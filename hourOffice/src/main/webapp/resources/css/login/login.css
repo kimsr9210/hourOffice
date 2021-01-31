@@ -8,7 +8,7 @@
 
     #form {
 		margin: auto;
-        padding: 50px 0;
+		padding: 0;
         width: 400px;
         height: 400px;
         text-align: center;
@@ -23,6 +23,7 @@
 
 	#form p {
 		margin: 8px auto;
+		margin-top: 58px;
         padding: 0;
         width: 320px;
         color: whitesmoke;
@@ -73,6 +74,7 @@
 		background-color: #F7F4BC;
 		color: #0D3C36;
 		font-size: 16px;
+		cursor: pointer;
 	}
 	.in-type::placeholder{
 		opacity: 0.8;

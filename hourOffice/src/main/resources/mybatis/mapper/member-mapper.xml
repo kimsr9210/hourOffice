@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="member">
-	<select id="selectMemberLogin" parameterType="Member" resultType="Member">
+	<select id="loginMember" parameterType="Member" resultType="Member">
 		SELECT
-			*
-		FROM test
+			MEM_NO as memNo,
+			MEM_PWD as memPwd,
+			MEM_POSITION as memPosition,
+			DEPT_CODE as deptCode,
+			MEM_NAME as memName,
+			MEM_BIRTH as memBirth,
+			MEM_GENDER as memGender,
+			MEM_ADDRESS as memAddress,
+			MEM_PHONE as memPhone,
+			MEM_TELL as memTell,
+			MEM_EMAIL as memEmail,
+			MEM_PROFILE as memProfile,
+			MEM_HOLIDAY_COUNT as memHolidayCount,
+			MEM_JOIN_DATE as memJoinDate,
+			MEM_RESIGN_YN as memResignYN,
+			MEM_RESIGN_DATE as memResigndate,
+			MEM_DEL_YN as memDelYN,
+			MEM_DEL_DATE as memDelDate,
+			MEM_RIGHT_CODE as memRightCode
+		FROM member
+		WHERE MEM_NO=#{memNo} and MEM_PWD=#{memPwd}
 	</select>
 </mapper>

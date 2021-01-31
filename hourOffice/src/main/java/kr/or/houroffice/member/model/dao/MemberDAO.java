@@ -8,8 +8,8 @@ import kr.or.houroffice.member.model.vo.Member;
 @Repository("memberDAO")
 public class MemberDAO {
 
-	public Member selectMemberLogin(SqlSessionTemplate sqlSession) {
-		Member member = sqlSession.selectOne("member.selectMemberLogin");
+	public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
+		Member member = sqlSession.selectOne("member.loginMember", m);
 		return member;
 	}
 
