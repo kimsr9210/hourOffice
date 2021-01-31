@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/header&sideNavi.css" />
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/projectAllList.css" />
+	href="/resources/css/project/projectAllList.css" />
 </head>
 <body>
 	<div id="wrap">
