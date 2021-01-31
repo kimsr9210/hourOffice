@@ -29,11 +29,8 @@ public class MemberAOP {
 	
 	public void passwordEncrytion(JoinPoint jp) throws Exception { //암호화 호출
 		Member m = (Member)jp.getArgs()[0];
-		
-		int memNo = m.getMemNo();
 		String memPwd = m.getMemPwd();
-		String encMemPwd = enc.encryData(memPwd, memNo);
-		
+		String encMemPwd = enc.encryData(memPwd);
 		m.setMemPwd(encMemPwd);
 	}
 	
