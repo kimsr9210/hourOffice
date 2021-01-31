@@ -6,9 +6,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ProjectController {
 	
+	@RequestMapping(value="/projectList.do")
+	public String projectList(){
+		System.out.println("실험");
+		return "/project/projectList";
+	}
+	
 	@RequestMapping(value="/projectAllList.do")
 	public String projectAllList(){
-		System.out.println("실험");
 		return "/project/projectAllList";
+	}
+	
+	@RequestMapping(value="/projectDetail.do")
+	public String projectDetail(){
+		System.out.println("실험");
+		return "/project/projectDetail";
 	}
 }

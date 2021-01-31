@@ -1,9 +1,9 @@
-package kr.or.houroffice.user.member.model.dao;
+package kr.or.houroffice.member.model.dao;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.houroffice.user.member.model.vo.Member;
+import kr.or.houroffice.member.model.vo.Member;
 
 @Repository("memberDAO")
 public class MemberDAO {
