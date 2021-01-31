@@ -6,11 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component("Sha256Util")
 public class Sha256Util { /*암호화메소드*/
-	public String encryData(String data, int salt)throws Exception{
-		String str = data+salt;
+	public String encryData(String data)throws Exception{
 		
 		MessageDigest mDigest = MessageDigest.getInstance("SHA-256");
-		mDigest.update(str.getBytes());
+		mDigest.update(data.getBytes());
 		byte [] msgStr = mDigest.digest();
 		
 		StringBuffer hexString = new StringBuffer();
