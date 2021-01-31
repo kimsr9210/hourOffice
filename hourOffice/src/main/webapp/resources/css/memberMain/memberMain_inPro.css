@@ -1,0 +1,89 @@
+@charset "UTF-8";
+    /*참여중인 프로젝트*/
+    .in-pro{
+        width: 75%;
+        height: 100%;
+    }
+    .in-pro-top{
+        height: 50px;
+        padding: 7px 10px;
+        background-color: #7E93E9;
+    }
+    .in-pro-top:hover{
+        opacity: 0.9;
+    }
+    .in-pro-top>a{
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+    }
+    .in-pro-top>span{
+        color: white;
+    }
+    .in-pro-top>.fa-star{
+        color: white;
+        margin-top: 10px;
+    }
+    /*게시물*/
+    .in-pro-post{
+        height: 230px;
+        background-color: white;
+        padding: 10px;
+    }
+    .post-info{
+        height: calc(100% / 3);
+        padding-top: 10px;
+    }
+    .post-info>img{
+        float: left;
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 50px;
+        margin: 0 10px;
+    }
+    .post-info>div{
+        float: left;
+        margin-top: 5px;
+    }
+    .post-info>div>span:nth-child(1){
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .post-info>div>span:nth-child(3){
+        color: darkgray;
+    }
+    #proNavi{
+        float: right;
+        font-size: 20px;
+        color: darkgray;
+        margin-top: 10px;
+        margin-right: 12px;
+        cursor: pointer;
+    }
+    .post-content{
+        height: calc(100% / 3);
+        padding: 0 10px 10px 10px;
+    }
+    .post-comment{
+        height: calc(100% / 3);
+        padding: 10px;
+    }
+    .comment-count{
+        height: 50%;
+        margin-bottom: 5px;
+    }
+    .comment-count>span{
+        float: right;
+        color: darkgray;
+    }
+    .comment-write{
+        display: block;
+        color: darkgray;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+    .comment-write:hover{
+        opacity: 0.9;
+    }

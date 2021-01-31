@@ -12,15 +12,16 @@
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="/resources/css/login/login.css" />
 
+<!-- JSTL:C -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 </head>
+
 <body>
-	<form id="form" action="/main_test.html" method="get">
+	<form id="form" action="/memberLogin.ho" method="post">
         <p>H:our Office</p>
         <br><br>
-        
-        <input type="text" name="memberId" class="in-type" placeholder="계정"><br>
-        
-        <input type="password" name="memberPw" class="in-type" placeholder="비밀번호"><br>
+        <input type="text" name="memNo" class="in-type" placeholder="계정"><br>
+        <input type="password" name="memPwd" class="in-type" placeholder="비밀번호"><br>
         <input class="log-type" type="submit" value="로그인">
     </form>
 </body></html>
