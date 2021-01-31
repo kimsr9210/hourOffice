@@ -11,5 +11,6 @@
 	<h3>두진 테스트</h3>
 	<h3>소련 테스트</h3>
 	<a href="/memberLogin.do">실험</a>
+	<a href="/projectAllList.do">프로젝트 메인 페이지</a>
 </body>
 </html>
