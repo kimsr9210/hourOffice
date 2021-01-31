@@ -147,6 +147,7 @@ a:active {
 	margin: 30px auto;
 	border: 0;
 	box-shadow: 0 0 6px #B3B3B3;
+    overflow: hidden;
 }
 
 #TitleName {

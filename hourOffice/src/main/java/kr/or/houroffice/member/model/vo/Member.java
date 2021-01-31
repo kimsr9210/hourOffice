@@ -1,4 +1,4 @@
-package kr.or.houroffice.user.member.model.vo;
+package kr.or.houroffice.member.model.vo;
 
 public class Member {
 	private int testNo;
