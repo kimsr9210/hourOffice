@@ -47,6 +47,9 @@
         height: 280px;
         display: flex;
     }
+    #columnchart_values{
+        width: 75%;
+    }
 </style>
 <body>
     <div id="wrap">
@@ -149,7 +152,7 @@
                         <div id="myMail">
                             <div class="myMail-title">메일함</div>
                             <div id="mailNavi">
-                                <div id="reMail">받은메일함</div>
+                                <div id="reMail">받은메일</div>
                                 <div id="mailBtn">
                                     <button><i class="fas fa-chevron-left"></i></button>
                                     <button><i class="fas fa-chevron-right"></i></button>
@@ -163,8 +166,8 @@
                     </div>
                     
                     <div class="pro-graph">
-                        <div id="columnchart_values" style="width: 750px; height: 425px;"></div>
-                        <div class="pro-graph-count">
+                        <div id="columnchart_values"></div>
+                        <div class="pro-graph-count" style="width:25%;">
                             <span id="cTitle">이번달 프로젝트 수</span>
                             <span id="cValue">9</span><!--4자리까지-->
                         </div>
@@ -400,15 +403,17 @@
                        2]);
 
         var options = {
-            title: { position: "none" },
-            width: 880,
-            height: 425,
-            bar: {groupWidth: "95%"},
-            legend: { position: "none" },
+                title: { position: "none" },
+                bar: {groupWidth: "95%"},
+                legend: { position: "none" },
+                width: '100%',
+                height: 425,
+                chartArea:{left:'15%',width:'80%',height:'80%'}
         };
         
         var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(view, options);
+        window.addEventListener('resize',drawChart,false);
     }
 </script>
 

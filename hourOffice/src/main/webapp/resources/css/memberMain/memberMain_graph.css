@@ -8,7 +8,6 @@
     }
     /*통계*/
     .pro-graph-count{
-        width: calc(100% - 750px);
         text-align: center;
         height: 40%;
         z-index: 999;
