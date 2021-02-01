@@ -154,7 +154,8 @@
 		<li class="categoryName">총무 관리자</li>
 		<li class="categoryList"><a href="#">공지사항 관리</a></li>
 		<li class="categoryList"><a href="#">사내규정 관리</a></li>
-		<li class="categoryList"><a href="#">휴일/기념일 관리</a></li>
+		<li class="categoryName">전산 관리자</li>
+		<li class="categoryList"><a href="#">관리자 페이지</a></li>
 		</ui>
 
 	</div>
