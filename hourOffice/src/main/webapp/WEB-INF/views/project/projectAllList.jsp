@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>H:our Office</title>
 <!-- 폰트어썸 -->
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
@@ -95,10 +95,10 @@
 				<i class="fas fa-times"></i>
 			</div>
 		</div>
-		<form id="projectForm" action="#" method="get">
-			<input type="text" placeholder="프로젝트 명을 입력하세요" name="pro_subject"
+		<form id="projectForm" action="/createProject.ho" method="get">
+			<input type="text" placeholder="프로젝트 명을 입력하세요" name="proSubject"
 				id="newProjectSubject" />
-			<textarea placeholder="설명 글을 입력할 수 있습니다." name="pro_exp"
+			<textarea placeholder="설명 글을 입력할 수 있습니다." name="proExp"
 				id="newProjectExplain"></textarea>
 			<br>
 			<br>
@@ -106,28 +106,20 @@
 			<div class="optionList">
 				<section class="setting st-login">
 				<p>
-					<i class="fas fa-check"></i> 관리자 승인 후 참여 가능 <label
-						class="btn-switch"> <input type="checkbox" name="favor_yn">
-						<i class="slide-object"></i>
-					</label>
-				</p>
-				</section>
-			</div>
-			<div class="optionList">
-				<section class="setting st-login">
-				<p>
 					<i class="fas fa-check"></i> 공개 프로젝트 여부 <label class="btn-switch">
-						<input type="checkbox" name="public_yn"> <i
+						<input type="checkbox" name="publicYN" id="public_check" value="on"/> <i
 						class="slide-object"></i>
 					</label>
 				</p>
 				</section>
 			</div>
+			<input type="hidden" name="publicYN" id="public_check_hidden" value="off"/>
+			<br>
 			<br>
 			<div class="projectBtnSize" id="projectInviteMember">
 				<i class="fas fa-user-plus"></i> 초대하기
 			</div>
-			<input type="hidden" name="mem_no" />
+			<input type="hidden" name="memNo" value=""/>
 			<div class="projectBtnSize">
 				<button type="submit" id="newProjectSubmitBtn">프로젝트 생성</button>
 			</div>

@@ -48,6 +48,8 @@
 	<aop:config>
 		<aop:pointcut expression="execution(* kr.or.houroffice.member.model.service.MemberService.*(..))"
 					id="txPointcut"/>
+		<aop:pointcut expression="execution(* kr.or.houroffice.project.model.service.ProjectServiceImpl.*(..))"
+					id="txPointcut"/>
 		<aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
 	</aop:config>
 	
