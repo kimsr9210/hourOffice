@@ -7,8 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="projectAllList.do">프로젝트 전체 목록</a><br>
-<a href="projectDetail.do">프로젝트 상세 페이지</a><br>
-<a href="projectBoardWrite.do">프로젝트 게시물 작성 페이지</a><br>
+<a href="projectAllList.ho">프로젝트 전체 목록</a><br>
+<a href="projectDetail.ho">프로젝트 상세 페이지</a><br>
+<a href="projectBoardWrite.ho">프로젝트 게시물 작성 페이지</a><br>
 </body>
 </html>

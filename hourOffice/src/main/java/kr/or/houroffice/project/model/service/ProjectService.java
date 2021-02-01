@@ -1,5 +1,7 @@
 package kr.or.houroffice.project.model.service;
 
+import kr.or.houroffice.project.model.vo.Project;
+
 public interface ProjectService {
-	public String projectInsert();
+	public int insertProject(Project p);
 }
