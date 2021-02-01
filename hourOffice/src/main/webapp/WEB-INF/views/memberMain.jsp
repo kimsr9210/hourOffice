@@ -367,6 +367,7 @@
 <script>
     
 </script>
+<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script></div>
 <script src="/resources/js/memberMain/memberMain_cal.js"></script>
 <script src="/resources/js/memberMain/memberMain_work.js"></script>
 <script src="/resources/js/memberMain/memberMain_publicPro.js"></script>

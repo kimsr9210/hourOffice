@@ -26,6 +26,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/memberLogin.ho")
 	public String loginMember(HttpSession session, Model model, Member m){ //로그인 메소드
+		
 		Member member = mService.loginMember(m);
 		if(member != null){
 			session.setAttribute("member", member);
