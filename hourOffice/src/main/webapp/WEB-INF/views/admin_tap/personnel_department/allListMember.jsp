@@ -11,92 +11,15 @@
     <!--jQuery CDN-->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	
-	<!-- CSS -->
-	
+	<!-- 헤더 & 네비 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
+	<!-- 관리자 탭 공통 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/allListMember.css" />
 	
 	<style>
-        #TitleContents *:focus{
-            outline: 0;
-        }
-        #TitleContents a{
-            color: black;
-        }
-        /* select 태그 디자인*/
-        #TitleContents select{
-            display:inline-block;
-            width: 120px; height: 25px;
-            border: 1px solid lightgray;
-            border-radius: 3px;
-            background: url(img/selectarrow2.png) 95% center no-repeat;
-            /* 화살표 없애기 */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        #TitleContents select::-ms-expand {
-           display: none;
-        }
-        .positionSel{
-            height: 30px;
-            padding-left: 30px;
-        }
         
-        #totalMemNum{
-            font-size: 1.2rem;
-        }
-        #totalMem{
-            font-weight: bold;
-        }
-        /* 버튼 3개 div */
-        #btnPlace{
-            padding-top: 30px;
-        }
-        /* 사원 전체 목록 테이블 */
-        #memAllListTbl{
-            margin: 0 auto;
-            width: 100%;
-        }
-        /* 모든 버튼 */
-        #TitleContents button{
-            font-weight: bold;
-            padding: 0 10px;
-            min-width: 50px;
-            height: 30px;
-            color: white;
-            background-color: #1D9F8E;
-            border-radius: 5px;
-            border-style: none;
-            margin-right: 5px;
-            cursor: pointer;
-        }
-        /* 삭제 또는 취소 버튼 */
-        #TitleContents .deleteBtn{
-            background-color: #FF6363;
-        }
-        /* table tr 크기 */
-        /* 사원정보 tr */
-        #TitleContents tr:nth-child(2n){
-            height: 40px;
-        }
-        /* 직위 변경 공간 tr */
-        .positionChangePlace{
-            background-color:#FFFAF5;
-            display: none;
-            height: 60px;
-            box-shadow: 1px 1px 5px #E7E0E8 inset;
-            border-radius: 5px;
-        }
-        /* checkbox 있는 td */
-        #TitleContents tr:nth-child(2n)>td:first-child{
-            text-align: center;
-        }
-        
-        /* 페이지 */
-        #pageNavi{
-            text-align: center;
-            padding: 20px 0;
-        }
         
     </style>
 <script>
@@ -196,7 +119,7 @@
 						
 						<div id="totalMemNum"><span id="totalMem">현재사원수</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;001명</div>
                         <hr width="200px" align="left">
-                        <div id="btnPlace"><a href="#"><button type="button" class="memAllListBtn">+ 사원생성</button></a><button type="button" id="positionChangeBtn" class="memAllListBtn">직위변경</button><button type="button" id="dropMemBtn" class="memAllListBtn deleteBtn">- 사원삭제</button></div>
+                        <div id="btnPlace"><a href="/admin_tap_memberJoin.ho"><button type="button">+ 사원생성</button></a><button type="button" id="positionChangeBtn">직위변경</button><button type="button" id="dropMemBtn" class="delBtn">- 사원삭제</button></div>
                         <div>
                             <table id="memAllListTbl">
                                 <tr height="1px"><td colspan="8"><hr style="margin:0;"></td></tr>
@@ -214,7 +137,7 @@
                                 <tr>
                                     <td><input type="checkbox" name="checkMem" value="2101001"/></td>
                                     <td>2101001</td>
-                                    <td><a href="">주다빈</a></td>
+                                    <td><a href="/admin_tap_memberInfo.ho">주다빈</a></td>
                                     <td>사원</td>
                                     <td>인사팀</td>
                                     <td>메일@메일.com</td>
@@ -224,7 +147,7 @@
                                 <tr id="change2101001" class="positionChangePlace">
                                     <td colspan="2" align="center">직위 변경</td>
                                     <td colspan="6">
-                                        <select name="memPosition" class="positionSel">
+                                        <select name="memPosition">
                                            <option value="">직위선택</option>
                                            <option value="사원">사 원</option>
                                            <option value="대리">대 리</option>
@@ -235,7 +158,7 @@
                                            <option value="이사">이 사</option>
                                            <option value="대표">대 표</option>
                                         </select>
-                                        <button type="button" class="memAllListBtn positionChangeSaveBtn">저장</button><button type="button" class="memAllListBtn deleteBtn positionChangeResetBtn">취소</button>
+                                        <button type="button" class="positionChangeSaveBtn">저장</button><button type="button" class="delBtn positionChangeResetBtn">취소</button>
                                     </td>
                                 </tr>
                             </table>
