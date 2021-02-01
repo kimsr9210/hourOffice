@@ -2,6 +2,7 @@
  * 
  */
 $(function() {
+
 	$('#categoryProject').next().css('display', 'block');
 	$('#categoryProject').next().css('height', '125px');
 	$('#categoryProject').children().last().children().attr('class',
@@ -17,6 +18,13 @@ $(function() {
 		location.reload();
 	});
 
+	$('#newProjectSubmitBtn').click(function() {
+		console.log($('input:checkbox[id="public_check"]').is(':checked'));
+		if ($('input:checkbox[id="public_check"]').is(':checked')) {
+			$('#public_check_hidden').attr('disabled', 'disabled');
+		}
+		return true;
+	});
 	/* 말풍선 */
 	$('#searchBtn').hover(function() {
 		$('#searchTooltip').css('visibility', 'visible');

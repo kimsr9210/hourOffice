@@ -12,5 +12,29 @@
 	<h3>소련 테스트</h3>
 	<a href="/memberLoginPage.ho">로그인</a>
 	<a href="/projectList.do">프로젝트 메인 페이지</a>
+	<br><br>
+	
+	<a href="/allCompanyRulePage.ho">사내 규정 전체 list</a><br>
+	<a href="/companyRule.ho">사내 규정 게시글</a><br>
+	<br>
+	<a href="/allNoticePage.ho">공지 사항 전체 list</a><br>
+	<a href="/notice.ho">공지 사항 게시글</a><br>
+	<br>
+	<a href="/allPartBoardPage.ho">부서별 게시판 전체 list</a><br>
+	<a href="/partBoard.ho">부서별 게시판 게시글</a><br>
+	<a href="/partBoardAdd.ho">부서별 게시판 새글쓰기</a><br>
+	<a href="/partBoardModify.ho">부서별 게시판 수정하기</a><br>
+	<br>
+	<a href="/admin_tap_allListMember.ho">관리자탭 - 사원 전체 list</a><br>
+	<a href="/admin_tap_memberInfo.ho">관리자탭 - 사원 정보</a><br>
+	<a href="/admin_tap_memberJoin.ho">관리자탭 - 사원 등록</a><br>
+	<a href="/admin_tap_organizationChart.ho">관리자탭 - 조직도</a><br>
+	<br>
+	<a href="/admin_tap_allCompanyRulePage.ho">관리자탭 - 사내 규정 전체 list</a><br>
+	<a href="/admin_tap_companyRuleAdd.ho">관리자탭 - 사내 규정 새글쓰기</a><br>
+	<a href="/admin_tap_companyRuleModify.ho">관리자탭 - 사내 규정 수정하기</a><br>
+	<a href="/admin_tap_allNoticePage.ho">관리자탭 - 공지 사항 전체 list</a><br>
+	<a href="/admin_tap_noticeAdd.ho">관리자탭 - 공지 사항 새글쓰기</a><br>
+	<a href="/admin_tap_noticeModify.ho">관리자탭 - 공지 사항 수정하기</a><br>
 </body>
 </html>
