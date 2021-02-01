@@ -8,7 +8,6 @@ public class ProjectController {
 	
 	@RequestMapping(value="/projectList.do")
 	public String projectList(){
-		System.out.println("실험");
 		return "/project/projectList";
 	}
 	
@@ -19,7 +18,11 @@ public class ProjectController {
 	
 	@RequestMapping(value="/projectDetail.do")
 	public String projectDetail(){
-		System.out.println("실험");
 		return "/project/projectDetail";
 	}
+	
+	@RequestMapping(value="/projectBoardWrite.do")
+	public String projectBoardWrite(){
+		return "/project/projectBoardWrite";
+	}	
 }

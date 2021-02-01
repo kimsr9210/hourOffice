@@ -1,3 +1,5 @@
+@CHARSET "UTF-8";
+
 #projectBox {
 	padding-top: 10px;
 	margin: 0 auto;
@@ -17,24 +19,16 @@
 
 #projectDetail {
 	width: 98%;
-	height: 130px;
+	height: 100px;
 	background-color: #999999;
 	border-radius: 3px;
 }
 
 #DetailTop {
 	width: 93%;
-	height: 65%;
-	border-bottom: 1px solid #bfbfbf;
+	height: 100%;
 	margin: 0 auto;
 	padding-top: 20px;
-}
-
-#DetailBot {
-	width: 93%;
-	height: 35%;
-	line-height: 40px;
-	margin: 0 auto;
 }
 
 #projectName {
@@ -65,11 +59,6 @@
 	font-size: 1rem;
 }
 
-#projectNavi>li>a:hover {
-	font-weight: 800;
-	color: #AFE1FF;
-}
-
 #newBoard {
 	width: 80px;
 	height: 30px;
@@ -82,163 +71,135 @@
 	cursor: pointer;
 }
 
-/* -----------------------게시물--------------------- */
-.boardBox {
+/* ----------------------게시물 작성---------------------- */
+#boardWriteTitle {
+	font-weight: 800;
+	font-size: 1rem;
+}
+
+#boardWrite {
 	width: 98%;
 	border: 1px solid #cccccc;
 	margin-top: 20px;
 	border-radius: 5px;
 }
 
-.boardInfo {
+#boardSelect {
 	width: 100%;
 	height: 50px;
+	line-height: 50px;
 }
 
-.memberImg {
-	width: 7%;
-	height: 100%;
+#boardSelect>li {
+	width: 25%;
 	float: left;
-	color: #999999;
-	font-size: 2rem;
-	padding: 2px 2px 2px 15px;
-}
-
-.memberInfo {
-	width: 83%;
-	height: 100%;
-	float: left;
-	padding-left: 10px;
-}
-
-.memberAdmin {
-	width: 10%;
-	height: 100%;
-	float: left;
-	padding: 15px;
-	color: #999999;
-}
-
-.memberName {
-	width: 100%;
-	height: 60%;
-	float: left;
+	text-align: center;
 	font-size: 1rem;
-	line-height: 30px;
 	font-weight: 800;
+	color: #999999;
+	border-bottom: 1px solid #cccccc;
 }
 
-.boardTime {
-	width: 100%;
-	height: 40%;
-	float: left;
-	font-size: 0.875rem;
-	line-height: 10px;
-	color: #999999
+#boardSelect>li:nth-child(1) {
+	color: #8041D9;
 }
 
-.boardSet {
+.modeSelect {
+	font-size: 1rem;
+	font-weight: 800;
 	cursor: pointer;
 }
 
-.boardContents {
-	padding: 20px;
-	overflow: visible;
+.modeSelect:hover {
+	color: #8041D9;
 }
 
-.textarea {
+#boardWriteContents {
 	width: 100%;
+	min-height: 100px;
 	height: auto;
-	border: 0;
-	background-color: white;
-	resize: none;
-	font-family: "맑은 고딕";
-	font-size: 0.875rem;
 }
 
-.commentCount {
-	padding: 20px 20px 5px 0px;
-	text-align: right;
-	font-weight: 800;
-	color: #999999;
-}
-
-.commentWrite {
+#boardWriteBot {
 	width: 100%;
-	height: 55px;
-	padding: 10px 20px 0px 10px;
-	overflow: hidden;
-	background-color: #cccccc;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	border: 1px solid #cccccc;
+	height: 50px;
+	border-top: 1px solid #cccccc;
 }
 
-.commentUser {
-	width: 7%;
-	font-size: 2rem;
+#fileUploadBox {
+	width: 15%;
+	height: 100%;
+	border-right: 1px solid #cccccc;
 	float: left;
 }
 
-.commentText {
-	width: 93%;
+#fileUpload {
+	display: none;
+}
+
+#imgUpload {
+	display: none;
+}
+
+.fileUploadImg {
+	font-size: 2rem;
+	padding-left: 20px;
+	color: #999999;
+	cursor: pointer;
+}
+
+#fileNameBox {
+	width: 60%;
 	height: 100%;
 	float: left;
 }
 
-.boardComment {
-	width: 100%;
-	height: 34px;
-	border: 1px solid #cccccc;
+#fileName {
 	outline: none;
-}
-
-.commentList {
-	padding: 0px 20px 0px 10px;
-}
-
-.commentInfo {
-	width: 93%;
+	width: 75%;
+	height: 100%;
+	text-align: right;
 	float: left;
-	border-top: 1px solid #cccccc;
-}
-
-.commentName {
-	width: 100%;
-	height: 60%;
-	float: left;
-	font-size: 0.875rem;
-	line-height: 30px;
-	font-weight: 800;
-}
-
-.commentTextArea {
-	width: 100%;
-	height: auto;
-	float: left;
-	background-color: white;
-	font-family: "맑은 고딕";
-	font-size: 0.875rem;
-	resize: none;
 	border: 0;
-	padding-bottom: 1rem;
 }
 
-.commentUserImg {
-	width: 7%;
-	font-size: 2rem;
+#fileSize {
+	outline: none;
+	width: 20%;
+	height: 100%;
+	text-align: center;
 	float: left;
-	border-top: 1px solid #cccccc;
-	color: #999999;
+	border: 0;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
 }
 
-.commentTime {
-	color: #999999;
-	padding-left: 0.4rem;
-	font-size: 0.650rem;
+#boardUpload {
+	width: 25%;
+	height: 100%;
+	float: right;
+	line-height: 50px;
 }
 
-/* projectRight */
+#publicYN {
+	width: 80px;
+	height: 40px;
+	border-radius: 5px;
+}
+
+#uploadBtn {
+	width: 100px;
+	height: 40px;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 0;
+	background-color: #999999;
+	color: white;
+	font-weight: 800;
+	font-size: 1rem;
+}
+
+/* -----------------projectRight---------------------- */
 #backward {
 	width: 100%;
 	height: 50px;
@@ -333,7 +294,7 @@
 	line-height: 40px;
 }
 
-/* 프로젝트 옵션 */
+/* --------------------------프로젝트 옵션 ---------------------------*/
 #projectOption {
 	width: 200px;
 	height: 220px;
@@ -375,29 +336,6 @@
 	color: #8041D9;
 }
 
-.boardModifyBox {
-	position: relative;
-	width: 100px;
-	height: auto;
-	right: 80px;
-	background-color: white;
-	border: 1px solid #cccccc;
-	border-radius: 5px;
-	text-align: center;
-	display: none;
-}
-
-.boardModifyList {
-	width: 100%;
-	padding: 5px 0px 5px 5px;
-	cursor: pointer;
-	color: #999999;
-}
-
-.boardModifyList:hover {
-	color: black;
-}
-
 /* -----------------------프로젝트 수정 박스------------------------ */
 #newProjectBox {
 	width: 500px;
@@ -432,7 +370,6 @@
 	float: right;
 	padding-right: 20px;
 	cursor: pointer;
-	padding-top: 22px;
 }
 
 #newProjectSubject {
@@ -450,7 +387,6 @@
 	border: 1px solid #BFBFBF;
 	border-radius: 5px;
 	resize: none;
-	font-family: "맑은 고딕";
 }
 
 #newProjectSubject::placeholder, #newProjectExplain::placeholder {
@@ -1004,4 +940,212 @@
 
 .fileRegular {
 	padding: 5px;
+}
+
+/* ------------------ 일반 글 작성 ---------------------*/
+#writeBox {
+	width: 100%;
+	height: auto;
+}
+
+#boardWriteText {
+	width: 100%;
+	padding: 30px;
+	font-family: "맑은 고딕";
+	font-size: 0.875rem;
+	resize: none;
+	border: 0;
+	outline: none;
+}
+/* ------------------ 일정 작성일 때----------------------*/
+#scheduleBox {
+	width: 100%;
+	height: auto;
+	display: none;
+}
+
+#scheduleBoxTop {
+	width: 100%;
+	height: 50px;
+	padding: 10px 30px 10px 30px;
+	line-height: 25px;
+	border-top: 1px solid #BFBFBF;
+	border-bottom: 1px solid #BFBFBF;
+}
+
+.scheduleImg {
+	margin-right: 20px;
+	height: 100%;
+	font-size: 0.875rem;
+	float: left;
+	font-size: 1.6rem;
+	color: #4D4D4D;
+}
+
+#line {
+	width: 5%;
+	height: 100%;
+	font-size: 1.5rem;
+	float: left;
+	text-align: center;
+}
+
+.scheduleDate {
+	width: 17%;
+	height: 100%;
+	font-size: 1rem;
+	float: left;
+	text-align: center;
+	margin-right: 10px;
+	border: 1px solid #cccccc;
+	color: #4D4D4D;
+	font-weight: 800;
+	outline: none;
+}
+
+.scheduleTime {
+	width: 15%;
+	height: 100%;
+	font-size: 1rem;
+	float: left;
+	text-align: center;
+	border: 1px solid #cccccc;
+	color: #4D4D4D;
+	font-weight: 800;
+	outline: none;
+}
+
+#scheduleBoxBot {
+	width: 100%;
+	height: 50px;
+	padding: 10px 30px 10px 30px;
+	line-height: 30px;
+	border-bottom: 1px solid #BFBFBF;
+}
+
+#scheduleMember {
+	width: auto;
+	float: left;
+}
+
+#scheduleMember>input {
+	width: 50px;
+	height: 30px;
+	border: 0;
+	border-radius: 5px;
+	text-align: center;
+	background-color: #999999;
+	color: white;
+	font-weight: 800;
+}
+
+#scheduleAdd {
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	margin-left: 10px;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	outline: none;
+}
+
+.scheduleMemberDelete {
+	font-size: 10px;
+	cursor: pointer;
+}
+
+#scheduleMemoBox {
+	width: 100%;
+	height: 50px;
+	padding: 10px 30px 10px 30px;
+	line-height: 30px;
+}
+
+#scheduleMemo {
+	width: 80%;
+	height: 100%;
+	outline: 0;
+	border: 0;
+}
+
+/* ------------------ 할일 작성일 때----------------------*/
+.boardWriteText {
+	width: 100%;
+	padding: 30px;
+	font-family: "맑은 고딕";
+	font-size: 0.875rem;
+	resize: none;
+	border: 0;
+	outline: none;
+}
+
+#workBox {
+	width: 100%;
+	height: auto;
+	display: none;
+}
+
+.workList {
+	width: 100%;
+	height: 50px;
+	padding: 10px 30px 10px 50px;
+	border-top: 1px solid #BFBFBF;
+}
+
+.workDelete {
+	font-size: 1.2rem;
+	color: red;
+	margin-top: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	float: left;
+}
+
+.workTitle {
+	width: 65%;
+	height: 100%;
+	outline: none;
+	border: 0;
+	float: left;
+}
+
+.workDate {
+	height: 100%;
+	font-size: 1rem;
+	text-align: center;
+	border: 1px solid #cccccc;
+	color: #4D4D4D;
+	font-weight: 600;
+	outline: none;
+	float: left;
+	margin-right: 15px;
+	border-radius: 5px;
+}
+
+.workMember {
+	margin: 5px;
+	font-size: 1.5rem;
+	float: left;
+	color: #cccccc;
+	cursor: pointer;
+}
+
+#workAdd {
+	width: 100%;
+	height: 50px;
+	padding: 10px 40px 10px 30px;
+	border-top: 1px solid #BFBFBF;
+}
+
+.workAddBtn {
+	font-size: 1.2rem;
+	color: blue;
+	margin-top: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	float: left;
+}
+
+#workHidden {
+	display: none;
 }

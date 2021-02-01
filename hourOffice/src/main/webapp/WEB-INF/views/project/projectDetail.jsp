@@ -18,7 +18,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/header&sideNavi.css" />
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/projectDetail.css" />
+	href="/resources/css/project/projectDetail.css" />
 	
 	
 <!-- TextArea 자동 높이 조절 CDN -->
@@ -67,8 +67,8 @@
                                         <li><a href="#"><i class="far fa-calendar"></i> 일정</a></li>
                                         <li><a href="#"><i class="fas fa-briefcase"></i> 할일</a></li>
                                         <li><a href="#" id="memberAllListNavi"><i class="fas fa-users"></i> 멤버</a></li>
+                                    	
                                     </ui>
-                                    
                                     <button id="newBoard">작성하기</button>
                                 </div>
                             </div>

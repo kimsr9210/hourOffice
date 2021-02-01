@@ -22,8 +22,8 @@ public class MemberService {
 	
 
 
-	public Member selectMemberLogin() {
-		Member member = mDAO.selectMemberLogin(sqlSession);
+	public Member loginMember(Member m) {
+		Member member = mDAO.loginMember(sqlSession, m);
 		return member;
 	}
 
