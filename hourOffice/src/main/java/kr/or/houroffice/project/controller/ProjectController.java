@@ -1,5 +1,7 @@
 package kr.or.houroffice.project.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.houroffice.member.model.vo.Member;
@@ -24,22 +27,33 @@ public class ProjectController {
 	
 	@RequestMapping(value="/projectList.do")
 	public String projectList(){
-		return "/project/projectList";
+		return "project/projectList";
 	}
 	
 	@RequestMapping(value="/projectAllList.ho")
-	public String projectAllList(){
-		return "/project/projectAllList";
+	public ModelAndView projectAllList(@SessionAttribute("member") Member member){
+		ArrayList<Project> myList = pService.selectAllProject(member.getMemNo());
+		ArrayList<Project> publicList = pService.selectPublicProject();
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("myList", myList);
+		mav.addObject("publicList", publicList);
+		mav.setViewName("project/projectAllList");
+		return mav;
 	}
 	
 	@RequestMapping(value="/projectDetail.ho")
-	public String projectDetail(){
-		return "/project/projectDetail";
+	public ModelAndView projectDetail(@RequestParam int proNo){
+		Project p = pService.selectOneProject(proNo);
+		System.out.println(p);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("project", p);
+		mav.setViewName("project/projectDetail");
+		return mav;
 	}
 	
 	@RequestMapping(value="/projectBoardWrite.ho")
 	public String projectBoardWrite(){
-		return "/project/projectBoardWrite";
+		return "project/projectBoardWrite";
 	}
 	
 	// 새프로젝트 만들기
@@ -58,15 +72,11 @@ public class ProjectController {
 		}else{
 			publicYN = "N";
 		}
+		
 		p.setPublicYN(publicYN.charAt(0));
 		Member m = (Member)session.getAttribute("member");
 		
 		p.setMemNo(m.getMemNo());
-		System.out.println("생성자 " + p.getMemNo());
-		System.out.println("제목 " + p.getProSubject());
-		System.out.println("설명 " + p.getProExp());
-		System.out.println("공개여부 : " + p.getPublicYN());
-		System.out.println(p);
 		
 		int result = pService.insertProject(p);
 		ModelAndView mav = new ModelAndView();
@@ -75,7 +85,8 @@ public class ProjectController {
 		}else{
 			mav.addObject("msg", "프로젝트 생성 실패");
 		}
-		mav.setViewName("/project/projectAllList");
+		mav.addObject("location","/projectAllList.ho");
+		mav.setViewName("result");
 		
 		return mav;
 	}	

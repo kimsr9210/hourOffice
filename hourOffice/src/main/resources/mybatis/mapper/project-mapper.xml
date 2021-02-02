@@ -5,4 +5,46 @@
 	<insert id="insertProject" parameterType="Project">
 		INSERT INTO PROJECT VALUES(PROJECT_SEQ.NEXTVAL, #{memNo}, #{proSubject}, #{proExp}, SYSDATE, #{publicYN}, 'N', 'N', NULL)
 	</insert>
+	
+	<select id="selectAllProject" resultType="Project">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			PRO_SUBJECT as proSubject,
+			PRO_EXP as proExp,
+			PRO_DATE as proDate,
+			PUBLIC_YN as publicYN,
+			COMP_YN as compYN,
+			COMP_DATE as compDate
+		FROM PROJECT
+		WHERE MEM_NO = #{memNo} AND DEL_YN = 'N'
+	</select>
+	
+	<select id="selectPublicProject" resultType="Project">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			PRO_SUBJECT as proSubject,
+			PRO_EXP as proExp,
+			PRO_DATE as proDate,
+			PUBLIC_YN as publicYN,
+			COMP_YN as compYN,
+			COMP_DATE as compDate
+		FROM PROJECT
+		WHERE PUBLIC_YN = 'Y' AND DEL_YN = 'N'
+	</select>
+	
+	<select id="selectOneProject" resultType="Project">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			PRO_SUBJECT as proSubject,
+			PRO_EXP as proExp,
+			PRO_DATE as proDate,
+			PUBLIC_YN as publicYN,
+			COMP_YN as compYN,
+			COMP_DATE as compDate
+		FROM PROJECT
+		WHERE PRO_NO=#{proNo} AND DEL_YN='N'
+	</select>
 </mapper>
