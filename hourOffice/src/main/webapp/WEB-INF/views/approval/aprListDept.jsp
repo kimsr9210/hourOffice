@@ -26,11 +26,12 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
                         <span id="page-name">전자결재</span>
-                        <span id="sub-name">결재요청함</span>
+                        <span id="sub-name">부서문서함</span>
                         <form action="" method="get" id="apr-search-form">
                            <select name="search-option" id="search-option">
                                <option value="title">제목</option>
                                <option value="date">기안일</option>
+                               <option value="member">기안자</option>
                                <option value="type">결재양식</option>
                            </select>
                             <input type="text" id="approval-search"><button type="submit" id="apr-search-btn">
@@ -53,6 +54,7 @@
                                 <th>기안일</th>
                                 <th>결재양식</th>
                                 <th>제목</th>
+                                <th>기안자</th>
                                 <th>결재상태</th>
                                 <th>긴급여부</th>
                             </tr>
@@ -61,6 +63,7 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ing">진행중</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -69,6 +72,16 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
+                                <td><span class="apr-type type-ing">진행중</span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>11111111</td>
+                                <td>2021-01-23</td>
+                                <td>법인카드사용신청서</td>
+                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ing">진행중</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -77,6 +90,7 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ing">진행중</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -85,6 +99,7 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ing">진행중</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -93,6 +108,7 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ing">진행중</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -101,30 +117,7 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
-                                <td><span class="apr-type type-ing">진행중</span></td>
-                                <td><span class="apr-type type-urg">긴급</span></td>
-                            </tr>
-                            <tr>
-                                <td>11111111</td>
-                                <td>2021-01-23</td>
-                                <td>법인카드사용신청서</td>
-                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
-                                <td><span class="apr-type type-ing">진행중</span></td>
-                                <td><span class="apr-type type-urg">긴급</span></td>
-                            </tr>
-                            <tr>
-                                <td>11111111</td>
-                                <td>2021-01-23</td>
-                                <td>법인카드사용신청서</td>
-                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
-                                <td><span class="apr-type type-ing">진행중</span></td>
-                                <td><span class="apr-type type-urg">긴급</span></td>
-                            </tr>
-                            <tr>
-                                <td>11111111</td>
-                                <td>2021-01-23</td>
-                                <td>법인카드사용신청서</td>
-                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-ref">반려</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
                             </tr>
@@ -133,8 +126,27 @@
                                 <td>2021-01-23</td>
                                 <td>법인카드사용신청서</td>
                                 <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
+                                <td><span class="apr-type type-ing">진행중</span></td>
+                                <td><span class="apr-type type-urg">긴급</span></td>
+                            </tr>
+                            <tr>
+                                <td>11111111</td>
+                                <td>2021-01-23</td>
+                                <td>법인카드사용신청서</td>
+                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
                                 <td><span class="apr-type type-done">완료</span></td>
                                 <td><span class="apr-type type-urg">긴급</span></td>
+                            </tr>
+                            <tr>
+                                <td>11111111</td>
+                                <td>2021-01-23</td>
+                                <td>법인카드사용신청서</td>
+                                <td><a href="">2월 회식 신청을 위한 법인카드 사용 신청</a></td>
+                                <td>김말똥</td>
+                                <td><span class="apr-type type-done">완료</span></td>
+                                <td></td>
                             </tr>
                         </table>
                         <ul id="page-navi">
