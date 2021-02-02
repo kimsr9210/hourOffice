@@ -121,7 +121,7 @@ $(function(){
 						<% ArrayList<Member> list = (ArrayList<Member>)request.getAttribute("list"); %>
 						<% SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일"); %>
 						
-						<div id="totalMemNum"><span id="totalMem">현재사원수</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;001명</div>
+						<div id="totalMemNum"><span id="totalMem" style="font-size: 1.5rem;">현재사원수</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${countAll }명</div>
                         <hr width="200px" align="left">
                         <div id="btnPlace"><a href="/admin_tap_memberJoin.ho"><button type="button">+ 사원생성</button></a><button type="button" id="positionChangeBtn">직위변경</button><button type="button" id="dropMemBtn" class="delBtn">- 사원삭제</button></div>
                         <div>

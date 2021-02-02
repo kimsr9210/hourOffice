@@ -23,6 +23,8 @@ public class AdminMemberController {
 	@RequestMapping(value="/admin_tap_allListMember.ho")
 	public String allListMember(HttpServletRequest request, Model model){
 		
+		int countAll = mService.selectCountAllMember();
+		
 		int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
 		if(request.getParameter("currentPage")==null) {
 			currentPage = 1;
@@ -40,6 +42,7 @@ public class AdminMemberController {
 		
 		
 		if(list != null){
+			model.addAttribute("countAll",countAll);
 			model.addAttribute("list",list);
 			model.addAttribute("pageNavi", pageNavi);
 		}

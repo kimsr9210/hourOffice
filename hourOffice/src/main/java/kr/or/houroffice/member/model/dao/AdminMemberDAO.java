@@ -12,6 +12,11 @@ import kr.or.houroffice.member.model.vo.Member;
 @Repository("adminMemberDAO")
 public class AdminMemberDAO {
 	
+	// 전체 게시물 구하는 메소드
+	public int selectCountAllMember(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("member.allMemberCount");
+	}
+	
 	// 전체 멤버 list - select
 	public ArrayList<Member> selectAllMember(SqlSessionTemplate sqlSession, int currentPage, int recordCountPerPage) {
 		// 페이징 처리 수식
@@ -31,7 +36,7 @@ public class AdminMemberDAO {
 		// currentPage			: 현재 페이지를 가지고 있는 변수
 		// recordCountPerPage	: 한 페이지당 보여질 게시물의 개수
 		// naviCountPerPage		: pageNavi가 몇개씩 보여질 것인지에 대한 변수
-		int postTotalCount = countAllMember(sqlSession); // 전체 게시물을 구하기 위한 메소드
+		int postTotalCount = selectCountAllMember(sqlSession); // 전체 게시물을 구하기 위한 메소드
 				
 		// 생성될 페이지 개수 구하기
 				
@@ -78,9 +83,6 @@ public class AdminMemberDAO {
 						
 		return sb+"";
 	}
-	// 전체 게시물 구하는 메소드
-	private int countAllMember(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("member.allMemberCount");
-	}
+	
 
 }

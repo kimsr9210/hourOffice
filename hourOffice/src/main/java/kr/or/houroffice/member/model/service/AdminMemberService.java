@@ -21,7 +21,12 @@ public class AdminMemberService {
 	
 	@Resource(name="adminMemberDAO")
 	private AdminMemberDAO mDAO;
-
+	
+	// 멤버 전체 수 구하는 메소드
+	public int selectCountAllMember() {
+		return mDAO.selectCountAllMember(sqlSession);
+		
+	}
 	// 멤버 전체 리스트 (인사관리 사원 조회)
 	public ArrayList<Member> selectAllMember(int currentPage, int recordCountPerPage) {
 		
@@ -31,5 +36,6 @@ public class AdminMemberService {
 	public String getPageNavi(int currentPage, int recordCountPerPage, int naviCountPerPage) {
 		return mDAO.getPageNavi(sqlSession,currentPage,recordCountPerPage,naviCountPerPage);
 	}
+	
 
 }

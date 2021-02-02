@@ -26,6 +26,12 @@
 		WHERE MEM_NO=#{memNo} and MEM_PWD=#{memPwd}
 	</select>
 	
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 목록 / 사원 총 수 -->
+	<select id="allMemberCount" resultType="int">
+		SELECT COUNT(*) AS MEM_ALL_COUNT FROM MEMBER WHERE MEM_DEL_YN='N'
+	</select>
+	
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 목록 / 전사원 리스트 -->
 	<select id="allMemberList" parameterType="hashmap" resultType="Member">
 		SELECT MEM_NO as memNo,
 				MEM_PWD as memPwd,
@@ -50,7 +56,4 @@
 		WHERE MEM_DEL_YN='N' AND (RNUM BETWEEN ${start} AND ${end})
 	</select>
 	
-	<select id="allMemberCount" resultType="int">
-		SELECT COUNT(*) AS MEM_ALL_COUNT FROM MEMBER WHERE MEM_DEL_YN='N'
-	</select>
 </mapper>
