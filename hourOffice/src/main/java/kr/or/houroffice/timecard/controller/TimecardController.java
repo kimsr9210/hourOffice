@@ -10,6 +10,11 @@ public class TimecardController {
 	public String holiday() {
 		return "timeCard/holiday";
 	}
+	
+	@RequestMapping(value ="/work.do")
+	public String work() {
+		return "timeCard/work";
+	}
 
 	
 	
