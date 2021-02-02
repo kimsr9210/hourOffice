@@ -5,54 +5,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"
-	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-	crossorigin="anonymous"></script>
-<style>
+	
+	<!-- 폰트 어썸 CDN -->
+	<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+	<!-- 제이쿼리 CDN -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
 
-#header {
-	width: 100%;
-	height: 40px;
-	line-height: 40px;
-	border: 0;
-	background-color: #22294A;
-	color: white;
-	font-weight: bold;
-} /*header:관리자 페이지 색깔 적용*/
-#headerClock {
-	margin-left: 210px;
-} /*headerClock:헤더에 시계 표시*/
-#headerMember {
-	height: 40px;
-	float: right;
-} /*headerMember:헤더에 오른쪽 꾸러미*/
-.headerIcon {
-	margin-top: 8px;
-	margin-right: 5px;
-} /*headerIcon:헤더에 오른쪽 아이콘*/
-#headerText {
-	float: right;
-	margin: 0 5px;
-} /*headerText:헤더에 오른쪽 문구*/
-#sideNavi {
-	width: 200px;
-	height: 100%;
-	float: left;
-	overflow-y: auto;
-	background-color: #22294A;
-	color: white;
-	font-weight: bold;
-	padding-top: 10px;
-} /*sideNavi:관리자 페이지 색깔 적용*/
-#teamName {
-	text-align: center;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
-	padding: 15px 0;
-	margin: 10px 10px 20px 10px;
-} /*teamName:사이드바 블랙보드*/
-</style>
+	<!-- 관리자 페이지 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/style.css" />
+	<!-- 관리자 페이지 헤더 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/header.css" />
 </head>
 <body>
 	<div id="header">
@@ -64,7 +26,7 @@
 		</div>
 	</div>
 	
-	<script>
+	<script type='text/javascript'>	    
 		setInterval(function(){             
 	        var date = new Date();
 	        var year = date.getYear();

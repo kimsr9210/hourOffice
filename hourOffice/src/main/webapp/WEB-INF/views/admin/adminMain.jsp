@@ -6,149 +6,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>H:our Office</title>
-<%@ include file ="./adminForm/style.jsp" %>
-<style>
-* {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	box-sizing: border-box;
-	font-size: 0.875rem;	
-}
-.contentsArray {
-	width: 85%;
-	min-width: 1000px;
-	margin: 0 auto;
-}
-#presentTer {
-	width: 60%;
-	min-width: 600px;
-}
 
-#toDoTer {
-	width: 30%;
-	min-width: 300px;
-}
+	<!-- 폰트 어썸 CDN -->
+	<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+	<!-- 제이쿼리 CDN -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
 
-#statsTer {
-	width: 92.5%;
-	min-width: 1000px;
-}
-.content {
-	padding: 20px;
-	margin: 20px;
-	float: left;
-	height: auto;
-	min-height: 400px;
-	background-color: white;
-	border-radius: 5px;
-	border: 0;
-	box-shadow: 0 0 6px #B3B3B3;
-}
+	<!-- 관리자 페이지 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/style.css" />
+	
+	<!-- 관리자 페이지 메인 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/main.css" />
 
-.terTblStyle {
-	width: 90%;
-	margin: 0 auto;
-	border-collapse: collapse;
-	border-radius: 5px;
-}
-
-.terTblStyle th {
-	padding: 10px;
-	background-color: #22294A;
-	color: white;
-	font-weight: bold;
-	font-size: 1rem;
-	border: 2px solid #22294A;
-}
-
-.terTblStyle td {
-	border: 2px solid #dcdcdc;	
-}
-
-#donutchart {
-	height: 400px;
-	margin: 0 auto;
-}
-.toDoList {
-	margin: 0 auto;
-	width: 90%;
-	border: none;
-	font-weight: bold;
-	padding-bottom: 8px;
-}
-
-.toDoList td {
-	padding: 10px;
-	border: 1px solid #dcdcdc;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-}
-.toDoList span {
-	background-color: rgba(255, 184, 184, 0.3);
-	text-align: left;
-}
-.toDoList p {
-	text-align: right;
-}
-#columnchart_material {
-	width: 100%;
-	padding: 20px;
-}
-.projectTbl {
-	width: 50%;
-}
-</style>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-        
-          ['상태', '현황'],
-          ['',     	  0],
-          ['',        0],
-          ['출근', 	 85],
-          ['퇴근',    13],
-          ['결근',     2],
-        ]);
-
-        var options = {
-          title: '사원 수 : 100명',
-          legend: {position:'bottom'},
-          pieHole: 0.3
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-      }
-</script>
-<script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['', '진행중인 프로젝트', '끝낸 프로젝트', '신규 프로젝트'],
-          ['10월', 20, 25, 5],
-          ['11월', 20, 26, 10],
-          ['12월', 15, 15, 20],
-          ['1월', 14, 22, 23],
-          ['2월', 10, 12, 1]
-        ]);
-
-        var options = {
-        	legend: {position: 'none'}
-		};
-
-        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-      }
-    </script>
 </head>
 <body>
 	<div id="wrap">
@@ -215,17 +84,65 @@
 						</table>
 					</div>
 				</div>
-
 			</div>
-
 		</div>
 	</div>
 
-	<script>
+	<script type='text/javascript'>	    
 		$(document).ready(function() {
 			var $teamName = $('#teamName');
 			$teamName.removeClass('hoverColor');
 		});
+	</script>
+	
+	<!-- 구글 차트  -->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+	      google.charts.load("current", {packages:["corechart"]});
+	      google.charts.setOnLoadCallback(drawChart);
+	      function drawChart() {
+	        var data = google.visualization.arrayToDataTable([
+	        
+	          ['상태', '현황'],
+	          ['',     	  0],
+	          ['',        0],
+	          ['출근', 	 85],
+	          ['퇴근',    13],
+	          ['결근',     2],
+	        ]);
+	
+	        var options = {
+	          title: '사원 수 : 100명',
+	          legend: {position:'bottom'},
+	          pieHole: 0.3
+	        };
+	
+	        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+	        chart.draw(data, options);
+	      }
+	</script>
+	<script type="text/javascript">
+	      google.charts.load('current', {'packages':['bar']});
+	      google.charts.setOnLoadCallback(drawChart);
+	
+	      function drawChart() {
+	        var data = google.visualization.arrayToDataTable([
+	          ['', '진행중인 프로젝트', '끝낸 프로젝트', '신규 프로젝트'],
+	          ['10월', 20, 25, 5],
+	          ['11월', 20, 26, 10],
+	          ['12월', 15, 15, 20],
+	          ['1월', 14, 22, 23],
+	          ['2월', 10, 12, 1]
+	        ]);
+	
+	        var options = {
+	        	legend: {position: 'none'}
+			};
+	
+	        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+	
+	        chart.draw(data, google.charts.Bar.convertOptions(options));
+	      }
 	</script>
 </body>
 </html>

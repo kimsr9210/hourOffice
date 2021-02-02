@@ -5,10 +5,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>H:our Office</title>
-<%@ include file ="../adminForm/style.jsp" %>
-<style>
-	
-</style>
+
+	<!-- 폰트 어썸 CDN -->
+	<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+	<!-- 제이쿼리 CDN -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
+
+	<!-- 관리자 페이지 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/style.css" />
+
 </head>
 <body>
 	<div id="wrap">
@@ -63,20 +68,23 @@
 		</div>
 	</div>
 	
-	<script>	
+	<script type='text/javascript'>		
 		$(document).ready(function(){
 			var $deleteList = $('#deleteList');			
 			var $deleteSelect = $('#deleteSelect');
 			
             /* 삭제 관리일 때 */
-            $deleteList.css('height','110px');
             $deleteSelect.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
+            $deleteList.css('height','110px');
             
-			$deleteSelect.removeClass('hoverColor').addClass('click');
+            $deleteSelect.removeClass('hoverColor').addClass('click');
 			$deleteList.removeClass('accordion');
 			$deleteList.addClass('click');
-			$deleteList.children().eq(2).children(":first").removeClass('hoverColor');	
-	
+			$deleteList.children().eq(2).children().removeClass('hoverColor');	
+            $deleteSelect.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
+		});
+		
+		$(function(){
 			// 결재안 조회 checkbox 전부 누르기		
 			$('#approvalList').find('input').first().click(function(){
 							
@@ -90,8 +98,8 @@
 					});
 				}	
 			});
-		
 		});
+		
 	</script>
 </body>
 </html>

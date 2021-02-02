@@ -5,26 +5,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>H:our Office</title>
-<%@ include file ="../adminForm/style.jsp" %>
-<style>
-	.adminSpace {
-	    padding : 0 30px 30px 30px;
-	}/*관리자 여백*/
-	.adminName {
-	    font-size: 1rem;
-	    font-weight: bold;
-	}/*관리자 종류*/
-	.adminLine {
-	    margin : 7.5px 0;
-	}
-	.adminTitle {
-	    font-size: 1rem;
-	    margin-right: 5px;
-	}/*관리자 관리의 소제목*/
-	.adminText {
-	    color: gray;
-	}/*관리자 관리의 소제목의 설명*/
-</style>
+
+	<!-- 폰트 어썸 CDN -->
+	<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+	<!-- 제이쿼리 CDN -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
+
+	<!-- 관리자 페이지 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/style.css" />
+	
+	<!-- 관리자 페이지 관리자 관리 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/administration.css" />
+
 </head>
 <body>
 	<div id="wrap">
@@ -114,7 +106,7 @@
                         </div>                       
                         <div id="modal">
 							<div class="modal-content">
-								<div class="exit-icon"><i class="far fa-times-circle"></i></div>
+								<div class="exit-icon"><i class="iModal far fa-times-circle"></i></div>
 								<div class="searchStyle">
 									<input type="text" name="#"/>
 									<button><i class="fas fa-search"></i></button>
@@ -145,17 +137,8 @@
 		</div>
 	</div>
 		
-	<script>	
-		
-		$(document).ready(function(){
-
-			// 네비 화살표 돌리기	
-			$(document).ready(function(){
-				$adminUpdate = $('#adminUpdate');
-		        $adminUpdate.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
-				$adminUpdate.removeClass('hoverColor').addClass('click');
-			});
-				
+	<script type='text/javascript'>	
+		$(function(){
 			// 전산관리자 checkbox 전부 누르기		
 			$('#adminList').find('input').first().click(function(){
 							
@@ -211,11 +194,22 @@
 				$('#modal').show();				
 			});			
 			// 모달 닫기
-            $('.fa-times-circle').click(function(){
+            $('#modal .iModal').click(function(){
                 $('#modal').hide();
                 $('#modal input').val('');
-            });				
+            });
+			
 		});
+		
+		$(document).ready(function(){
+			$adminUpdate = $('#adminUpdate');
+	        $adminUpdate.children().eq(2).children().addClass('fa-rotate-180');		
+			$adminUpdate.removeClass('hoverColor').addClass('click');
+	        $adminUpdate.children().eq(2).children().attr('class','iArrow fas fa-angle-left');		
+
+		});
+		
+
 	</script>
 </body>
 </html>
