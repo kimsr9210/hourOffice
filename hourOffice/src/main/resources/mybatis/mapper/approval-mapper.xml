@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="approval">
+  	<select id="selectApprovalListRequest" resultType="Approval">
+  		select 
+  			DOCU_NO as docuNo,
+  			MEM_NO as memNo,
+  			DEPT_CODE as deptCode,
+  			DOCU_DATE as docuDate,
+  			DOCU_TYPE as docuType,
+  			TITLE as title,
+  			APR_TYPE as aprType,
+  			URGENCY_YN as urgencyYN,
+  			LOCK_YN as lockYN,
+  			DEL_YN as delYN,
+  			FINAL_DATE as finalDate
+  			from approval where MEM_NO = #{memNo} and DEL_YN = 'N'
+  	</select>
+  	
+  	<select id="selectMyDeptPeople" parameterType="Member" resultType="AprLineMember">
+  		SELECT 
+  			MEM_NO as memNo,
+			MEM_POSITION as memPosition,
+			MEM_NAME as memName,
+			DEPT_CODE as deptCode,
+			DEPT_NAME as deptName
+  		FROM MEM_DEPT WHERE DEPT_CODE = #{deptCode} AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		ORDER BY DEPT_CODE
+  	</select>
+  	
+  	<select id="selectCCCLinePeople" parameterType="Member" resultType="AprLineMember">
+  		SELECT 
+  			MEM_NO as memNo,
+			MEM_POSITION as memPosition,
+			MEM_NAME as memName,
+			DEPT_CODE as deptCode,
+			DEPT_NAME as deptName
+  		FROM MEM_DEPT WHERE DEPT_CODE IN ('D2',#{deptCode}) AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		ORDER BY DEPT_CODE
+  	</select>
+</mapper>

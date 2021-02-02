@@ -40,7 +40,7 @@
                         </form>
                     </div>
                     <div id="TitleContents">
-                       <a href="" id="new-apr-btn">+ 새 결재문서</a>
+                       <a href="/aprFormHol.ho" id="new-apr-btn">+ 새 결재문서</a>
                         <ul id="apr-list-filter">
                             <li><a href="">전체목록</a></li>
                             <li><a href="">진행중</a></li>
