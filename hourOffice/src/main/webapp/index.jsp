@@ -36,8 +36,15 @@
 	<a href="/admin_tap_allNoticePage.ho">관리자탭 - 공지 사항 전체 list</a><br>
 	<a href="/admin_tap_noticeAdd.ho">관리자탭 - 공지 사항 새글쓰기</a><br>
 	<a href="/admin_tap_noticeModify.ho">관리자탭 - 공지 사항 수정하기</a><br>
+	<br><br>
+	<a href="/addbook.do">사내주소록</a><br>
+	<a href="/myaddbook.do">개인주소록</a><br><br>
+	
+	<a href="/mypage.do">내개인정보</a><br>
+	<a href="/information.do">인사정보</a><br><br>
 	<br>
 	<a href="/adminMainPage.ho">관리자탭 - 관리자 페이지 입장하기</a><br><br>
 	<a href="/holiday.do">연차내역</a><br>
+	<a href="/work.do">근태현황</a><br>
 </body>
 </html>
