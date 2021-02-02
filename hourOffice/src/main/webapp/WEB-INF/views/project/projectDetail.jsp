@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.project.model.vo.Project"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,6 +25,9 @@
 <!-- TextArea 자동 높이 조절 CDN -->
 <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
+<%
+	Project p = (Project)request.getAttribute("project");
+%>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -39,7 +43,7 @@
                             <div id="projectDetail">
                                 <div id="DetailTop">
                                     <p id="projectName">
-                                        <i class="far fa-star"></i>&nbsp;&nbsp;BlackBoard
+                                        <i class="far fa-star"></i>&nbsp;&nbsp;<%=p.getProSubject() %>
                                         <i id="projectSetting" class="fas fa-cog"></i>
                                     </p>
                                     <div id="projectOption">
@@ -53,10 +57,10 @@
                                         <p id="mgrFile" class="optionRegular">파일 다운로드 권한 설정</p>
                                         <hr>
                                         <p class="optionBold">프로젝트 번호</p>
-                                        <p class="optionRegular">805506</p>
+                                        <p class="optionRegular"><%=p.getProNo() %></p>
                                     </div>
                                     <p id="projectExp">
-                                        IT중소기업을 위한 그룹웨어 제작
+                                        <%=p.getProExp() %>
                                     </p>
                                 </div>
                                 <div id="DetailBot">

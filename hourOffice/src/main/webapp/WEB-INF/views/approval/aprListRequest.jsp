@@ -13,6 +13,7 @@
 
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
+<link rel="stylesheet" type="text/css" href="/resources/css/approval/approval_list.css" />
 
 </head>
 <body>
