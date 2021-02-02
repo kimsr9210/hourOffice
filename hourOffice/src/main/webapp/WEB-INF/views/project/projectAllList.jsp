@@ -1,3 +1,5 @@
+<%@page import="kr.or.houroffice.project.model.vo.Project"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -20,6 +22,12 @@
 	href="/resources/css/project/projectAllList.css" />
 </head>
 <body>
+
+<%
+	ArrayList<Project> myList = (ArrayList<Project>)request.getAttribute("myList");
+	ArrayList<Project> publicList = (ArrayList<Project>)request.getAttribute("publicList");
+%>
+
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -40,45 +48,80 @@
 						<div class="projectList">
 
 							<!-- 얘가 여러개 생겨남 -->
-							<div class="projectBox">
-								<a href="#">
-									<div class="projectSubject">프로젝트 이름</div>
-									<div class="projectMember">0명 참여중</div>
-								</a>
-								<div class="projectLike">
-									<a href="#"><i class="far fa-star"></i></a>
+						<%if(!myList.isEmpty()){ %>
+							<%for(Project p : myList) {%>
+								<%if(p.getCompYN()=='N'){ %>
+								<form action="/projectDetail.ho" method="get">
+								<div class="projectBox">
+									<a>
+										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
+										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+										<div class="projectMember">0명 참여중</div>
+									</a>
+									<div class="projectLike">
+										<a><i class="far fa-star"></i></a>
+									</div>
 								</div>
-							</div>
+								</form>
+								<%} %>
+							<%} %>
+						<%}else{ %>
+							<div class="noneProject">참여하고 있는 프로젝트가 없습니다</div>
+						<%} %>
 						</div>
 
 
 						<br>
 						<div>공개 프로젝트</div>
 						<div class="projectList">
-							<div class="projectBox">
-								<a href="#">
-									<div class="projectSubject">프로젝트 이름</div>
-									<div class="projectMember">0명 참여중</div>
-								</a>
-								<div class="projectLike">
-									<a href="#"><i class="far fa-star"></i></a>
+						<%if(!publicList.isEmpty()){ %>
+							<%for(Project p : publicList) {%>
+								<form action="/projectDetail.ho" method="get">
+								<div class="projectBox">
+									<a>
+										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
+										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+										<div class="projectMember">0명 참여중</div>
+									</a>
+									<div class="projectLike">
+										<a><i class="far fa-star"></i></a>
+									</div>
 								</div>
-							</div>
+								</form>
+							<%} %>
+						<%}else{ %>
+							<div class="noneProject">공개 프로젝트가 없습니다</div>
+						<%} %>
 
 						</div>
 
 						<br>
 						<div>완료 프로젝트</div>
 						<div class="projectList">
-							<div class="projectBox">
-								<a href="#">
-									<div class="projectSubject">프로젝트 이름</div>
-									<div class="projectMember">0명 참여중</div>
-								</a>
-								<div class="projectLike">
-									<a href="#"><i class="far fa-star"></i></a>
+						
+						
+						<%if(!myList.isEmpty()){ %>
+							<%int count=0; %>
+							<%for(Project p : myList) {%>
+								<%if(p.getCompYN()=='Y'){ %>
+								<%count++; %>
+								<div class="projectBox">
+									<a href="#">
+										<div class="projectSubject"><%=p.getProSubject() %></div>
+										<div class="projectMember">0명 참여중</div>
+									</a>
+									<div class="projectLike">
+										<a href="#"><i class="far fa-star"></i></a>
+									</div>
 								</div>
-							</div>
+								<%} %>
+							<%} %>
+							<%if(count==0){ %>
+								<div class="noneProject">완료된 프로젝트가 없습니다</div>
+							<%} %>
+						<%} %>
+							
+							
 						</div>
 						<!----------------------------------->
 					</div>
