@@ -38,5 +38,6 @@
 	<a href="/admin_tap_noticeModify.ho">관리자탭 - 공지 사항 수정하기</a><br>
 	<br>
 	<a href="/adminMainPage.ho">관리자탭 - 관리자 페이지 입장하기</a><br>
+	<a href="/holiday.do">연차내역</a><br>
 </body>
 </html>

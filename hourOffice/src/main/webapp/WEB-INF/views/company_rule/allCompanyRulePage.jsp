@@ -11,122 +11,16 @@
     <!--jQuery CDN-->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	
-	<!-- CSS -->
-	
+	<!-- 헤더 & 네비 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
-<style>
-        /*div{
-            border: 1px solid #FFD8D8;
-        }*/
-        *:focus{
-            outline: 0;
-        }
-        a{
-            color: black;
-        }
-        /* 폰트어썸 */
-        i{
-             color: #78BEB5;
-        }
-        /* 모든 버튼 */
-        button{
-            min-width: 28px; height: 27px;
-            font-size: 1rem; font-weight: bold;
-            padding: 0 10px;
-            color: white; background-color: #1D9F8E;
-            border-style: none;
-            border-radius: 5px;
-            box-shadow: 1px 1px 5px #cccccc;
-            cursor: pointer;
-        }
-        input{
-            border: 1px solid;
-            border-radius: 3px;
-        }
-        /* 게시글 목록 */
-        table{
-            width: 100%; 
-            text-align: center;
-            border-collapse: collapse;
-            margin-top: 5px;
-        }
-        
-        table tr{
-            border: 1px solid lightgray;
-            border-left: 0; border-right: 0;
-        }
-        table th,td{
-            padding: 10px;
-        }
-        table td:first-child{
-            width:  70px;
-        }
-        /* table 안에서 말줄임 ... 넣는 css 1 */
-        table td:nth-child(2) div{
-            padding: 0 50px;
-            text-align: left;
-            display: table;
-        	table-layout: fixed;
-        	width: 100%;
-        	white-space: nowrap;
-        }
-        /* table 안에서 말줄임 ... 넣는 css 2 */
-        table td:nth-child(2) div > *{
-            display: table-cell;
-        	overflow: hidden;
-        	text-overflow: ellipsis;
-        }
-        table td:nth-child(3){
-            width: 100px;
-        }
-        table td:last-child{
-            width: 100px;
-        }
-        
-        /* 페이지 번호 */
-        #pageNavi{
-            text-align: center;
-            margin: 20px 0 10px 0;
-        }
-        /* 검색 div */
-        #search-div{
-            text-align: center;
-        }
-        /* select */
-        #search-div select{
-            width: 85px; height: 25px;
-            align-content: center;
-            border-radius: 3px;
-            border: 1px solid black;
-            background: url(/resources/images/selectarrow.png) 115% center no-repeat;
-            /* 화살표 없애기 */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            /* 가운데 정렬 */
-            text-align-last: center;
-            text-align: center;
-            -ms-text-align-last: center;
-            -moz-text-align-last: center;
-            padding-right: 12px;
-            
-        }
-        #search-div select::-ms-expand {
-           display: none;
-        }
-        /* 검색창 */
-        #search-div input{
-            height: 25px;
-            padding: 0 10px;
-        }
-        #search-div button{
-            position: relative;
-            top: 1px;
-        }
-        #search-div button:active{
-            box-shadow: 0 0 5px black;
-        }
-    </style>
+	<!-- 관리자 탭 공통 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
+	<!-- 게시판 공통 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/board.css" />
+	<!-- CSS 테이블만 있는 것 -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/userBoard.css" />
+	
+
     <script>
         $(function(){
             
@@ -163,7 +57,7 @@
                             </tr>
                             <tr>
                                 <td>1</td>
-                                <td><div><a href="">1조 1항</a></div></td>
+                                <td><div><a href="/companyRule.ho">1조 1항</a></div></td>
                                 <td>주다빈 사원</td>
                                 <td>2021/01/28</td>
                             </tr>
@@ -179,7 +73,7 @@
                                 <option value="notContent">내용</option>
                             </select>
                             <input type="text" name="text"/>
-                            <button><i class="fas fa-search"></i></button>
+                            <button><i class="fas fa-search i-icon"></i></button>
                             </form>
                         </div>
 						

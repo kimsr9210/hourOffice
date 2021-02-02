@@ -11,319 +11,13 @@
     <!--jQuery CDN-->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	
-	<!-- CSS -->
-	
+	<!-- 헤더 & 네비 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
+	<!-- 관리자 탭 공통 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/memberInfo.css" />
 	
-	<style>
-        #TitleContents *:focus{
-            outline: 0;
-        }
-        #TitleContents input[type=text]{
-            height: 38px;
-        }
-        #TitleContents input[type=text]:focus{
-            box-shadow: 0 0 5px 5px #D9E5FF;
-            border: 1px solid #A0BAED;
-            border-radius: 5px;
-            
-        }
-        #TitleContents img{
-            width: 100%; height: 100%;
-        }
-        /* 모든 버튼 */
-        #TitleContents button{
-            font-weight: bold;
-            padding: 0 10px;
-            min-width: 60px;
-            height: 35px;
-            color: white;
-            background-color: #1D9F8E;
-            border-radius: 5px;
-            border-style: none;
-            margin: 5px 5px 0 0;
-            box-shadow: 1px 1px 5px #cccccc;
-            cursor: pointer;
-        }
-        /* 취소 버튼 */
-        #TitleContents .deleteBtn{
-            background-color: #FF6363;
-        }
-        #TitleContents #wrap{
-            min-width: 1400px;
-        }
-        #TitleContents #contWrapper{
-            width: 850px; height: auto;
-            margin: 0 auto;
-            min-width: 800px;
-        }
-        
-        /* select 태그 디자인*/
-        #TitleContents select{
-            display:inline-block;
-            width: 120px; height: 25px;
-            border-radius: 3px;
-            background: url(/resources/images/selectarrow.png) 105% center no-repeat;
-            /* 화살표 없애기 */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        select::-ms-expand {
-           display: none;
-        }
-        /*
-        .select{
-          position: relative;
-          display: inline-block;
-          width :100%;
-        }
-        .select__arrow{
-          position: absolute;
-          top : 29.7px;
-          right: 78px;
-          width :0;
-          height :0;
-          pointer-events: none;
-          border-style :solid;
-          border-width: 8px 5px 0 5px;
-          border-color: #41AA9D transparent transparent transparent;
-        }
-        */
-        
-        #TitleContents #subtitle{
-            font-size: 1rem;
-        }
-        
-        /* 컨텐트 div */
-        #TitleContents .floatDiv{
-            float: left;
-            width: 50%;
-        }
-        /* 오른쪽 div영역 */
-        #TitleContents #rightCont{
-            padding-top: 27px;
-            padding-left: 10%;
-            margin-bottom: 60px;
-        }
-        /* 각각의 정보 div */
-        #TitleContents .infoRespective{
-            margin: 20px 0;
-        }
-        /* input 태그 중 text 타입 긴거 */
-        #TitleContents .inputStyle{
-            border:0;
-            width: 330px; height: 35px;
-            background-color: #E7E0E8;
-            border-radius: 3px;
-            margin-top: 5px;
-            padding: 0 20px;
-            font-size: 1rem
-        }
-        /* img 태그 div */
-        #TitleContents #memProfile{
-            width: 200px; height: 230px;
-            margin: 0 auto;
-            margin-bottom: 50px;
-        }
-        /* 직위 & 부서 div */
-        #TitleContents #position_dept{
-            width: 326px;
-            margin: 0 auto;
-        }
-        /* 직위 & 부서 각각의 div */
-        #TitleContents .posi_deptDiv{
-            float: left;
-            margin: 0 10px;
-        }
-        /* 직위 & 부서 select 태그 */
-        #TitleContents .posi_deptSelect{
-            width: 140px; height: 39px;
-            padding-left: 37px;
-            margin-top: 5px;
-        }
-        /* 생년월일 div */
-        #TitleContents #birthDiv{
-            float: left;
-            width: 66%;
-        }
-        /* 생년월일 select 태그 */
-        #TitleContents .memBirthSelect{
-            width: 65px; height: 39px;
-            padding-left: 8px;
-            margin-top: 5px;
-            background: url(/resources/images/selectarrow.png) 120% center no-repeat;
-        }
-        #TitleContents #birthYear{
-            width: 80px;
-            background-position: 110%;
-        }
-        /* 성별 div */
-        #TitleContents #genderDiv{
-            float: left;
-            width: 34%; height: 62px;
-            padding-left: 12px;
-        }
-        /* 성별 input 태그 */
-        #TitleContents .genderInput{
-            margin: 18px 5px 0 5px;
-        }
-        /* 현주소 input 태그*/
-        #TitleContents #addrInput{
-            width: 70px; height: 35px;
-            margin-top: 5px;
-            text-align: center;
-        }
-        
-        /* 연락처 select & input 태그 */
-        #TitleContents #phoneSelect{
-            width: 70px; height: 39px;
-            padding-left: 14px;
-            background: url(/resources/images/selectarrow.png) 120% center no-repeat;
-        }
-        #TitleContents .phoneInput{
-            width: 70px; height: 38px;
-            margin-left: 5px;
-            margin-top: 5px;
-            text-align: center;
-        }
-        
-        
-        /* 안쪽 hr */
-        #TitleContents .innerHr{
-            width: 840px;
-            margin: 10px 0;
-            border: 1px dashed lightgray;
-        }
-        /* 바깥 hr */
-        #TitleContents .outHr{
-            border: 1px solid white;
-            margin: 10px 0;
-        }
-        #TitleContents .outHr:nth-child(4){
-            padding-top: 25px;
-        }
-        /* 학력 */
-        #TitleContents #acaInfor{
-            width: 92%;
-        }
-        #TitleContents #acaInfor + div{
-            width: 8%; height: 42px;
-            padding-top: 11px;
-        }
-        #TitleContents #schoolNameInput{
-            width: 120px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        #TitleContents #majorNameInput{
-            width: 120px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        #TitleContents #gradSelect{
-            width: 90px; height: 35px;
-            padding-left: 8px;
-        }
-        /* 자격증 및 면허 */
-        #TitleContents #licInfor{
-            width: 577px;
-        }
-        #TitleContents #licInfor + div{
-            width: 31.6%; height: 43px;
-            padding-top: 11px;
-        }
-        #TitleContents #licNameInput{
-            width: 140px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        #TitleContents #licOriginInput{
-            width: 140px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        /* 경력 */
-        #TitleContents #carInfor{
-            width: 745px;
-        }
-        #TitleContents #carInfor + div{
-            width: 11.6%; height: 43px;
-            padding-top: 11px;
-        }
-        #TitleContents #carPlaceInput{
-            width: 110px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        #TitleContents #carPositionInput{
-            width: 90px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        #TitleContents #carContentInput{
-            width: 100px;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        /* 병역 */
-        #TitleContents #milInfor{
-            width: 67%;
-        }
-        #TitleContents #milInfor + div{
-            width: 33%; height: 39px;
-        }
-        #TitleContents #milTypeSelect{
-            width: 66px; height: 35px;
-            padding-left: 8px;
-        }
-        #TitleContents #milReasonInput{
-            width: 15%;
-            margin-top: 5px;
-            padding: 0 10px;
-        }
-        
-        /* 기간 input */
-        #TitleContents .dateInput{
-            width: 118px; height: 38px;
-            margin-top: 5px;
-            padding-left: 5px;
-            font-size: 1.02rem;
-        }
-        /* 추가 버튼 */
-        #TitleContents .plusBtn{
-            width: 25px; height: 25px;
-            margin-right: 5px;
-            color: white;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background-color: gold;
-            border-radius: 100%;
-            cursor: pointer;
-        }
-        /* 추가취소 버튼 */
-        #TitleContents .minusBtn{
-            width: 25px; height: 25px;
-            color: white;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background-color: #FF6363;
-            border-radius: 100%;
-            cursor: pointer;
-        }
-        #TitleContents .float{
-            float: left;
-        }
-        /* 저장 버튼들 */
-        #TitleContents #saveDiv{
-            text-align: center;
-            padding-left: 7px;
-            margin: 0 auto;
-            margin-top: 70px;
-        }
-    </style>
     
 <script>
     // 생년월일 선택 목록 셋팅
@@ -421,7 +115,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div style="width:63%; margin-top:20px; display:inline-block; text-align:right;">어쩌구 저쩌구.jpg</div> <button type="button" class="allBtn">사진 업로드</button>
+                                <div style="width:63%; margin-top:20px; display:inline-block; text-align:right;">어쩌구 저쩌구.jpg</div> <button type="button">사진 업로드</button>
                             </div>
                         </div>
                         <div id="rightCont" class="floatDiv">
@@ -447,7 +141,7 @@
                            <hr color="white">
                            <div class="infoRespective">
                                현주소<br>
-                               <input type="text" name="memAddr1" id="addrInput"/> <button type="button" class="allBtn">검색</button><br>
+                               <input type="text" name="memAddr1" id="addrInput"/> <button type="button">검색</button><br>
                                <input type="text" name="memAddr2" class="inputStyle"/>
                            </div>
                            <div class="infoRespective">
@@ -499,7 +193,7 @@
                             </div>
                         </div>
                         
-                        <div id="saveDiv"><button type="button" class="allBtn">저장 후 추가 생성</button> <button class="allBtn">저장</button> <a href=""><button type="button" class="allBtn deleteBtn">취소</button></a></div>
+                        <div id="saveDiv"><button type="button">저장 후 추가 생성</button> <button>저장</button> <a href=""><button type="button" class="delBtn">취소</button></a></div>
                         
                     </form>    
                     </div>

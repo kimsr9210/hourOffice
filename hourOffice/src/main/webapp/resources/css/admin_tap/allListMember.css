@@ -1,0 +1,62 @@
+@CHARSET "UTF-8";
+
+		/* select 태그 디자인*/
+        #TitleContents select{
+            display:inline-block;
+            width: 120px; height: 30px;
+            padding-left: 30px;
+            border: 1px solid lightgray;
+            background: url(/resources/images/selectarrow2.png) 95% center no-repeat;
+        }
+        /* 총 사원 수  */
+        #totalMemNum{
+            font-size: 1.2rem;
+        }
+        #totalMem{
+            font-weight: bold;
+        }
+        /* 버튼 3개 div */
+        #btnPlace{
+            padding-top: 30px;
+        }
+        /* 모든 버튼 */
+        #TitleContents button{
+            min-width: 50px;
+            height: 30px;
+            margin-right: 5px;
+        }
+        /* a 태그 */
+        #TitleContents #btnPlace a{
+        	padding:0;
+        }
+        
+        /* 사원 전체 목록 테이블 */
+        #memAllListTbl{
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* table tr 크기 */
+        /* 사원정보 tr */
+        #TitleContents tr:nth-child(2n){
+            height: 40px;
+            text-align: center;
+        }
+        /* 직위 변경 공간 tr */
+        .positionChangePlace{
+            background-color:#FFFAF5;
+            display: none;
+            height: 60px;
+            box-shadow: 1px 1px 5px #E7E0E8 inset;
+            border-radius: 5px;
+        }
+        /* checkbox 있는 td */
+        #TitleContents tr:nth-child(2n)>td:first-child{
+            text-align: center;
+        }
+        
+        /* 페이지 */
+        #pageNavi{
+            text-align: center;
+            padding: 20px 0;
+        }
