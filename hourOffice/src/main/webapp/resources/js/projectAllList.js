@@ -82,4 +82,8 @@ $(function() {
 		}
 	});
 
+	//프로젝트 클릭 시
+	$('.projectSubject').click(function(){
+		$(this).next().submit();
+	});
 });
