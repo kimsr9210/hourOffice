@@ -47,7 +47,7 @@
 
 .projectBox>a {
 	text-decoration: none;
-	cursor:pointer;
+	cursor: pointer;
 }
 
 .projectMember {
@@ -65,7 +65,7 @@
 	width: 20%;
 	float: left;
 	font-size: 1.2rem;
-	cursor:pointer;
+	cursor: pointer;
 }
 
 .projectLike>a {
@@ -426,10 +426,14 @@
 	font-weight: 800;
 }
 
-.projectDetailBtn{
+.projectDetailBtn {
 	border: 0;
-	background:none;
+	background: none;
 	cursor: pointer;
 	color: white;
 	outline: none;
+}
+
+.projectClass {
+	padding-bottom: 20px;
 }

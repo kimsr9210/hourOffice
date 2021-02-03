@@ -56,7 +56,7 @@
 									<a>
 										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
 										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
-										<div class="projectMember">0명 참여중</div>
+										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
 										<a><i class="far fa-star"></i></a>
@@ -72,7 +72,7 @@
 
 
 						<br>
-						<div>공개 프로젝트</div>
+						<div class="projectClass">공개 프로젝트</div>
 						<div class="projectList">
 						<%if(!publicList.isEmpty()){ %>
 							<%for(Project p : publicList) {%>
@@ -81,7 +81,7 @@
 									<a>
 										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
 										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
-										<div class="projectMember">0명 참여중</div>
+										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
 										<a><i class="far fa-star"></i></a>
@@ -96,7 +96,7 @@
 						</div>
 
 						<br>
-						<div>완료 프로젝트</div>
+						<div class="projectClass">완료 프로젝트</div>
 						<div class="projectList">
 						
 						
@@ -108,7 +108,7 @@
 								<div class="projectBox">
 									<a href="#">
 										<div class="projectSubject"><%=p.getProSubject() %></div>
-										<div class="projectMember">0명 참여중</div>
+										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
 										<a href="#"><i class="far fa-star"></i></a>

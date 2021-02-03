@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.project.model.vo.Project"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -25,6 +26,94 @@
 <script
 	src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
+<style>
+/*------------submit 버튼 */
+.boardWriteText {
+	width: 100%;
+	padding: 30px;
+	font-family: "맑은 고딕";
+	font-size: 0.875rem;
+	resize: none;
+	border: 0;
+	outline: none;
+}
+        .boardWriteBot{
+            width: 100%;
+            height: 50px;
+            border-top: 1px solid #cccccc;
+        }
+        .fileUploadBox{
+            width: 15%;
+            height: 100%;
+            border-right: 1px solid #cccccc;
+            float: left;
+        }
+        .fileUpload{
+            display: none;
+        }
+        .imgUpload{
+            display: none;
+        }
+        .fileUploadImg{
+            font-size: 2rem;
+            padding-left: 20px;
+            color: #999999;
+            cursor: pointer;
+        }
+        .fileNameBox{
+            width: 60%;
+            height: 100%;
+            float: left;
+        }
+        .fileName{
+            outline: none;
+            width: 75%;
+            height: 100%;
+            text-align: right;
+            float: left;
+            border: 0;
+        }
+        .fileSize{
+            outline: none;
+            width: 20%;
+            height: 100%;
+            text-align: center;
+            float: left;
+            border: 0;
+            border-left: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+        }
+        
+        .boardUpload{
+            width: 25%;
+            height: 100%;
+            float: right;
+            line-height: 50px;
+        }
+        
+        .publicYN{
+            width: 80px;
+            height: 40px;
+            border-radius: 5px;
+            
+        }
+        
+        .uploadBtn{
+            width: 100px;
+            height: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 0;
+            background-color: #999999;
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+</style>
+
+<%
+	Project p = (Project)request.getAttribute("project");
+%>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -40,8 +129,8 @@
 							<div id="projectDetail">
 								<div id="DetailTop">
 									<p id="projectName">
-										<i class="far fa-star"></i>&nbsp;&nbsp;BlackBoard <i
-											id="projectSetting" class="fas fa-cog"></i>
+										<i class="far fa-star"></i>&nbsp;&nbsp;<%=p.getProSubject() %>
+										<i id="projectSetting" class="fas fa-cog"></i>
 									</p>
 									<div id="projectOption">
 										<p class="optionBold">프로젝트 설정</p>
@@ -54,9 +143,9 @@
 										<p id="mgrFile" class="optionRegular">파일 다운로드 권한 설정</p>
 										<hr>
 										<p class="optionBold">프로젝트 번호</p>
-										<p class="optionRegular">805506</p>
+										<p class="optionRegular"><%=p.getProNo() %></p>
 									</div>
-									<p id="projectExp">IT중소기업을 위한 그룹웨어 제작</p>
+									<p id="projectExp"><%=p.getProExp() %></p>
 								</div>
 							</div>
 
@@ -64,112 +153,160 @@
 							<br>
 							<p id="boardWriteTitle">게시물 작성</p>
 							<div id="boardWrite">
-								<form action="#" method="post">
-									<ul id="boardSelect">
-										<li><span class="modeSelect"><i
-												class="far fa-edit"></i> 글작성</span></li>
-										<li><span class="modeSelect"><i
-												class="fas fa-laptop-code"></i> 코드</span></li>
-										<li><span class="modeSelect"><i
-												class="fas fa-briefcase"></i> 일정</span></li>
-										<li><span class="modeSelect"><i
-												class="fas fa-briefcase"></i> 할일</span></li>
-									</ul>
-									<div id="boardWriteContents">
-
-										<!-- 일반 글 작성일 때 -->
-										<div id="writeBox" class="boardAllStyle">
-											<textarea id="boardWriteText" name=""
-												placeholder="내용을 입력해 주세요"></textarea>
-										</div>
-
-										<!--일정 일 때-->
-										<div id="scheduleBox" class="boardAllStyle">
-											<input type="text" id="boardWriteText" name=""
-												placeholder="일정 제목을 입력해 주세요." />
-											<div id="scheduleBoxTop">
-												<i class="far fa-clock scheduleImg"></i> <input type="date"
-													class="scheduleDate" /> <input type="time"
-													class="scheduleTime" />
-												<div id="line">~</div>
-												<input type="date" class="scheduleDate" /> <input
-													type="time" class="scheduleTime" />
-											</div>
-											<div id="scheduleBoxBot">
-												<i class="fas fa-user scheduleImg"></i>
-												<div id="scheduleMember">
-
-													<!--얘가 여러개-->
-													<input type="text" value="백두진" readonly="readonly" /> <i
-														class="fas fa-times scheduleMemberDelete"></i>
-													<!--얘가 여러개-->
-
-													<input type="text" value="이진원" readonly="readonly" /> <i
-														class="fas fa-times scheduleMemberDelete"></i>
-												</div>
-												<input type="text" id="scheduleAdd" placeholder="참석자 추가" />
-											</div>
-											<div id="scheduleMemoBox">
-												<i class="far fa-sticky-note scheduleImg"></i> <input
-													id="scheduleMemo" type="text" placeholder="메모를 입력하세요"
-													name="memo" />
-											</div>
-										</div>
-
-										<!--할일 일 때-->
-										<div id="workBox" class="boardAllStyle">
-											<input type="text" class="boardWriteText" name=""
-												placeholder="할일 제목을 입력해 주세요." />
-
-											<!-- 얘가 여러개 -->
-											<div class="workList">
-												<i class="fas fa-minus-circle workDelete"></i> <input
-													class="workTitle" type="text" placeholder="할일 입력" /> <input
-													type="date" class="workDate" /> <i
-													class="fas fa-user-plus workMember"></i> <input
-													type="hidden" />
-											</div>
-
-											<div id="workAdd">
-												<i class="fas fa-plus-circle workAddBtn"></i> <input
-													class="workTitle" type="text" placeholder="할일 추가"
-													readonly="readonly" />
-											</div>
-										</div>
-
-										<div id="workHidden" class="workList">
-											<i class="fas fa-minus-circle workDelete"></i> <input
-												class="workTitle" type="text" placeholder="할일 입력" /> <input
-												type="date" class="workDate" /> <i
-												class="fas fa-user-plus workMember"></i> <input
-												type="hidden" />
-										</div>
-
-
-									</div>
-									<div id="boardWriteBot">
-										<div id="fileUploadBox">
-											<input type="file" id="fileUpload" /> <input type="file"
-												id="imgUpload" /> <label for="fileUpload"
-												class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-											<label for="imgUpload" class="fileUploadImg"><i
-												class="far fa-image"></i></label>
-
-										</div>
-										<div id="fileNameBox">
-											<input text="text" id="fileName" /> <input text="text"
-												id="fileSize" />
-										</div>
-										<div id="boardUpload">
-											<select name="public" id="publicYN">
-												<option value="public" selected>전체공개</option>
-												<option value="admin">관리자만</option>
-											</select>
-											<button type="submit" id="uploadBtn">올리기</button>
-										</div>
-									</div>
-								</form>
-							</div>
+                                    <ul id="boardSelect">
+                                        <li><span class="modeSelect"><i class="far fa-edit"></i> 글작성</span></li>
+                                        <li><span class="modeSelect"><i class="fas fa-laptop-code"></i> 코드</span></li>
+                                        <li><span class="modeSelect"><i class="fas fa-briefcase"></i> 일정</span></li>
+                                        <li><span class="modeSelect"><i class="fas fa-briefcase"></i> 할일</span></li>
+                                    </ul>
+                                    <div id="boardWriteContents">
+                                        
+                                        <!-- 일반 글 작성일 때 -->
+                                        <form action="/insertProjectBoard.ho" method="get">
+                                        <input type="hidden" value="post" name="type"/>
+                                        <input type="hidden" value="<%=p.getProNo() %>" name="proNo"/>
+                                        <input type="hidden" value="${sessionScope.member.memNo }" name="memNo"/>
+                                        <div id="writeBox" class="boardAllStyle">
+                                            <textarea class="boardWriteText" name="boardText" placeholder="내용을 입력해 주세요"></textarea>
+                                            
+                                        <div class="boardWriteBot">
+                                        <div class="fileUploadBox">
+                                            <input type="file" class="fileUpload"/>
+                                            <input type="file" class="imgUpload"/>
+                                            <label for="fileUpload" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+                                            <label for="imgUpload" class="fileUploadImg"><i class="far fa-image"></i></label>
+                                            
+                                        </div>
+                                        <div class="fileNameBox">
+                                            <input text="text" class="fileName"/>
+                                            <input text="text" class="fileSize"/>
+                                        </div>
+                                        <div class="boardUpload">
+                                            <select name="public" class="publicYN">
+                                                <option value="public" selected>전체공개</option>
+                                                <option value="admin">관리자만</option>
+                                            </select>
+                                            <button type="submit" class="uploadBtn">올리기</button>
+                                        </div>
+                                    </div>
+                                        </div>
+                                        </form>
+                                        
+                                        
+                                        <!--일정 일 때-->
+                                        <form action="bbb" method="get">
+                                        <input type="hidden" value="plan" name="type"/>
+                                        <div id="scheduleBox" class="boardAllStyle">
+                                            <input type="text" class="boardWriteText" name="dlfwjd" placeholder="일정 제목을 입력해 주세요."/>
+                                            <div id="scheduleBoxTop">
+                                                <i class="far fa-clock scheduleImg"></i>
+                                                <input type="date" class="scheduleDate"/>
+                                                <input type="time" class="scheduleTime"/>
+                                                <div id="line">~</div>
+                                                <input type="date" class="scheduleDate"/>
+                                                <input type="time" class="scheduleTime"/>
+                                            </div>
+                                            <div id="scheduleBoxBot">
+                                                <i class="fas fa-user scheduleImg"></i>
+                                                <div id="scheduleMember">
+                                                    
+                                                    <!--얘가 여러개-->
+                                                    <input type="text" value="백두진" readonly="readonly"/>
+                                                    <i class="fas fa-times scheduleMemberDelete"></i>
+                                                    <!--얘가 여러개-->
+                                                    
+                                                    <input type="text" value="이진원" readonly="readonly"/>
+                                                    <i class="fas fa-times scheduleMemberDelete"></i>
+                                                </div>
+                                                <input type="text" id="scheduleAdd" placeholder="참석자 추가"/>
+                                            </div>
+                                            <div id="scheduleMemoBox">
+                                                <i class="far fa-sticky-note scheduleImg"></i>
+                                                <input id="scheduleMemo" type="text" placeholder="메모를 입력하세요" name="memo"/>
+                                            </div>
+                                            <div class="boardWriteBot">
+                                        <div class="fileUploadBox">
+                                            <input type="file" class="fileUpload"/>
+                                            <input type="file" class="imgUpload"/>
+                                            <label for="fileUpload" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+                                            <label for="imgUpload" class="fileUploadImg"><i class="far fa-image"></i></label>
+                                            
+                                        </div>
+                                        <div class="fileNameBox">
+                                            <input text="text" class="fileName"/>
+                                            <input text="text" class="fileSize"/>
+                                        </div>
+                                        <div class="boardUpload">
+                                            <select name="public" class="publicYN">
+                                                <option value="public" selected>전체공개</option>
+                                                <option value="admin">관리자만</option>
+                                            </select>
+                                            <button type="submit" class="uploadBtn">올리기</button>
+                                        </div>
+                                    </div>
+                                        </div>
+                                        </form>
+                                        
+                                        <!--할일 일 때-->
+                                        <form action="ccc" method="get">
+                                        <input type="hidden" value="work" name="type"/>
+                                        <div id="workBox" class="boardAllStyle">
+                                            <input type="text" class="boardWriteText" name="" placeholder="할일 제목을 입력해 주세요."/>
+                                            
+                                            <!-- 얘가 여러개 -->
+                                            <div class="workList">
+                                                <i class="fas fa-minus-circle workDelete"></i>
+                                                <input class="workTitle" type="text" placeholder="할일 입력" name="workTitle"/>
+                                                <input type="date" class="workDate"/>
+                                                <i class="fas fa-user-plus workMember"></i>
+                                                <input type="hidden"/>
+                                            </div>
+                                            
+                                            <div class="workList">
+                                                <i class="fas fa-minus-circle workDelete"></i>
+                                                <input class="workTitle" type="text" placeholder="할일 입력" name="workTitle"/>
+                                                <input type="date" class="workDate"/>
+                                                <i class="fas fa-user-plus workMember"></i>
+                                                <input type="hidden"/>
+                                            </div>
+                                            
+                                            <div id="workAdd">
+                                                <i class="fas fa-plus-circle workAddBtn"></i>
+                                                <input class="workTitle" type="text" placeholder="할일 추가" readonly="readonly"/>
+                                            </div>
+                                            <div class="boardWriteBot">
+                                        <div class="fileUploadBox">
+                                            <input type="file" class="fileUpload"/>
+                                            <input type="file" class="imgUpload"/>
+                                            <label for="fileUpload" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+                                            <label for="imgUpload" class="fileUploadImg"><i class="far fa-image"></i></label>
+                                            
+                                        </div>
+                                        <div class="fileNameBox">
+                                            <input text="text" class="fileName"/>
+                                            <input text="text" class="fileSize"/>
+                                        </div>
+                                        <div class="boardUpload">
+                                            <select name="public" class="publicYN">
+                                                <option value="public" selected>전체공개</option>
+                                                <option value="admin">관리자만</option>
+                                            </select>
+                                            <button type="submit" class="uploadBtn">올리기</button>
+                                        </div>
+                                    </div>
+                                        </div>
+                                        </form>
+                                        
+                                        <div id="workHidden" class="workList">
+                                                <i class="fas fa-minus-circle workDelete"></i>
+                                                <input class="workTitle" type="text" placeholder="할일 입력" name="workTitle"/>
+                                                <input type="date" class="workDate"/>
+                                                <i class="fas fa-user-plus workMember"></i>
+                                                <input type="hidden"/>
+                                        </div>
+                                    </div>
+                                    
+                            </div>
 
 
 
@@ -223,23 +360,11 @@
 			</div>
 		</div>
 		<form id="projectForm" action="#" method="get">
-			<input type="text" value="프로젝트명" name="pro_subject"
+			<input type="text" value="<%=p.getProSubject() %>" name="pro_subject"
 				id="newProjectSubject" />
-			<textarea placeholder="설명 글을 입력할 수 있습니다." name="pro_exp"
-				id="newProjectExplain">프로젝트 상세 설명</textarea>
-			<br>
-			<br>
+			<textarea name="pro_exp" id="newProjectExplain"><%=p.getProExp() %></textarea>
+			<br> <br>
 			<div id="newProjectOption">옵션 설정</div>
-			<div class="optionList">
-				<section class="setting st-login">
-				<p>
-					<i class="fas fa-check"></i> 관리자 승인 후 참여 가능 <label
-						class="btn-switch"> <input type="checkbox" name="favor_yn">
-						<i class="slide-object"></i>
-					</label>
-				</p>
-				</section>
-			</div>
 			<div class="optionList">
 				<section class="setting st-login">
 				<p>
@@ -368,12 +493,12 @@
 				<input type="radio" name="file" value="all" /> 전체 다운로드 가능
 			</p>
 			<p class="fileRegular">
-				<input type="radio" name="file" value="admin" /> 관리자 + 글 작성 본인만 다운로드
-				가능
+				<input type="radio" name="file" value="admin" /> 관리자 + 글 작성 본인만
+				다운로드 가능
 			</p>
 		</div>
 	</div>
-
+	
 	<!-- 자바 스크립트    -->
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectBoardWrite.js"></script>
