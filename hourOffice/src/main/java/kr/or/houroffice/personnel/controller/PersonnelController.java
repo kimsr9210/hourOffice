@@ -23,7 +23,8 @@ public class PersonnelController {
 	@Qualifier(value="sqlSessionTemplate")
 	private SqlSessionTemplate sqlSession;
 	
-	@RequestMapping(value = "/addbook.do")
+	//사원 전체 주소록 
+	@RequestMapping(value = "/addbook.do") 
 	public ModelAndView addBook() {
 		ArrayList<Member> list = pService.selectAddbook();
 
@@ -48,7 +49,8 @@ public class PersonnelController {
 	public String mypage() {
 		return "personnel/mypage";
 	}
-
+	
+	//내인사정보
 	@RequestMapping(value = "/information.do")
 	public String information() {
 		return "personnel/information";

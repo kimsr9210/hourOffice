@@ -1,3 +1,5 @@
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -28,6 +30,13 @@ select{height: 25px;}
 </style>
 
 <body>
+	
+	<% 
+		//jsp 페이지에서 사용하기 위하여 데이터를 꺼내는 작업
+		//어레이리스트는 오브젝트 타입 , 다운캐스팅을 해줘야한다.   (ArrayList<Member>)
+		ArrayList<Member> list  = (ArrayList<Member>)request.getAttribute("list");
+		Member sessionMember = (Member)session.getAttribute("member");
+	%>
 
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -71,6 +80,8 @@ select{height: 25px;}
 
     <table border="1px" width="100%" style="text-align:center; margin:auto; border-collapse:collapse;">
         <tr style="background-color:#1D9F8E; color:white;">
+        
+  
             <th>프로필</th>
             <th>이름</th>
             <th>소속부서</th>
@@ -81,17 +92,18 @@ select{height: 25px;}
         </tr>
 
         <!-- 반복문 for 작성 -->
+        <!-- 탈퇴자는 리스트에서 안보이게 만들어야됨 -->
+        <%for(Member m : list) {%>
         <tr>
             <td>사진</td>
-            <td>김소련</td>
-            <td>개발1팀</td>
-            <td>팀장</td>
-            <td>02)2049-3618</td>
-            <td>010-8888-1111</td>
-            <td>kim@kr.or.iei.kh</td>
+            <td><%=m.getMemName() %></td>
+            <td>소속부서 vo없음</td>
+            <td><%=m.getMemPosition() %></td>
+            <td><%=m.getMemTell() %></td>
+            <td><%=m.getMemPhone() %></td>
+            <td><%=m.getMemEmail() %></td>
         </tr>
-
-        
+		<%} %>
 
 
     </table><br>
