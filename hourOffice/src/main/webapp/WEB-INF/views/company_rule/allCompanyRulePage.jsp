@@ -16,9 +16,9 @@
 	<!-- 관리자 탭 공통 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
 	<!-- 게시판 공통 CSS -->
-	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/board.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/css/board/board.css" />
 	<!-- CSS 테이블만 있는 것 -->
-	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/userBoard.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/css/board/userBoard.css" />
 	
 
     <script>

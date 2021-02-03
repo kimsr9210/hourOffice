@@ -444,6 +444,7 @@ table textarea{
 #title-wrap div:first-child{
     background-color: #eaeaea;
     width: 20%;
+    height:100%;
     float: left;
     padding: 16px;
     border-right: 1px solid darkgray;

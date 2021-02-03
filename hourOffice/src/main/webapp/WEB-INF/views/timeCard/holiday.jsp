@@ -54,6 +54,8 @@ body {
 }
 </style>
 
+
+
 <script>
 	document
 			.addEventListener(
@@ -134,6 +136,10 @@ body {
 				</div>
 			</div>
 		</div>
+		
+		<!-- 자바 스크립트    -->
+	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
+		
 	</div>
 </body>
 </html>

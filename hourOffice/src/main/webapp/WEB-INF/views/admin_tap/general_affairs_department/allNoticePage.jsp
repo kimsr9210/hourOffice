@@ -16,7 +16,7 @@
 	<!-- 관리자 탭 공통 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
 	<!-- 게시판 공통 CSS -->
-	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/board.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/css/board/board.css" />
 
     <script>
         $(function(){

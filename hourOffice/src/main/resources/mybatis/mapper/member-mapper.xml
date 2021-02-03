@@ -25,4 +25,35 @@
 		FROM member
 		WHERE MEM_NO=#{memNo} and MEM_PWD=#{memPwd}
 	</select>
+	
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 목록 / 사원 총 수 -->
+	<select id="allMemberCount" resultType="int">
+		SELECT COUNT(*) AS MEM_ALL_COUNT FROM MEMBER WHERE MEM_DEL_YN='N'
+	</select>
+	
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 목록 / 전사원 리스트 -->
+	<select id="allMemberList" parameterType="hashmap" resultType="Member">
+		SELECT MEM_NO as memNo,
+				MEM_PWD as memPwd,
+				MEM_POSITION as memPosition,
+				DEPT_CODE as deptCode,
+				MEM_NAME as memName,
+				MEM_BIRTH as memBirth,
+				MEM_GENDER as memGender,
+				MEM_ADDRESS as memAddress,
+				MEM_PHONE as memPhone,
+				MEM_TELL as memTell,
+				MEM_EMAIL as memEmail,
+				MEM_PROFILE as memProfile,
+				MEM_HOLIDAY_COUNT as memHolidayCount,
+				MEM_JOIN_DATE as memJoinDate,
+				MEM_RESIGN_YN as memResignYN,
+				MEM_RESIGN_DATE as memResigndate,
+				MEM_DEL_YN as memDelYN,
+				MEM_DEL_DATE as memDelDate,
+				MEM_RIGHT_CODE as memRightCode 
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY MEM_JOIN_DATE DESC) AS RNUM, MEMBER.* FROM MEMBER)
+		WHERE MEM_DEL_YN='N' AND (RNUM BETWEEN ${start} AND ${end})
+	</select>
+	
 </mapper>
