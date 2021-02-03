@@ -1,4 +1,4 @@
-package kr.or.houroffice.approval.model.vo;
+package kr.or.houroffice.timecard.model.vo;
 
 import java.sql.Timestamp;
 
