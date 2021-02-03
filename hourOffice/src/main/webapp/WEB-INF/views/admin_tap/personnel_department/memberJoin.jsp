@@ -18,6 +18,9 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/memberInfo.css" />
 	
+	<style>
+		
+	</style>
     
 <script>
     // 생년월일 선택 목록 셋팅
@@ -42,24 +45,26 @@
     // 월 뿌려주기(1월부터 12월)
     var month;
     $("#birthMonth").append("<option value=''>월</option>");
-    for (var i = 1; i <= 12; i++) {
-        if(i<10){
-            $("#birthMonth").append("<option value='0" + i + "'>0" + i + " 월" + "</option>");
+    for (var m = 1; m <= 12; m++) {
+        if(m<10){
+            $("#birthMonth").append("<option value='0" + m + "'>0" + m + " 월" + "</option>");
         }else{
-            $("#birthMonth").append("<option value='" + i + "'>" + i + " 월" + "</option>");
+            $("#birthMonth").append("<option value='" + m + "'>" + m + " 월" + "</option>");
         }
     }
 
     // 일 뿌려주기(1일부터 31일)
     var day;
     $("#birthDay").append("<option value=''>일</option>");
-    for (var i = 1; i <= 31; i++) {
-        if(i<10){
-            $("#birthDay").append("<option value='0" + i + "'>0" + i + " 일" + "</option>");
+    for (var d = 1; d <= 31; d++) {
+        if(d<10){
+            $("#birthDay").append("<option value='0" + d + "'>0" + d + " 일" + "</option>");
         }else{
-            $("#birthDay").append("<option value='" + i + "'>" + i + " 일" + "</option>");
+            $("#birthDay").append("<option value='" + d + "'>" + d + " 일" + "</option>");
         }
     }
+    
+    //alert($('#acaEnrollDate').val());
 
   }
 
@@ -83,12 +88,11 @@
 						
 						
 						<div id="contWrapper">
-                    <form action="#" method="get">
+                    <form action="/memberSingUp.ho" method="post">
                         <div class="floatDiv">
                             <div id="memProfile"><img border="1px" src="img/selectarrow.png"/><br></div>
                             <div id="position_dept">
-                                <div class="posi_deptDiv">
-                                    직위<br>
+                                <div class="posi_deptDiv">직위<br>
                                     <select name="memPosition" class="posi_deptSelect">
                                         <option value=""></option>
                                         <option value="사원">사 &nbsp;&nbsp;&nbsp;원</option>
@@ -101,14 +105,13 @@
                                         <option value="대표">대 &nbsp;&nbsp;&nbsp;표</option>
                                     </select>
                                 </div>
-                                <div class="posi_deptDiv">
-                                    부서<br>
+                                <div class="posi_deptDiv">부서<br>
                                     <select name="deptCode" class="posi_deptSelect">
                                         <option value=""></option>
-                                        <option value="D1">인 &nbsp;&nbsp;&nbsp;사</option>
-                                        <option value="D2">총 &nbsp;&nbsp;&nbsp;무</option>
-                                        <option value="D3">전 &nbsp;&nbsp;&nbsp;산</option>
-                                        <option value="D4">개 &nbsp;&nbsp;&nbsp;발</option>
+                                        <option value="D1">인 &nbsp;&nbsp;사&nbsp;&nbsp;부</option>
+                                        <option value="D2">총 &nbsp;&nbsp;무&nbsp;&nbsp;부</option>
+                                        <option value="D3">전 &nbsp;&nbsp;산&nbsp;&nbsp;부</option>
+                                        <option value="D4">개 &nbsp;&nbsp;발&nbsp;&nbsp;부</option>
                                         <option value="D5">디자인</option>
                                     </select>
                                     <!--<div class="select__arrow"></div>-->
@@ -119,13 +122,11 @@
                             </div>
                         </div>
                         <div id="rightCont" class="floatDiv">
-                           <div>
-                                이름<br>
+                           <div>이름<br>
                                 <input type="text" name="memName" class="inputStyle"/>
                            </div>
                            <div class="infoRespective">
-                               <div id="birthDiv">
-                                    생년월일<br>
+                               <div id="birthDiv">생년월일<br>
                                     <select name="memBirth1" id="birthYear" class="memBirthSelect">
                                     </select>
                                     <select name="memBirth2" id="birthMonth" class="memBirthSelect">
@@ -133,23 +134,20 @@
                                     <select name="memBirth3" id="birthDay" class="memBirthSelect">
                                     </select>
                                 </div>
-                                <div id="genderDiv">
-                                    성별<br>
-                                    <input type="radio" name="memGender" class="genderInput" value="남" checked/> 남 <input type="radio" name="memGender" class="genderInput" value="여"/> 여
+                                <div id="genderDiv">성별<br>
+                                    <input type="radio" name="memGender" class="genderInput" value="M" checked/> 남 <input type="radio" name="memGender" class="genderInput" value="F"/> 여
                                 </div>
                            </div>
                            <hr color="white">
-                           <div class="infoRespective">
-                               현주소<br>
-                               <input type="text" name="memAddr1" id="addrInput"/> <button type="button">검색</button><br>
-                               <input type="text" name="memAddr2" class="inputStyle"/>
+                           <div class="infoRespective">현주소<br>
+                               <input type="text" name="memAddress1" id="addrInput"/> <button type="button">검색</button><br>
+                               <input type="text" name="memAddress2" class="inputStyle"/>
                            </div>
-                           <div class="infoRespective">
-                               연락처<br>
-                               <select name="phone1" id="phoneSelect">
+                           <div class="infoRespective">연락처<br>
+                               <select name="memPhone1" id="phoneSelect">
                                    <option value=""></option>
                                    <option value="010">010</option>
-                               </select> <input type="text" name="phone2" size="4" class="phoneInput"/> <input type="text" name="phone3" size="4" class="phoneInput"/>
+                               </select> <input type="text" name="memPhone2" size="4" class="phoneInput"/> <input type="text" name="memPhone3" size="4" class="phoneInput"/>
                            </div>
                         </div>
                         
