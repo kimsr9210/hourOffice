@@ -83,11 +83,11 @@
 		</div>
 		<ui class="categoryBox">
 		<li class="categoryName">결재하기</li>
-		<li class="categoryList"><a href="#">결재 요청함</a></li>
-		<li class="categoryList"><a href="#">결재 대기함</a></li>
+		<li class="categoryList"><a href="/aprListRequest.ho">결재 요청함</a></li>
+		<li class="categoryList"><a href="/aprListWait.ho">결재 대기함</a></li>
 		<li class="categoryName">문서함</li>
-		<li class="categoryList"><a href="#">참조 문서함</a></li>
-		<li class="categoryList"><a href="#">부서 문서함</a></li>
+		<li class="categoryList"><a href="/aprListRef.ho">참조 문서함</a></li>
+		<li class="categoryList"><a href="/aprListDept.ho">부서 문서함</a></li>
 		</ui>
 
 		<div id="categoryBoard" class="sideNaviClick">
