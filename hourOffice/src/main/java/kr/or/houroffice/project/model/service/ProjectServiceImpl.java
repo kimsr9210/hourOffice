@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import kr.or.houroffice.project.model.dao.ProjectDAO;
 import kr.or.houroffice.project.model.vo.Project;
+import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectMember;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService{
@@ -44,6 +46,38 @@ public class ProjectServiceImpl implements ProjectService{
 		Project p = pDAO.selectOneProject(proNo, sqlSession);
 		return p;
 		
+	}
+
+	@Override
+	public Project selectOneProjectSubject(String proSubject) {
+		Project p = pDAO.selectOneProjectSubject(proSubject, sqlSession);
+		return p;
+	}
+
+	@Override
+	public int insertProjectMemberAdmin(ProjectMember pm) {
+		int result = pDAO.insertProjectMemberAdmin(pm, sqlSession);
+		return result;
+		
+	}
+
+	@Override
+	public ArrayList<ProjectMember> selectProjectMemberList(int proNo) {
+		ArrayList<ProjectMember> projectMemberList = pDAO.selectProjectMemberList(proNo, sqlSession);
+		return projectMemberList;
+		
+	}
+
+	@Override
+	public int insertProjectBoard(ProjectBoard pb) {
+		int result = pDAO.insertProjectBoard(pb, sqlSession);
+		return result;
+	}
+
+	@Override
+	public ArrayList<ProjectBoard> selectProjectBoardList(int proNo) {
+		ArrayList<ProjectBoard> boardList = pDAO.selectProjectBoardList(proNo, sqlSession);
+		return boardList;
 	}
 
 }

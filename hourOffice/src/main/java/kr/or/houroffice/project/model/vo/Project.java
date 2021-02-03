@@ -13,12 +13,13 @@ public class Project {
 	private char compYN;
 	private char delYN;
 	private char compDate;
+	private int memCount;
 	public Project() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Project(int proNo, int memNo, String proSubject, String proExp, Date proDate, char publicYN, char compYN,
-			char delYN, char compDate) {
+			char delYN, char compDate, int memCount) {
 		super();
 		this.proNo = proNo;
 		this.memNo = memNo;
@@ -29,6 +30,7 @@ public class Project {
 		this.compYN = compYN;
 		this.delYN = delYN;
 		this.compDate = compDate;
+		this.memCount = memCount;
 	}
 	public int getProNo() {
 		return proNo;
@@ -84,11 +86,17 @@ public class Project {
 	public void setCompDate(char compDate) {
 		this.compDate = compDate;
 	}
+	public int getMemCount() {
+		return memCount;
+	}
+	public void setMemCount(int memCount) {
+		this.memCount = memCount;
+	}
 	@Override
 	public String toString() {
 		return "Project [proNo=" + proNo + ", memNo=" + memNo + ", proSubject=" + proSubject + ", proExp=" + proExp
 				+ ", proDate=" + proDate + ", publicYN=" + publicYN + ", compYN=" + compYN + ", delYN=" + delYN
-				+ ", compDate=" + compDate + "]";
+				+ ", compDate=" + compDate + ", memCount=" + memCount + "]";
 	}
 	
 	

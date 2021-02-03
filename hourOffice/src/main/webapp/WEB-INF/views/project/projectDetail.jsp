@@ -1,3 +1,6 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectBoard"%>
+<%@page import="kr.or.houroffice.project.model.vo.ProjectMember"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="kr.or.houroffice.project.model.vo.Project"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -27,6 +30,8 @@
 <body>
 <%
 	Project p = (Project)request.getAttribute("project");
+	ArrayList<ProjectMember> projectMemberList = (ArrayList<ProjectMember>)request.getAttribute("projectMemberList");
+	ArrayList<ProjectBoard> boardList = (ArrayList<ProjectBoard>)request.getAttribute("boardList");
 %>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -73,18 +78,22 @@
                                         <li><a href="#" id="memberAllListNavi"><i class="fas fa-users"></i> 멤버</a></li>
                                     	
                                     </ui>
+                                    <form action="/projectBoardWrite.ho" method="post">
+                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
                                     <button id="newBoard">작성하기</button>
+                                    </form>
                                 </div>
                             </div>
                             
                             <!-- 게시물 여러개 -->
+                            <%for(ProjectBoard pb : boardList){ %>
                             <div class="boardBox">
-                                
+                            
                                 <div class="boardInfo">
                                     <div class="memberImg"><i class="fas fa-user-circle"></i></div>
                                     <div class="memberInfo">
                                         <div class="memberName">백두진</div>
-                                        <div class="boardTime">2021-01-26 13:26</div>
+                                        <div class="boardTime"><%=pb.getBoardDate() %></div>
                                     </div>
                                     <!--관리자 일 때-->
                                     <div class="memberAdmin">
@@ -98,7 +107,7 @@
                                 </div>
                                 
                                 <div class="boardContents">
-                                    <textarea class="textarea"  disabled="disabled" readonly="readonly">여기는 내용입니다</textarea>
+                                    <textarea class="textarea"  disabled="disabled" readonly="readonly"><%=pb.getBoardText() %></textarea>
                                 </div>
                                 
                                 <div class="commentCount">
@@ -116,7 +125,6 @@
                                 </div>
                                 
                                 
-                                
                                 <div class="commentWrite">
                                     <div class="commentUser">
                                         <i class="fas fa-user-circle"></i>
@@ -128,7 +136,9 @@
                                     </div>
                                 </div>
                                 
+                                
                             </div>
+                            <%} %>
                             
                             
                         </div>
@@ -170,20 +180,10 @@
             프로젝트 수정<div id="newProjectExit"><i class="fas fa-times"></i></div>
         </div>
         <form id="projectForm" action="#" method="get">
-            <input type="text" value="프로젝트명" name="pro_subject" id="newProjectSubject" />
-            <textarea placeholder="설명 글을 입력할 수 있습니다." name="pro_exp" id="newProjectExplain" >프로젝트 상세 설명</textarea>
+            <input type="text" value="<%=p.getProSubject() %>" name="pro_subject" id="newProjectSubject" />
+            <textarea placeholder="설명 글을 입력할 수 있습니다." name="pro_exp" id="newProjectExplain" ><%=p.getProExp() %></textarea>
             <br><br>
             <div id="newProjectOption">옵션 설정</div>
-            <div class="optionList">
-                <section class="setting st-login">
-                <p><i class="fas fa-check"></i> 관리자 승인 후 참여 가능
-                        <label class="btn-switch">
-                            <input type="checkbox" name="favor_yn">
-                            <i class="slide-object"></i>
-                        </label>
-                    </p>
-                </section>
-            </div>
             <div class="optionList">
                 <section class="setting st-login">
                 <p><i class="fas fa-check"></i> 공개 프로젝트 여부
@@ -297,7 +297,6 @@
             <p class="fileRegular"><input type="radio" name="file" value="admin"/> 관리자 + 글 작성 본인만 다운로드 가능</p>
         </div>
     </div>
-    
     <!-- 자바 스크립트    -->
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectDetail.js"></script>

@@ -3,7 +3,7 @@
 
 <mapper namespace="project">
 	<insert id="insertProject" parameterType="Project">
-		INSERT INTO PROJECT VALUES(PROJECT_SEQ.NEXTVAL, #{memNo}, #{proSubject}, #{proExp}, SYSDATE, #{publicYN}, 'N', 'N', NULL)
+		INSERT INTO PROJECT VALUES(PROJECT_SEQ.NEXTVAL, #{memNo}, #{proSubject}, #{proExp}, SYSDATE, #{publicYN}, 'N', 'N', NULL, 1)
 	</insert>
 	
 	<select id="selectAllProject" resultType="Project">
@@ -15,7 +15,8 @@
 			PRO_DATE as proDate,
 			PUBLIC_YN as publicYN,
 			COMP_YN as compYN,
-			COMP_DATE as compDate
+			COMP_DATE as compDate,
+			MEM_COUNT as memCount
 		FROM PROJECT
 		WHERE MEM_NO = #{memNo} AND DEL_YN = 'N'
 	</select>
@@ -29,7 +30,8 @@
 			PRO_DATE as proDate,
 			PUBLIC_YN as publicYN,
 			COMP_YN as compYN,
-			COMP_DATE as compDate
+			COMP_DATE as compDate,
+			MEM_COUNT as memCount
 		FROM PROJECT
 		WHERE PUBLIC_YN = 'Y' AND DEL_YN = 'N'
 	</select>
@@ -43,8 +45,55 @@
 			PRO_DATE as proDate,
 			PUBLIC_YN as publicYN,
 			COMP_YN as compYN,
-			COMP_DATE as compDate
+			COMP_DATE as compDate,
+			MEM_COUNT as memCount
 		FROM PROJECT
 		WHERE PRO_NO=#{proNo} AND DEL_YN='N'
 	</select>
+	
+	<select id="selectOneProjectSubject" resultType="Project">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			PRO_SUBJECT as proSubject,
+			PRO_EXP as proExp,
+			PRO_DATE as proDate,
+			PUBLIC_YN as publicYN,
+			COMP_YN as compYN,
+			COMP_DATE as compDate,
+			MEM_COUNT as memCount
+		FROM PROJECT
+		WHERE PRO_SUBJECT=#{proSubject} AND DEL_YN='N'
+	</select>
+	
+	<insert id="insertProjectMemberAdmin" parameterType="ProjectMember">
+		INSERT INTO PRO_MEMBER VALUES(#{proNo}, #{memNo}, 'Y', 'N')
+	</insert>
+	
+	<select id="selectProjectMemberList" resultType="ProjectMember">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			MGR_YN as mgrYN,
+			DEL_YN as delYN
+		FROM PRO_MEMBER
+		WHERE PRO_NO=#{proNo} AND DEL_YN='N'
+	</select>
+	
+	<insert id="insertProjectBoard" parameterType="ProjectBoard">
+		INSERT INTO PRO_BOARD VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, SYSTIMESTAMP, 'N', #{boardText})
+	</insert>
+	
+	<select id="selectProjectBoardList" parameterType="ProjectBoard" resultType="ProjectBoard">
+		SELECT
+			BOARD_NO as boardNo,
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			BOARD_DATE as boardDate,
+			DEL_YN as delYN,
+			BOARD_TEXT as boardText
+		FROM PRO_BOARD
+		WHERE DEL_YN='N'
+	</select>
+	
 </mapper>

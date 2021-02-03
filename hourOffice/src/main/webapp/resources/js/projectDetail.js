@@ -146,4 +146,8 @@ $(function() {
 		}
 	});
 
+	$('#newBoard').click(function(){
+		alert('gd');
+		location.replace('/projectBoardWrite.ho');
+	});
 });

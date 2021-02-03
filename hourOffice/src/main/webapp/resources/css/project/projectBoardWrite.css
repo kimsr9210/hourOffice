@@ -120,24 +120,25 @@
 	height: auto;
 }
 
-#boardWriteBot {
+/*------------submit 버튼 */
+.boardWriteBot {
 	width: 100%;
 	height: 50px;
 	border-top: 1px solid #cccccc;
 }
 
-#fileUploadBox {
+.fileUploadBox {
 	width: 15%;
 	height: 100%;
 	border-right: 1px solid #cccccc;
 	float: left;
 }
 
-#fileUpload {
+.fileUpload {
 	display: none;
 }
 
-#imgUpload {
+.imgUpload {
 	display: none;
 }
 
@@ -148,13 +149,13 @@
 	cursor: pointer;
 }
 
-#fileNameBox {
+.fileNameBox {
 	width: 60%;
 	height: 100%;
 	float: left;
 }
 
-#fileName {
+.fileName {
 	outline: none;
 	width: 75%;
 	height: 100%;
@@ -163,7 +164,7 @@
 	border: 0;
 }
 
-#fileSize {
+.fileSize {
 	outline: none;
 	width: 20%;
 	height: 100%;
@@ -174,20 +175,20 @@
 	border-right: 1px solid #cccccc;
 }
 
-#boardUpload {
+.boardUpload {
 	width: 25%;
 	height: 100%;
 	float: right;
 	line-height: 50px;
 }
 
-#publicYN {
+.publicYN {
 	width: 80px;
 	height: 40px;
 	border-radius: 5px;
 }
 
-#uploadBtn {
+.uploadBtn {
 	width: 100px;
 	height: 40px;
 	border-radius: 5px;
@@ -370,6 +371,7 @@
 	float: right;
 	padding-right: 20px;
 	cursor: pointer;
+	padding-top: 22px;
 }
 
 #newProjectSubject {
@@ -387,6 +389,7 @@
 	border: 1px solid #BFBFBF;
 	border-radius: 5px;
 	resize: none;
+	font-family: "맑은 고딕";
 }
 
 #newProjectSubject::placeholder, #newProjectExplain::placeholder {
@@ -948,7 +951,7 @@
 	height: auto;
 }
 
-#boardWriteText {
+.boardWriteText {
 	width: 100%;
 	padding: 30px;
 	font-family: "맑은 고딕";
