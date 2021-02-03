@@ -11,6 +11,9 @@
     <!--jQuery CDN-->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	
+	<!-- JSTL:C -->
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
 	<link rel="stylesheet" type="text/css" href="/resources/css/memberMain/memberMain_notice.css">
@@ -83,16 +86,19 @@
                         <a href="#">최근 공개 프로젝트</a>
                         <div class="public-list">
                             
-                            <div id="pro1" class="proStyle">
-                                <a href="#" class="pro-title">프로젝트 이름</a>
-                                <div class="pro-info">
-                                    <a href="#">0명 참여중</a>
-                                    <i class="far fa-star"></i>
-                                </div>
-                            </div>
+                            <c:forEach items="${publicList }" var="pl" varStatus="status" begin="0" end="3">
+	                            <div id="pro${status.count }" class="proStyle">
+	                                <a href="#" class="pro-title">${pl.proSubject }</a>
+	                                <div class="pro-info">
+	                                    <a href="#">0명 참여중</a>
+	                                    <i class="far fa-star"></i>
+	                                </div>
+	                            </div>	
+                            </c:forEach>
+                            
 
 
-                            <div id="pro2" class="proStyle">
+                            <!-- <div id="pro2" class="proStyle">
                                 <a href="#" class="pro-title">프로젝트 이름</a>
                                 <div class="pro-info">
                                     <a href="#">0명 참여중</a>
@@ -114,16 +120,25 @@
                                     <a href="#">0명 참여중</a>
                                     <i class="far fa-star"></i>
                                 </div>
-                            </div>
+                            </div> -->
                                 
                         </div>
                     </div>
                     
                     <div class="proAmail">
                        
-                        <div id="pro5" class="in-pro">
+                        <div id="proIn" class="in-pro">
                             <div class="in-pro-top">
-                                <a href="#">참여중인 프로젝트</a>
+                                <a href="#">
+	                                <c:choose>
+	                                	<c:when test="${empty myList }">
+	                                		참여중인 프로젝트
+	                                	</c:when>
+	                                	<c:otherwise>
+	                                		${myList[0].proSubject }
+	                                	</c:otherwise>
+	                                </c:choose>
+                                </a>
                                 <i class="far fa-star"></i><br>
                                 <span>0명 참여중</span>
                             </div>
@@ -228,8 +243,17 @@
                    
                     <div class="nameCard">
                         <img class="nc-img">
-                        <span class="nc-name">${sessionScope.member.memName } 직급</span>
-                        <span class="nc-dept">부서명</span>
+                        <span class="nc-name">${sessionScope.member.memName } ${sessionScope.member.memPosition }</span>
+                        <span class="nc-dept">
+	                        <c:choose>
+	                        	<c:when test="${empty sessionScope.member.deptName }">
+	                        		부서 없음
+	                        	</c:when>
+	                        	<c:otherwise>
+	                        		${sessionScope.member.deptName }
+	                        	</c:otherwise>
+	                        </c:choose>
+                        </span>
                         
                         <div>
                             <a href="#" class="nc-state">결재할 문서</a>
@@ -367,7 +391,7 @@
 <script>
     
 </script>
-<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script></div>
+<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 <script src="/resources/js/memberMain/memberMain_cal.js"></script>
 <script src="/resources/js/memberMain/memberMain_work.js"></script>
 <script src="/resources/js/memberMain/memberMain_publicPro.js"></script>

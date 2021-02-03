@@ -21,8 +21,9 @@ public class Member {
 	private char memResignYN;
 	private Timestamp memResignDate;
 	private char memDelYN;
-	private Timestamp memDeldate;
+	private Timestamp memDelDate;
 	private char memRightCode;
+	private String deptName;
 	
 	public Member() {
 		super();
@@ -31,7 +32,7 @@ public class Member {
 	public Member(int memNo, String memPwd, String memPosition, String deptCode, String memName, Date memBirth,
 			char memGender, String memAddress, String memPhone, String memTell, String memEmail, String memProfile,
 			int memHolidayCount, Timestamp memJoinDate, char memResignYN, Timestamp memResignDate, char memDelYN,
-			Timestamp memDeldate, char memRightCode) {
+			Timestamp memDelDate, char memRightCode, String deptName) {
 		super();
 		this.memNo = memNo;
 		this.memPwd = memPwd;
@@ -50,8 +51,9 @@ public class Member {
 		this.memResignYN = memResignYN;
 		this.memResignDate = memResignDate;
 		this.memDelYN = memDelYN;
-		this.memDeldate = memDeldate;
+		this.memDelDate = memDelDate;
 		this.memRightCode = memRightCode;
+		this.deptName = deptName;
 	}
 	
 	public int getMemNo() {
@@ -156,16 +158,22 @@ public class Member {
 	public void setMemDelYN(char memDelYN) {
 		this.memDelYN = memDelYN;
 	}
-	public Timestamp getMemDeldate() {
-		return memDeldate;
+	public Timestamp getMemDelDate() {
+		return memDelDate;
 	}
-	public void setMemDeldate(Timestamp memDeldate) {
-		this.memDeldate = memDeldate;
+	public void setMemDelDate(Timestamp memDelDate) {
+		this.memDelDate = memDelDate;
 	}
 	public char getMemRightCode() {
 		return memRightCode;
 	}
 	public void setMemRightCode(char memRightCode) {
 		this.memRightCode = memRightCode;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 }

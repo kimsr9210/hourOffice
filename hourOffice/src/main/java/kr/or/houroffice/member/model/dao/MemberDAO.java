@@ -13,4 +13,8 @@ public class MemberDAO {
 		return member;
 	}
 
+	public Member selectOneAsMemNo(SqlSessionTemplate sqlSession, int memNo) {
+		return sqlSession.selectOne("member.selectOneAsMemNo", memNo);
+	}
+
 }

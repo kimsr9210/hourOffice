@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="member">
-	<select id="loginMember" parameterType="Member" resultType="Member">
+	<select id="selectOneAsMemNo" parameterType="Member" resultType="Member">
 		SELECT
 			MEM_NO as memNo,
 			MEM_PWD as memPwd,
@@ -23,6 +23,32 @@
 			MEM_DEL_DATE as memDelDate,
 			MEM_RIGHT_CODE as memRightCode
 		FROM member
-		WHERE MEM_NO=#{memNo} and MEM_PWD=#{memPwd}
+		WHERE m.MEM_NO=#{memNo}
+	</select>
+	
+	<select id="loginMember" parameterType="Member" resultType="Member">
+		SELECT
+			m.MEM_NO as memNo,
+			m.MEM_PWD as memPwd,
+			m.MEM_POSITION as memPosition,
+			m.DEPT_CODE as deptCode,
+			m.MEM_NAME as memName,
+			m.MEM_BIRTH as memBirth,
+			m.MEM_GENDER as memGender,
+			m.MEM_ADDRESS as memAddress,
+			m.MEM_PHONE as memPhone,
+			m.MEM_TELL as memTell,
+			m.MEM_EMAIL as memEmail,
+			m.MEM_PROFILE as memProfile,
+			m.MEM_HOLIDAY_COUNT as memHolidayCount,
+			m.MEM_JOIN_DATE as memJoinDate,
+			m.MEM_RESIGN_YN as memResignYN,
+			m.MEM_RESIGN_DATE as memResigndate,
+			m.MEM_DEL_YN as memDelYN,
+			m.MEM_DEL_DATE as memDelDate,
+			m.MEM_RIGHT_CODE as memRightCode,
+			d.DEPT_NAME as deptName
+		FROM member m left join department d on(m.dept_code=d.dept_code)
+		WHERE m.MEM_NO=#{memNo} and m.MEM_PWD=#{memPwd}
 	</select>
 </mapper>

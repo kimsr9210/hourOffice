@@ -24,7 +24,7 @@
 			<li><a href="#"><i class="fas fa-user-circle naviIcon"></i></a></li>
 			<li><a id="userLogout" href="/memberLogout.ho"><i
 					class="fas fa-sign-out-alt naviIcon"></i></a> <span id="exitTooltip">로그아웃</span></li>
-			<li id="welcomeName">땡땡땡 님, 환영합니다</li>
+			<li id="welcomeName">${sessionScope.member.memName } 님, 환영합니다</li>
 			</ui>
 		</form>
 	</div>
