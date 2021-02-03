@@ -1,9 +1,8 @@
 package kr.or.houroffice.member.controller;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +13,11 @@ import kr.or.houroffice.member.model.vo.Member;
 @Controller
 public class MemberController {
 
-	
-	@Autowired
-	@Qualifier(value="memberService")
+	@Resource(name="memberService")
 	private MemberService mService;
 	
 	@RequestMapping(value="/memberLoginPage.ho")
-	public String memberLoginPage(){ // 로그인페이지 이동용 메소드
+	public String memberLoginPage(){ // 인덱스 페이지에서 로그인페이지으로 이동용 메소드
 		return "redirect:/login.jsp";
 	}
 	
@@ -30,7 +27,7 @@ public class MemberController {
 		Member member = mService.loginMember(m);
 		if(member != null){
 			session.setAttribute("member", member);
-			return "memberMain";
+			return "redirect:/login.jsp";
 		}else{
 			model.addAttribute("msg", "로그인 실패");
 			model.addAttribute("location", "/memberLoginPage.ho");
@@ -43,5 +40,6 @@ public class MemberController {
 		session.invalidate();
 		return "redirect:/index.jsp";
 	}
+	
 	
 }
