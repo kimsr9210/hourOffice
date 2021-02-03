@@ -5,117 +5,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>H:our Office</title>
-<%@ include file ="../adminForm/style.jsp" %>
-<style>
-	/*#TitleContents div{
-		border: 1px solid #FFD8D8;
-	}*/
-	
-	.float{float:left;}
-	#TitleContents *:focus{
-		outline: 0;
-	}
-	#TitleContents a{
-		color: black;
-	}
-	/* 모든 input */
-	#TitleContents input{
-		height: 100%;
-		border: 1px solid lightgray;
-		padding: 0 5px;
-		margin-right: 10px;
-	}
-	/* 모든 button */
-	#TitleContents button{
-		height: 100%;
-		cursor: pointer;
-	}
-	
-    /* 초기화 영역 */
-	#init-div{
-		height: 30px;
-		padding-left: 5%;
-	}
-	#init-div > #selectMember{height: 100%; display:none;}
-    #init-div > #selectMember > table{
-    /* 검색 된 정보 */
-    	width: 50%; height: 100%;
-    	text-align: center;
-    	margin-left: 20px;
-    	background-color: rgba(255, 184, 184, 0.4);
-    }
-    #init-div > #selectMember > table tr{
-    	
-    }
-    #init-div > #selectMember > table td{
-    	width: 80px;
-    	padding: 0 5px;
-    }
-    #init-div > #selectMember > table td:nth-child(2n){
-    	background-color: white;
-    }
-    #init-div > #selectMember > #init-btn{
-    /* 초기화 버튼 */
-    	width: 110px;
-    }
-    
-    
-    /* 로그 영역 */
-	#log-div{
-		width: 90%;
-		margin: 0 auto;
-		margin-top: 50px;
-	}
-	#log-div > div:first-child{
-		height: 30px;
-		text-align: right;
-		margin-bottom: 10px;
-	}
-	#log-div > div:first-child input{
-		position: relative;
-		bottom: 4px;
-	}
-	#log-div > div:first-child > *{
-		height: 100%;
-		margin-right: 10px;
-	}
-	/* 로그 테이블 */
-	#log-div table{
-		width: 100%; height: 300px;
-	}
-	#log-div table tr{
-		height: 57px;
-	}
-	#log-div table td{
-		padding: 0 5px;
-		text-align: center;
-	}
-	#log-div table td:first-child{
-		width: 150px;
-	}
-	#log-div table td:last-child > div{
-		width: 100px; height: 30px;
-		margin: 0 auto;
-		padding-top: 7px;
-		border-radius: 5px;
-	}
-	#log-div > div#pageNabi{
-		margin-top: 10px;
-		text-align: center;
-	}
-	
-	/* 로그 성공 & 실패 */
-	.successLog{
-		color: white;
-		text-shadow: 0 0 1px white;
-		background-color: rgba(29, 159, 142, 0.4);
-	}
-	.failLog{
-		color: white;
-		text-shadow: 0 0 1px white;
-		background-color: rgba(67, 116, 217, 0.4); 
-	}
-</style>
+
+	<!-- 폰트 어썸 CDN -->
+	<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+	<!-- 제이쿼리 CDN -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>
+
+	<!-- 관리자 페이지 공통 css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/style.css" />
+
+	<!-- 관리자 페이지 오류 관리 비밀번호 초기화  css -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/admin/passwordInitialization.css" />
 <script>
 	$(function(){
 		// 초기화 / 사번
@@ -157,11 +57,7 @@
 						오류 관리 <span>비밀번호 초기화</span>
     				</div>
     				<div id="TitleContents">
-                        <!--여기서 각자 id 만드시면 됩니다-->
-                        
-                        
-                        
-                        
+                        <!--여기서 각자 id 만드시면 됩니다-->                     
                         <div id="init-div">
                             <input type="text" class="float" placeholder="사번을 입력하세요"/> <button type="button" id="init-search-btn" class="agreeButtonType float"><i class="fas fa-search"></i></button>
                             <div id="selectMember">
@@ -220,11 +116,6 @@
                             <hr>
                             <div id="pageNabi">1 2 3 4 5 ></div>
                         </div>
-                        
-                        
-                        
-                        
-                        
                         <!----------------------------------->
     				</div>
 				</div>
@@ -232,21 +123,20 @@
 		</div>
 	</div>
 	
-	<script>
-       
+	<script type='text/javascript'>	      
 	   $(document).ready(function(){
 	      var $errorList = $('#errorList');         
 	      var $error = $('#error');
 	      
 	      /* 오류 관리일 때*/
+	      $error.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
           $errorList.css('height','72px');
-          $error.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
-	      
+          	      
 	      $error.removeClass('hoverColor').addClass('click');
 	      $errorList.removeClass('accordion');
 	      $errorList.addClass('click');
-	      $errorList.children().eq(0).children(":first").removeClass('hoverColor');   
-	      
+	      $errorList.children().eq(0).children(":first").removeClass('hoverColor');
+          $error.children().eq(2).children().attr('class','iArrow fas fa-angle-left');
 	   });
 	</script>
 </body>

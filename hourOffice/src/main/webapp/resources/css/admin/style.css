@@ -1,41 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"
-	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-	crossorigin="anonymous"
-></script>
-<style>
+@CHARSET "UTF-8";
+
 * {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 	box-sizing: border-box;
-	font-size: 0.875rem;
-}
+	font-size: 0.875rem;}
 
-html {
-	overflow-y: hidden;
-}
+html {overflow-y: hidden;}
 
-a {
-	text-decoration: none;
-}
-
+a {text-decoration: none;}
 a:visited {
 	text-decoration: none;
-	color: white;
-}
-
+	color: white;}
 a:active {
-	text-decoration: none;
-}
+	text-decoration: none;}
 
 #wrap {
 	position: absolute;
@@ -44,24 +23,21 @@ a:active {
 	left: 0;
 	right: 0;
 	min-width: 1200px;
-	overflow-y: hidden;
-}
-
+	overflow-y: hidden;}
+	
 #contentsBox {
 	width: 100%;
 	height: calc(100% - 40px);
 	background-color: #F2F2F2;
-	overflow: hidden;
-}
-
+	overflow: hidden;}
+	
 #contents {
 	width: calc(100% - 200px);
 	height: 100%;
 	float: left;
 	overflow-y: auto;
-	overflow-x: auto;
-}
-
+	overflow-x: auto;}
+	
 #contentsDetail {
 	min-width: 900px;
 	width: 90%;
@@ -72,63 +48,74 @@ a:active {
 	border-radius: 5px;
 	margin: 30px auto;
 	border: 0;
-	box-shadow: 0 0 6px #B3B3B3;
-}
-
+	box-shadow: 0 0 6px #B3B3B3;}
+	
 #TitleName {
 	width: calc(100% - 30px);
 	height: 50px;
 	font-size: 1.5rem;
 	margin: 15px;
-	float: left;
-}
-
+	float: left;}
+	
 #TitleContents {
 	width: calc(100% - 30px);
 	height: calc(100% - 110px);
 	margin: 15px;
-	float: left;
-}
-
+	float: left;}
+	
 /* clearfix */
-.clearfix {
-	*zoom: 1;
-}
-
+.clearfix {*zoom: 1;}
 .clearfix:before, .clearfix:after {
 	display: block;
 	content: '';
-	line-height: 0;
-}
+	line-height: 0;}
+.clearfix:after {clear: both;}
 
-.clearfix:after {
-	clear: both;
-}
-
+/*테이블 공통*/
 .tblStyle {
 	width: 95%;
 	margin: 25px auto;
 	line-height: 25px;
-	border-collapse: collapse;
-} /*관리자 관리 관리자목록 표*/
+	border-collapse: collapse;}
+	
 .tblStyle th {
 	border-top: 1px solid #dcdcdc;
-	border-bottom: 1px solid #dcdcdc;
-} /*관리자 관리 관리자목록 표 주제 */
-.tblStyle td {
-	text-align: center;
-} /*관리자 관리 관리자목록 표 내용 가운데 정렬 */
+	border-bottom: 1px solid #dcdcdc;}
+	
+.tblStyle td {text-align: center;}
+
+/*검색 스타일*/
 .searchStyle {
 	margin-top: 15px;
 	padding: 0;
 	height: 22px;
-	text-align: center;
-} /*관리자 관리 모달 검색 스타일*/
+	text-align: center;}
+.searchStyle>input {
+	width: 150px;
+	height: 20px;
+	border: 2px solid #dcdcdc;
+	border-radius: 2px;
+	display: inline;
+	position: relative;
+	bottom: 3px;}
+.searchStyle>button {
+	display: inline;
+	border: none;}
+/*검색 아이콘 스타일*/	
+.fa-search {
+	background-color: #22294A;
+	color: white;
+	font-size: 20px;
+	border: 2px solid #22294A;
+	border-radius: 2px;
+}
+	
+/*셀렉트 스타일*/	
 .selectStyle {
 	text-align: right;
-	padding-right: 20px;
-}
+	padding-right: 20px;}		
 
+/*옵션 스타일*/
 .optionStyle {
 	border: 2px solid #dcdcdc;
 	width: 100px;
@@ -137,36 +124,14 @@ a:active {
 	border-radius: 2px;
 	display: inline;
 	position: relative;
-	bottom: 3px;
-} /*관리자 select 스타일*/
-.searchStyle>input {
-	width: 150px;
-	height: 20px;
-	border: 2px solid #dcdcdc;
-	border-radius: 2px;
-	display: inline;
-	position: relative;
-	bottom: 3px;
-} /*관리자 관리 모달 검색 스타일 input*/
-.searchStyle>button {
-	display: inline;
-	border: none;
-}
+	bottom: 3px;}
 
-.fa-search {
-	background-color: #22294A;
-	color: white;
-	font-size: 20px;
-	border: 2px solid #22294A;
-	border-radius: 2px;
-} /*관리자 관리 모달 검색 스타일 아이콘*/
+/*버튼 스타일*/
 .buttonSet {
 	float: right;
-	padding: 0 5px;
-} /*관리자 버튼 세트 자리*/
-.buttonStyle {
-	padding-right: 20px;
-}
+	padding: 0 5px;}
+	
+.buttonStyle {padding-right: 20px;}
 
 .agreeButtonType {
 	width: 35px;
@@ -177,8 +142,8 @@ a:active {
 	font-weight: 800;
 	text-align: center;
 	box-shadow: 1px 1px 3px #cccccc;
-	outline: 0;
-} /*관리자 수락 버튼 타입*/
+	outline: 0;}
+	
 .refuseButtonType {
 	width: 35px;
 	border-radius: 3px;
@@ -188,45 +153,38 @@ a:active {
 	font-weight: 800;
 	text-align: center;
 	box-shadow: 1px 1px 3px #cccccc;
-	outline: 0;
-} /*관리자 거절 버튼 타입*/
-
-/* 모달 */
+	outline: 0;}
+	
+/*모달 스타일*/
 #modal {
 	display: none;
 	position: fixed;
 	left: 67%;
 	width: 100%;
 	height: 100%;
-	z-index: 1;
-}
-
+	z-index: 1;}
+	
 #modal .modal-content {
 	width: 250px;
 	padding: 20px;
 	background: #fff;
 	border: 1.5px solid #12776A;
 	border-radius: 5px;
-	box-shadow: 3px 3px 5px rgba(63, 0, 153, 50%);
-}
-
+	box-shadow: 3px 3px 5px rgba(63, 0, 153, 50%);}
+	
 #modal .modal-layer {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: -1;
-}
-
-#modal .exit-icon {
-	text-align: right;
-}
+	z-index: -1;}
+	
+#modal .exit-icon {text-align: right;}
 
 #modal .exit-icon>i {
 	font-size: 1.5rem;
-	cursor: pointer;
-}
+	cursor: pointer;}
 
 #modal_close_btn {
 	min-width: 28px;
@@ -239,29 +197,19 @@ a:active {
 	border-style: none;
 	border-radius: 5px;
 	box-shadow: 1px 1px 5px #cccccc;
-	cursor: pointer;
-}
+	cursor: pointer;}
 
-.modal-content {
-	text-align: center;
-}
+#modal .modal-content {text-align: center;}
 
-.modal-table {
+#modal .modal-table {
 	width: 95%;
 	margin: 20px auto;
 	text-align: center;
-	border-collapse: collapse;
-} /*관리자 관리 모달 표*/
-.modal-table th {
+	border-collapse: collapse;}
+	
+#modal .modal-table th {
 	border-bottom: 1px solid #dcdcdc;
-	padding: 5px;
-} /*관리자 관리 모달 표*/
-.modal-table td {
-	padding: 5px;
-} /*관리자 관리 모달 표*/
-</style>
-</head>
-<body>
-
-</body>
-</html>
+	padding: 5px;}
+	
+#modal .modal-table td {
+	padding: 5px;}
