@@ -13,9 +13,13 @@
 	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 	crossorigin="anonymous"></script>
 
+<!-- jQuery lib -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <!-- CSS -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/header&sideNavi.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 
@@ -60,8 +64,72 @@ select {
 	height: 25px;
 }
 </style>
+<script>
+$( function() {
+    var dialog, form;
+    
+    function addUser() {
+    	// ajax 이벤트 추가
+    	alert('사용자 추가');
+      }
+   
+      dialog = $( "#dialog-form" ).dialog({
+        autoOpen: false,
+        height: 400,
+        width: 350,
+        modal: true,
+        buttons: {
+          "연락처 등록": addUser,
+          "닫기": function() {
+            dialog.dialog( "close" );
+          }
+        },
+        close: function() {
+          form[ 0 ].reset();
+        }
+      });
+   
+      form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        addUser();
+      });
+   
+      $( "#create-user" ).button().on( "click", function() {
+        dialog.dialog( "open" );
+      });
+    } );
+</script>
 
 <body>
+
+<div id="dialog-form" title="연락처등록">
+   <form>
+              <tr>
+                <td>이름</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+            <tr>
+                <td>회사</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+            <tr>
+                <td>직책</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+            <tr>
+                <td>내선번호</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+            <tr>
+                <td>휴대폰</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td><input type="text" class="text"/></td>
+            </tr>
+  </form>
+</div>
 
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -84,9 +152,7 @@ select {
 <table width="100%" style="margin:auto;">
         <tr>
             <td width="7%">
-                <form>
-                    <input type="submit" id="savebtn" value="연락처 등록" >
-                </form>
+            	<button id="create-user">연락처 등록</button>
             </td>
 
             <td width="7%">

@@ -4,8 +4,9 @@
 
 	<select id="selectAddbook" resultType="Member">
 		SELECT
-		    M.MEM_POSITION AS MEMPOSITION,
-		    M.MEM_NAME AS MEMNAME,
+
+		    M.MEM_POSITION AS memPosition, 
+		    M.MEM_NAME AS memName,
 		    M.MEM_PHONE AS MEMPHONE,
 		    M.MEM_TELL AS MEMTELL,
 		    M.MEM_EMAIL AS MEMEMAIL,
@@ -18,6 +19,7 @@
 		        DEPT_CODE = M.DEPT_CODE
 		    ) AS DEPT_NAME
 		FROM MEMBER M
+
 	</select>
 
 </mapper>

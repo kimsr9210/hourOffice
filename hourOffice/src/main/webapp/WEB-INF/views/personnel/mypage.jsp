@@ -82,6 +82,15 @@ th {
 }
 </style>
 
+<script>
+	$( function() {
+		$("#change").click(function(){
+			$(".text_span").css("display","none");
+			$(".text_input").removeAttr("style");
+		})
+	})
+</script>
+
 <body>
 
 	<div id="wrap">
@@ -102,110 +111,118 @@ th {
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 
-                       
-        <!--border="1px"-->                
-         <table width="80%" height="600px" style="text-align:center;" id="hi">
-         <tr>
-           <td width="20%"> </td>
-           <td width="20%" ></td>
-           <td width="20%" ></td>
-           <td width="20%" ></td> 
-           <td width="20%" ><input type="submit" id="change" value="수정"/> 
-               <input type="reset" id="cxlbtn" value="취소"/></td>
-         </tr>
-             
-        <tr>
-           <td  rowspan="5">
-               <div id="photo" src="" style="margin:30px"></div>     
-        
-        <!--  파일등록-->
-        <form action="" method="post" enctype="multipart/form-data">
-        <input type="file" id="pic" value="사진선택" />
-        <input type="submit" value="등록" id="upload" />
-        </form>
-             
-            
-            </td>
-           <th>사번</th>
-           <td></td>
-           <td></td>
-           <td></td>
-         </tr>
-          
-         <tr>    
-           <th>성명</th>
-           <td></td>
-           <td></td>
-           <td></td>
-         </tr>       
-             
-          <tr>
-           
-           <th>부서</th>
-           <td></td>
-           <td></td>
-           <td></td>
-         </tr>           
-             
-          <tr>
-           
-           <th>직위</th>
-           <td></td>
-           <td></td>
-           <td></td>
-         </tr>                   
-             
-         <tr>
-           
-           <th>내선번호</th>
-           <td></td>
-           <td></td>
-           <td></td>
-         </tr> 
-         
-         <form action="" method="post">   
-           <tr>
-           <td></td>
-           <th>휴대전화번호</th>
-           <td><input type="text"></td>
-           <td></td>
-           <td></td>
-         </tr>          
-             
-          <tr>
-           <td></td>
-           <th>이메일</th>
-           <td><input type="text"></td>
-           <td></td>
-           <td></td>
-         </tr>
-             
-           <tr>
-           <td></td>
-           <th>주소</th>
-           <td><input type="text"></td>
-           <td></td>
-           <td></td>
-         </tr></form> 
-            
-        <tr>
-           <td></td>
-           <th>아이디</th>
-           <td><input type="text"></td>
-           <td><input type="submit" id="checkbtn" value="중복확인" style="float: left;"/></td>
-           <td></td>
-         </tr>        
-             
-         <tr>
-           <td></td>
-           <th>비밀번호</th>
-           <td><input type="password"></td>
-           <td><input type="submit" id="passbtn" value="비밀번호 변경" style="float: left;"/> </td>
-           <td></td>
-         </tr> 
-        </table><br><br><br>
-                        
-                        
+
+						<!--border="1px"-->
+						<table width="80%" height="600px" style="text-align: center;"
+							id="hi">
+							<tr>
+								<td width="20%"></td>
+								<td width="20%"></td>
+								<td width="20%"></td>
+								<td width="20%"></td>
+								<td width="20%">
+									<input type="button" id="change" value="수정" /> 
+									<input type="reset" id="cxlbtn" value="취소" />
+								</td>
+							</tr>
+
+							<tr>
+								<td rowspan="5">
+									<div id="photo" src="" style="margin: 30px"></div> <!--  파일등록-->
+									<form action="" method="post" enctype="multipart/form-data">
+										<input type="file" id="pic" value="사진선택" /> 
+										<input type="submit" value="등록" id="upload" />
+									</form>
+								</td>
+								<th>사번</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<th>성명</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+
+							<tr>
+
+								<th>부서</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+
+							<tr>
+
+								<th>직위</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+
+							<tr>
+
+								<th>내선번호</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+
+							<form action="" method="post">
+								<tr>
+									<td></td>
+									<th>휴대전화번호</th>
+									<td><input type="text"></td>
+									<td></td>
+									<td></td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<th>이메일</th>
+									<td>
+										<span class="text_span">이메일</span>
+										<input type="text" class="text_input" style="display:none;">
+									</td>
+									<td></td>
+									<td></td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<th>주소</th>
+									<td><span class="text_span">주소</span><input type="text" class="text_input" style="display:none;"></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</form>
+
+							<tr>
+								<td></td>
+								<th>아이디</th>
+								<td><input type="text"></td>
+								<td><input type="submit" id="checkbtn" value="중복확인"
+									style="float: left;" /></td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<th>비밀번호</th>
+								<td><input type="password"></td>
+								<td><input type="submit" id="passbtn" value="비밀번호 변경"
+									style="float: left;" /></td>
+								<td></td>
+							</tr>
+						</table>
+						<br>
+						<br>
+						<br>
+
+
 
 
 						<!----------------------------------->
