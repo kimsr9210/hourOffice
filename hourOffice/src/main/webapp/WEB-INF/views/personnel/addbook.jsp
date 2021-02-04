@@ -26,7 +26,7 @@
                
 tr{height: 30px;}
 select{height: 25px;}
-#search{height: 25px;}
+#searchText{height: 25px;}
 </style>
 
 <body>
@@ -64,14 +64,15 @@ select{height: 25px;}
                             
         <tr style="text-align:right;">
             <td>
-                <form>
-                    <select>
-                        <option>이름</option>
-                        <option>부서</option>
-                        <option>직책</option>
+                <form action="/addbookSearch.ho" method="get">
+                    <select name="selectBox">
+                    	<option value="" selected>전체</option>
+                        <option value="name">이름</option>
+                        <option value="dept">부서</option>
+                        <option value="position">직책</option>
                     </select>
-                    <input type="text" id="search" name="search" />
-                    <input type="submit" class="sbbtn" value="검색" style="border-radius: 5px;"/>
+                    <input type="text" id="search" name="searchText" />
+                    <input type="submit" class="sbbtn" name="searchBtn" value="검색" style="border-radius: 5px;"/>
                 </form>
             </td>
         </tr>
@@ -97,7 +98,7 @@ select{height: 25px;}
         <tr>
             <td>사진</td>
             <td><%=m.getMemName() %></td>
-            <td>소속부서 vo없음</td>
+            <td><%=m.getDeptName() %></td>
             <td><%=m.getMemPosition() %></td>
             <td><%=m.getMemTell() %></td>
             <td><%=m.getMemPhone() %></td>
@@ -109,7 +110,7 @@ select{height: 25px;}
     </table><br>
     
     <p style="text-align: center;"> 1 2 3 4 5 ></p>
-                        
+    <div id="pageNavi">${pageNavi }</div>              
 
 
 						<!----------------------------------->
