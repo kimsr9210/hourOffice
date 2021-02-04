@@ -61,7 +61,7 @@
                                         <option value="D2">총 &nbsp;&nbsp;무&nbsp;&nbsp;부</option>
                                         <option value="D3">전 &nbsp;&nbsp;산&nbsp;&nbsp;부</option>
                                         <option value="D4">개 &nbsp;&nbsp;발&nbsp;&nbsp;부</option>
-                                        <option value="D5">디자인</option>
+                                        <option value="D5">디 자 인</option>
                                     </select>
                                     <!--<div class="select__arrow"></div>-->
                                 </div>

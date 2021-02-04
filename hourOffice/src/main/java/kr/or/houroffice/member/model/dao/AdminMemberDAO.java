@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.or.houroffice.member.model.vo.AcademicAbility;
 import kr.or.houroffice.member.model.vo.Career;
+import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.License;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.member.model.vo.Military;
@@ -114,6 +115,12 @@ public class AdminMemberDAO {
 		return sqlSession.insert("member.insertMilitary",mil);
 	}
 	////////////////////////////////////////사원 등록 메소드   ////////////////////////////////////////
+
+	public ArrayList<Member> selectOrganizationChart(SqlSessionTemplate sqlSession) {
+		List list = sqlSession.selectList("member.selectDeptList");
+		return (ArrayList<Member>)list;
+	}
+
 	
 
 }

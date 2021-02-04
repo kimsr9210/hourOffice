@@ -204,13 +204,16 @@ public class AdminMemberController {
 	
 	// 조직도 select
 	@RequestMapping(value="/admin_tap_organizationChart.ho")
-	public String organizationChart(HttpSession session){
+	public String organizationChart(HttpSession session, Model model){
 		
+		ArrayList<Member> list = mService.selectOrganizationChart();
+		model.addAttribute("list",list);
+		/*
 		if(session.getAttribute("member")!=null){
-			return "admin_tap/personnel_department/organizationChart";
+			//return "admin_tap/personnel_department/organizationChart";
 		}else{
 			return "redirect:login.jsp";
-		}
-		
+		}*/
+		return "admin_tap/personnel_department/organizationChart";
 	}
 }

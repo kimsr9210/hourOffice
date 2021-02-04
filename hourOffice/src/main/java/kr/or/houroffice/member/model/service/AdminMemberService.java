@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import kr.or.houroffice.member.model.dao.AdminMemberDAO;
 import kr.or.houroffice.member.model.vo.AcademicAbility;
 import kr.or.houroffice.member.model.vo.Career;
+import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.License;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.member.model.vo.Military;
@@ -74,6 +75,10 @@ public class AdminMemberService {
 		}
 		
 		return false; // 실패시 false 반환
+	}
+	// 조직도 list - select
+	public ArrayList<Member> selectOrganizationChart() {
+		return mDAO.selectOrganizationChart(sqlSession);
 	}
 	
 
