@@ -31,7 +31,7 @@
         #TitleContents select{
             display:inline-block;
             width: 120px; height: 25px;
-            background: url(${pageContext.request.contextPath}/resources/images/selectarrow.png) 120% center no-repeat;
+            background: url(/resources/images/selectarrow.png) 120% center no-repeat;
         }
         
         #TitleContents #subtitle{
@@ -84,7 +84,7 @@
             width: 140px; height: 39px;
             padding-left: 37px;
             margin-top: 5px;
-            background: url(${pageContext.request.contextPath}/resources/images/selectarrow.png) 105% center no-repeat;
+            background: url(/resources/images/selectarrow.png) 105% center no-repeat;
         }
         /* 생년월일 div */
         #TitleContents #birthDiv{
@@ -166,7 +166,7 @@
         #TitleContents #gradSelect{
             width: 90px; height: 35px;
             padding-left: 8px;
-            background: url(${pageContext.request.contextPath}/resources/images/selectarrow.png) 105% center no-repeat;
+            background: url(/resources/images/selectarrow.png) 105% center no-repeat;
         }
         /* 자격증 및 면허 */
         #TitleContents #licInfor{
