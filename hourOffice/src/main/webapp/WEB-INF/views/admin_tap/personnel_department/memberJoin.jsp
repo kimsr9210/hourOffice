@@ -18,57 +18,6 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/memberInfo.css" />
 	
-	<style>
-		
-	</style>
-    
-<script>
-    // 생년월일 선택 목록 셋팅
-  $(document).ready(function () {
-    setDateBox();
-  });
-    
-  // select box 연도 , 월 표시
-  function setDateBox() {
-    var dt = new Date();
-    var year = "";
-    var com_year = dt.getFullYear();
-
-    // 발행 뿌려주기
-    $("#birthYear").append("<option value=''>년도</option>");
-
-    // 올해 기준으로 -50년부터 +1년을 보여준다.
-    for (var y = (com_year - 60); y <= (com_year); y++) {
-      $("#birthYear").append("<option value='" + y + "'>" + y + " 년" + "</option>");
-    }
-
-    // 월 뿌려주기(1월부터 12월)
-    var month;
-    $("#birthMonth").append("<option value=''>월</option>");
-    for (var m = 1; m <= 12; m++) {
-        if(m<10){
-            $("#birthMonth").append("<option value='0" + m + "'>0" + m + " 월" + "</option>");
-        }else{
-            $("#birthMonth").append("<option value='" + m + "'>" + m + " 월" + "</option>");
-        }
-    }
-
-    // 일 뿌려주기(1일부터 31일)
-    var day;
-    $("#birthDay").append("<option value=''>일</option>");
-    for (var d = 1; d <= 31; d++) {
-        if(d<10){
-            $("#birthDay").append("<option value='0" + d + "'>0" + d + " 일" + "</option>");
-        }else{
-            $("#birthDay").append("<option value='" + d + "'>" + d + " 일" + "</option>");
-        }
-    }
-    
-    //alert($('#acaEnrollDate').val());
-
-  }
-
-</script>
 </head>
 <body>
 	<div id="wrap">
@@ -88,12 +37,12 @@
 						
 						
 						<div id="contWrapper">
-                    <form action="/memberSingUp.ho" method="post">
+                    <form action="/memberSingUp.ho" method="post" enctype="multipart/form-data">
                         <div class="floatDiv">
-                            <div id="memProfile"><img border="1px" src="img/selectarrow.png"/><br></div>
+                            <div id="memProfile"><img border="1px" src=""/><br></div>
                             <div id="position_dept">
                                 <div class="posi_deptDiv">직위<br>
-                                    <select name="memPosition" class="posi_deptSelect">
+                                    <select id="memPosition" name="memPosition" class="posi_deptSelect">
                                         <option value=""></option>
                                         <option value="사원">사 &nbsp;&nbsp;&nbsp;원</option>
                                         <option value="대리">대 &nbsp;&nbsp;&nbsp;리</option>
@@ -118,7 +67,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div style="width:63%; margin-top:20px; display:inline-block; text-align:right;">어쩌구 저쩌구.jpg</div> <button type="button">사진 업로드</button>
+                                <div style="width:63%; margin-top:20px; display:inline-block; text-align:right;"><input type="file" name="memProfile" id="profileImg"/></div>
                             </div>
                         </div>
                         <div id="rightCont" class="floatDiv">
@@ -157,9 +106,8 @@
                             <div class="infoRespective">
                                 학력<br>
                                 <hr class="innerHr">
-                                <div id="acaInfor" class="float">기간 <input type="date" name="acaEnrollDate" class="dateInput"  placeholder="19991231"/> ~ <input type="date" name="acaGradDate" class="dateInput"/> &nbsp;학교명 <input type="text" name="acaSchoolName" id="schoolNameInput"/> &nbsp;전공 <input type="text" name="acaMajorName" id="majorNameInput"/> &nbsp;졸업여부 
+                                <div id="acaInfor" class="float">기간 <input type="date" name="acaEnrollDate" class="dateInput"/> ~ <input type="date" name="acaGradDate" class="dateInput"/> &nbsp;학교명 <input type="text" name="acaSchoolName" id="schoolNameInput"/> &nbsp;전공 <input type="text" name="acaMajorName" id="majorNameInput"/> &nbsp;졸업여부 
                                 <select name="acaGrad" id="gradSelect">
-                                    <option value=""></option>
                                     <option value="졸업">졸 업</option>
                                     <option value="졸업예정">졸업예정</option>
                                     <option value="휴학">휴 학</option>
@@ -170,7 +118,7 @@
                             <div id="licenseDiv" class="infoRespective">
                                 자격증 및 면허<br>
                                 <hr class="innerHr">
-                                <div id="licInfor" class="float">취득일자 <input type="date" name="licDate" class="dateInput" placeholder="19991231"/> &nbsp;자격증명 <input type="text" name="licName" id="licNameInput"/> &nbsp;시행처 <input type="text" name="licOrigin" id="licOriginInput"/></div> <div class="float"><div class="plusBtn float" onclick="plusBtn('licInfor')">+</div></div>
+                                <div id="licInfor" class="float">취득일자 <input type="date" name="licDate" class="dateInput"/> &nbsp;자격증명 <input type="text" name="licName" id="licNameInput"/> &nbsp;시행처 <input type="text" name="licOrigin" id="licOriginInput"/></div> <div class="float"><div class="plusBtn float" onclick="plusBtn('licInfor')">+</div></div>
                             </div>
                             <hr class="outHr">
                             <div id="careerDiv" class="infoRespective">
@@ -191,11 +139,15 @@
                             </div>
                         </div>
                         
-                        <div id="saveDiv"><button type="button">저장 후 추가 생성</button> <button>저장</button> <a href=""><button type="button" class="delBtn">취소</button></a></div>
+                        <div id="saveDiv"><button type="button">저장 후 추가 생성</button> <button id="submit-btn" type="button">저장</button> <a href=""><button type="button" class="delBtn">취소</button></a></div>
                         
                     </form>    
                     </div>
                         <script>
+                        	
+                        	
+                        
+                        
                             // + - 버튼 이름
                             var num =1;
                             // + div
@@ -215,7 +167,119 @@
                                 $('#'+id).parent().prev().remove();
                                 $('#'+id).parent().remove();
                             }
-                        
+                        	
+                            
+                            // 프로필 사진 미리보기
+							var sel_file; // 선택된 이미지
+							$(function(){
+								// on("change",function(){}) 은 해당 태그가 바뀔 때 마다 함수 실행한다는 의미
+								$('#profileImg').on("change", handleImgFileSelect);
+							});
+                            function handleImgFileSelect(e){
+                            	var files = e.target.files;
+                            	var filesArr = Array.prototype.slice.call(files); // 파일리스트를 배열로 각각 넣어준다.
+                            	
+                            	filesArr.forEach(function(imgfile){ // 파일 배열의 길이만큼 반복
+                            		if(!imgfile.type.match("image.*")){
+                            			alert("확장자는 이미지 확장자만 가능합니다.");
+                            			return;
+                            		}
+                            			
+	                            	sel_file = imgfile;
+	                            		
+	                            	var reader = new FileReader();
+	                            	reader.onload = function(e){
+	                            		$('#memProfile>img').attr("src", e.target.result);
+	                            	}
+	                            	reader.readAsDataURL(imgfile);
+                            	});
+                            }
+                            
+                         // 생년월일 선택 목록 셋팅
+                            $(document).ready(function () {
+                              setDateBox();
+                            });
+                              
+                            // select box 연도 , 월 표시
+                            function setDateBox() {
+                              var dt = new Date();
+                              var year = "";
+                              var com_year = dt.getFullYear();
+
+                              // 발행 뿌려주기
+                              $("#birthYear").append("<option value=''>년도</option>");
+
+                              // 올해 기준으로 -50년부터 +1년을 보여준다.
+                              for (var y = (com_year - 60); y <= (com_year); y++) {
+                                $("#birthYear").append("<option value='" + y + "'>" + y + " 년" + "</option>");
+                              }
+
+                              // 월 뿌려주기(1월부터 12월)
+                              var month;
+                              $("#birthMonth").append("<option value=''>월</option>");
+                              for (var m = 1; m <= 12; m++) {
+                                  if(m<10){
+                                      $("#birthMonth").append("<option value='0" + m + "'>0" + m + " 월" + "</option>");
+                                  }else{
+                                      $("#birthMonth").append("<option value='" + m + "'>" + m + " 월" + "</option>");
+                                  }
+                              }
+
+                              // 일 뿌려주기(1일부터 31일)
+                              var day;
+                              $("#birthDay").append("<option value=''>일</option>");
+                              for (var d = 1; d <= 31; d++) {
+                                  if(d<10){
+                                      $("#birthDay").append("<option value='0" + d + "'>0" + d + " 일" + "</option>");
+                                  }else{
+                                      $("#birthDay").append("<option value='" + d + "'>" + d + " 일" + "</option>");
+                                  }
+                              }
+
+                            }
+                            
+                            
+                            $('#submit-btn').click(function(){
+                        		// submit 전에 거르기
+                        		if($('select[name=memPosition]').val()==''){alert('직위를 선택해주세요');}
+                        		else if($('#profileImg').val()==''){alert('프로필 사진을 선택해주세요');}
+                        		else if($('input[name=memName]').val()==''){alert('이름을 입력해주세요');}
+                        		else if($('select[name=memBirth1]').val()==''){alert('생년월일을 입력해주세요');}
+                        		else if($('select[name=memBirth2]').val()==''){alert('생년월일을 입력해주세요');}
+                        		else if($('select[name=memBirth3]').val()==''){alert('생년월일을 입력해주세요');}
+                        		else if($('input[name=memAddress1]').val()==''){alert('주소를 입력해주세요');}
+                        		else if($('input[name=memAddress2]').val()==''){alert('주소를 입력해주세요');}
+                        		else if($('select[name=memPhone1]').val()==''){alert('연락처를 입력해주세요');}
+                        		else if($('input[name=memPhone2]').val()==''){alert('연락처를 입력해주세요');}
+                        		else if($('input[name=memPhone3]').val()==''){alert('연락처를 입력해주세요');}
+                        		else{
+	                        		if($('input[name=acaEnrollDate]').val()==''){
+	                        			$('input[name=acaEnrollDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=acaGradDate]').val()==''){
+	                        			$('input[name=acaGradDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=licDate]').val()==''){
+	                        			$('input[name=licDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=carJoinDate]').val()==''){
+	                        			$('input[name=carJoinDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=carResignDate]').val()==''){
+	                        			$('input[name=carResignDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=milJoinDate]').val()==''){
+	                        			$('input[name=milJoinDate]').val('0001-01-01');
+	                        		}
+	                        		if($('input[name=milLeaveDate]').val()==''){
+	                        			$('input[name=milLeaveDate]').val('0001-01-01');
+	                        		}
+	                        		
+	                        		$('#contWrapper > form').submit();
+                        		}
+                        	});
+                            
+                            
                         </script>
 						
 						
