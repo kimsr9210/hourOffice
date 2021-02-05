@@ -80,6 +80,24 @@ public class AdminMemberService {
 	public ArrayList<Member> selectOrganizationChart() {
 		return mDAO.selectOrganizationChart(sqlSession);
 	}
+	// 조직도 - 사원 부서 이동 - update
+	public int updateMemberPosition(int[] memNo, String deptCode) {
+		return mDAO.updateMemberPosition(sqlSession,memNo,deptCode);
+	}
+	// 조직도 - 부서 추가 - insert
+	public int insertDepartment(String deptCode, String deptName) {
+		return mDAO.insertDepartment(sqlSession,deptCode,deptName);
+	}
+	// 조직도 - 부서 이름 수정 - update
+	public int updateDepartmentName(String deptCode, String deptName) {
+		return mDAO.updateDepartmentName(sqlSession,deptCode,deptName);
+			
+	}
+	// 조직도 - 부서 삭제 - update
+	public int updateDepartmentDelete(String deptCode) {
+		return mDAO.updateDepartmentDelete(sqlSession,deptCode);
+	}
+	
 	
 
 }

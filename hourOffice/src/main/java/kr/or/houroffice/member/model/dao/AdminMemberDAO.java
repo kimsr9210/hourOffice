@@ -121,6 +121,32 @@ public class AdminMemberDAO {
 		List list = sqlSession.selectList("member.selectDeptList");
 		return (ArrayList<Member>)list;
 	}
+	// 관리자탭 (인사관리) - 조직도 - 사원 부서 이동 update
+	public int updateMemberPosition(SqlSessionTemplate sqlSession, int[] memNo, String deptCode) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("memNo", memNo);
+		map.put("deptCode", deptCode);
+		return sqlSession.update("member.changePosition",map);
+	}
+	// 관리자탭 (인사관리) - 조직도 - 부서 추가 insert
+	public int insertDepartment(SqlSessionTemplate sqlSession, String deptCode, String deptName) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("deptCode", deptCode);
+		map.put("deptName", deptName);
+		return sqlSession.insert("member.addDepartment",map);
+	}
+	// 관리자탭 (인사관리) - 조직도 - 부서 이름 수정 update
+	public int updateDepartmentName(SqlSessionTemplate sqlSession, String deptCode, String deptName) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("deptCode", deptCode);
+		map.put("deptName", deptName);
+		return sqlSession.update("member.modifyDepartment",map);
+	}
+	// 관리자탭 (인사관리) - 조직도 - 부서 삭제 update
+	public int updateDepartmentDelete(SqlSessionTemplate sqlSession, String deptCode) {
+		return sqlSession.update("member.deleteDepartment",deptCode);
+	}
+	
 
 	
 

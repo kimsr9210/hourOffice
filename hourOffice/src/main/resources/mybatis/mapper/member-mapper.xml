@@ -164,9 +164,27 @@
 			#{milReason}
 		)
 	</insert>
-	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 select-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 select -->
 	<select id="selectDeptList" resultType="Member">
-		SELECT d.DEPT_CODE AS deptCode, d.DEPT_NAME AS deptName, m.MEM_NO AS memNo, m.MEM_NAME AS memName, m.MEM_POSITION AS memPosition FROM DEPARTMENT d RIGHT JOIN MEMBER m ON(d.DEPT_CODE=m.DEPT_CODE) WHERE (d.DEPT_DEL_YN='N' OR m.DEPT_CODE IS NULL) AND MEM_DEL_YN='N' AND MEM_RESIGN_YN='N' ORDER BY d.DEPT_NAME
+		SELECT d.DEPT_CODE AS deptCode, d.DEPT_NAME AS deptName, m.MEM_NO AS memNo, m.MEM_NAME AS memName, m.MEM_POSITION AS memPosition FROM (select * from DEPARTMENT WHERE DEPT_DEL_YN='N') d FULL JOIN (SELECT * FROM MEMBER WHERE MEM_DEL_YN='N' AND MEM_RESIGN_YN='N') m ON(d.DEPT_CODE=m.DEPT_CODE) ORDER BY d.DEPT_NAME
 	</select>
-	
+	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 부서 이동 update -->
+	<update id="changePosition" parameterType="hashmap">
+		UPDATE MEMBER SET DEPT_CODE=#{deptCode} 
+		<foreach collection="memNo" item="item" index="i" open="WHERE" separator="OR">
+		 MEM_NO=#{item}
+		</foreach>
+	</update>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 부서 추가 insert -->
+	<insert id="addDepartment" parameterType="hashmap">
+		INSERT INTO DEPARTMENT VALUES(#{deptCode},#{deptName},'N')
+	</insert>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 부서 이름 수정 update -->
+	<update id="modifyDepartment" parameterType="hashmap">
+		UPDATE DEPARTMENT SET DEPT_NAME=#{deptName} WHERE DEPT_CODE=#{deptCode} AND DEPT_DEL_YN='N'
+	</update>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 부서 삭제 update -->
+	<update id="deleteDepartment" parameterType="String">
+		UPDATE DEPARTMENT SET DEPT_DEL_YN='Y' WHERE DEPT_CODE=#{deptCode}
+	</update>
 </mapper>
