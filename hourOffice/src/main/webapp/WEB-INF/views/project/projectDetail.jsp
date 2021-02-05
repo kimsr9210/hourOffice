@@ -1,3 +1,7 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectComment"%>
+<%@page import="org.springframework.web.bind.annotation.SessionAttribute"%>
+<%@page import="javax.websocket.Session"%>
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectBoard"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectMember"%>
 <%@page import="java.util.ArrayList"%>
@@ -28,10 +32,40 @@
 <!-- TextArea 자동 높이 조절 CDN -->
 <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
+
+<style>
+.commentInfo {
+	width: 93%;
+	float: left;
+	border-top: 1px solid #F2F2F2;
+}
+.commentUserImg{
+            width: 7%;
+            font-size: 2rem;
+            float: left;
+            color: #999999;
+			border-top: 1px solid #F2F2F2;
+            padding: 10px 0px 0px 10px;
+        }
+        
+.commentModifyBtn, .commentDeleteBtn{
+	color: #cccccc;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.commentModifyBtn:hover, .commentDeleteBtn:hover{
+	font-weight: bolder;
+}
+</style>
 <%
 	Project p = (Project)request.getAttribute("project");
-	ArrayList<ProjectMember> projectMemberList = (ArrayList<ProjectMember>)request.getAttribute("projectMemberList");
+	ArrayList<Member> projectMemberList = (ArrayList<Member>)request.getAttribute("projectMemberList");
 	ArrayList<ProjectBoard> boardList = (ArrayList<ProjectBoard>)request.getAttribute("boardList");
+	ArrayList<Member> boardMemberList = (ArrayList<Member>)request.getAttribute("boardMemberList");
+	ArrayList<ProjectMember> projectMgrList = (ArrayList<ProjectMember>)request.getAttribute("projectMgrList");
+	ArrayList<ProjectComment> commentList = (ArrayList<ProjectComment>)request.getAttribute("commentList");
+	Member m = (Member)session.getAttribute("member");
 %>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -49,13 +83,21 @@
                                 <div id="DetailTop">
                                     <p id="projectName">
                                         <i class="far fa-star"></i>&nbsp;&nbsp;<%=p.getProSubject() %>
-                                        <i id="projectSetting" class="fas fa-cog"></i>
+                                        <%
+                                        	for(ProjectMember pm : projectMgrList){
+                                        		if(pm.getMemNo()==m.getMemNo()){
+                                        %>
+                                        <span id="projectSetting"><i class="fas fa-cog"></i></span>
+                                        	<% } %>
+                                        <% } %>
                                     </p>
                                     <div id="projectOption">
                                         <p class="optionBold">프로젝트 설정</p>
                                         <p id="projectExit" class="optionRegular">프로젝트 나가기</p>
-                                        <p id="projectModify" class="optionRegular">프로젝트 수정</p>
-                                        <p id="projectDelete" class="optionRegular">프로젝트 삭제</p>
+                                        <%if(m.getMemNo()==p.getMemNo()){ %>
+                                       	 	<p id="projectModify" class="optionRegular">프로젝트 수정</p>
+                                        	<p id="projectDelete" class="optionRegular">프로젝트 삭제</p>
+                                        <%} %>
                                         <hr>
                                         <p class="optionBold">프로젝트 관리자 설정</p>
                                         <p id="mgrComment" class="optionRegular">글/댓글 작성 권한 설정</p>
@@ -70,7 +112,7 @@
                                 </div>
                                 <div id="DetailBot">
                                     <ui id="projectNavi">
-                                        <li><a href="#"><i class="fas fa-list"></i> 전체</a></li>
+                                        <li><a href="#"><i class="fas fa-list"></i> 일반</a></li>
                                         <li><a href="#"><i class="fas fa-file"></i> 파일</a></li>
                                         <li><a href="#"><i class="fas fa-laptop-code"></i> 코드</a></li>
                                         <li><a href="#"><i class="far fa-calendar"></i> 일정</a></li>
@@ -87,51 +129,96 @@
                             
                             <!-- 게시물 여러개 -->
                             <%for(ProjectBoard pb : boardList){ %>
+                            <%String name = ""; %>
+                            <%for(Member member : boardMemberList){ %>
+                            	<%if(member.getMemNo()==pb.getMemNo()){ %>
+                            	<%name = member.getMemName(); %>
+                            	<%} %>
+                            <%} %>
                             <div class="boardBox">
                             
                                 <div class="boardInfo">
                                     <div class="memberImg"><i class="fas fa-user-circle"></i></div>
                                     <div class="memberInfo">
-                                        <div class="memberName">백두진</div>
+                                    
+                                        <div class="memberName"><%=name %></div>
+                                    
                                         <div class="boardTime"><%=pb.getBoardDate() %></div>
                                     </div>
                                     <!--관리자 일 때-->
+                                    <%if(pb.getMemNo()==m.getMemNo()){ %>
                                     <div class="memberAdmin">
-                                        <i class="fas fa-ellipsis-v boardSet"></i>
+                                        <span class="boardSet"><i class="fas fa-ellipsis-v"></i></span>
                                         <div class="boardModifyBox">
                                             <div id="boardModify" class="boardModifyList">게시물 수정</div>
                                             <div id="boardDelete" class="boardModifyList">게시물 삭제</div>
                                         </div>
                                     </div>
+                                    <%} %>
                                     <!--------------->
                                 </div>
                                 
                                 <div class="boardContents">
                                     <textarea class="textarea"  disabled="disabled" readonly="readonly"><%=pb.getBoardText() %></textarea>
                                 </div>
-                                
+                                <%
+                                int count = 0;
+                                for(ProjectComment pc : commentList){
+                                	if(pb.getBoardNo()==pc.getBoardNo()){
+                                		count++;
+                                	}
+                                }
+                                	
+                                %>
                                 <div class="commentCount">
-                                    1개 댓글
+                                    <%=count %>개 댓글
                                 </div>
                                 <!-- 댓글 하나 코드 -->
+                                <%for(ProjectComment pc : commentList){ %>
+                                <%if(pc.getBoardNo()==pb.getBoardNo()){ %>
+                                <%
+                                	String memName = "";
+                                	for(Member member : boardMemberList){
+                                		if(pc.getMemNo()==member.getMemNo()){
+                                			memName = member.getMemName();
+                                		}
+                                	}
+                                %>
                                 <div class="commentList">
                                     <div class="commentUserImg">
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div class="commentInfo">
-                                        <div class="commentName">백두진<span class="commentTime">2021-01-26 16:40</span></div>
-                                        <textarea class="commentTextArea" disabled="disabled" readonly="readonly">여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.</textarea>
+                                        <div class="commentName">
+                                        	<%=memName %><span class="commentTime"><%=pc.getCommentDate() %></span>
+                                        	<%if(pc.getMemNo()==m.getMemNo()){ %>
+	                                        <span class="commentModifyBtn">수정</span>
+	                                        <span  class="commentDeleteBtn">삭제</span>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+	                                        <%} %>
+                                        </div>
+                                        <form action="/updateProjectComment.ho" method="get">
+	                                        <textarea class="commentTextArea" name="commentCon" disabled="disabled" readonly="readonly"><%=pc.getCommentCon() %></textarea>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo()%>"/>
+	                                        <input type="hidden" name="memNo" value="<%=pc.getMemNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+                                        </form>
                                     </div>
                                 </div>
-                                
+                                <%} %>
+                                <%} %>
                                 
                                 <div class="commentWrite">
                                     <div class="commentUser">
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div class="commentText">
-                                        <form action="#" method="post">
-                                            <input class="boardComment" type="text" name="comment" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
+                                        <form action="/insertBoardComment.ho" method="post">
+                                            <input class="boardComment" type="text" name="commentCon" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
+                                            <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+                                            <input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
                                         </form>
                                     </div>
                                 </div>
@@ -152,16 +239,12 @@
                                 <div id="memberListBot">
                                     
                                     <!-- 멤버 목록 여러개 -->
+                                    <%for(Member member : projectMemberList) {%>
                                     <div class="memberList">
                                         <div><i class="fas fa-user-circle"></i></div>
-                                        <div class="memberListName">백두진</div>
+                                        <div class="memberListName"><%=member.getMemName() %></div>
                                     </div>
-                                    
-                                    <div class="memberList">
-                                        <div><i class="fas fa-user-circle"></i></div>
-                                        <div class="memberListName">이진원</div>
-                                    </div>
-                                    
+                                    <%} %>
                                     
                                 </div>
                                 
@@ -205,7 +288,7 @@
     <!-- 프로젝트 멤버 추가 하기 -->
     <div id="inviteBox">
         <div id="inviteHeader">
-            <i id="inviteExit" class="fas fa-times"></i>
+            <span id="inviteExit"><i class="fas fa-times"></i></span>
             <div id="inviteName">초대하기</div>
         </div>
         <div id="inviteSearchBox">
@@ -233,7 +316,7 @@
     <!--참가자 목록 -->
     <div id="memberAllListBox">
         <div id="memberAllListHeader" class="displayNone">
-            <i id="memberAllListExit" class="fas fa-times"></i>
+            <span id="memberAllListExit"><i class="fas fa-times"></i></span>
             <div id="memberAllListName">프로젝트 참가자</div>
         </div>
         <div id="memberAllListSearchBox" class="displayNone">
@@ -244,14 +327,25 @@
         <div id="memberAllListContents">
             
             <!--얘가 여러개 생겨남-->
+            <%for(Member member : projectMemberList) {%>
+            <%
+            	char mgrYN = 'N';
+            	for(ProjectMember pm : projectMgrList){
+            		if(member.getMemNo()==pm.getMemNo()){
+            			mgrYN = pm.getMgrYN();
+            		}
+            	}
+            %>
             <div class="memberAllListLabel">
                 <div class="memberAllListImg displayNone"><i class="fas fa-user-circle"></i></div>
                 <div class="memberAllListInfo displayNone">
-                    <div class="memberAllListName">이름</div>
-                    <div class="memberAllListPosition">직급</div>
+                    <div class="memberAllListName"><%=member.getMemName() %></div>
+                    <div class="memberAllListPosition"><%=member.getMemPosition() %></div>
                 </div>
                 <div class="memberAllListSet">
+                <%if(mgrYN=='Y'){ %>
                     <div class="memberAllListSetAdminDis displayNone">관리자</div>
+               	<%} %>
                     <div class="memberAllListSetAdmin"><i class="fas fa-ellipsis-v"></i>
                         <!-- 프로젝트 관리자만 보임 -->
                         <div class="memberAdminBox">
@@ -264,7 +358,7 @@
                     </div>
                 </div>
             </div>
-            
+            <%} %>
             
         </div>
     </div>
@@ -298,6 +392,52 @@
         </div>
     </div>
     <!-- 자바 스크립트    -->
+    <script>
+    $(function(){
+    	// 댓글 수정 
+		$('.commentModifyBtn').click(function(){
+				var $textBox = $(this).parent().next().children().eq(0);
+				var $form = $(this).parent().next();
+			if($(this).text()=='수정'){
+				$(this).text('완료');
+		        $textBox.removeAttr('disabled');
+		        $textBox.removeAttr('readonly');
+		        $textBox.css('border','1px solid black');
+			}else{
+				var result = window.confirm("해당 수정을 삭제하시겠습니까?");
+				if(result){
+					$form.submit();
+				}
+			}
+		});
+		
+    	// 댓글 삭제
+		$('.commentDeleteBtn').click(function(){
+			var result = window.confirm("해당 댓글을 삭제하시겠습니까?");
+			var $commentBox = $(this).parent().parent().parent();
+			if(result){
+				var $commentNo = $(this).next().val();
+				var $proNo = $(this).next().next().val();
+				$.ajax({
+                	url : "/deleteProjectComment.ho",
+                	data : {"commentNo" : $commentNo},
+                	type : "get",
+                	success : function(result){
+                		if(result=="true"){
+                			console.log("댓글이 삭제되었습니다");
+                		}else{
+                			console.log("프로젝트 즐겨찾기 실패");
+                		}
+                	},
+                	error : function(){
+                		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+                	}
+                });
+				$(this).parent().parent().parent().remove();
+			}
+		});
+    });
+    </script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectDetail.js"></script>
 </body>
