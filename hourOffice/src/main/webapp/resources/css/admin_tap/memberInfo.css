@@ -248,6 +248,7 @@
         /* 추가취소 버튼 */
         #TitleContents .minusBtn{
             width: 25px; height: 25px;
+            color: white;
             text-align: center;
             font-size: 1.1rem;
             background-color: #FF6363;
@@ -261,3 +262,4 @@
             margin: 0 auto;
             margin: 100px 0 20px 0 ;
         }
+        

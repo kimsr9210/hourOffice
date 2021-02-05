@@ -21,6 +21,11 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/allListMember.css" />
 	
+	<style>
+		
+		
+	</style>
+	
 </head>
 
 <script>
@@ -123,7 +128,21 @@ $(function(){
 						
 						<div id="totalMemNum"><span id="totalMem" style="font-size: 1.5rem;">현재사원수</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${countAll }명</div>
                         <hr width="200px" align="left">
-                        <div id="btnPlace"><a href="/admin_tap_memberJoin.ho"><button type="button">+ 사원생성</button></a><button type="button" id="positionChangeBtn">직위변경</button><button type="button" id="dropMemBtn" class="delBtn">- 사원삭제</button></div>
+                        
+                        
+                        <div id="btnPlace" class="float"><a href="/admin_tap_memberJoin.ho"><button type="button">+ 사원생성</button></a><button type="button" id="positionChangeBtn">직위변경</button><button type="button" id="dropMemBtn" class="delBtn">- 사원삭제</button></div>
+                        
+                        <div id="search-div" class="float">
+                            <form action="#" method="get">
+                            <select name="searchType">
+                                <option value="memNo">사번</option>
+                                <option value="memName">이름</option>
+                            </select>
+                            <input type="text" name="keyword"/>
+                            <button><i class="fas fa-search i-icon"></i></button>
+                            </form>
+                        </div>
+                        
                         <div>
                             <table id="memAllListTbl">
                                 <tr height="1px"><td colspan="8"><hr style="margin:0;"></td></tr>
@@ -150,7 +169,7 @@ $(function(){
                                     <td>없음</td>
                                 <% } %>
                               	<% if(member.getMemEmail() != null){ %>
-                                    <td><%=member.getMemEmail() %></td>
+                                    <td><%=member.getDeptName() %></td>
                                 <% }else { %>
                                 	<td>미등록</td>
                                 <% } %>
@@ -177,6 +196,7 @@ $(function(){
                                 <% } %>
                             </table>
                             <div id="pageNavi">${pageNavi }</div>
+                            
                         </div>
 						
 						

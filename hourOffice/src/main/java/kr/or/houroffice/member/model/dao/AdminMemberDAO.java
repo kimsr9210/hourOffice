@@ -7,7 +7,12 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import kr.or.houroffice.member.model.vo.AcademicAbility;
+import kr.or.houroffice.member.model.vo.Career;
+import kr.or.houroffice.member.model.vo.Department;
+import kr.or.houroffice.member.model.vo.License;
 import kr.or.houroffice.member.model.vo.Member;
+import kr.or.houroffice.member.model.vo.Military;
 
 @Repository("adminMemberDAO")
 public class AdminMemberDAO {
@@ -83,6 +88,39 @@ public class AdminMemberDAO {
 						
 		return sb+"";
 	}
+
+	////////////////////////////////////////  사원 등록 메소드   ////////////////////////////////////////
+	// 관리자탭 (인사관리) - 사원 등록 / 사번 채번 메소드 
+	public int selectInsertMemberNo(SqlSessionTemplate sqlSession){
+		return sqlSession.selectOne("member.choiceMemberNo");
+	}
+	// 관리자탭 (인사관리) - 사원 등록
+	public int insertMember(SqlSessionTemplate sqlSession, Member m) {		
+		return sqlSession.insert("member.signUpMember",m);
+	}
+	// 관리자탭 (인사관리) - 사원 등록 - 학력 insert
+	public int insertInfoAca(SqlSessionTemplate sqlSession, ArrayList<AcademicAbility> acaList) {
+		return sqlSession.insert("member.insertAcademicAbility",acaList);
+	}
+	// 관리자탭 (인사관리) - 사원 등록 - 자격증 insert
+	public int insertInfoLic(SqlSessionTemplate sqlSession, ArrayList<License> licList) {
+		return sqlSession.insert("member.insertLicense",licList);
+	}
+	// 관리자탭 (인사관리) - 사원 등록 - 경력 insert
+	public int insertInfoCar(SqlSessionTemplate sqlSession, ArrayList<Career> carList) {
+		return sqlSession.insert("member.insertCareer",carList);
+	}
+	// 관리자탭 (인사관리) - 사원 등록 - 병력 insert
+	public int insertInfoMil(SqlSessionTemplate sqlSession, Military mil) {
+		return sqlSession.insert("member.insertMilitary",mil);
+	}
+	////////////////////////////////////////사원 등록 메소드   ////////////////////////////////////////
+
+	public ArrayList<Member> selectOrganizationChart(SqlSessionTemplate sqlSession) {
+		List list = sqlSession.selectList("member.selectDeptList");
+		return (ArrayList<Member>)list;
+	}
+
 	
 
 }

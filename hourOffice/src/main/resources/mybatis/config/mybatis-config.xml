@@ -3,6 +3,11 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="kr.or.houroffice.member.model.vo.Member" alias="Member"/>
+		<typeAlias type="kr.or.houroffice.member.model.vo.Department" alias="Department"/> <!-- 부서  -->
+		<typeAlias type="kr.or.houroffice.member.model.vo.AcademicAbility" alias="AcademicAbility"/> <!-- 학력 -->
+		<typeAlias type="kr.or.houroffice.member.model.vo.Career" alias="Career"/> <!-- 경력 -->
+		<typeAlias type="kr.or.houroffice.member.model.vo.License" alias="License"/> <!-- 자격증 -->
+		<typeAlias type="kr.or.houroffice.member.model.vo.Military" alias="Military"/> <!-- 병력 -->
 		<typeAlias type="kr.or.houroffice.project.model.vo.Project" alias="Project"/>
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectMember" alias="ProjectMember"/>
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectBoard" alias="ProjectBoard"/>

@@ -1,3 +1,5 @@
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -41,6 +43,7 @@
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
+						<% ArrayList<Member> list = (ArrayList<Member>)request.getAttribute("list"); %>
 						
 						<div id="contWrapper">
                         <div id="btnDiv">
@@ -51,31 +54,25 @@
                                 <li>
                                     <i class="fas fa-building i-icon"></i><a href="#menu-top" class="open">칠판 그룹</a>
                                     <ul id="menu-top">
+                          			<% ArrayList<String> deptCodeList = new ArrayList<String>(); %>
+									<% for(Member member : list){ %>
+									<% if(!deptCodeList.contains(member.getDeptName()) && member.getDeptCode()!=null){ %>
+									<% deptCodeList.add(member.getDeptName()); %>	
                                         <li>
-                                            <a href="#subMenu1" id="D4" class="open"><i class="fas fa-plus-square i-icon"></i> 개발</a>
-                                            <ul id="subMenu1">
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
+                                            <a href="#subMenu<%=member.getDeptCode() %>" id="<%=member.getDeptCode() %>" class="open"><i class="fas fa-plus-square i-icon"></i> <%=member.getDeptName() %></a>
+                                            <ul id="subMenu<%=member.getDeptCode() %>">
+                                	<% for(Member memInfo : list){ %>
+                                	<% System.out.println(memInfo.getDeptCode()); %>
+                                	<% if(member.getDeptCode()==memInfo.getDeptCode()){ %><% System.out.println("안쪽 : "+memInfo.getDeptCode()); %>
+                                                <li><i class="fas fa-user-tie i-icon"></i> <a><%=memInfo.getMemName() %></a></li>
+                                	<% } %>
+                                	<% } %>
                                             </ul>
                                         </li>
-                                        <li>
-                                            <a href="#subMenu2" id="D5" class="open"><i class="fas fa-plus-square i-icon"></i> 디자인</a>
-                                            <ul id="subMenu2">
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#subMenu3" class="open"><i class="fas fa-plus-square i-icon"></i> 전산</a>
-                                            <ul id="subMenu3"></ul>
-                                        </li>
-                                        <li>
-                                            <a class="open"><i class="fas fa-plus-square i-icon"></i> 인사</a>
-                                            <ul id="subMenu4"></ul>
-                                        </li>
-                                        <li class="end">
-                                            <a class="open"><i class="fas fa-plus-square i-icon"></i> 총무</a>
-                                            <ul id="subMenu5"></ul>
-                                        </li>
+                                        
+                                	<% } %>
+									<% } %>     
+                                        
                                     </ul>
                                 </li>
                             </ul>
@@ -163,7 +160,6 @@
             var deptCode = ""; // 부서 코드 
             function treeControl (e) {
                 deptCode = $(this).attr('id');
-                alert(deptCode);
                 
                 if(deptCode!=null){
                     //$.ajax(); 여기서 아작스처리해주기!!
