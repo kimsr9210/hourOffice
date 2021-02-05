@@ -13,6 +13,8 @@
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectBoard" alias="ProjectBoard"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.Approval" alias="Approval"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.AprLineMember" alias="AprLineMember"/>
+		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectFavorite" alias="ProjectFavorite"/>
+		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectComment" alias="ProjectComment"/>
 	</typeAliases>
 </configuration>
 

@@ -72,16 +72,18 @@
 
 #newBoard {
 	width: 80px;
-	height: 30px;
-	border-radius: 5px;
+	height: 35px;
+	border-radius: 2px;
 	color: black;
-	font-weight: 800;
+	font-weight: 700;
 	text-align: center;
 	background-color: white;
 	border: 0;
 	cursor: pointer;
-    margin-top: 7px;
+	margin-top: 5px;
+	outline: none;
 }
+
 
 /* -----------------------게시물--------------------- */
 .boardBox {
@@ -169,10 +171,11 @@
 	height: 55px;
 	padding: 10px 20px 0px 10px;
 	overflow: hidden;
-	background-color: #cccccc;
+	background-color: #F2F2F2;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border: 1px solid #cccccc;
+	border-top: 1px solid #E6E6E6;
 }
 
 .commentUser {
@@ -201,7 +204,7 @@
 .commentInfo {
 	width: 93%;
 	float: left;
-	border-top: 1px solid #cccccc;
+	border-top: 1px solid #F2F2F2;
 }
 
 .commentName {
@@ -223,15 +226,17 @@
 	resize: none;
 	border: 0;
 	padding-bottom: 1rem;
+	outline: none;
 }
 
-.commentUserImg {
-	width: 7%;
-	font-size: 2rem;
-	float: left;
-	border-top: 1px solid #cccccc;
-	color: #999999;
-}
+.commentUserImg{
+            width: 7%;
+            font-size: 2rem;
+            float: left;
+            color: #999999;
+			border-top: 1px solid #F2F2F2;
+            padding: 10px 0px 0px 10px;
+        }
 
 .commentTime {
 	color: #999999;
@@ -1005,4 +1010,14 @@
 
 .fileRegular {
 	padding: 5px;
+}
+
+.commentModifyBtn, .commentDeleteBtn{
+	color: #cccccc;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.commentModifyBtn:hover, .commentDeleteBtn:hover{
+	font-weight: bolder;
 }
