@@ -2,11 +2,16 @@ package kr.or.houroffice.personnel.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.houroffice.member.model.vo.Member;
@@ -24,7 +29,7 @@ public class PersonnelController {
 	private SqlSessionTemplate sqlSession;
 	
 	//사원 전체 주소록 
-	@RequestMapping(value = "/addbook.do") 
+	@RequestMapping(value = "/addbook.ho") 
 	public ModelAndView addBook() {
 		ArrayList<Member> list = pService.selectAddbook();
 
@@ -40,20 +45,48 @@ public class PersonnelController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/myaddbook.do")
-	public String mybook() {
+	@RequestMapping(value = "/myaddbook.ho")
+	public String mybook(HttpSession session ) {
 		return "personnel/myaddbook";
 	}
 
-	@RequestMapping(value = "/mypage.do")
+	@RequestMapping(value = "/mypage.ho")
 	public String mypage() {
 		return "personnel/mypage";
 	}
 	
-	//내인사정보
-	@RequestMapping(value = "/information.do")
-	public String information() {
+	//내인사정보 , 쿼리문다시하기 !
+	@RequestMapping(value = "/information.ho")
+	public String information(@SessionAttribute("member") Member m, HttpSession session) {
+		
+		Member member = pService.information(m.getMemNo());
+
+		//get 꺼내옴 , set 놓다/보내줌?
+		session.setAttribute("member", member);
+		
 		return "personnel/information";
+	}
+	
+	//사원 전체 주소록 검색(search) 결과
+	@RequestMapping(value = "/addbookSearch.ho")
+	public String addbookSearch(Member m, HttpServletRequest request, Model model){
+		
+		//비즈니스로직
+		ArrayList<Member> list = pService.addbookSearch(request);
+		
+		//결과값 보내주기 ! ㅜ_ㅜ
+		if(list != null){
+			//model.addAttribute("countAll",countAll);
+			//model.addAttribute("pageNavi", pageNavi);
+			model.addAttribute("list",list);	
+		}
+		return "personnel/addbook";
+	}
+	
+	//다이얼로그 
+	public void dialog(@SessionAttribute("member") Member m, HttpSession session){
+		//pService.dialog();
+		
 	}
 
 }

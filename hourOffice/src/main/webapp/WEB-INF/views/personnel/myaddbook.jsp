@@ -19,7 +19,8 @@
 <!-- CSS -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/header&sideNavi.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 
@@ -33,7 +34,7 @@
 	height: 25px;
 }
 
-#savebtn {
+#create-user {
 	background-color: #1D9F8E;
 	color: white;
 	border: 0;
@@ -63,73 +64,75 @@ select {
 #search {
 	height: 25px;
 }
+
+.addname{display: inline-block;
+	width:100px;
+	text-align:center;
+	}
+	
+.textbox{width:200px;
+}
+
 </style>
 <script>
-$( function() {
-    var dialog, form;
-    
-    function addUser() {
-    	// ajax 이벤트 추가
-    	alert('사용자 추가');
-      }
-   
-      dialog = $( "#dialog-form" ).dialog({
-        autoOpen: false,
-        height: 400,
-        width: 350,
-        modal: true,
-        buttons: {
-          "연락처 등록": addUser,
-          "닫기": function() {
-            dialog.dialog( "close" );
-          }
-        },
-        close: function() {
-          form[ 0 ].reset();
-        }
-      });
-   
-      form = dialog.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        addUser();
-      });
-   
-      $( "#create-user" ).button().on( "click", function() {
-        dialog.dialog( "open" );
-      });
-    } );
+	$(function() {
+		var dialog, form;
+
+		function addUser() {
+			// ajax 이벤트 추가
+				$.ajax({
+				url : "/",
+				data : {"name":myName},
+				type : "post",
+				success : function(){
+					console.log("서버 호출을 정상적으로 완료 하였습니다.");
+				},
+				error : function(){
+					console.log("서버 호출을 정상적으로 처리하지 못하였습니다.!!");
+				},
+				complete : function(){
+					dialog.dialog("close");
+				}
+				
+			});
+		}
+
+		dialog = $("#dialog-form").dialog({
+			autoOpen : false,
+			height : 350,
+			width : 350,
+			modal : true,
+			buttons : {
+				"연락처 등록" : addUser,
+				"닫기" : function() {
+					dialog.dialog("close");
+				}
+			},
+			close : function() {
+				form[0].reset();
+			}
+		});
+
+		form = dialog.find("form").on("submit", function(event) {
+			event.preventDefault();
+			addUser();
+		});
+
+		$("#create-user").button().on("click", function() {
+			dialog.dialog("open");
+		});
+	});
 </script>
 
 <body>
 
-<div id="dialog-form" title="연락처등록">
-   <form>
-              <tr>
-                <td>이름</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-            <tr>
-                <td>회사</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-            <tr>
-                <td>직책</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-            <tr>
-                <td>내선번호</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-            <tr>
-                <td>휴대폰</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-            <tr>
-                <td>이메일</td>
-                <td><input type="text" class="text"/></td>
-            </tr>
-  </form>
-</div>
+	<div id="dialog-form" title="연락처등록"><br>
+			<div class="addname">이름</div><input class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname">직책</div><input class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname">내선번호</div><input class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname">휴대폰</div><input class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname">이메일</div><input class="textbox" type="text" class="text" /><br><br>
+	</div>
 
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -143,85 +146,89 @@ $( function() {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						연차내역
+						개인주소록
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 
-<table width="100%" style="margin:auto;">
-        <tr>
-            <td width="7%">
-            	<button id="create-user">연락처 등록</button>
-            </td>
+						<table width="100%" style="margin: auto;">
+							<tr>
+								<td width="7%">
+									<button id="create-user">등록</button>
+								</td>
 
-            <td width="7%">
-                <form>
-                    <button type="submit" id="delbtn">삭제</button>     
-                </form>
-            </td>
-            
-    
-    <script>
-	$(function(){
-		$('#delbtn').click(function(){
-			var result = window.confirm("연락처 삭제 하시겠습니까?");
-			if(result==true)
-			{
-					
-			}
+								<td width="7%">
+									<form>
+										<button type="submit" id="delbtn">삭제</button>
+									</form>
+								</td>
 
-			});
-	});
-    </script>      
 
-	<!-- 체크박스 모두선택하기 -->
-	<script>
-      $( document ).ready( function() {
-        $( '.ckall' ).click( function() {
-          $( '.ck' ).prop( 'checked', this.checked );
-        });
-     	 });
-    </script>
+								<script>
+									$(function() {
+										$('#delbtn').click(function() {
+										var result = window.confirm("연락처 삭제 하시겠습니까?");
+										if (result == true) {
 
-            <td style="text-align:right;">
-                <form>
-                    <select>
-                        <option>이름</option>
-                        <option>부서</option>
-                        <option>직책</option>
-                    </select>
-                    <input type="text" id="search" name="search" />
-                    <input type="submit" id="sbbtn" value="검색"/>
-                </form>
-            </td>
-        </tr></table><br><br>
+										}
+									});
+									});
+									
+								</script>
 
-    
-    <table border="1px" width="100%" style="text-align:center; margin:auto; border-collapse:collapse;">
+								<!-- 체크박스 모두선택하기 -->
+								<script>
+								$(document).ready(
+								function() {
+								$('.ckall').click(function() {
+								$('.ck').prop('checked',this.checked);
+									});
+								});
+								</script>
 
-        <tr style="background-color:#1D9F8E; color:white; ">
-            <th><input type="checkbox" class="ckall"></th>
-            <th>이름</th>
-            <th>소속부서</th>
-            <th>내선번호</th>
-            <th>휴대폰</th>
-            <th>이메일</th>
-        </tr>
+								<td style="text-align: right;">
+									<form>
+										<select>
+											<option>이름</option>
+											<option>부서</option>
+											<option>직책</option>
+										</select> <input type="text" id="search" name="search" /> <input
+											type="submit" id="sbbtn" value="검색" />
+									</form>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<br>
 
-        <!-- 반복문 for 작성 -->
-        <tr>
-            <td><input type="checkbox" class="ck"></td>
-            <td>김소련</td>
-            <td>개발1팀</td>
-            <td>팀장</td>
-            <td>02)2049-3618</td>
-            <td>kim@kr.or.iei.kh</td>
-        </tr>
 
-    </table><br>
-                        
-    <p style="text-align: center;"> 1 2 3 4 5 ></p> 
+						<table border="1px" width="100%"
+							style="text-align: center; margin: auto; border-collapse: collapse;">
+
+							<tr style="background-color: #1D9F8E; color: white;">
+								<th><input type="checkbox" class="ckall"></th>
+								<th>이름</th>
+								<th>소속부서</th>
+								<th>내선번호</th>
+								<th>휴대폰</th>
+								<th>이메일</th>
+							</tr>
+
+							<!-- 반복문 for 작성 -->
+							<tr>
+								<td><input type="checkbox" class="ck"></td>
+								<td>김소련</td>
+								<td>개발1팀</td>
+								<td>팀장</td>
+								<td>02)2049-3618</td>
+								<td>kim@kr.or.iei.kh</td>
+							</tr>
+
+						</table>
+						<br>
+
+						<p style="text-align: center;">1 2 3 4 5 ></p>
 
 						<!----------------------------------->
 					</div>
@@ -229,6 +236,8 @@ $( function() {
 				</div>
 			</div>
 		</div>
+		
+		
 
 		<!-- 자바 스크립트    -->
 		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
@@ -236,6 +245,8 @@ $( function() {
 	</div>
 
 	</div>
+	
+	
 </body>
 </html>
 
