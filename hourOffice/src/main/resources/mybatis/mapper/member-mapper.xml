@@ -23,7 +23,7 @@
 			MEM_DEL_DATE as memDelDate,
 			MEM_RIGHT_CODE as memRightCode
 		FROM member
-		WHERE m.MEM_NO=#{memNo}
+		WHERE MEM_NO=#{memNo}
 	</select>
 	
 	<select id="loginMember" parameterType="Member" resultType="Member">
@@ -82,4 +82,63 @@
 		WHERE MEM_DEL_YN='N' AND (RNUM BETWEEN ${start} AND ${end})
 	</select>
 	
+	<!-- BY 두진 - 프로젝트 게시물 작성자 리스트 -->
+	<select id="selectProjectBoardMemberList" resultType="Member">
+		 SELECT
+			MEM_NO as memNo,
+			MEM_PWD as memPwd,
+			MEM_POSITION as memPosition,
+			DEPT_CODE as deptCode,
+			MEM_NAME as memName,
+			MEM_BIRTH as memBirth,
+			MEM_GENDER as memGender,
+			MEM_ADDRESS as memAddress,
+			MEM_PHONE as memPhone,
+			MEM_TELL as memTell,
+			MEM_EMAIL as memEmail,
+			MEM_PROFILE as memProfile,
+			MEM_HOLIDAY_COUNT as memHolidayCount,
+			MEM_JOIN_DATE as memJoinDate,
+			MEM_RESIGN_YN as memResignYN,
+			MEM_RESIGN_DATE as memResigndate,
+			MEM_DEL_YN as memDelYN,
+			MEM_DEL_DATE as memDelDate,
+			MEM_RIGHT_CODE as memRightCode
+		FROM member
+		WHERE MEM_NO IN (
+        SELECT
+			MEM_NO
+		FROM PRO_BOARD
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo})
+	</select>
+	
+	<!-- BY 두진 - 프로젝트 참가자 리스트 -->
+	<select id="selectProjectMemberList" resultType="Member">
+	   SELECT
+			MEM_NO as memNo,
+			MEM_PWD as memPwd,
+			MEM_POSITION as memPosition,
+			DEPT_CODE as deptCode,
+			MEM_NAME as memName,
+			MEM_BIRTH as memBirth,
+			MEM_GENDER as memGender,
+			MEM_ADDRESS as memAddress,
+			MEM_PHONE as memPhone,
+			MEM_TELL as memTell,
+			MEM_EMAIL as memEmail,
+			MEM_PROFILE as memProfile,
+			MEM_HOLIDAY_COUNT as memHolidayCount,
+			MEM_JOIN_DATE as memJoinDate,
+			MEM_RESIGN_YN as memResignYN,
+			MEM_RESIGN_DATE as memResigndate,
+			MEM_DEL_YN as memDelYN,
+			MEM_DEL_DATE as memDelDate,
+			MEM_RIGHT_CODE as memRightCode
+		FROM member
+		WHERE MEM_NO IN (
+        SELECT
+			MEM_NO
+		FROM PRO_MEMBER
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo})
+	</select>
 </mapper>

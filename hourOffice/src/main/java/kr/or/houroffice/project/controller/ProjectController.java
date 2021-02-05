@@ -1,7 +1,9 @@
 package kr.or.houroffice.project.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.org.apache.xerces.internal.util.Status;
+
+import kr.or.houroffice.member.model.service.MemberService;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.project.model.service.ProjectServiceImpl;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectComment;
+import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 
 @Controller
@@ -25,7 +32,9 @@ public class ProjectController {
 	@Qualifier(value="projectService")
 	private ProjectServiceImpl pService;
 	
-	
+	@Autowired
+	@Qualifier(value="memberService")
+	private MemberService mService;
 	
 	@RequestMapping(value="/projectList.do")
 	public String projectList(){
@@ -35,11 +44,31 @@ public class ProjectController {
 	//프로젝트 전체 리스트
 	@RequestMapping(value="/projectAllList.ho")
 	public ModelAndView projectAllList(@SessionAttribute("member") Member member){
-		ArrayList<Project> myList = pService.selectAllProject(member.getMemNo());
-		ArrayList<Project> publicList = pService.selectPublicProject();
+		//내가 참가한 프로젝트 가져오기
+		ArrayList<Project> myProjectList = pService.selectMyProjectList(member.getMemNo());
+		
+		//공개 프로젝트 정보 출력
+		ArrayList<Project> publicAllList = pService.selectPublicProject();
+		
+		//공개프로젝트 - 참가 프로젝트
+		ArrayList<Project> publicList = new ArrayList<Project>();
+		for(int i = 0; i<publicAllList.size();i++){
+			Project p = publicAllList.get(i);
+			for(Project mp : myProjectList){
+				if(mp.getProNo()==p.getProNo()){
+					publicAllList.remove(i);
+				}
+			}
+		}
+		
+		//즐겨찾는 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
+		
+		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("myList", myList);
-		mav.addObject("publicList", publicList);
+		mav.addObject("myList", myProjectList);
+		mav.addObject("publicList", publicAllList);
+		mav.addObject("favoriteList", favoriteList);
 		mav.setViewName("project/projectAllList");
 		return mav;
 	}
@@ -49,17 +78,32 @@ public class ProjectController {
 	public ModelAndView projectDetail(@RequestParam int proNo){
 		//프로젝트 정보 가져오기
 		Project p = pService.selectOneProject(proNo);
-		ArrayList<ProjectBoard> boardList = pService.selectProjectBoardList(proNo);
-		//프로젝트  멤버 리스트 가져오기
-		ArrayList<ProjectMember> projectMemberList = pService.selectProjectMemberList(p.getProNo());
-		//가져온 멤버 리스트로 회원 정보 알아오기
 		
+		//프로젝트 게시물 가져오기
+		ArrayList<ProjectBoard> boardList = pService.selectProjectBoardList(proNo);
+		
+		//프로젝트 게시물의 댓글 가져오기
+		ArrayList<ProjectComment> commentList = pService.selectBoardCommentList(proNo);
+		
+		//프로젝트 게시물 작성자 정보 가져오기
+		ArrayList<Member> boardMemberList = mService.selectProjectBoardMemberList(proNo);
+		
+		//프로젝트  멤버 리스트 가져오기
+		ArrayList<Member> projectMemberList = mService.selectProjectMemberList(proNo);
+
+		//프로젝트 관리자 목록 가져오기
+		ArrayList<ProjectMember> projectMgrList = pService.selectProjectMemberList(proNo);
+		
+		//멤버 전체 목록 가져오기
 		
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
-		mav.addObject("projectMemberList", projectMemberList);
 		mav.addObject("boardList", boardList);
+		mav.addObject("boardMemberList", boardMemberList);
+		mav.addObject("projectMemberList", projectMemberList);
+		mav.addObject("projectMgrList", projectMgrList);
+		mav.addObject("commentList", commentList);
 		mav.setViewName("project/projectDetail");
 		return mav;
 	}
@@ -139,11 +183,80 @@ public class ProjectController {
 		}else{
 			mav.addObject("msg", "게시물 작성 실패");
 		}
-		
-
 		mav.addObject("proNo", pb.getProNo());
-		System.out.println(pb.getProNo());
 		mav.setViewName("project/boardWriteResult");
 		return mav;
+	}
+	
+	//프로젝트 즐겨찾기 등록 ajax
+	@RequestMapping(value="/insertProjectFavor.ho")
+	public void insertProjectFavor(ProjectFavorite pf, HttpServletResponse response)  throws IOException{
+		
+		int result = pService.insertProjectFavor(pf);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+		
+	}
+	
+	//프로젝트 즐겨찾기 삭제 ajax
+	@RequestMapping(value="/deleteProjectFavor.ho")
+	public void deleteProjectFavor(ProjectFavorite pf, HttpServletResponse response)  throws IOException{
+		
+		int result = pService.deleteProjectFavor(pf);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+		
+	}
+	
+	//게시물 댓글 작성
+	@RequestMapping(value="/insertBoardComment.ho")
+	public ModelAndView insertBoardComment(ProjectComment pc, @RequestParam int proNo){
+		
+		int result = pService.insertBoardComment(pc);
+		ModelAndView mav = new ModelAndView();
+		if(result>0){
+			System.out.println("댓글 작성 성공");
+		}else{
+			System.out.println("댓글 작성 실패");
+		}
+		mav.addObject("proNo", proNo);
+		mav.setViewName("project/commentResult");
+		
+		return mav;
+	}
+	
+	//게시물 댓글 수정
+	@RequestMapping(value="/updateProjectComment.ho")
+	public ModelAndView updateProjectComment(ProjectComment pc, @RequestParam int proNo){
+		
+		int result = pService.updateProjectComment(pc);
+		ModelAndView mav = new ModelAndView();
+		if(result>0){
+			System.out.println("댓글 수정 성공");
+		}else{
+			System.out.println("댓글 수정 실패");
+		}
+		mav.addObject("proNo", proNo);
+		mav.setViewName("project/commentResult");
+		
+		return mav;
+	}
+	
+	//게시물 댓글 삭제
+	@RequestMapping(value="/deleteProjectComment.ho")
+	public void deleteProjectComment(@RequestParam int commentNo, HttpServletResponse response)  throws IOException{
+		
+		int result = pService.deleteProjectComment(commentNo);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
 	}
 }

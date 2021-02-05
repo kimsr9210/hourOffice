@@ -147,7 +147,53 @@ $(function() {
 	});
 
 	$('#newBoard').click(function(){
-		alert('gd');
 		location.replace('/projectBoardWrite.ho');
+	});
+	
+	$('#backward').click(function(){
+		history.back(-1);
+	});
+	
+	// 댓글 수정 
+	$('.commentModifyBtn').click(function(){
+			var $textBox = $(this).parent().next().children().eq(0);
+			var $form = $(this).parent().next();
+		if($(this).text()=='수정'){
+			$(this).text('완료');
+	        $textBox.removeAttr('disabled');
+	        $textBox.removeAttr('readonly');
+	        $textBox.css('border','1px solid black');
+		}else{
+			var result = window.confirm("해당 수정을 삭제하시겠습니까?");
+			if(result){
+				$form.submit();
+			}
+		}
+	});
+	
+	// 댓글 삭제
+	$('.commentDeleteBtn').click(function(){
+		var result = window.confirm("해당 댓글을 삭제하시겠습니까?");
+		var $commentBox = $(this).parent().parent().parent();
+		if(result){
+			var $commentNo = $(this).next().val();
+			var $proNo = $(this).next().next().val();
+			$.ajax({
+            	url : "/deleteProjectComment.ho",
+            	data : {"commentNo" : $commentNo},
+            	type : "get",
+            	success : function(result){
+            		if(result=="true"){
+            			console.log("댓글이 삭제되었습니다");
+            		}else{
+            			console.log("프로젝트 즐겨찾기 실패");
+            		}
+            	},
+            	error : function(){
+            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+            	}
+            });
+			$(this).parent().parent().parent().remove();
+		}
 	});
 });

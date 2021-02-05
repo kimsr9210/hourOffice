@@ -86,4 +86,46 @@ $(function() {
 	$('.projectSubject').click(function(){
 		$(this).next().submit();
 	});
+	
+	//프로젝트 즐겨찾기 버튼
+	$('.projectLike').click(function(){
+        var proNo = $(this).children().eq(1).val();
+        var memNo = $(this).children().eq(2).val();
+        var proSubject = $(this).children().eq(3).val();
+        if($(this).children().eq(0).css('color')=='rgb(255, 255, 255)'){
+            $.ajax({
+            	url : "/insertProjectFavor.ho",
+            	data : {"proNo" : proNo, "memNo" : memNo},
+            	type : "get",
+            	success : function(result){
+            		if(result=="true"){
+            			alert("["+proSubject+"] 가 즐겨 찾기에 등록되었습니다");
+            		}else{
+            			alert("프로젝트 즐겨찾기 실패");
+            		}
+            	},
+            	error : function(){
+            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+            	}
+            });
+            $(this).children().eq(0).attr('class','fas fa-star likeBtn');
+        }else{
+        	$.ajax({
+            	url : "/deleteProjectFavor.ho",
+            	data : {"proNo" : proNo, "memNo" : memNo},
+            	type : "get",
+            	success : function(result){
+            		if(result=="true"){
+            			alert("["+proSubject+"] 가 즐겨 찾기에 삭제되었습니다");
+            		}else{
+            			alert("프로젝트 즐겨찾기 실패");
+            		}
+            	},
+            	error : function(){
+            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+            	}
+            });
+            $(this).children().eq(0).attr('class','far fa-star');
+        }
+    });
 });
