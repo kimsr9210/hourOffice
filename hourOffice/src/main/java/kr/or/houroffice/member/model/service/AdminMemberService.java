@@ -76,7 +76,7 @@ public class AdminMemberService {
 		
 		return false; // 실패시 false 반환
 	}
-	// 조직도 list - select
+	// 조직도 - select
 	public ArrayList<Member> selectOrganizationChart() {
 		return mDAO.selectOrganizationChart(sqlSession);
 	}

@@ -115,7 +115,8 @@ public class AdminMemberDAO {
 		return sqlSession.insert("member.insertMilitary",mil);
 	}
 	////////////////////////////////////////사원 등록 메소드   ////////////////////////////////////////
-
+	
+	// 관리자탭 (인사관리) - 조직도 select
 	public ArrayList<Member> selectOrganizationChart(SqlSessionTemplate sqlSession) {
 		List list = sqlSession.selectList("member.selectDeptList");
 		return (ArrayList<Member>)list;

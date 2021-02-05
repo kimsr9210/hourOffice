@@ -56,17 +56,19 @@
                                     <ul id="menu-top">
                           			<% ArrayList<String> deptCodeList = new ArrayList<String>(); %>
 									<% for(Member member : list){ %>
-									<% if(!deptCodeList.contains(member.getDeptName()) && member.getDeptCode()!=null){ %>
-									<% deptCodeList.add(member.getDeptName()); %>	
+									<% if(!deptCodeList.contains(member.getDeptCode()) && member.getDeptCode()!=null){ %>
+									<% deptCodeList.add(member.getDeptCode()); %>	
                                         <li>
                                             <a href="#subMenu<%=member.getDeptCode() %>" id="<%=member.getDeptCode() %>" class="open"><i class="fas fa-plus-square i-icon"></i> <%=member.getDeptName() %></a>
                                             <ul id="subMenu<%=member.getDeptCode() %>">
                                 	<% for(Member memInfo : list){ %>
-                                	<% System.out.println(memInfo.getDeptCode()); %>
-                                	<% if(member.getDeptCode()==memInfo.getDeptCode()){ %><% System.out.println("안쪽 : "+memInfo.getDeptCode()); %>
+
+                                	<% 	if(member.getDeptCode().equals(memInfo.getDeptCode())){ %>
                                                 <li><i class="fas fa-user-tie i-icon"></i> <a><%=memInfo.getMemName() %></a></li>
+                                	<% 	} %>
+                  
                                 	<% } %>
-                                	<% } %>
+                                	
                                             </ul>
                                         </li>
                                         
@@ -84,16 +86,16 @@
                             <p>부서코드</p><br>
                             </div>
                             <div>
-                                <p><span>개발</span><input type="text" class="deptName"/><i class="fas fa-pen dept-update i-icon"></i></p><br>
-                                <p>D4</p><br>
+                                <p><span id="deptName-InInfor">(부서명)</span><input type="text" class="deptName"/><i class="fas fa-pen dept-update i-icon"></i></p><br>
+                                <p id="deptCode-InInfor">(부서코드)</p><br>
                             </div>
                             <p>부서원</p>
                             <form id="change-form">
                                 <table>    
                                     <tr>
-                                        <td><input type="checkbox" name="memNo" value="210126"/>
-                                        <td>주다빈</td>
-                                        <td>사원</td>
+                                        <td><input type="checkbox" name="memNo"/>
+                                        <td>(사원명)</td>
+                                        <td>(직위)</td>
                                     </tr>
                                 </table>
                                 <div id="positionChange">
@@ -131,17 +133,8 @@
    
         <div class="modal-layer"></div>
     </div>
-						
-						<!----------------------------------->
-					</div>
-				</div>
-			</div>
-		</div>
-		
-	<!-- 자바 스크립트    -->
-	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
-	
-	<script>
+    
+    <script>
         $(function(){
             // 조직도 셋팅
             var opener = $("a.open");
@@ -162,7 +155,45 @@
                 deptCode = $(this).attr('id');
                 
                 if(deptCode!=null){
-                    //$.ajax(); 여기서 아작스처리해주기!!
+                	
+                	
+                <% deptCodeList = new ArrayList<String>(); %>
+                <% for(Member member : list){ %>
+                <% if(!deptCodeList.contains(member.getDeptCode()) && member.getDeptCode()!=null){ %>
+                <% deptCodeList.add(member.getDeptCode()); // 부서코드 중복비허용을 위한 코드 %>
+                
+                	if(deptCode=='<%=member.getDeptCode() %>'){
+                		
+                		var tblText = '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
+                		$('#infor-div #deptName-InInfor').text('<%=member.getDeptName() %>');
+                		$('#infor-div #deptCode-InInfor').text('<%=member.getDeptCode() %>');
+                		<% int childNum = 1;%>
+                <% for(Member memInfo : list){ %>
+                <% 	if(member.getDeptCode().equals(memInfo.getDeptCode())){ %>
+                		$('#infor-div #change-form > table').html(tblText);
+                		tblText += '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
+                		<% childNum++; System.out.println(childNum);%>
+                <% }// if %>
+                <% }// for %>
+               		 	tblText = '';
+                	}// if - 추출한 부서코드가 member 부서코드랑 같을 때 - tr을 반복 추가하는 코드
+                	
+                <% }// if - 부서코드 중복비허용 코드%>
+                <% }// for %>
+                // 각 부서 정보 내의 사원 리스트 정보 추가하기
+                var trNum = 1;
+            	<% for(Member memInfor : list){ %>
+            		if(deptCode=='<%=memInfor.getDeptCode() %>'){
+            		
+	            		$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:first-child>input').val('<%=memInfor.getMemNo() %>');
+	        			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:nth-child(2)').text('<%=memInfor.getMemName() %>');
+	        			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:last-child').text('<%=memInfor.getMemPosition() %>');
+	        				
+            		trNum++;
+            		}
+            	<% } %>
+            	//---end
+                
                     $('#infor-div').show(); // 정보 div 열기
                 }
                 
@@ -248,6 +279,21 @@
             
        
     </script>  
+    
+    
+    
+    
+						
+						<!----------------------------------->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	<!-- 자바 스크립트    -->
+	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
+	
+	
 
 	</div>
 </body>

@@ -92,14 +92,25 @@ $(function(){
     });
     
     // 사원삭제 -> update
-    $('#dropMemBtn').click(function(){
+    $('#dropMemBtn').click(function(){ 
         if(checkMem.length>0){
             if(checkMem[0]=='all'){
                 checkMem.splice(checkMem.indexOf(checkMem[0]),1);
             }
             if(confirm('정말 삭제하시겠습니까?')){
-                // $.ajax();
-                // 삭제로직~   
+            	
+                $.ajax({
+                	url : '/admin_tap_resignMember.ho',
+                	data : {'memNoList':checkMem},
+                	type : 'post',
+                	success : function(){
+                		
+                	},
+                	error:function(){
+                		
+                	}
+                });
+                  
             }
         }else{
             alert('삭제할 사원을 선택해주세요');

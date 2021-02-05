@@ -39,6 +39,9 @@
 						<div id="contWrapper">
                     <form action="/memberSingUp.ho" method="post" enctype="multipart/form-data">
                         <div class="floatDiv">
+                        	<div>
+                                <div id="img-btn-div"><input type="file" name="memProfile" id="profileImg"/><label for="profileImg" id="profileImg-label">이미지 선택</label></div>
+                            </div>
                             <div id="memProfile"><img border="1px" src=""/><br></div>
                             <div id="position_dept">
                                 <div class="posi_deptDiv">직위<br>
@@ -66,9 +69,7 @@
                                     <!--<div class="select__arrow"></div>-->
                                 </div>
                             </div>
-                            <div>
-                                <div style="width:63%; margin-top:20px; display:inline-block; text-align:right;"><input type="file" name="memProfile" id="profileImg"/></div>
-                            </div>
+                            
                         </div>
                         <div id="rightCont" class="floatDiv">
                            <div>이름<br>
@@ -278,7 +279,10 @@
 	                        		$('#contWrapper > form').submit();
                         		}
                         	});
-                            
+                            // 취소 btn 클릭 이벤트
+                            $('.delBtn').click(function(){
+                            	history.go(-1);
+                            });
                             
                         </script>
 						

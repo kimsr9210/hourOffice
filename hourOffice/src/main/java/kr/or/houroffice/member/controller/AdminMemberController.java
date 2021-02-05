@@ -2,7 +2,7 @@ package kr.or.houroffice.member.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -215,5 +216,14 @@ public class AdminMemberController {
 			return "redirect:login.jsp";
 		}*/
 		return "admin_tap/personnel_department/organizationChart";
+	}
+	
+	@RequestMapping(value="/admin_tap_resignMember.ho")
+	public void resignMember(@RequestParam(value="memNoList[]") List<String> memNoList,HttpServletRequest request){
+		System.out.println("dd");
+		System.out.println(memNoList.get(0));
+		System.out.println(memNoList.size());
+		
+		
 	}
 }
