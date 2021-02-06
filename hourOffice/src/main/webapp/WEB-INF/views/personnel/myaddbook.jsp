@@ -77,12 +77,27 @@ select {
 <script>
 	$(function() {
 		var dialog, form;
-
 		function addUser() {
+			
+			// Class = addName
+			//$(".addName")
+			
+			// Id = addName
+			//$("#addName")
+			
+			var addName = $("#addName").val();
+			var addPosition = $("#addPosition").val();
+			var addTell = $("#addTell").val();
+			var addPh = $("#addPh").val();
+			var addEmail = $("#addEmail").val();
+
+			var object = {"name":addName,"position":addPosition,"tell":addTell,"ph":addPh,"email":addEmail};
 			// ajax 이벤트 추가
-				$.ajax({
-				url : "/",
-				data : {"name":myName},
+			$.ajax({
+				url : "/myaddbook.ho",
+				dataType: 'json',
+		        data: JSON.stringify(object),
+		        contentType:'application/json; charset=utf-8',
 				type : "post",
 				success : function(){
 					console.log("서버 호출을 정상적으로 완료 하였습니다.");
@@ -113,6 +128,7 @@ select {
 			}
 		});
 
+		//여기가 잘못된거같은데 모르겠네
 		form = dialog.find("form").on("submit", function(event) {
 			event.preventDefault();
 			addUser();
@@ -126,12 +142,15 @@ select {
 
 <body>
 
+
 	<div id="dialog-form" title="연락처등록"><br>
-			<div class="addname">이름</div><input class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname">직책</div><input class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname">내선번호</div><input class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname">휴대폰</div><input class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname">이메일</div><input class="textbox" type="text" class="text" /><br><br>
+	<form>
+			<div class="addname" >이름</div><input  id="addName" class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname" >직책</div><input id="addPosition" class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname" >내선번호</div><input id="addTell" class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname" >휴대폰</div><input id="addPh" class="textbox" type="text" class="text" /><br><br><br>
+			<div class="addname" >이메일</div><input id="addEmail" class="textbox" type="text" class="text" /><br><br>
+	</form>
 	</div>
 
 	<div id="wrap">

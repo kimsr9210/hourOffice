@@ -1,6 +1,7 @@
 package kr.or.houroffice.personnel.controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.personnel.model.service.PersonnelServiceImpl;
+import kr.or.houroffice.personnel.model.vo.MemDept;
 
 @Controller
 public class PersonnelController {
@@ -46,7 +50,19 @@ public class PersonnelController {
 	}
 
 	@RequestMapping(value = "/myaddbook.ho")
-	public String mybook(HttpSession session ) {
+	public String mybook(HttpSession session, HttpServletRequest request ) {
+		
+		//다이얼 로그에서 가져온 결과값 출력
+		
+		return "personnel/myaddbook";
+	}
+	
+	@RequestMapping(value = "/myaddbook.ho", method=RequestMethod.POST)
+	public String mybook(@RequestBody Map<String, Object> params, HttpSession session, HttpServletRequest request ) {
+		
+		//다이얼 로그에서 가져온 결과값 출력
+		System.out.println(params);
+		
 		return "personnel/myaddbook";
 	}
 
@@ -59,10 +75,10 @@ public class PersonnelController {
 	@RequestMapping(value = "/information.ho")
 	public String information(@SessionAttribute("member") Member m, HttpSession session) {
 		
-		Member member = pService.information(m.getMemNo());
-
-		//get 꺼내옴 , set 놓다/보내줌?
-		session.setAttribute("member", member);
+		MemDept memDept = pService.information(m.getMemNo());
+//
+//		//get 꺼내옴 , set 놓다/보내줌 , put 저장 
+		session.setAttribute("memDept", memDept);
 		
 		return "personnel/information";
 	}
@@ -81,12 +97,6 @@ public class PersonnelController {
 			model.addAttribute("list",list);	
 		}
 		return "personnel/addbook";
-	}
-	
-	//다이얼로그 
-	public void dialog(@SessionAttribute("member") Member m, HttpSession session){
-		//pService.dialog();
-		
 	}
 
 }

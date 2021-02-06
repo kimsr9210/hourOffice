@@ -3,15 +3,15 @@ package kr.or.houroffice.personnel.model.vo;
 import java.sql.Date;
 
 public class Contact {
-	private int memNo;
-	private int cntNo;
-	private String name;
-	private String company;
-	private String appointment;
-	private String ph;
-	private String email;
-	private Date enrollDate;
-	private char endYN;
+	private int memNo; //사원번호
+	private int cntNo; //게시물번호
+	private String name; //이름
+	private String company; //회사
+	private String appointment; //직위
+	private String ph; //폰번호
+	private String email; //이메일주소
+	private Date enrollDate; //작성일
+	private char endYN; //삭제여부
 	public int getMemNo() {
 		return memNo;
 	}
