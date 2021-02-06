@@ -101,7 +101,7 @@
                             <p>부서코드</p><br>
                             </div>
                             <div>
-                                <p class="dept-btn-div"><span id="deptName-InInfor">(부서명)</span><input type="text" class="deptName"/><span id="modityDept-icon" class="dept-update"><i class="fas fa-pen i-icon dept-update"></i></span></p><br>
+                                <p class="dept-btn-div"><span id="deptName-InInfor">(부서명)</span><input type="text" class="deptName"/><span id="modityDept-icon" class="dept-update"><i class="fas fa-pen i-icon iconClass"></i></span></p><br>
                                 <p id="deptCode-InInfor">(부서코드)</p><br>
                             </div>
                             <p>부서원</p>
@@ -287,18 +287,19 @@
             $('body').click(function(e){
                 
             	//var $deptName-InInfor = $(e.target).hasId('deptName-InInfor');
-                var $place = $(e.target).hasClass('dept-btn-div');
-                var $deptNameInInfor = $(e.target).is('#deptName-InInfor');
-                var $deptName = $(e.target).hasClass('deptName');
-                var $modityDeptIcon = $(e.target).hasClass('dept-update');
-                //if($('.deptName').css('display') != 'none'){
-                    if ( (!$place && !$deptNameInInfor) && (!$deptName && !$modityDeptIcon) ) {alert($('.deptInfo-div').text());
+                var $place = $(e.target).hasClass('dept-btn-div'); // p 태그
+                var $deptNameInInfor = $(e.target).is('path'); // i 태그 안의 path 태그
+                var $deptName = $(e.target).hasClass('deptName'); // 부서명 span 태그
+                var $modityDeptIcon = $(e.target).hasClass('dept-update'); // i 태그 감싼 span 태그
+                var $iconClass = $(e.target).hasClass('iconClass'); // i 태그
+                if($('.deptName').css('display') != 'none'){
+                    if ( ((!$place && !$deptNameInInfor) && (!$deptName && !$modityDeptIcon)) && !$iconClass) {alert($('.deptInfo-div').text());
                         $('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
                         $('.dept-update').prev().hide('10000').prev().show();
                         //return true;
                     }
-                //}
-                    e.stopImmediatePropagation();
+                }
+                    e.stopImmediatePropagation(); // 버블링 방지
             });
             
             // 부서 이동 btn
