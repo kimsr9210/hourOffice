@@ -260,18 +260,33 @@ public class AdminMemberController {
 	@RequestMapping(value="/admin_tap_memberInfo.ho")
 	public String memberInfo(Member m, HttpSession session, Model model){
 		Member oneMem = mService.selectOneMember(m); // MEMBER 테이블
-		ArrayList<AcademicAbility> acaList = mService.selectOneMemberAca(m); // 학력
-		ArrayList<License> licList = mService.selectOneMemberLic(m); // 자격증
-		ArrayList<Career> carList = mService.selectOneMemberCar(m); // 경력
-		Military mil = mService.selectOneMemberMil(m);
 		
-		System.out.println(acaList.get(0).getMemNo()+" / "+acaList.get(0).getAcaEnrollDate()+" / "+acaList.get(0).getAcaGradDate()+" / "+acaList.get(0).getAcaSchoolName()+" / "+acaList.get(0).getAcaMajorName()+" / "+acaList.get(0).getAcaGrad());
-		System.out.println(licList.get(0).getMemNo()+" / "+licList.get(0).getLicDate()+" / "+licList.get(0).getLicName()+" / "+licList.get(0).getLicOrigin());
-		System.out.println(carList.get(0).getMemNo()+" / "+carList.get(0).getCarJoinDate()+" / "+carList.get(0).getCarResignDate()+" / "+carList.get(0).getCarPlace()+" / "+carList.get(0).getCarPosition()+" / "+carList.get(0).getCarContent());
-		System.out.println(mil.getMemNo()+" / "+mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilServiceType()+" / "+mil.getMilReason());
+		if(oneMem!=null){
 		
-		HashMap<String,Object> map = new HashMap<String, Object>();
-		
+			ArrayList<AcademicAbility> acaList = mService.selectOneMemberAca(m); // 학력
+			ArrayList<License> licList = mService.selectOneMemberLic(m); // 자격증
+			ArrayList<Career> carList = mService.selectOneMemberCar(m); // 경력
+			Military mil = mService.selectOneMemberMil(m);
+			
+			System.out.println(acaList.get(0).getMemNo()+" / "+acaList.get(0).getAcaEnrollDate()+" / "+acaList.get(0).getAcaGradDate()+" / "+acaList.get(0).getAcaSchoolName()+" / "+acaList.get(0).getAcaMajorName()+" / "+acaList.get(0).getAcaGrad());
+			System.out.println(licList.get(0).getMemNo()+" / "+licList.get(0).getLicDate()+" / "+licList.get(0).getLicName()+" / "+licList.get(0).getLicOrigin());
+			System.out.println(carList.get(0).getMemNo()+" / "+carList.get(0).getCarJoinDate()+" / "+carList.get(0).getCarResignDate()+" / "+carList.get(0).getCarPlace()+" / "+carList.get(0).getCarPosition()+" / "+carList.get(0).getCarContent());
+			System.out.println(mil.getMemNo()+" / "+mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilServiceType()+" / "+mil.getMilReason());
+			
+			HashMap<String,Object> map = new HashMap<String, Object>();
+			map.put("member", oneMem);
+			map.put("acaList", acaList);
+			map.put("licList", licList);
+			map.put("carList", carList);
+			map.put("mil", mil);
+			
+			model.addAttribute("info",map);
+			return "admin_tap/personnel_department/memberInfo";
+		}else{
+			model.addAttribute("msg","해당 사원의 정보가 없습니다. \n지속적인 문제발생시 관리자에 문의하세요.");
+			model.addAttribute("location","/admin_tap_allListMember.ho");
+			return "result";
+		}
 		/*
 		if(session.getAttribute("member")!=null){
 			return "admin_tap/personnel_department/memberInfo";
@@ -279,7 +294,6 @@ public class AdminMemberController {
 			return "redirect:login.jsp";
 		}
 		*/
-		return "";
 	}
 	
 	
