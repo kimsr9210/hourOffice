@@ -19,26 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/organizationChart.css" />
-	
-	<style>
-        /*div{
-            border: 1px solid #FFD8D8;
-        }*/
-        
-        .deptHaveno{
-        	cursor: default;
-        	margin: 0 5px;
-        }
-        #dept-update{
-        	position: relative;
-        	z-index: 97;
-        }
-        .dept-btn-div{
-        	position: relative;;
-        	z-index: 99;
-        }
-        
-    </style>
     
 	
 </head>
@@ -73,12 +53,12 @@
 									<% if(!deptCodeList.contains(member.getDeptCode()) && member.getDeptCode()!=null){ %>
 									<% deptCodeList.add(member.getDeptCode()); %>	
                                         <li>
-                                            <a href="#subMenu<%=member.getDeptCode() %>" id="<%=member.getDeptCode() %>" class="open"><i class="fas fa-plus-square i-icon"></i> <%=member.getDeptName() %></a>
+                                            <a href="#subMenu<%=member.getDeptCode() %>" id="<%=member.getDeptCode() %>" class="open"><i class="fas fa-plus-square i-icon"></i> <span id="deptName-<%=member.getDeptCode() %>"><%=member.getDeptName() %></span></a>
                                             <ul id="subMenu<%=member.getDeptCode() %>">
                                 	<% for(Member memInfo : list){ %>
 
                                 	<% if(member.getDeptCode().equals(memInfo.getDeptCode()) && memInfo.getMemName()!=null){ %>
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a><%=memInfo.getMemName() %></a></li>
+                                                <li><i class="fas fa-user-tie i-icon" style="cursor:default"></i> <a><%=memInfo.getMemName() %></a></li>
                                 	<% } %>
                   
                                 	<% } %>
@@ -87,7 +67,7 @@
                                         </li>
                                         
                                 	<% }else if(member.getDeptCode()==null){ %>
-                                		<li class="deptHaveno"><i class="fas fa-user-tie i-icon"></i> <a><%=member.getMemName() %></a></li>
+                                		<li class="deptHaveno" style="margin: 0 5px;"><i class="fas fa-user-tie i-icon" style="cursor:default"></i> <a><%=member.getMemName() %></a></li>
 									<% } %>
                                     <% } %>    
                                     </ul>
@@ -105,7 +85,7 @@
                                 <p id="deptCode-InInfor">(부서코드)</p><br>
                             </div>
                             <p>부서원</p>
-                            <form id="change-form" action="/admin_tap_changePosition.ho" method="post">
+                            <form id="change-form" action="/admin_tap_changeDepartment.ho" method="post">
                                 <table>    
                                     <tr>
                                         <td><input type="checkbox" name="memNo"/>
@@ -261,7 +241,6 @@
                     $(this).children('.i-icon').removeClass('fa-pen').addClass('fa-check-circle');
                     $(this).prev().show('10000').focus().prev().hide();
                 }else{
-                    alert(newDeptName);
                     if(newDeptName!=""){
                     $.ajax({
                     	url: '/admin_tap_modifyDepartmentName.ho',
@@ -270,11 +249,17 @@
                     	success: function(result){
                     		if(result) {
                     			alert('여기서 이름 변경해주기 jqeury 작성');
+                    			$('#deptName-InInfor').text(newDeptName);
+                    			$('#deptName-D9').text(newDeptName);//--------------------------------------------------------------------------------------------------------------------------
+                    			$('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
+                                $('.dept-update').prev().hide('10000').val('').prev().show();
+                    			
+                    			alert('<a href="#subMenu'+deptCode+'" id="'+deptCode+'" class="open"><i class="fas fa-plus-square i-icon"></i> '+newDeptName+'</a>');
                     		}else{
                     			alert('부서명 변경을 실패했습니다. \n지속적인 오류시 관리자에 문의하세요.');
                     		}
                     	},
-                    	error: function(){}
+                    	error: function(){alert('부서명 변경을 실패했습니다. \n관리자에 문의바랍니다.');}
                     });
                     
                     }
@@ -286,17 +271,16 @@
             // 부서 이름 변경 취소
             $('body').click(function(e){
                 
-            	//var $deptName-InInfor = $(e.target).hasId('deptName-InInfor');
                 var $place = $(e.target).hasClass('dept-btn-div'); // p 태그
                 var $deptNameInInfor = $(e.target).is('path'); // i 태그 안의 path 태그
                 var $deptName = $(e.target).hasClass('deptName'); // 부서명 span 태그
                 var $modityDeptIcon = $(e.target).hasClass('dept-update'); // i 태그 감싼 span 태그
                 var $iconClass = $(e.target).hasClass('iconClass'); // i 태그
                 if($('.deptName').css('display') != 'none'){
-                    if ( ((!$place && !$deptNameInInfor) && (!$deptName && !$modityDeptIcon)) && !$iconClass) {alert($('.deptInfo-div').text());
+                    if ( ((!$place && !$deptNameInInfor) && (!$deptName && !$modityDeptIcon)) && !$iconClass) {
                         $('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
-                        $('.dept-update').prev().hide('10000').prev().show();
-                        //return true;
+                        $('.dept-update').prev().hide('10000').val('').prev().show();
+                        
                     }
                 }
                     e.stopImmediatePropagation(); // 버블링 방지

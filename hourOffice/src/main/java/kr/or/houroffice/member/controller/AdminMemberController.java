@@ -35,8 +35,8 @@ public class AdminMemberController {
 	
 	@Autowired
 	ServletContext context; // 파일 업로드시 필요한 객체 - 현재 프로젝트에 대한 정보를 가지고있는 객체
-	
-	// 사원 관리 all select
+	// 통합사원 ----------------------------------------------------------------------------------------------------------------------
+	// 사원 all select
 	@RequestMapping(value="/admin_tap_allListMember.ho")
 	public String allListMember(HttpSession session, HttpServletRequest request, Model model){
 		
@@ -199,6 +199,59 @@ public class AdminMemberController {
 			return "redirect:login.jsp";
 		}
 	}
+	// 통합사원 사원 삭제 update (ajax)
+	@RequestMapping(value="/admin_tap_resignMember.ho")
+	public void resignMember(@RequestParam(value="memNoList[]") List<String> memNoList,HttpServletResponse response) throws IOException{
+		int result = mService.updateMemberResign(memNoList);
+		if(result>0){
+			response.getWriter().print(true);
+		}else {
+			response.getWriter().print(false);
+		}
+	}
+	// 통합사원 사원 직위 변경 update (ajax)
+	@RequestMapping(value="/admin_tap_changePosition.ho")
+	public void changePosition(@RequestParam("memNo") int memNo, @RequestParam("position") String memPosition, HttpServletResponse response) throws IOException{
+		int result = mService.updateMemberPosition(memNo, memPosition);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	// 통합사원 사원 검색 select
+	@RequestMapping(value="/admin_tap_search_allListMember.ho")
+	public String searchMember(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword, HttpServletRequest request, Model model){
+		if(searchType.equals("memNo")){ searchType = "MEM_NO"; // 사번으로 검색
+		}else if(searchType.equals("memName")){ searchType = "MEM_NAME"; } // 이름으로 검색
+		keyword = "%"+keyword+"%"; // 키워드 LIKE 처리
+		
+		int countAll = mService.selectCountAllMember();
+		
+		int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
+		if(request.getParameter("currentPage")==null) {
+			currentPage = 1;
+		}else {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}	
+		int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+		
+		ArrayList<Member> list = mService.selectSearchMember(searchType,keyword,currentPage,recordCountPerPage);
+		
+		int searchCount = list.size(); // 검색된 수
+
+		// 페이징 처리 - 네비
+		int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
+		String pageNavi = mService.searchGetPageNavi(currentPage,recordCountPerPage,naviCountPerPage,searchCount);
+		
+		if(list != null){
+			model.addAttribute("countAll",countAll);
+			model.addAttribute("list",list);
+			model.addAttribute("pageNavi", pageNavi);
+		}
+		
+		return "admin_tap/personnel_department/allListMember";
+	}
 		
 	// 사원 정보 select & update
 	@RequestMapping(value="/admin_tap_memberInfo.ho")
@@ -211,18 +264,9 @@ public class AdminMemberController {
 		}
 		
 	}
-	//----------------------------------------------------------------------------------------------------------------------
-	@RequestMapping(value="/admin_tap_resignMember.ho")
-	public void resignMember(@RequestParam(value="memNoList[]") List<String> memNoList,HttpServletRequest request){
-		System.out.println("dd");
-		System.out.println(memNoList.get(0));
-		System.out.println(memNoList.size());
 	
 	
-	}
-	//------------------------------------------------------------------------------------------------------------------------
-	
-	
+	// 조직도 ------------------------------------------------------------------------------------------------------------------------
 	// 조직도 select
 	@RequestMapping(value="/admin_tap_organizationChart.ho")
 	public String organizationChart(HttpSession session, Model model){
@@ -238,9 +282,9 @@ public class AdminMemberController {
 		return "admin_tap/personnel_department/organizationChart";
 	}
 	// 사원 부서 이동 update
-	@RequestMapping(value="/admin_tap_changePosition.ho")
+	@RequestMapping(value="/admin_tap_changeDepartment.ho")
 	public String changePosition(@RequestParam(value="memNo") int[] memNo, @RequestParam String deptCode, Model model, HttpSession session){
-		int result = mService.updateMemberPosition(memNo,deptCode);
+		int result = mService.updateMemberDepartment(memNo,deptCode);
 		if(result>0){
 			return organizationChart(session,model);
 			
@@ -288,6 +332,5 @@ public class AdminMemberController {
 			model.addAttribute("location","/admin_tap_organizationChart.ho");
 			return "result";
 		}
-		
 	}
 }

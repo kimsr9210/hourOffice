@@ -79,20 +79,19 @@
 				MEM_DEL_DATE as memDelDate,
 				MEM_RIGHT_CODE as memRightCode,
                 DEPT_NAME as deptName
-		FROM (SELECT ROW_NUMBER()OVER(ORDER BY m.MEM_JOIN_DATE DESC) AS RNUM, m.*,d.DEPT_NAME FROM MEMBER m LEFT JOIN DEPARTMENT d ON(m.DEPT_CODE=d.DEPT_CODE)) 
-		WHERE MEM_DEL_YN='N' AND MEM_RESIGN_YN='N' AND RNUM BETWEEN ${start} AND ${end}
-		
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY m.MEM_JOIN_DATE DESC) AS RNUM, m.*,d.DEPT_NAME FROM (SELECT * FROM MEMBER WHERE MEM_DEL_YN='N' AND MEM_RESIGN_YN='N') m LEFT JOIN DEPARTMENT d ON(m.DEPT_CODE=d.DEPT_CODE)) 
+		WHERE RNUM BETWEEN ${start} AND ${end}
 	</select>
-	
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / 사번 채번 -->
+		
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 사번 채번 -->
 	<select id="choiceMemberNo" resultType="int">
 		SELECT TO_CHAR(SYSDATE,'YYMM')||LPAD(MEMBER_SEQ.NEXTVAL,3,0) FROM DUAL
 	</select>
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / insert-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / insert-->
 	<insert id="signUpMember" parameterType="Member">
 		INSERT INTO MEMBER VALUES(${memNo},'03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4',#{memPosition},#{deptCode},#{memName},#{memBirth},#{memGender},#{memPhone},NULL,NULL,#{memProfile},DEFAULT,DEFAULT,DEFAULT,NULL,DEFAULT,NULL,NULL,#{memAddress})
 	</insert>
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / 학력 insert-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 학력 insert-->
 	<insert id="insertAcademicAbility" parameterType="java.util.List">
 		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" "> 
 		INTO ACADEMIC_ABILITY(MEM_NO,ACA_ENROLL_DATE,ACA_GRAD_DATE,ACA_SCHOOL_NAME,ACA_MAJOR_NAME,ACA_GRAD)
@@ -112,7 +111,7 @@
 		)
 		</foreach>
 	</insert> 
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / 자격증 insert-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 자격증 insert-->
 	<insert id="insertLicense" parameterType="java.util.List">
 		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" "> 
 		INTO LICENSE(MEM_NO,LIC_DATE,LIC_NAME,LIC_ORIGIN)
@@ -127,7 +126,7 @@
 		)
 		</foreach>
 	</insert> 
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / 경력 insert-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 경력 insert-->
 	<insert id="insertCareer" parameterType="java.util.List">
 		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM SYS.DUAL" separator=" "> 
 		INTO CAREER(MEM_NO,CAR_JOIN_DATE,CAR_RESIGN_DATE,CAR_PLACE,CAR_POSITION,CAR_CONTENT)
@@ -147,7 +146,7 @@
 		)
 		</foreach>
 	</insert> 
-	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 등록 / 병력 insert-->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 병력 insert-->
 	<insert id="insertMilitary" parameterType="Military">
 		INSERT INTO MILITARY 
 		VALUES(
@@ -164,12 +163,49 @@
 			#{milReason}
 		)
 	</insert>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 직위 변경 update -->
+	<update id="changePosition" parameterType="hashmap">
+		UPDATE MEMBER SET MEM_POSITION=#{memPosition} WHERE MEM_DEL_YN='N' AND MEM_NO=#{memNo}
+	</update>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 삭제 update -->
+	<update id="resignMember" parameterType="java.util.List">
+		UPDATE MEMBER SET MEM_RESIGN_YN='Y'
+		<foreach collection="list" item="item" open="WHERE MEM_DEL_YN='N' AND (" close=")" separator="OR">
+		  MEM_NO=#{item}
+		</foreach>
+	</update>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 검색 select -->
+	<select id="searchMember" parameterType="hashmap" resultType="Member">
+		SELECT MEM_NO as memNo,
+				MEM_PWD as memPwd,
+				MEM_POSITION as memPosition,
+				DEPT_CODE as deptCode,
+				MEM_NAME as memName,
+				MEM_BIRTH as memBirth,
+				MEM_GENDER as memGender,
+				MEM_ADDRESS as memAddress,
+				MEM_PHONE as memPhone,
+				MEM_TELL as memTell,
+				MEM_EMAIL as memEmail,
+				MEM_PROFILE as memProfile,
+				MEM_HOLIDAY_COUNT as memHolidayCount,
+				MEM_JOIN_DATE as memJoinDate,
+				MEM_RESIGN_YN as memResignYN,
+				MEM_RESIGN_DATE as memResigndate,
+				MEM_DEL_YN as memDelYN,
+				MEM_DEL_DATE as memDelDate,
+				MEM_RIGHT_CODE as memRightCode,
+                DEPT_NAME as deptName
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY m.MEM_JOIN_DATE DESC) AS RNUM, m.*,d.DEPT_NAME FROM (SELECT * FROM MEMBER WHERE ${searchType} LIKE #{keyword} AND MEM_DEL_YN='N' AND MEM_RESIGN_YN='N') m LEFT JOIN DEPARTMENT d ON(m.DEPT_CODE=d.DEPT_CODE)) 
+		WHERE RNUM BETWEEN ${start} AND ${end}
+	</select>
+	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 select -->
 	<select id="selectDeptList" resultType="Member">
 		SELECT d.DEPT_CODE AS deptCode, d.DEPT_NAME AS deptName, m.MEM_NO AS memNo, m.MEM_NAME AS memName, m.MEM_POSITION AS memPosition FROM (select * from DEPARTMENT WHERE DEPT_DEL_YN='N') d FULL JOIN (SELECT * FROM MEMBER WHERE MEM_DEL_YN='N' AND MEM_RESIGN_YN='N') m ON(d.DEPT_CODE=m.DEPT_CODE) ORDER BY d.DEPT_NAME
 	</select>
 	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 부서 이동 update -->
-	<update id="changePosition" parameterType="hashmap">
+	<update id="changeDepartment" parameterType="hashmap">
 		UPDATE MEMBER SET DEPT_CODE=#{deptCode} 
 		<foreach collection="memNo" item="item" index="i" open="WHERE" separator="OR">
 		 MEM_NO=#{item}
