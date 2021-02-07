@@ -164,6 +164,8 @@ $(function() {
 			$('#writeBox').css('display', 'block');
 		} else if ($(this).text() == " 할일") {
 			$('#workBox').css('display', 'block');
+		} else if ($(this).text() == " 코드") {
+			$('#codeBox').css('display', 'block');
 		}
 	});
 
@@ -179,5 +181,212 @@ $(function() {
 	$('.workDelete').click(function() {
 		console.log($(this).parent());
 		$(this).parent().remove();
+	});
+	
+	//이전화면 누르기
+	$('#backward').click(function(){
+		location.replace('/projectAllList.ho');
+	});
+	
+	//게시물 즐겨찾기 추가버튼
+	$('#projectFavor').click(function(){
+        var proNo = $(this).next().val();
+        var memNo = $(this).next().next().val();
+        var proSubject = $(this).next().next().next().val();
+        
+        if($(this).children().css('color')=='rgb(255, 255, 255)'){
+            $.ajax({
+            	url : "/insertProjectFavor.ho",
+            	data : {"proNo" : proNo, "memNo" : memNo},
+            	type : "get",
+            	success : function(result){
+            		if(result=="true"){
+            			alert("["+proSubject+"] 가 즐겨 찾기에 등록되었습니다");
+            		}else{
+            			alert("프로젝트 즐겨찾기 실패");
+            		}
+            	},
+            	error : function(){
+            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+            	}
+            });
+            $(this).children().attr('class','fas fa-star likeBtn');
+        }else{
+        	$.ajax({
+            	url : "/deleteProjectFavor.ho",
+            	data : {"proNo" : proNo, "memNo" : memNo},
+            	type : "get",
+            	success : function(result){
+            		if(result=="true"){
+            			alert("["+proSubject+"] 가 즐겨 찾기에 삭제되었습니다");
+            		}else{
+            			alert("프로젝트 즐겨찾기 실패");
+            		}
+            	},
+            	error : function(){
+            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+            	}
+            });
+            $(this).children().attr('class','far fa-star');
+        }
+    });
+	
+	//프로젝트 수정 시
+	$('#newProjectSubmitBtn').click(function() {
+		if ($('input:checkbox[id="public_check"]').is(':checked')) {
+			$('#public_check_hidden').attr('disabled', 'disabled');
+		}
+		return true;
+	});
+	
+	//프로젝트 나가기
+	$('#projectExit, .outProject').click(function(){
+		var proNo = '<%=p.getProNo()%>';
+		var proMemNo = '<%=p.getMemNo()%>';
+		var memNo = '<%=m.getMemNo()%>'
+		var result = window.confirm("해당 프로젝트에서 나가시겠습니까?");
+		if(result){
+			if(proMemNo==memNo){
+				alert('프로젝트 생성자는 프로젝트를 나갈 수 없습니다');
+			}else{
+				$.ajax({
+	            	url : "/updateProjectMemberExit.ho",
+	            	data : {"proNo" : proNo, "memNo" : memNo},
+	            	type : "post",
+	            	success : function(result){
+	            		if(result=="true"){
+	            			alert("해당 프로젝트에서 나갔습니다.");
+	            		}else{
+	            			alert("해당 프로젝트 나가기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+	            		}
+	            	},
+	            	error : function(){
+	            		console.log("프로젝트 나가기 ajax 통신 실패");
+	            	}
+	            });
+				
+			}
+			location.replace('/projectAllList.ho');
+		}
+	});
+	
+	//프로젝트 삭제
+	$('#projectDelete').click(function(){
+		var proNo = '<%=p.getProNo()%>';
+		var proMemNo = '<%=p.getMemNo()%>';
+		var memNo = '<%=m.getMemNo()%>';
+		var proSubject = '<%=p.getProSubject()%>'
+		var result = window.confirm("해당 프로젝트를 삭제하시겠습니까?");
+		if(result){
+			if(!(proMemNo==memNo)){
+				alert('프로젝트 생성자만 삭제할 수 있습니다.');
+			}else{
+				$.ajax({
+	            	url : "/deleteProject.ho",
+	            	data : {"proNo" : proNo},
+	            	type : "post",
+	            	success : function(result){
+	            		if(result=="true"){
+	            			alert("해당 프로젝트가 삭제되었습니다.")
+	            		}else{
+	            			alert("해당 프로젝트 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+	            		}
+	            	},
+	            	error : function(){
+	            		console.log("프로젝트 삭제 ajax 통신 실패");
+	            	}
+	            });
+				location.replace('/projectAllList.ho');
+			}
+		}
+	});
+	
+	//프로젝트 내보내기
+	$('.outProjectMember').click(function(){
+		var memNo = $(this).next().val();
+		var memName = $(this).next().next().val();
+		var proMemNo = '<%=p.getMemNo()%>';
+		var proNo = '<%=p.getProNo()%>';
+		var result = window.confirm("["+memName+"] 님을 해당 프로젝트에서 내보내시겠습니까?");
+		if(memNo==proMemNo){
+			alert('프로젝트 생성자는 내보낼 수 없습니다');
+		}else{
+			if(result){
+				$.ajax({
+		            url : "/updateProjectMemberExit.ho",
+		            data : {"proNo" : proNo, "memNo" : memNo},
+		            type : "post",
+		            success : function(result){
+		            	if(result=="true"){
+		            		alert("["+memName+"] 님을 해당 프로젝트에서 내보냈습니다");
+		            	}else{
+		            		alert("참가자 내보내기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+		            	}
+		            },
+		            error : function(){
+		            	console.log("참가자 내보내기 ajax 통신 실패");
+		            }
+		        });
+			}
+    		location.reload();
+		}
+	});
+	
+	//관리자 지정
+	$('.adminSet').click(function(){
+		var memNo = $(this).next().val();
+		var memName = $(this).next().next().val();
+		var proMemNo = '<%=p.getMemNo()%>';
+		var proNo = '<%=p.getProNo()%>';
+		var result = window.confirm("["+memName+"] 님을 관리자로 설정하시겠습니까?");
+		if(result){
+			$.ajax({
+		           url : "/updateProjectMgrSet.ho",
+		           data : {"proNo" : proNo, "memNo" : memNo},
+		           type : "post",
+		           success : function(result){
+		           	if(result=="true"){
+		           		alert("["+memName+"] 님을 관리자로 설정하였습니다");
+		           	}else{
+		           		alert("관리자 권한 지정에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+		           	}
+		           },
+		           error : function(){
+		           	console.log("관리자 지정 ajax 통신 실패");
+		           }
+		       });
+		}
+    	location.reload();
+	});
+	
+	//관리자 지정 해제
+	$('.adminCancel').click(function(){
+		var memNo = $(this).next().val();
+		var memName = $(this).next().next().val();
+		var proMemNo = '<%=p.getMemNo()%>';
+		var proNo = '<%=p.getProNo()%>';
+		var result = window.confirm("["+memName+"] 님의 관리자 권한을 해제하시겠습니까?");
+		if(memNo==proMemNo){
+			alert('프로젝트 생성자는 관리자 권한을 해제할 수 없습니다');
+		}else{
+			if(result){
+				$.ajax({
+		            url : "/updateProjectMgrCancel.ho",
+		            data : {"proNo" : proNo, "memNo" : memNo},
+		            type : "post",
+		            success : function(result){
+		            	if(result=="true"){
+		            		alert("["+memName+"] 님의 관리자 권한을 해제하였습니다");
+		            	}else{
+		            		alert("관리자 권한 해제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+		            	}
+		            },
+		            error : function(){
+		            	console.log("관리자 지정 해제 ajax 통신 실패");
+		            }
+		        });
+			}
+    		location.reload();
+		}
 	});
 });
