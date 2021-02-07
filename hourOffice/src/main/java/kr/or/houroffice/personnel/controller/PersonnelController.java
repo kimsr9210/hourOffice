@@ -41,7 +41,6 @@ public class PersonnelController {
 		// 1. Model // 데이터 반환만 하기 때문에 return 구문을 통해서 이동할 페이지를 명시 해야 함
 		// 2. ModelAndView // 데이터 반환 + 페이지 이동을 정의할 수 있으며, return시 ModelAndView를
 		// 리턴해주어야 함
-
 		ModelAndView mav = new ModelAndView();
 
 		mav.addObject("list", list);
@@ -50,18 +49,16 @@ public class PersonnelController {
 	}
 
 	@RequestMapping(value = "/myaddbook.ho")
-	public String mybook(HttpSession session, HttpServletRequest request ) {
-		
-		//다이얼 로그에서 가져온 결과값 출력
-		
-		return "personnel/myaddbook";
-	}
+	public String mybook(HttpSession session, HttpServletRequest request ) {	
+		return "personnel/myaddbook";}
 	
 	@RequestMapping(value = "/myaddbook.ho", method=RequestMethod.POST)
 	public String mybook(@RequestBody Map<String, Object> params, HttpSession session, HttpServletRequest request ) {
-		
 		//다이얼 로그에서 가져온 결과값 출력
 		System.out.println(params);
+		
+		int result = pService.insertMyaddbook(params);
+		
 		
 		return "personnel/myaddbook";
 	}

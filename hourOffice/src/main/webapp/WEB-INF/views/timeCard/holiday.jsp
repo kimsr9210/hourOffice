@@ -23,6 +23,7 @@
 <!-- 풀켈린더 -->
 <link href='/resources/css/fullcalendar.css' rel='stylesheet' />
 <script src='/resources/js/fullcalendar.js'></script>
+<script type="text/javascript" src="/resources/js/locales-all.js"></script>
 <style>
 #aform {
 	color: white;
@@ -58,16 +59,6 @@ body {
 
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
-		/* var events = [{
-	        	title: '테스트',
-	        	start: '2021-02-24',
-	          	end: '2021-02-24'
-	        },
-	        {
-	        	title: '안녕',
-	        	start: '2021-02-12',
-	          	end: '2021-02-12'
-	        }]; */
 	    var events;
 		$.ajax({
 			url : "/searchHoliday.ho",
@@ -88,7 +79,8 @@ body {
 	    center: 'title',
 	    right: 'dayGridMonth,listMonth'
 	  },
-	  initialDate: '2021-02-12',
+	  locales : "ko",
+	  initialDate: new Date(),
 	  navLinks: true, // can click day/week names to navigate views
 	  businessHours: true, // display business hours
 	  editable: true,

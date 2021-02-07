@@ -124,7 +124,7 @@ th {
             <td>1</td>
             <td>1</td>
             <td>1</td>
-            <td><%=md.getLicDate() %></td>
+            <td></td>
         </tr>
     </table><br><br>
 

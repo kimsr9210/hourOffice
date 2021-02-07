@@ -3,6 +3,7 @@ package kr.or.houroffice.personnel.model.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import kr.or.houroffice.personnel.model.vo.MemDept;
 public class PersonnelDAO {
 
 	public ArrayList<Member> selectAddbook(SqlSessionTemplate sqlSession) {
-		List<Member> list = sqlSession.selectList("addbook.selectAddbook");
+		List<Member> list = sqlSession.selectList("personnel.selectAddbook");
 
 		return (ArrayList<Member>) list;
 	}
@@ -31,7 +32,7 @@ public class PersonnelDAO {
 		map.put("end", end);
 		map.put("selectBox", selectBox);
 		map.put("searchText", searchText);
-		List<Member> list = sqlSession.selectList("addbook.allMemberList", map);
+		List<Member> list = sqlSession.selectList("personnel.allMemberList", map);
 
 		return (ArrayList<Member>) list;
 	}
@@ -150,8 +151,13 @@ public class PersonnelDAO {
 
 	// 인사정보
 	public MemDept information(SqlSessionTemplate sqlSession, int memNo) {
-		MemDept md = sqlSession.selectOne("addbook.information", memNo);
+		MemDept md = sqlSession.selectOne("personnel.information", memNo);
 		return md;
+	}
+
+	public int insertMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
+		int result = sqlSession.insert("personnel,selectmyaddbook",params);
+		return result ;
 	}
 
 }

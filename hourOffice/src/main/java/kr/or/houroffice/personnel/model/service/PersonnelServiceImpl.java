@@ -2,6 +2,7 @@ package kr.or.houroffice.personnel.model.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -83,6 +84,12 @@ public class PersonnelServiceImpl implements PersonnelService {
 	public MemDept information(int memNo) {
 		MemDept md = pDAO.information(sqlSession,memNo);
 		return md;
+	}
+	
+	//개인주소록에서 다이얼로그에 받아온 값
+	public int insertMyaddbook(Map<String, Object> params) {
+		int result = pDAO.insertMyaddbook(sqlSession,params);
+		return result ;
 	}
 
 }
