@@ -103,7 +103,7 @@
                             <div><input type="text" name="memNo" value="${member.memNo }" style="display:none"/>
                                 사번 : ${member.memNo }<br><br>
                             </div>
-                            <div id="memProfile"><img border="1px" src="/resources/images/profile/${member.memProfile }"/><br></div>
+                            <div id="memProfile"><img src="/resources/images/profile/${member.memProfile }"/><br></div>
                             <div id="position_dept">
                                 <div class="posi_deptDiv">
                                     직위<br>
@@ -282,7 +282,7 @@
                             </div>
                         </div>
                         
-                        <div id="saveDiv"><button>수정</button> <a href="/admin_tap_allListMember.ho"><button type="button" class="delBtn">취소</button></a></div>
+                        <div id="saveDiv"><button id="submit-btn">수정</button> <a href="/admin_tap_allListMember.ho"><button type="button" class="delBtn">취소</button></a></div>
                         
                     </form>    
                     </div>
@@ -310,8 +310,13 @@
                             
                             }
                             $(function(){
+                            	// 출력 값이 null 이면 빈 값으로 바꿈
+                            	$('input[type=text]').each(function(){
+                            		if($(this).val()=='null'){
+                            			$(this).val('');
+                            		}
+                            	});
                                 // 직위 & 부서 출력
-                                
                                 $('.posi_deptSelect option').each(function(){
                                     if($(this).val()=='${member.memPosition}'){
                                         $(this).prop('selected',true);
@@ -359,6 +364,39 @@
                                    if($(this).val()=='${mil.milServiceType}'){
                                        $(this).attr('selected',true);
                                    } 
+                                });
+                                
+                                $('#submit-btn').click(function(){
+                            		// submit 전에 거르기
+                            		
+    	                        	if($('input[name=acaEnrollDate]').val()==''){
+    	                        		$('input[name=acaEnrollDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=acaGradDate]').val()==''){
+    	                        		$('input[name=acaGradDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=licDate]').val()==''){
+    	                        		$('input[name=licDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=carJoinDate]').val()==''){
+    	                        		$('input[name=carJoinDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=carResignDate]').val()==''){
+    	                        		$('input[name=carResignDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=milJoinDate]').val()==''){
+    	                        		$('input[name=milJoinDate]').val('0001-01-01');
+    	                        	}
+    	                        	if($('input[name=milLeaveDate]').val()==''){
+    	                        		$('input[name=milLeaveDate]').val('0001-01-01');
+    	                        	}
+    	                        	
+    	                        	$('#contWrapper > form').submit();
+                            		
+                            	});
+                                // 취소 btn 클릭 이벤트
+                                $('.delBtn').click(function(){
+                                	history.go(-1);
                                 });
                             })
                         </script>

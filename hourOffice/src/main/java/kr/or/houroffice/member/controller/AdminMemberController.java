@@ -1,8 +1,11 @@
 package kr.or.houroffice.member.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -129,9 +132,12 @@ public class AdminMemberController {
 	// 사원 등록 ------------------------------------------------------------------------------------------------------------------------
 	// 사원 등록 - view 페이지
 	@RequestMapping(value="/admin_tap_memberJoin.ho")
-	public String memberJoin(HttpSession session){
+	public String memberJoin(Model model, HttpSession session){
 		
 		if(session.getAttribute("member")!=null){
+			ArrayList<Department> deptList = mService.selectDeptAll();
+			
+			model.addAttribute("deptList",deptList);
 			return "admin_tap/personnel_department/memberJoin";
 		}else{
 			return "redirect:login.jsp";
@@ -162,6 +168,16 @@ public class AdminMemberController {
 			// request.getParameter() 를 이용 하면 모두 null 값을 반환
 			// multi.getParameter() 를 이용 해야 매개변수를 가져올 수 있음
 			
+			// 프로필사진 이름 만들기
+			// 확장자 추출
+			String memProfile = multi.getFilesystemName("memProfile");
+			int pos = memProfile.lastIndexOf( "." );
+			String ext = memProfile.substring( pos + 1 );
+			// 시간 포맷 및 현재 시간값 가져오기
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss"); // 포맷 만들기
+			long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
+			String profileRename = formatter.format(currentTime); // 시간값만 일단 넣어둠 
+			
 			// 멤버 
 			Member m = new Member();
 			
@@ -172,9 +188,9 @@ public class AdminMemberController {
 			m.setMemGender(multi.getParameter("memGender").charAt(0));
 			m.setMemAddress("("+multi.getParameter("memAddress1")+") "+multi.getParameter("memAddress2"));
 			m.setMemPhone(multi.getParameter("memPhone1")+multi.getParameter("memPhone2")+multi.getParameter("memPhone3"));
-			m.setMemProfile(multi.getFilesystemName("memProfile"));
+			m.setMemProfile(profileRename+"."+ext);
 			
-			System.out.println(m.getMemPosition()+" / "+m.getDeptCode()+" / "+m.getMemName()+" / "+m.getMemBirth()+" / "+m.getMemGender()+" / "+m.getMemAddress()+" / "+m.getMemPhone()+" / "+m.getMemProfile());
+			//System.out.println(m.getMemPosition()+" / "+m.getDeptCode()+" / "+m.getMemName()+" / "+m.getMemBirth()+" / "+m.getMemGender()+" / "+m.getMemAddress()+" / "+m.getMemPhone()+" / "+m.getMemProfile());
 			
 			
 			// 학력
@@ -201,6 +217,7 @@ public class AdminMemberController {
 			ArrayList<License> licList = new ArrayList<License>();
 			
 			for(int j=0; j<multi.getParameterValues("licName").length; j++){
+				
 				if(multi.getParameterValues("licName")[j].equals("") && multi.getParameterValues("licOrigin")[j].equals("")){  }else{
 					// 만약 자격증명 과 시행처가 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
 					License lic = new License();
@@ -239,9 +256,14 @@ public class AdminMemberController {
 			mil.setMilReason(multi.getParameter("milReason"));
 				//System.out.println(mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilReason());
 			// member 객제, 학력 객체, 자격증 객체, 경력 객체, 병력 객체 넘겨주고 비즈니스 로직 처리
-			boolean result = mService.insertMember(m,acaList,licList,carList,mil);
+			int result = mService.insertMember(m,acaList,licList,carList,mil); // 사번 리턴
 			
-			if(result){
+			if(result>0){
+				// 파일 리네임
+				File file = new File(realUploadPath+"\\"+multi.getFilesystemName("memProfile")); // 파일 연결
+				System.out.println(realUploadPath+"\\"+multi.getFilesystemName("memProfile"));
+				file.renameTo(new File(realUploadPath+"\\"+profileRename+"_"+result+"."+ext)); // 실제 경로에 있는 파일 이름을 바꿈
+				System.out.println(realUploadPath+"\\"+profileRename+"_"+result+"."+ext);
 				model.addAttribute("msg", "사원 등록을 완료하였습니다.");
 			}else{
 				model.addAttribute("msg", "사원 등록을 실패하였습니다. \n지속적인 실패 시 관리자에 문의하세요.");
