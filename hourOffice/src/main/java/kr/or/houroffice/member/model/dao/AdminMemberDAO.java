@@ -222,6 +222,17 @@ public class AdminMemberDAO {
 	public Military selectOneMemberMil(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.selectOne("member.oneMemberInfoMil",m);
 	}
+	// 관리자탭 (인사관리) - 사원 정보 - 사원 정보 변경 - all delete
+	public int updateDeleteMemberInfo(SqlSessionTemplate sqlSession, Member m, String[] tbl) {
+		int result = 0;
+		for(int i=0; i<tbl.length; i++){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("memNo", m.getMemNo());
+			map.put("tableName", tbl[i]);
+			result += sqlSession.delete("member.allDeleteMemberInfo",map); // 성공했으면 +1
+		}
+		return result;
+	}
 	
 	// 조직도 ----------------------------------------------------------------------------------------------------------
 	// 관리자탭 (인사관리) - 조직도 select
@@ -254,6 +265,8 @@ public class AdminMemberDAO {
 	public int updateDepartmentDelete(SqlSessionTemplate sqlSession, String deptCode) {
 		return sqlSession.update("member.deleteDepartment",deptCode);
 	}
+
+	
 
 	
 

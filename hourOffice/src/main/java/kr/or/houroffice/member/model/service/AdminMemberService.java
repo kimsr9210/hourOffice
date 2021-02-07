@@ -121,6 +121,16 @@ public class AdminMemberService {
 	public Military selectOneMemberMil(Member m) {
 		return mDAO.selectOneMemberMil(sqlSession,m);
 	}
+	// 사원 정보 - 사원 정보 변경 update - delete
+	public int updateMemberInfo(Member m, String[] tbl) {
+		return mDAO.updateDeleteMemberInfo(sqlSession,m,tbl);
+	}
+	// 사원 정보 - 사원 정보 변경 update
+	public int insertNewMemberInfo(ArrayList<AcademicAbility> acaList, ArrayList<License> licList,
+			ArrayList<Career> carList, Military mil) {
+		return mDAO.insertInfoAca(sqlSession,acaList)+mDAO.insertInfoLic(sqlSession,licList)
+			+mDAO.insertInfoCar(sqlSession,carList)+mDAO.insertInfoMil(sqlSession,mil);
+	}
 	
 	// 조직도 -----------------------------------------------------------------------------------------------------------------
 	// 조직도 - select
@@ -144,6 +154,8 @@ public class AdminMemberService {
 	public int updateDepartmentDelete(String deptCode) {
 		return mDAO.updateDepartmentDelete(sqlSession,deptCode);
 	}
+	
+	
 	
 	
 	

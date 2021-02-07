@@ -98,9 +98,9 @@
 						
 						
 						<div id="contWrapper">
-                    <form action="#" method="get">
+                    <form action="/admin_tap_modifyMemberInfo.ho" method="post">
                         <div class="floatDiv">
-                            <div>
+                            <div><input type="text" name="memNo" value="${member.memNo }" style="display:none"/>
                                 사번 : ${member.memNo }<br><br>
                             </div>
                             <div id="memProfile"><img border="1px" src="/resources/images/profile/${member.memProfile }"/><br></div>
@@ -207,6 +207,13 @@
 	                            </div> 
                                 <div class="float">
                                 	<div class="plusBtn float" onclick="plusBtn('acaInfor')">+</div>
+               	<script>
+               		$('#gradSelect option').each(function(){
+               			if($(this).val()=='<%=acaList.get(acaN).getAcaGrad() %>') 
+               				$(this).prop('selected',true);
+               			
+               		});
+               	</script>
                     	<% if(acaN>0){ %>
                                 	<div id="index<%=index %>" class="minusBtn float" onclick="minusBtn('index<%=index%>')">-</div>
                         <% } %> 
@@ -275,7 +282,7 @@
                             </div>
                         </div>
                         
-                        <div id="saveDiv"><button>수정</button> <a href=""><button type="button" class="delBtn">취소</button></a></div>
+                        <div id="saveDiv"><button>수정</button> <a href="/admin_tap_allListMember.ho"><button type="button" class="delBtn">취소</button></a></div>
                         
                     </form>    
                     </div>

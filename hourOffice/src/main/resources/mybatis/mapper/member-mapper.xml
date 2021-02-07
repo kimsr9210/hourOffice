@@ -257,6 +257,11 @@
 		FROM MILITARY 
 		WHERE MEM_NO=#{memNo}
 	</select>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 정보 변경 delete -->
+	<delete id="allDeleteMemberInfo" parameterType="hashmap">
+		DELETE FROM ${tableName} WHERE MEM_NO=#{memNo}
+	</delete>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 정보 변경 insert -->
 	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 select -->
 	<select id="selectDeptList" resultType="Member">

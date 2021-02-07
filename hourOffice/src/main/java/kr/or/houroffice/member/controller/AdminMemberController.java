@@ -190,7 +190,7 @@ public class AdminMemberController {
 					aca.setAcaSchoolName(multi.getParameterValues("acaSchoolName")[i]);
 					aca.setAcaMajorName(multi.getParameterValues("acaMajorName")[i]);
 					aca.setAcaGrad(multi.getParameterValues("acaGrad")[i]);
-						System.out.println(aca.getAcaEnrollDate()+" / "+aca.getAcaGradDate()+" / "+aca.getAcaSchoolName()+" / "+aca.getAcaMajorName()+" / "+aca.getAcaGrad());
+						//System.out.println(aca.getAcaEnrollDate()+" / "+aca.getAcaGradDate()+" / "+aca.getAcaSchoolName()+" / "+aca.getAcaMajorName()+" / "+aca.getAcaGrad());
 					acaList.add(aca);
 				}
 			}
@@ -208,7 +208,7 @@ public class AdminMemberController {
 					if(multi.getParameterValues("licDate")[j].charAt(0)!='0'){ lic.setLicDate(Date.valueOf(multi.getParameterValues("licDate")[j])); }
 					lic.setLicName(multi.getParameterValues("licName")[j]);
 					lic.setLicOrigin(multi.getParameterValues("licOrigin")[j]);
-						System.out.println(lic.getLicDate()+" / "+lic.getLicName()+" / "+lic.getLicOrigin());
+						//System.out.println(lic.getLicDate()+" / "+lic.getLicName()+" / "+lic.getLicOrigin());
 					licList.add(lic);
 				}
 			}
@@ -226,19 +226,18 @@ public class AdminMemberController {
 					car.setCarPlace(multi.getParameterValues("carPlace")[k]);
 					car.setCarPosition(multi.getParameterValues("carPosition")[k]);
 					car.setCarContent(multi.getParameterValues("carContent")[k]);
-						System.out.println(car.getCarJoinDate()+" / "+car.getCarResignDate()+" / "+car.getCarPlace()+" / "+car.getCarPosition()+" / "+car.getCarContent());
+						//System.out.println(car.getCarJoinDate()+" / "+car.getCarResignDate()+" / "+car.getCarPlace()+" / "+car.getCarPosition()+" / "+car.getCarContent());
 					carList.add(car);
 				}
 			}	
 			
-			System.out.println("병역 : "+multi.getParameter("milJoinDate"));
 			// 병력
 			Military mil = new Military();
 			mil.setMilServiceType(multi.getParameter("milServiceType"));
 			if(multi.getParameter("milJoinDate").charAt(0)!='0'){ mil.setMilJoinDate(Date.valueOf(multi.getParameter("milJoinDate"))); }
 			if(multi.getParameter("milLeaveDate").charAt(0)!='0'){ mil.setMilLeaveDate(Date.valueOf(multi.getParameter("milLeaveDate"))); }
 			mil.setMilReason(multi.getParameter("milReason"));
-				System.out.println(mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilReason());
+				//System.out.println(mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilReason());
 			// member 객제, 학력 객체, 자격증 객체, 경력 객체, 병력 객체 넘겨주고 비즈니스 로직 처리
 			boolean result = mService.insertMember(m,acaList,licList,carList,mil);
 			
@@ -256,7 +255,7 @@ public class AdminMemberController {
 	
 		
 	// 사원 정보 ------------------------------------------------------------------------------------------------------------------------
-	// 사원 정보 select & update
+	// 사원 정보 select
 	@RequestMapping(value="/admin_tap_memberInfo.ho")
 	public String memberInfo(Member m, HttpSession session, Model model){
 		Member oneMem = mService.selectOneMember(m); // MEMBER 테이블
@@ -295,8 +294,96 @@ public class AdminMemberController {
 		}
 		*/
 	}
-	
-	
+	// 사원 정보 update
+	@RequestMapping(value="/admin_tap_modifyMemberInfo.ho")
+	public String modifyMemberInfo(Member m, HttpServletRequest request, Model model){
+		String[] tbl = {"ACADEMIC_ABILITY","LICENSE","CAREER","MILITARY"}; // delete 할 테이블 명 
+		Member member = mService.selectOneMember(m);
+		
+		if(member!=null){
+			int result = mService.updateMemberInfo(m,tbl); // 먼저 전 데이터 삭제
+			// 학력
+			ArrayList<AcademicAbility> acaList = new ArrayList<AcademicAbility>();
+					
+			for(int i=0; i<request.getParameterValues("acaSchoolName").length; i++){
+				if(request.getParameterValues("acaSchoolName")[i].equals("") && request.getParameterValues("acaMajorName")[i].equals("")){  }else{
+					// 만약 학교명 과 전공명이 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
+					AcademicAbility aca = new AcademicAbility();
+					
+					aca.setMemNo(m.getMemNo());
+					if(request.getParameterValues("acaEnrollDate")[i].charAt(0)!='0'){ aca.setAcaEnrollDate(Date.valueOf(request.getParameterValues("acaEnrollDate")[i])); }
+					if(request.getParameterValues("acaGradDate")[i].charAt(0)!='0'){ aca.setAcaGradDate(Date.valueOf(request.getParameterValues("acaGradDate")[i])); }
+					aca.setAcaSchoolName(request.getParameterValues("acaSchoolName")[i]);
+					aca.setAcaMajorName(request.getParameterValues("acaMajorName")[i]);
+					aca.setAcaGrad(request.getParameterValues("acaGrad")[i]);
+						//System.out.println(aca.getAcaEnrollDate()+" / "+aca.getAcaGradDate()+" / "+aca.getAcaSchoolName()+" / "+aca.getAcaMajorName()+" / "+aca.getAcaGrad());
+					acaList.add(aca);
+				}
+			}	
+					
+			// 자격증
+			ArrayList<License> licList = new ArrayList<License>();
+					
+			for(int j=0; j<request.getParameterValues("licName").length; j++){
+				if(request.getParameterValues("licName")[j].equals("") && request.getParameterValues("licOrigin")[j].equals("")){  }else{
+					// 만약 자격증명 과 시행처가 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
+					License lic = new License();
+					
+					lic.setMemNo(m.getMemNo());
+					if(request.getParameterValues("licDate")[j].charAt(0)!='0'){ lic.setLicDate(Date.valueOf(request.getParameterValues("licDate")[j])); }
+					lic.setLicName(request.getParameterValues("licName")[j]);
+					lic.setLicOrigin(request.getParameterValues("licOrigin")[j]);
+						//System.out.println(lic.getLicDate()+" / "+lic.getLicName()+" / "+lic.getLicOrigin());
+					licList.add(lic);
+				}
+			}
+			
+			// 경력
+			ArrayList<Career> carList = new ArrayList<Career>();
+			
+			for(int k=0; k<request.getParameterValues("carPlace").length; k++){
+				if(request.getParameterValues("carPlace")[k].equals("") && request.getParameterValues("carPosition")[k].equals("")){  }else{
+					// 만약 회사명 과 직위가 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
+					Career car = new Career();
+					
+					car.setMemNo(m.getMemNo());
+					if(request.getParameterValues("carJoinDate")[k].charAt(0)!='0'){ car.setCarJoinDate(Date.valueOf(request.getParameterValues("carJoinDate")[k])); }
+					if(request.getParameterValues("carResignDate")[k].charAt(0)!='0'){ car.setCarResignDate(Date.valueOf(request.getParameterValues("carResignDate")[k])); }
+					car.setCarPlace(request.getParameterValues("carPlace")[k]);
+					car.setCarPosition(request.getParameterValues("carPosition")[k]);
+					car.setCarContent(request.getParameterValues("carContent")[k]);
+						//System.out.println(car.getCarJoinDate()+" / "+car.getCarResignDate()+" / "+car.getCarPlace()+" / "+car.getCarPosition()+" / "+car.getCarContent());
+					carList.add(car);
+				}
+			}	
+			
+			// 병력
+			Military mil = new Military();
+			mil.setMemNo(m.getMemNo());
+			mil.setMilServiceType(request.getParameter("milServiceType"));
+			if(request.getParameter("milJoinDate").charAt(0)!='0'){ mil.setMilJoinDate(Date.valueOf(request.getParameter("milJoinDate"))); }
+			if(request.getParameter("milLeaveDate").charAt(0)!='0'){ mil.setMilLeaveDate(Date.valueOf(request.getParameter("milLeaveDate"))); }
+			mil.setMilReason(request.getParameter("milReason"));
+				//System.out.println(mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilReason());
+			
+		
+			int insertInfo = mService.insertNewMemberInfo(acaList,licList,carList,mil); // insert
+			
+			int lengCount = acaList.size()+licList.size()+carList.size()+1; // insert를 모두 성공했을 경우의 수
+			
+			if(insertInfo>=lengCount){
+				model.addAttribute("msg","정보를 변경하였습니다.");
+			}else{
+				model.addAttribute("msg","정보 변경을 실패하였습니다. \n지속적인 실패시 관리자에 문의하세요");
+			}
+			model.addAttribute("location","/admin_tap_memberInfo.ho?memNo="+m.getMemNo());
+			
+		}else{
+			model.addAttribute("msg","해당 사원의 정보가 없습니다.");
+			model.addAttribute("location","/admin_tap_memberInfo.ho"); // 통합사원 목록으로 이동
+		}
+		return "result";
+	}
 	// 조직도 ------------------------------------------------------------------------------------------------------------------------
 	// 조직도 select
 	@RequestMapping(value="/admin_tap_organizationChart.ho")
@@ -364,4 +451,6 @@ public class AdminMemberController {
 			return "result";
 		}
 	}
+	
+	
 }
