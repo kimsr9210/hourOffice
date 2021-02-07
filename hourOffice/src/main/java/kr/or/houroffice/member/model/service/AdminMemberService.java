@@ -1,6 +1,7 @@
 package kr.or.houroffice.member.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -32,15 +33,33 @@ public class AdminMemberService {
 		return mDAO.selectCountAllMember(sqlSession);
 		
 	}
-	// 멤버 전체 리스트 (인사관리 사원 조회)
+	// 통합사원 - 사원 목록 - select
 	public ArrayList<Member> selectAllMember(int currentPage, int recordCountPerPage) {
-		
 		return mDAO.selectAllMember(sqlSession,currentPage,recordCountPerPage);
 	}
-	// 멤버 전체 리스트 (인사관리 사원 조회) - 페이징 처리 네비 만들기
+	// 통합사원 - 사원 목록 - 페이징 처리
 	public String getPageNavi(int currentPage, int recordCountPerPage, int naviCountPerPage) {
 		return mDAO.getPageNavi(sqlSession,currentPage,recordCountPerPage,naviCountPerPage);
 	}
+	// 통합사원 - 사원 직위 변경 - update
+	public int updateMemberPosition(int memNo, String memPosition) {
+		return mDAO.updateMemberPosition(sqlSession,memNo,memPosition);
+	}
+	// 통합사원 - 사원 삭제 - update
+	public int updateMemberResign(List<String> memNoList) {
+		return mDAO.updateMemberResign(sqlSession,memNoList);
+	}
+	
+	// 통합사원 - 검색 - select
+	public ArrayList<Member> selectSearchMember(String searchType, String keyword, int currentPage, int recordCountPerPage) {
+		return (ArrayList<Member>)mDAO.selectSearchMember(sqlSession,searchType,keyword,currentPage,recordCountPerPage);
+	}
+	// 통합사원 - 검색 - 페이징 처리
+	public String searchGetPageNavi(int currentPage, int recordCountPerPage, int naviCountPerPage, int searchCount) {
+		return mDAO.searchGetPageNavi(sqlSession,currentPage,recordCountPerPage,naviCountPerPage,searchCount);
+	}
+		
+	// 사원 등록 -----------------------------------------------------------------------------------------------------------------
 	public boolean insertMember(Member m, ArrayList<AcademicAbility> acaList, ArrayList<License> licList, ArrayList<Career> carList, Military mil) {
 		
 		// 사번 채번
@@ -76,10 +95,60 @@ public class AdminMemberService {
 		
 		return false; // 실패시 false 반환
 	}
-	// 조직도 list - select
+	
+	// 사원 정보 -----------------------------------------------------------------------------------------------------------------
+	// 사원 정보 - select
+	public Member selectOneMember(Member m) {
+		return mDAO.selectOneMember(sqlSession,m);
+	}
+	// 사원 정보 - 학력 select
+	public ArrayList<AcademicAbility> selectOneMemberAca(Member m) {
+		return (ArrayList<AcademicAbility>)mDAO.selectOneMemberAca(sqlSession,m);
+	}
+	// 사원 정보 - 자격증 select
+	public ArrayList<License> selectOneMemberLic(Member m) {
+		return (ArrayList<License>)mDAO.selectOneMemberLic(sqlSession,m);
+	}
+	// 사원 정보 - 경력 select
+	public ArrayList<Career> selectOneMemberCar(Member m) {
+		return (ArrayList<Career>)mDAO.selectOneMemberCar(sqlSession,m);
+	}
+	// 사원 정보 - 병력 select
+	public Military selectOneMemberMil(Member m) {
+		return mDAO.selectOneMemberMil(sqlSession,m);
+	}
+	
+	// 조직도 -----------------------------------------------------------------------------------------------------------------
+	// 조직도 - select
 	public ArrayList<Member> selectOrganizationChart() {
 		return mDAO.selectOrganizationChart(sqlSession);
 	}
+	// 조직도 - 사원 부서 이동 - update
+	public int updateMemberDepartment(int[] memNo, String deptCode) {
+		return mDAO.updateMemberDepartment(sqlSession,memNo,deptCode);
+	}
+	// 조직도 - 부서 추가 - insert
+	public int insertDepartment(String deptCode, String deptName) {
+		return mDAO.insertDepartment(sqlSession,deptCode,deptName);
+	}
+	// 조직도 - 부서 이름 수정 - update
+	public int updateDepartmentName(String deptCode, String deptName) {
+		return mDAO.updateDepartmentName(sqlSession,deptCode,deptName);
+			
+	}
+	// 조직도 - 부서 삭제 - update
+	public int updateDepartmentDelete(String deptCode) {
+		return mDAO.updateDepartmentDelete(sqlSession,deptCode);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }
