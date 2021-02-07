@@ -97,6 +97,10 @@ public class AdminMemberService {
 	}
 	
 	// 사원 정보 -----------------------------------------------------------------------------------------------------------------
+	// 사원 정보 - 부서 select
+	public ArrayList<Department> selectDeptAll() {
+		return (ArrayList<Department>)mDAO.selectDeptAll(sqlSession);
+	}
 	// 사원 정보 - select
 	public Member selectOneMember(Member m) {
 		return mDAO.selectOneMember(sqlSession,m);
@@ -140,6 +144,7 @@ public class AdminMemberService {
 	public int updateDepartmentDelete(String deptCode) {
 		return mDAO.updateDepartmentDelete(sqlSession,deptCode);
 	}
+	
 	
 	
 	

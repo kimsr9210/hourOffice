@@ -83,17 +83,16 @@
 			box-shadow: 1px 1px 5px #cccccc;
 			cursor: pointer;
 		}
-		
-		/* img 태그 div */
-        #TitleContents #memProfile{
-            width: (354*0.5)px; height: (472*0.5)px;
-            margin: 0 auto;
-            margin-bottom: 50px;
-        }
         /* 직위 & 부서 div */
         #TitleContents #position_dept{
             width: 326px;
             margin: 0 auto;
+        }
+        /* img 태그 div */
+        #TitleContents #memProfile{
+            width: 177px; height: 236px;
+            margin: 0 auto;
+            margin-bottom: 50px;
         }
         /* 직위 & 부서 각각의 div */
         #TitleContents .posi_deptDiv{

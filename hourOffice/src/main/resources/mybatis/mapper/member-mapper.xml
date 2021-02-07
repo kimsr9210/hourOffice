@@ -209,6 +209,9 @@
 	</insert>
 	
 	<!-- 한명의 사원 정보를 가져오는 매퍼는 맨 위에 있음 -->
+	<select id="deptAll" resultType="Department">
+		SELECT DEPT_CODE AS deptCode, DEPT_NAME AS deptName, DEPT_DEL_YN AS deptDelYN FROM DEPARTMENT WHERE DEPT_DEL_YN='N'
+	</select>
 	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 학력 select -->
 	<select id="oneMemberInfoAca" parameterType="Member" resultType="AcademicAbility">
 		SELECT 
@@ -243,6 +246,7 @@
 		FROM CAREER 
 		WHERE MEM_NO=#{memNo}
 	</select>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 병력 select -->
 	<select id="oneMemberInfoMil" parameterType="Member" resultType="Military">
 		SELECT 
 			MEM_NO AS memNo, 

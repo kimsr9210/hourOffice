@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.or.houroffice.member.model.vo.AcademicAbility;
 import kr.or.houroffice.member.model.vo.Career;
+import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.License;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.member.model.vo.Military;
@@ -197,6 +198,10 @@ public class AdminMemberDAO {
 	////////////////////////////////////////사원 등록 메소드   ////////////////////////////////////////
 
 	// 사원 정보 ----------------------------------------------------------------------------------------------------------
+	// 관리자탭 (인사관리) - 부서 select
+	public List selectDeptAll(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("member.deptAll");
+	}
 	// 관리자탭 (인사관리) - 사원 정보 select
 	public Member selectOneMember(SqlSessionTemplate sqlSession, Member m) {
 		return (Member)sqlSession.selectOne("member.selectOneAsMemNo",m);
@@ -249,6 +254,8 @@ public class AdminMemberDAO {
 	public int updateDepartmentDelete(SqlSessionTemplate sqlSession, String deptCode) {
 		return sqlSession.update("member.deleteDepartment",deptCode);
 	}
+
+	
 
 	
 
