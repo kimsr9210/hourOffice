@@ -50,8 +50,10 @@ th {
 
 <body>
 
-	<%Member m = (Member)session.getAttribute("member");%>
-	<%MemDept md = (MemDept)session.getAttribute("MemDept");%>
+	<%
+		Member m = (Member)session.getAttribute("member");
+		MemDept md  = (MemDept)request.getAttribute("memDept");
+	%>
 	
 	
 	<div id="wrap">
@@ -124,7 +126,7 @@ th {
             <td>1</td>
             <td>1</td>
             <td>1</td>
-            <td></td>
+            <td><%=md.getMemNo()%></td>
         </tr>
     </table><br><br>
 

@@ -99,7 +99,7 @@ select {
 				dataType: 'json',
 		        data: JSON.stringify(object), //리스트(object)를 json 형식으로 저장하기 -> 키 벨류
 		        contentType:'application/json; charset=utf-8',
-				type : "post",
+				type : "POST",
 				success : function(){
 					console.log("서버 호출을 정상적으로 완료 하였습니다.");
 				},

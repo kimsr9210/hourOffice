@@ -48,15 +48,24 @@ public class PersonnelController {
 		return mav;
 	}
 
+	/*
+	 * 페이지 호출 - GET 방식
+	 */
 	@RequestMapping(value = "/myaddbook.ho")
 	public String mybook(HttpSession session, HttpServletRequest request ) {	
-		return "personnel/myaddbook";}
+		return "personnel/myaddbook";
+	}
 	
+	/*
+	 * 페이지 내에 업무 처리 - POST 방식
+	 */
 	@RequestMapping(value = "/myaddbook.ho", method=RequestMethod.POST)
-	public String mybook(@RequestBody Map<String, Object> params, HttpSession session, HttpServletRequest request ) {
+	public String mybook(@SessionAttribute("member") Member m,@RequestBody Map<String, Object> params, HttpSession session, HttpServletRequest request ) {
 		//다이얼 로그에서 가져온 결과값 출력
 		System.out.println(params);
+		System.out.println(params.get("name"));
 		
+		params.put("memNo", m.getMemNo());
 		int result = pService.insertMyaddbook(params);
 		
 		
@@ -70,14 +79,12 @@ public class PersonnelController {
 	
 	//내인사정보 , 쿼리문다시하기 !
 	@RequestMapping(value = "/information.ho")
-	public String information(@SessionAttribute("member") Member m, HttpSession session) {
-		
+	public ModelAndView information(@SessionAttribute("member") Member m, HttpSession session) {
 		MemDept memDept = pService.information(m.getMemNo());
-//
-//		//get 꺼내옴 , set 놓다/보내줌 , put 저장 
-		session.setAttribute("memDept", memDept);
-		
-		return "personnel/information";
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("memDept", memDept);
+		mav.setViewName("personnel/information"); // ViewResolver에 의해서 경로가 최종 완성됨
+		return mav;
 	}
 	
 	//사원 전체 주소록 검색(search) 결과

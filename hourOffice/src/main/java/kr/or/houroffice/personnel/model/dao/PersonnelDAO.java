@@ -156,7 +156,7 @@ public class PersonnelDAO {
 	}
 
 	public int insertMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
-		int result = sqlSession.insert("personnel,selectmyaddbook",params);
+		int result = sqlSession.insert("personnel.insertMyaddbook",params);
 		return result ;
 	}
 

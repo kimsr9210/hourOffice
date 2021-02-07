@@ -4,28 +4,32 @@
 
 
 	<sql id="sql_selectAddbook">
-		SELECT
-		M.MEM_NO AS memNo,
-		M.MEM_POSITION AS memPosition,
-		M.MEM_NAME AS memName,
-		M.MEM_BIRTH AS memBirth,
-		M.MEM_ADDRESS AS
-		memAddress,
-		M.MEM_PHONE AS MEMPHONE,
-		M.MEM_TELL AS MEMTELL,
-		M.MEM_EMAIL
-		AS MEMEMAIL,
-		M.MEM_PROFILE AS MEMPROFILE,
-		( SELECT
-		DEPT_NAME
-		FROM
-		DEPARTMENT
-		WHERE
-		DEPT_CODE = M.DEPT_CODE
-		) AS deptName
-		FROM (SELECT ROW_NUMBER()OVER(ORDER BY
-		MEM_JOIN_DATE DESC) AS RNUM,
-		MEMBER.* FROM MEMBER) M
+		SELECT M.* FROM (
+			SELECT
+				RNUM,
+				M.MEM_NO AS memNo,
+				M.MEM_POSITION AS memPosition,
+				M.MEM_NAME AS memName,
+				M.MEM_BIRTH AS memBirth,
+				M.MEM_ADDRESS AS
+				memAddress,
+				M.MEM_PHONE AS MEMPHONE,
+				M.MEM_TELL AS MEMTELL,
+				M.MEM_EMAIL
+				AS MEMEMAIL,
+				M.MEM_PROFILE AS MEMPROFILE,
+				( SELECT
+				DEPT_NAME
+				FROM
+				DEPARTMENT
+				WHERE
+				DEPT_CODE = M.DEPT_CODE
+				) AS deptName,
+				M.MEM_DEL_YN
+			FROM (SELECT ROW_NUMBER()OVER(ORDER BY
+			MEM_JOIN_DATE DESC) AS RNUM,
+			MEMBER.* FROM MEMBER) M
+		) M
 	</sql>
 
 	<!-- 사내주소록 쿼리 -->
@@ -56,22 +60,22 @@
 		<include refid="sql_selectAddbook"></include>
 		<where> <!-- MAPPER 기능 : 처음 <where> 절은 > and 생략 -->
 			<if test="selectBox == 'name'">
-				AND m.mem_name LIKE '%'||#{searchText}||'%'
+				AND M.memName LIKE '%'||#{searchText}||'%'
 			</if>
 			<if test="selectBox == 'dept'">
-				AND DEPARTMENT.dept_name LIKE '%'||#{searchText}||'%'
+				AND M.deptName LIKE '%'||#{searchText}||'%'
 			</if>
 			<if test="selectBox == 'position'">
-				AND m.mem_position LIKE '%'||#{searchText}||'%'
+				AND M.memPosition LIKE '%'||#{searchText}||'%'
 			</if>
 			AND m.RNUM BETWEEN #{start} AND #{end}
 		</where>
 	</select>
 
 
-	<select id="selectmyaddbook" resultType="Contact">
+	<select id="insertMyaddbook" parameterType="hashmap" resultType="int">
 		INSERT INTO contact
-		VALUES(#{memNo},CONTACT_SEQ.NEXTVAL,#{name},#{company},#{appointment},#{officeNumber},#{ph},#{email},DEFAULT,'N')
+		VALUES(#{memNo},CONTACT_SEQ.NEXTVAL,#{name},#{company},#{position},#{tell},#{ph},#{email},DEFAULT,'N')
 		<!-- INSERT INTO CONTACT VALUES(2101001,CONTACT_SEQ.NEXTVAL,'삼성','개발1팀',0212341234,'01011112222','K@NAVER.COM','회사',DEFAULT,'N'); -->
 	</select>
 
