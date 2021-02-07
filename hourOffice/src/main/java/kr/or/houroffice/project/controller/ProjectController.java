@@ -24,6 +24,7 @@ import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectMember;
+import kr.or.houroffice.project.model.vo.ProjectPlan;
 
 @Controller
 public class ProjectController {
@@ -75,7 +76,7 @@ public class ProjectController {
 	
 	//프로젝트 상세 페이지
 	@RequestMapping(value="/projectDetail.ho")
-	public ModelAndView projectDetail(@RequestParam int proNo){
+	public ModelAndView projectDetail(@RequestParam int proNo, @SessionAttribute("member") Member member, @RequestParam String boardType){
 		//프로젝트 정보 가져오기
 		Project p = pService.selectOneProject(proNo);
 		
@@ -94,8 +95,8 @@ public class ProjectController {
 		//프로젝트 관리자 목록 가져오기
 		ArrayList<ProjectMember> projectMgrList = pService.selectProjectMemberList(proNo);
 		
-		//멤버 전체 목록 가져오기
-		
+		//즐겨찾기 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
@@ -104,17 +105,46 @@ public class ProjectController {
 		mav.addObject("projectMemberList", projectMemberList);
 		mav.addObject("projectMgrList", projectMgrList);
 		mav.addObject("commentList", commentList);
+		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("boardType", boardType);
 		mav.setViewName("project/projectDetail");
 		return mav;
 	}
 	
 	// 프로젝트 게시물 작성 페이지
 	@RequestMapping(value="/projectBoardWrite.ho")
-	public ModelAndView projectBoardWrite(@RequestParam int proNo){
+	public ModelAndView projectBoardWrite(@RequestParam int proNo, @SessionAttribute("member") Member member){
+		
 		//프로젝트 정보 가져오기
 		Project p = pService.selectOneProject(proNo);
+		
+
+		//프로젝트 게시물 가져오기
+		ArrayList<ProjectBoard> boardList = pService.selectProjectBoardList(proNo);
+		
+		//프로젝트 게시물의 댓글 가져오기
+		ArrayList<ProjectComment> commentList = pService.selectBoardCommentList(proNo);
+		
+		//프로젝트 게시물 작성자 정보 가져오기
+		ArrayList<Member> boardMemberList = mService.selectProjectBoardMemberList(proNo);
+		
+		//프로젝트  멤버 리스트 가져오기
+		ArrayList<Member> projectMemberList = mService.selectProjectMemberList(proNo);
+
+		//프로젝트 관리자 목록 가져오기
+		ArrayList<ProjectMember> projectMgrList = pService.selectProjectMemberList(proNo);
+		
+		//즐겨찾기 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
+		mav.addObject("boardList", boardList);
+		mav.addObject("boardMemberList", boardMemberList);
+		mav.addObject("projectMemberList", projectMemberList);
+		mav.addObject("projectMgrList", projectMgrList);
+		mav.addObject("commentList", commentList);
+		mav.addObject("favoriteList", favoriteList);
 		mav.setViewName("project/projectBoardWrite");
 		return mav;
 	}
@@ -166,14 +196,9 @@ public class ProjectController {
 		return mav;
 	}
 	
+	//일반 게시글 올리기
 	@RequestMapping(value="/insertProjectBoard.ho")
-	public ModelAndView insertProjectBoard(ProjectBoard pb, @RequestParam String type){
-		if(type.equals("post")){
-			System.out.println(pb.getProNo());
-			System.out.println(pb.getBoardText());
-			System.out.println(pb.getMemNo());
-			System.out.println();
-		}
+	public ModelAndView insertProjectBoard(ProjectBoard pb){
 		
 		int result = pService.insertProjectBoard(pb);
 		ModelAndView mav = new ModelAndView();
@@ -184,7 +209,8 @@ public class ProjectController {
 			mav.addObject("msg", "게시물 작성 실패");
 		}
 		mav.addObject("proNo", pb.getProNo());
-		mav.setViewName("project/boardWriteResult");
+		mav.addObject("boardType", "post");
+		mav.setViewName("project/projectDetailResult");
 		return mav;
 	}
 	
@@ -226,6 +252,7 @@ public class ProjectController {
 			System.out.println("댓글 작성 실패");
 		}
 		mav.addObject("proNo", proNo);
+		mav.addObject("boardType", "post");
 		mav.setViewName("project/commentResult");
 		
 		return mav;
@@ -259,4 +286,164 @@ public class ProjectController {
 			response.getWriter().print(false);
 		}
 	}
+	
+	//프로젝트 수정
+	@RequestMapping(value="/updateProject.ho")
+	public ModelAndView updateProject(@RequestParam String proSubject,
+								@RequestParam String proExp,
+								@RequestParam String publicYN,
+								@RequestParam int proNo,
+								@RequestParam int memNo,
+								HttpSession session){
+		Member m = (Member)session.getAttribute("member");
+		Project p = new Project();
+
+		ModelAndView mav = new ModelAndView();
+		//세션과 프로젝트 생성자가 같다면
+		if(m.getMemNo()==memNo){
+			if(publicYN.equals("on")){
+				publicYN = "Y";
+			}else{
+				publicYN = "N";
+			}
+			p.setProSubject(proSubject);
+			p.setProExp(proExp);
+			p.setPublicYN(publicYN.charAt(0));
+			p.setMemNo(m.getMemNo());
+			p.setProNo(proNo);
+			int result = pService.updateProject(p);
+			if(result>0){
+				mav.addObject("msg", "프로젝트 수정 완료");
+			}else{
+				mav.addObject("msg", "프로젝트 수정 실패");
+			}
+			mav.addObject("proNo", proNo);
+			mav.addObject("boardType", "post");
+			mav.setViewName("project/projectDetailResult");
+		}else{
+			mav.addObject("msg", "프로젝트 생성자만 수정이 가능합니다.");
+			mav.addObject("proNo", proNo);
+			mav.addObject("boardType", "post");
+			mav.setViewName("project/projectDetailResult");
+		}
+		return mav;
+	}
+	
+	//게시물 수정
+	@RequestMapping(value="/updateProjectBoard.ho")
+	public ModelAndView updateProjectBoard(ProjectBoard pb){
+		
+		System.out.println(pb);
+		int result = pService.updateProjectBoard(pb);
+		ModelAndView mav = new ModelAndView();
+		
+		if(result>0){
+			mav.addObject("msg", "게시물 수정 완료");
+		}else{
+			mav.addObject("msg", "게시물 수정 실패");
+		}
+		mav.addObject("proNo", pb.getProNo());
+		mav.addObject("boardType", "post");
+		mav.setViewName("project/projectDetailResult");
+		return mav;
+	}
+	
+	//게시물 삭제
+	@RequestMapping(value="/deleteProjectBoard.ho")
+	public void deleteProjectBoard(@RequestParam int boardNo, HttpServletResponse response)  throws IOException{
+		
+		int result = pService.deleteProjectBoard(boardNo);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
+	
+	//프로젝트 나가기
+	@RequestMapping(value="/updateProjectMemberExit.ho")
+	public void updateProjectMemberExit(ProjectMember pm, HttpServletResponse response)  throws IOException{
+		System.out.println(pm.getMemNo());
+		System.out.println(pm.getProNo());
+		int result = pService.updateProjectMemberExit(pm);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
+	
+	//프로젝트 삭제
+	@RequestMapping(value="/deleteProject.ho")
+	public void updateProject(@RequestParam int proNo, HttpServletResponse response)  throws IOException{
+		int result = pService.deleteProject(proNo);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
+	//관리자 설정
+	@RequestMapping(value="/updateProjectMgrSet.ho")
+	public void updateProjectMgrSet(ProjectMember pm, HttpServletResponse response)  throws IOException{
+		int result = pService.updateProjectMgrSet(pm);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
+	//관리자 설정 해제
+	@RequestMapping(value="/updateProjectMgrCancel.ho")
+	public void updateProjectMgrCancel(ProjectMember pm, HttpServletResponse response)  throws IOException{
+		int result = pService.updateProjectMgrCancel(pm);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
+	//일정 게시물 올리기
+	@RequestMapping(value="/insertProjectPlan.ho")
+	public ModelAndView insertProjectPlan(ProjectPlan pp){
+		System.out.println(pp);
+		int result = pService.insertProjectPlan(pp);
+		ModelAndView mav = new ModelAndView();
+		
+		if(result>0){
+			mav.addObject("msg", "일정 작성 완료");
+		}else{
+			mav.addObject("msg", "일정 작성 실패");
+		}
+		mav.addObject("proNo", pp.getProNo());
+		mav.addObject("boardType", "plan");
+		mav.setViewName("project/projectDetailResult");
+		return mav;
+		
+	}
+	
+	
+	@RequestMapping(value="/updateProjectComplate.ho")
+	public void updateProjectComplate(Project p, HttpServletResponse response)  throws IOException{
+		System.out.println(p);
+		
+		if(p.getCompYN()=='Y'){
+			p.setCompYN('N');
+		}else{
+			p.setCompYN('Y');
+		}
+		
+		int result = pService.updateProjectComplate(p);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	
 }

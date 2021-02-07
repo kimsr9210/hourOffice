@@ -11,6 +11,7 @@ import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectMember;
+import kr.or.houroffice.project.model.vo.ProjectPlan;
 
 @Repository("projectDAO")
 public class ProjectDAO {
@@ -103,6 +104,51 @@ public class ProjectDAO {
 
 	public int deleteProjectComment(int commentNo, SqlSessionTemplate sqlSession) {
 		int result = sqlSession.update("project.deleteProjectComment", commentNo);
+		return result;
+	}
+
+	public int updateProject(Project p, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProject",p);
+		return result;
+	}
+
+	public int updateProjectBoard(ProjectBoard pb, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectBoard",pb);
+		return result;
+	}
+
+	public int deleteProjectBoard(int boardNo, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.deleteProjectBoard",boardNo);
+		return result;
+	}
+
+	public int updateProjectMemberExit(ProjectMember pm, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectMemberExit",pm);
+		return result;
+	}
+
+	public int deleteProject(int proNo, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.deleteProject",proNo);
+		return result;
+	}
+
+	public int updateProjectMgrSet(ProjectMember pm, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectMgrSet",pm);
+		return result;
+	}
+
+	public int updateProjectMgrCancel(ProjectMember pm, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectMgrCancel",pm);
+		return result;
+	}
+
+	public int insertProjectPlan(ProjectPlan pp, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectPlan",pp);
+		return result;
+	}
+
+	public int updateProjectComplate(Project p, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.updateProjectComplate",p);
 		return result;
 	}
 

@@ -199,6 +199,11 @@
 	font-weight: 800;
 	font-size: 1rem;
 }
+#codeBox {
+	display: none;
+	width: 100%;
+	height: auto;
+}
 
 /* -----------------projectRight---------------------- */
 #backward {
@@ -1072,15 +1077,6 @@
 }
 
 /* ------------------ 할일 작성일 때----------------------*/
-.boardWriteText {
-	width: 100%;
-	padding: 30px;
-	font-family: "맑은 고딕";
-	font-size: 0.875rem;
-	resize: none;
-	border: 0;
-	outline: none;
-}
 
 #workBox {
 	width: 100%;
@@ -1151,4 +1147,10 @@
 
 #workHidden {
 	display: none;
+}
+
+#projectName {
+	color: white;
+	font-size: 1.50rem;
+	font-weight: 800;
 }

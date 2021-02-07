@@ -122,8 +122,8 @@
 			COMP_DATE as compDate,
 			MEM_COUNT as memCount
 		FROM PROJECT
-		WHERE PRO_NO IN
-        (SELECT PRO_NO FROM PRO_MEMBER WHERE MEM_NO=#{MEM_NO})
+		WHERE DEL_YN='N' AND PRO_NO IN
+        (SELECT PRO_NO FROM PRO_MEMBER WHERE MEM_NO=#{MEM_NO} AND DEL_YN='N')
 	</select>
 	
 	<!-- 프로젝트 즐겨찾기 등록 -->
@@ -181,4 +181,67 @@
 	<update id="deleteProjectComment">
 		UPDATE PRO_COMMENT SET DEL_YN='Y' WHERE COMMENT_NO=#{commentNo}
 	</update>
+	
+	<!-- 프로젝트 수정하기 -->
+	<update id="updateProject" parameterType="Project">
+		UPDATE PROJECT SET 
+			PRO_SUBJECT=#{proSubject},
+			PRO_EXP=#{proExp},
+			PUBLIC_YN=#{publicYN}
+		WHERE PRO_NO=#{proNo}
+	</update>
+	
+	<!-- 프로젝트 게시물 내용 수정 -->
+	<update id="updateProjectBoard" parameterType="ProjectBoard">
+		UPDATE PRO_Board SET 
+			BOARD_TEXT=#{boardText}
+		WHERE BOARD_NO=#{boardNo}
+	</update>
+	
+	<!-- 프로젝트 게시물 삭제 -->
+	<update id="deleteProjectBoard">
+		UPDATE PRO_BOARD SET 
+			DEL_YN='Y'
+		WHERE BOARD_NO=#{boardNo}
+	</update>
+	
+	<!-- 프로젝트 나가기 -->
+	<update id="updateProjectMemberExit" parameterType="ProjectMember">
+		UPDATE PRO_MEMBER SET 
+			DEL_YN='Y'
+		WHERE PRO_NO=#{proNo} AND MEM_NO=#{memNo}
+	</update>
+	
+	<!-- 프로젝트 삭제 -->
+	<update id="deleteProject" parameterType="Project">
+		UPDATE PROJECT SET 
+			DEL_YN='Y'
+		WHERE PRO_NO=#{proNo}
+	</update>
+	
+	<!-- 관리자 지정 -->
+	<update id="updateProjectMgrSet" parameterType="ProjectMember">
+		UPDATE PRO_MEMBER SET 
+			MGR_YN='Y'
+		WHERE PRO_NO=#{proNo} AND MEM_NO=#{memNo}
+	</update>
+	
+	<!-- 관리자 지정 해제 -->
+	<update id="updateProjectMgrCancel" parameterType="ProjectMember">
+		UPDATE PRO_MEMBER SET 
+			MGR_YN='N'
+		WHERE PRO_NO=#{proNo} AND MEM_NO=#{memNo}
+	</update>
+	
+	<!-- 일정 게시물 올리기 -->
+	<insert id="insertProjectPlan" parameterType="ProjectPlan">
+		INSERT INTO PRO_PLAN VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, #{subject}, #{memo}, #{startDate}, #{endDate}, 'N')
+	</insert>
+	<!-- 프로젝트 완료 미완료 처리 -->
+	<update id="updateProjectComplate" parameterType="Project">
+		UPDATE PROJECT SET 
+			COMP_YN=#{compYN}
+		WHERE PRO_NO=#{proNo}
+	</update>
+	
 </mapper>
