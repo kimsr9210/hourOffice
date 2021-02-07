@@ -1,18 +1,22 @@
 package kr.or.houroffice.member.controller;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -32,8 +36,8 @@ public class AdminMemberController {
 	
 	@Autowired
 	ServletContext context; // 파일 업로드시 필요한 객체 - 현재 프로젝트에 대한 정보를 가지고있는 객체
-	
-	// 사원 관리 all select
+	// 통합사원 ----------------------------------------------------------------------------------------------------------------------
+	// 사원 all select
 	@RequestMapping(value="/admin_tap_allListMember.ho")
 	public String allListMember(HttpSession session, HttpServletRequest request, Model model){
 		
@@ -69,7 +73,60 @@ public class AdminMemberController {
 		}else{ return "redirect:/login.jsp"; }// if문 - session
 		
 	}
-	
+	// 통합사원 사원 삭제 update (ajax)
+	@RequestMapping(value="/admin_tap_resignMember.ho")
+	public void resignMember(@RequestParam(value="memNoList[]") List<String> memNoList,HttpServletResponse response) throws IOException{
+		int result = mService.updateMemberResign(memNoList);
+		if(result>0){
+			response.getWriter().print(true);
+		}else {
+			response.getWriter().print(false);
+		}
+	}
+	// 통합사원 사원 직위 변경 update (ajax)
+	@RequestMapping(value="/admin_tap_changePosition.ho")
+	public void changePosition(@RequestParam("memNo") int memNo, @RequestParam("position") String memPosition, HttpServletResponse response) throws IOException{
+		int result = mService.updateMemberPosition(memNo, memPosition);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	// 통합사원 사원 검색 select
+	@RequestMapping(value="/admin_tap_search_allListMember.ho")
+	public String searchMember(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword, HttpServletRequest request, Model model){
+		if(searchType.equals("memNo")){ searchType = "MEM_NO"; // 사번으로 검색
+		}else if(searchType.equals("memName")){ searchType = "MEM_NAME"; } // 이름으로 검색
+		keyword = "%"+keyword+"%"; // 키워드 LIKE 처리
+		
+		int countAll = mService.selectCountAllMember();
+		
+		int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
+		if(request.getParameter("currentPage")==null) {
+			currentPage = 1;
+		}else {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}	
+		int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+		
+		ArrayList<Member> list = mService.selectSearchMember(searchType,keyword,currentPage,recordCountPerPage);
+		
+		int searchCount = list.size(); // 검색된 수
+			// 페이징 처리 - 네비
+		int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
+		String pageNavi = mService.searchGetPageNavi(currentPage,recordCountPerPage,naviCountPerPage,searchCount);
+		
+		if(list != null){
+			model.addAttribute("countAll",countAll);
+			model.addAttribute("list",list);
+			model.addAttribute("pageNavi", pageNavi);
+		}
+		
+		return "admin_tap/personnel_department/allListMember";
+	}
+
+	// 사원 등록 ------------------------------------------------------------------------------------------------------------------------
 	// 사원 등록 - view 페이지
 	@RequestMapping(value="/admin_tap_memberJoin.ho")
 	public String memberJoin(HttpSession session){
@@ -83,7 +140,7 @@ public class AdminMemberController {
 	}
 	// 사원 등록 - insert
 	@RequestMapping(value="/memberSingUp.ho")
-	public String memberSingUp(HttpSession session, HttpServletRequest request, Model model) throws Exception{
+	public String memberSingUp(HttpSession session, HttpServletRequest request, Model model) throws IOException{
 		
 		if(session.getAttribute("member")!=null){
 		
@@ -100,6 +157,10 @@ public class AdminMemberController {
 			MultipartRequest multi = new MultipartRequest(request,realUploadPath,uploadFileSizeLimit,encType,new DefaultFileRenamePolicy());
 			
 			// 이 위까지 하면 이미지 업로드 완료
+			// 멀티파트리퀘스트를 이용하면 매개변수를 객체로 받아올 수 없음 (방법을 모름)
+			// 그래서 모든 정보를 하나하나 객체에 넣으준다
+			// request.getParameter() 를 이용 하면 모두 null 값을 반환
+			// multi.getParameter() 를 이용 해야 매개변수를 가져올 수 있음
 			
 			// 멤버 
 			Member m = new Member();
@@ -120,7 +181,8 @@ public class AdminMemberController {
 			ArrayList<AcademicAbility> acaList = new ArrayList<AcademicAbility>();
 			
 			for(int i=0; i<multi.getParameterValues("acaSchoolName").length; i++){
-				if(multi.getParameterValues("acaSchoolName")[i]=="" && multi.getParameterValues("acaMajorName")[i]==""){  }else{
+				if(multi.getParameterValues("acaSchoolName")[i].equals("") && multi.getParameterValues("acaMajorName")[i].equals("")){  }else{
+					// 만약 학교명 과 전공명이 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
 					AcademicAbility aca = new AcademicAbility();
 					
 					if(multi.getParameterValues("acaEnrollDate")[i].charAt(0)!='0'){ aca.setAcaEnrollDate(Date.valueOf(multi.getParameterValues("acaEnrollDate")[i])); }
@@ -139,7 +201,8 @@ public class AdminMemberController {
 			ArrayList<License> licList = new ArrayList<License>();
 			
 			for(int j=0; j<multi.getParameterValues("licName").length; j++){
-				if(multi.getParameterValues("licName")[j]=="" && multi.getParameterValues("licOrigin")[j]==""){  }else{
+				if(multi.getParameterValues("licName")[j].equals("") && multi.getParameterValues("licOrigin")[j].equals("")){  }else{
+					// 만약 자격증명 과 시행처가 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
 					License lic = new License();
 					
 					if(multi.getParameterValues("licDate")[j].charAt(0)!='0'){ lic.setLicDate(Date.valueOf(multi.getParameterValues("licDate")[j])); }
@@ -154,7 +217,8 @@ public class AdminMemberController {
 			ArrayList<Career> carList = new ArrayList<Career>();
 									
 			for(int k=0; k<multi.getParameterValues("carPlace").length; k++){
-				if(multi.getParameterValues("carPlace")[k]==null && multi.getParameterValues("carPosition")[k]==null){  }else{
+				if(multi.getParameterValues("carPlace")[k].equals("") && multi.getParameterValues("carPosition")[k].equals("")){  }else{
+					// 만약 회사명 과 직위가 빈 값이 아니라면 실행 (디비에 넣겠다는 의미)
 					Career car = new Career();
 								
 					if(multi.getParameterValues("carJoinDate")[k].charAt(0)!='0'){ car.setCarJoinDate(Date.valueOf(multi.getParameterValues("carJoinDate")[k])); }
@@ -179,9 +243,9 @@ public class AdminMemberController {
 			boolean result = mService.insertMember(m,acaList,licList,carList,mil);
 			
 			if(result){
-				model.addAttribute("msg", "사원 등록이 완료되었습니다.");
+				model.addAttribute("msg", "사원 등록을 완료하였습니다.");
 			}else{
-				model.addAttribute("msg", "사원 등록에 실패하였습니다. \n지속적인 실패 시 관리자에 문의하세요.");
+				model.addAttribute("msg", "사원 등록을 실패하였습니다. \n지속적인 실패 시 관리자에 문의하세요.");
 			}
 			model.addAttribute("location", "/admin_tap_allListMember.ho");
 			return "result";
@@ -189,19 +253,51 @@ public class AdminMemberController {
 			return "redirect:login.jsp";
 		}
 	}
+	
 		
+	// 사원 정보 ------------------------------------------------------------------------------------------------------------------------
 	// 사원 정보 select & update
 	@RequestMapping(value="/admin_tap_memberInfo.ho")
-	public String memberInfo(HttpSession session){
+	public String memberInfo(Member m, HttpSession session, Model model){
+		Member oneMem = mService.selectOneMember(m); // MEMBER 테이블
 		
+		if(oneMem!=null){
+		
+			ArrayList<AcademicAbility> acaList = mService.selectOneMemberAca(m); // 학력
+			ArrayList<License> licList = mService.selectOneMemberLic(m); // 자격증
+			ArrayList<Career> carList = mService.selectOneMemberCar(m); // 경력
+			Military mil = mService.selectOneMemberMil(m);
+			
+			System.out.println(acaList.get(0).getMemNo()+" / "+acaList.get(0).getAcaEnrollDate()+" / "+acaList.get(0).getAcaGradDate()+" / "+acaList.get(0).getAcaSchoolName()+" / "+acaList.get(0).getAcaMajorName()+" / "+acaList.get(0).getAcaGrad());
+			System.out.println(licList.get(0).getMemNo()+" / "+licList.get(0).getLicDate()+" / "+licList.get(0).getLicName()+" / "+licList.get(0).getLicOrigin());
+			System.out.println(carList.get(0).getMemNo()+" / "+carList.get(0).getCarJoinDate()+" / "+carList.get(0).getCarResignDate()+" / "+carList.get(0).getCarPlace()+" / "+carList.get(0).getCarPosition()+" / "+carList.get(0).getCarContent());
+			System.out.println(mil.getMemNo()+" / "+mil.getMilJoinDate()+" / "+mil.getMilLeaveDate()+" / "+mil.getMilServiceType()+" / "+mil.getMilReason());
+			
+			HashMap<String,Object> map = new HashMap<String, Object>();
+			map.put("member", oneMem);
+			map.put("acaList", acaList);
+			map.put("licList", licList);
+			map.put("carList", carList);
+			map.put("mil", mil);
+			
+			model.addAttribute("info",map);
+			return "admin_tap/personnel_department/memberInfo";
+		}else{
+			model.addAttribute("msg","해당 사원의 정보가 없습니다. \n지속적인 문제발생시 관리자에 문의하세요.");
+			model.addAttribute("location","/admin_tap_allListMember.ho");
+			return "result";
+		}
+		/*
 		if(session.getAttribute("member")!=null){
 			return "admin_tap/personnel_department/memberInfo";
 		}else{
 			return "redirect:login.jsp";
 		}
-		
+		*/
 	}
 	
+	
+	// 조직도 ------------------------------------------------------------------------------------------------------------------------
 	// 조직도 select
 	@RequestMapping(value="/admin_tap_organizationChart.ho")
 	public String organizationChart(HttpSession session, Model model){
@@ -215,5 +311,57 @@ public class AdminMemberController {
 			return "redirect:login.jsp";
 		}*/
 		return "admin_tap/personnel_department/organizationChart";
+	}
+	// 사원 부서 이동 update
+	@RequestMapping(value="/admin_tap_changeDepartment.ho")
+	public String changePosition(@RequestParam(value="memNo") int[] memNo, @RequestParam String deptCode, Model model, HttpSession session){
+		int result = mService.updateMemberDepartment(memNo,deptCode);
+		if(result>0){
+			return organizationChart(session,model);
+			
+		}else{
+			model.addAttribute("msg","부서이동이 실패하였습니다. \n지속적인 오류시 관리자에 문의하세요.");
+			model.addAttribute("location","/admin_tap_organizationChart.ho");
+			return "result";
+		}
+	}
+	
+	// 부서 추가 insert
+	@RequestMapping(value="/admin_tap_addDepartment.ho")
+	public String addDepartment(@RequestParam("deptCode") String deptCode, @RequestParam("deptName") String deptName, Model model){
+		int result = mService.insertDepartment(deptCode,deptName);
+		
+		if(result>0){
+			model.addAttribute("msg","새로운 부서를 추가하였습니다.");
+		}else{
+			model.addAttribute("msg","새로운 부서 추가를 실패하였습니다. \n지속적인 오류시 관리자에 문의하세요.");
+		}
+		model.addAttribute("location", "/admin_tap_organizationChart.ho");
+		return "result";
+	}
+	
+	// 부서 이름 수정 update (ajax)
+	@RequestMapping(value="/admin_tap_modifyDepartmentName.ho")
+	public void modifyDepartmentName(@RequestParam("deptCode") String deptCode, @RequestParam("deptName") String deptName, HttpServletResponse response) throws IOException{
+		int result = mService.updateDepartmentName(deptCode,deptName);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+		
+	}
+	
+	// 부서 삭제 update
+	@RequestMapping(value="/admin_tap_dropDepartment.ho")
+	public String dropDepartment(@RequestParam("deptCode") String deptCode, Model model, HttpSession session){
+		int result = mService.updateDepartmentDelete(deptCode);
+		if(result>0){
+			return organizationChart(session,model);
+		}else{
+			model.addAttribute("msg","해당 부서 삭제를 실패하였습니다. \n지속적인 오류시 관리자에 문의하세요.");
+			model.addAttribute("location","/admin_tap_organizationChart.ho");
+			return "result";
+		}
 	}
 }
