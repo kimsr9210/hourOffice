@@ -80,8 +80,8 @@
                             <p>부서코드</p><br>
                             </div>
                             <div>
-                                <p class="dept-btn-div"><span id="deptName-InInfor">(부서명)</span><input type="text" class="deptName"/><span id="modityDept-icon" class="dept-update"><i class="fas fa-pen i-icon iconClass"></i></span></p><br>
-                                <p id="deptCode-InInfor">(부서코드)</p><br>
+                                <p class="dept-btn-div"><span id="deptName-InInfor">(없음)</span><input type="text" class="deptName"/><span id="modityDept-icon" class="dept-update"><i class="fas fa-pen i-icon iconClass"></i></span></p><br>
+                                <p id="deptCode-InInfor">(없음)</p><br>
                             </div>
                             <p>부서원</p>
                             <form id="change-form" action="/admin_tap_changeDepartment.ho" method="post">
@@ -150,6 +150,8 @@
             function treeControl (e) {
                 deptCode = $(this).attr('id');
                 
+                var tblText = '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>'; // 사원 정보 테이블
+                
                 if(deptCode!=null){
                 	
                 	
@@ -160,15 +162,12 @@
                 
                 	if(deptCode=='<%=member.getDeptCode() %>'){
                 		
-                		var tblText = '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
                 		$('#infor-div #deptName-InInfor').text('<%=member.getDeptName() %>');
                 		$('#infor-div #deptCode-InInfor').text('<%=member.getDeptCode() %>');
-                		<% int childNum = 1;%>
                 <% for(Member memInfo : list){ %>
                 <% 	if(member.getDeptCode().equals(memInfo.getDeptCode())){ %>
                 		$('#infor-div #change-form > table').html(tblText);
                 		tblText += '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
-                		<% childNum++; %>
                 <% }// if %>
                 <% }// for %>
                		 	tblText = '';
@@ -190,11 +189,33 @@
 		            	$('#infor-div #change-form tr:nth-child(1)').find('td:first-child>input').val('');
 		    			$('#infor-div #change-form tr:nth-child(1)').find('td:nth-child(2)').text('없음');
 		    			$('#infor-div #change-form tr:nth-child(1)').find('td:last-child').text('없음');
-            	<% } %>            		}
+            	<% } %>            		
+            		}
             	<% } %>
             	//---end
                 
                     $('#infor-div').show(); // 정보 div 열기
+                }else{
+                <% for(Member member : list){ %>
+                	if(<%=member.getDeptCode()%>==null){
+                		$('#infor-div #change-form > table').html(tblText);
+                		tblText += '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
+                	}
+                <% } %>
+                	tblText = '';
+                
+                var trNum = 1;
+                <% for(Member memInfor : list){ %>
+               	<% if(memInfor.getDeptCode()==null){ %>
+		               	$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:first-child>input').val('<%=memInfor.getMemNo() %>');
+		    			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:nth-child(2)').text('<%=memInfor.getMemName() %>');
+		    			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:last-child').text('<%=memInfor.getMemPosition() %>');
+		    			trNum++;
+                <% } %>
+                <% } %>
+                	
+                	$('#infor-div #modityDept-icon').hide();
+                	$('#infor-div').show(); // 정보 div 열기
                 }
                 
                 $('a').css('background-color',''); // 모든 a 태그 배경 삭제

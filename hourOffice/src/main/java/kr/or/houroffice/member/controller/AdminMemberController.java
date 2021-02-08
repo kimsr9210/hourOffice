@@ -261,9 +261,7 @@ public class AdminMemberController {
 			if(result>0){
 				// 파일 리네임
 				File file = new File(realUploadPath+"\\"+multi.getFilesystemName("memProfile")); // 파일 연결
-				System.out.println(realUploadPath+"\\"+multi.getFilesystemName("memProfile"));
 				file.renameTo(new File(realUploadPath+"\\"+profileRename+"_"+result+"."+ext)); // 실제 경로에 있는 파일 이름을 바꿈
-				System.out.println(realUploadPath+"\\"+profileRename+"_"+result+"."+ext);
 				model.addAttribute("msg", "사원 등록을 완료하였습니다.");
 			}else{
 				model.addAttribute("msg", "사원 등록을 실패하였습니다. \n지속적인 실패 시 관리자에 문의하세요.");
@@ -474,10 +472,10 @@ public class AdminMemberController {
 	// 부서 삭제 update
 	@RequestMapping(value="/admin_tap_dropDepartment.ho")
 	public String dropDepartment(@RequestParam("deptCode") String deptCode, Model model, HttpSession session){
-		int result = mService.updateDepartmentDelete(deptCode);
+		int result = mService.updateDepartmentDelete(deptCode+" ");
 		if(result>0){
 			return organizationChart(session,model);
-		}else{
+		}else{System.out.println("aa");
 			model.addAttribute("msg","해당 부서 삭제를 실패하였습니다. \n지속적인 오류시 관리자에 문의하세요.");
 			model.addAttribute("location","/admin_tap_organizationChart.ho");
 			return "result";
