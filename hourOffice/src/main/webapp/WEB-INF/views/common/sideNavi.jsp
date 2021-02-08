@@ -149,8 +149,8 @@
 
 		<ui class="categoryBox">
 		<li class="categoryName">인사 관리자</li>
-		<li class="categoryList"><a href="#">통합사원 관리</a></li>
-		<li class="categoryList"><a href="#">조직도 관리</a></li>
+		<li class="categoryList"><a href="/admin_tap_allListMember.ho">통합사원 관리</a></li>
+		<li class="categoryList"><a href="/admin_tap_organizationChart.ho">조직도 관리</a></li>
 		<li class="categoryName">총무 관리자</li>
 		<li class="categoryList"><a href="#">공지사항 관리</a></li>
 		<li class="categoryList"><a href="#">사내규정 관리</a></li>
