@@ -1,3 +1,7 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="kr.or.houroffice.board.model.vo.PartBoard"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,7 +42,7 @@
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
-						<span><a href="#"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span>
+						<span><a href="/writePostPartBoard.ho?deptCode=${list[0].deptCode }"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span>
 						<table>
                             <!--<tr style="padding:0;"><td colspan="4" style="padding:0;"><hr></td></tr>-->
                             <tr>
@@ -47,13 +51,25 @@
                                 <th>작성자</th>
                                 <th>작성일</th>
                             </tr>
-                            <!--<tr><td colspan="4" style="padding:0;"><hr></td></tr>-->
+                    <% SimpleDateFormat format = new SimpleDateFormat("yyyy. MM. dd."); %>
+                    <% Date toDay = new Date(System.currentTimeMillis()); // 현재 날짜 구하기 %>
+                  	<% ArrayList<PartBoard> list = (ArrayList<PartBoard>)request.getAttribute("list"); %>
+                  	<% if(!list.isEmpty()){ %>
+                  	<% for(PartBoard pb : list){ %>
                             <tr>
-                                <td>1</td>
-                                <td><div><a href="/partBoard.ho">ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</a></div></td>
-                                <td>주다빈 사원</td>
-                                <td>2021/01/28</td>
+                                <td><%=pb.getPartNo() %></td>
+                                <td><div><a href="/partBoard.ho?deptCode=<%=pb.getDeptCode()%>&partNo=<%=pb.getPartNo()%>"><%=pb.getPartContent() %></a></div></td>
+                                <td><%=pb.getPartWriter() %></td>
+                    <% if(format.format(pb.getPartDate()).equals(format.format(toDay))){ %>
+                    <% format = new SimpleDateFormat("hh:mm"); %>
+                    			<td><%=format.format(pb.getPartDate()) %></td>
+					<% }else{ %>
+								<td><%=format.format(pb.getPartDate()) %></td>
+                    <% } %>
+                                
                             </tr>
+                    <% } %>
+                    <% } %>
                         </table>
                         </form>
                         

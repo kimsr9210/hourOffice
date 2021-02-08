@@ -263,6 +263,7 @@
 	</insert>
 	
 	<!-- 한명의 사원 정보를 가져오는 매퍼는 맨 위에 있음 -->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 부서 select -->
 	<select id="deptAll" resultType="Department">
 		SELECT DEPT_CODE AS deptCode, DEPT_NAME AS deptName, DEPT_DEL_YN AS deptDelYN FROM DEPARTMENT WHERE DEPT_DEL_YN='N'
 	</select>

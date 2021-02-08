@@ -105,7 +105,7 @@
 		<li class="categoryList"><a href="#">공지사항 게시판</a></li>
 		<li class="categoryList"><a href="#">문의사항 게시판</a></li>
 		<li class="categoryName">부서 게시판</li>
-		<li class="categoryList"><a href="#">부서별 게시판</a></li>
+		<li class="categoryList"><a href="/allPartBoardPage.ho">부서별 게시판</a></li>
 		</ui>
 
 		<div id="categoryProject" class="sideNaviClick">
