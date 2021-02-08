@@ -62,7 +62,6 @@
                                 	<% } %>
                   
                                 	<% } %>
-                                	
                                             </ul>
                                         </li>
                                         
@@ -248,13 +247,10 @@
                     	type: 'post',
                     	success: function(result){
                     		if(result) {
-                    			alert('여기서 이름 변경해주기 jqeury 작성');
                     			$('#deptName-InInfor').text(newDeptName);
-                    			$('#deptName-D9').text(newDeptName);//--------------------------------------------------------------------------------------------------------------------------
+                    			$('#deptName-'+deptCode).text(newDeptName);
                     			$('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
                                 $('.dept-update').prev().hide('10000').val('').prev().show();
-                    			
-                    			alert('<a href="#subMenu'+deptCode+'" id="'+deptCode+'" class="open"><i class="fas fa-plus-square i-icon"></i> '+newDeptName+'</a>');
                     		}else{
                     			alert('부서명 변경을 실패했습니다. \n지속적인 오류시 관리자에 문의하세요.');
                     		}

@@ -412,6 +412,14 @@ public class AdminMemberController {
 	public String organizationChart(HttpSession session, Model model){
 		
 		ArrayList<Member> list = mService.selectOrganizationChart();
+		
+		//이 아래 forEach 구문은 DEPT_CODE안에 있는 공백 제거하는 코드
+		for(Member m : list){
+			if(m.getDeptCode()!=null){
+				m.setDeptCode(m.getDeptCode().replaceAll(" ", ""));
+			}
+		}
+		
 		model.addAttribute("list",list);
 		/*
 		if(session.getAttribute("member")!=null){
@@ -452,6 +460,8 @@ public class AdminMemberController {
 	// 부서 이름 수정 update (ajax)
 	@RequestMapping(value="/admin_tap_modifyDepartmentName.ho")
 	public void modifyDepartmentName(@RequestParam("deptCode") String deptCode, @RequestParam("deptName") String deptName, HttpServletResponse response) throws IOException{
+		deptCode = deptCode+" "; // DB에는 끝에 공백이 들어가 있어서 조직도에 뿌려줄 때 빼준 공백을 다시 넣어줌...
+								// 추후에 DB를 수정하게 되면 해당 코드는 없어져야함..
 		int result = mService.updateDepartmentName(deptCode,deptName);
 		if(result>0){
 			response.getWriter().print(true);
