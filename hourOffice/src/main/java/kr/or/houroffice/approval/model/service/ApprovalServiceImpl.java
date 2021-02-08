@@ -37,4 +37,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 		ArrayList<AprLineMember> list = aprDAO.selectCCCLinePeople(sqlSession,m);
 		return list;
 	}
+	
+	// BY 진원  - 자신이 결재해야할 문서개수 조회
+	public int selectMyAprLineCount(int memNo){
+		return aprDAO.selectMyAprLineCount(sqlSession, memNo);
+	}
 }

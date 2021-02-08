@@ -38,4 +38,13 @@
   		FROM MEM_DEPT WHERE DEPT_CODE IN ('D2',#{deptCode}) AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
   		ORDER BY DEPT_CODE
   	</select>
+  	
+  	<!-- BY 진원 - 자신이 결재해야할 문서개수 조회 -->
+  	<select id="selectMyAprLineCount" resultType="int">
+  		SELECT COUNT(DOCU_NO)
+  		FROM APPROVAL_LINE
+  		WHERE MEM_NO=#{memNo} AND APR_TYPE = 'W'
+  	</select>
+  	
+  	
 </mapper>

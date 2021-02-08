@@ -244,4 +244,18 @@
 		WHERE PRO_NO=#{proNo}
 	</update>
 	
+	<!-- BY 진원 - 한 게시물에 대한 댓글 목록 -->
+	<select id="selectOneBoardComment" resultType="ProjectComment">
+		SELECT 
+		    COMMENT_NO as commentNo,
+		    BOARD_NO as boardNo,
+		    MEM_NO as memNo,
+		    COMMENT_CON as commentCon,
+		    COMMENT_DATE as commentDate,
+		    DEL_YN as delYN
+		FROM PRO_COMMENT
+		WHERE DEL_YN='N' AND BOARD_NO =#{boardNo}
+		ORDER BY COMMENT_DATE DESC
+	</select>
+	
 </mapper>

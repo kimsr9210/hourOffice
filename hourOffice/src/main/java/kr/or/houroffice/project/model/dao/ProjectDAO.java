@@ -152,6 +152,12 @@ public class ProjectDAO {
 		return result;
 	}
 
+	//BY 진원 - 한 게시물에 대한 댓글 목록
+	public ArrayList<ProjectComment> selectOneBoardComment(SqlSessionTemplate sqlSession, int boardNo) {
+		List commentList = sqlSession.selectList("project.selectOneBoardComment", boardNo);
+		return (ArrayList<ProjectComment>) commentList;
+	}
+
 	
 
 	

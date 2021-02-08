@@ -344,5 +344,42 @@
 		FROM PRO_MEMBER
 		WHERE DEL_YN='N' AND PRO_NO=#{proNo})
 	</select>
+	
+	<!-- BY 진원 - 개인 근태기록 조회 -->
+	<select id="selectAttendanceMember" resultType="Attendance">
+		SELECT
+			MEM_NO as memNo,
+			START_DATE as startDate,
+			END_DATE as endDate,
+			TODAY_WORK as todayWork
+		FROM ATTENDANCE_BOOK
+		WHERE MEM_NO=#{memNo}
+		AND (TO_CHAR(END_DATE, 'YYYY-MM-DD') = TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD')
+			OR END_DATE IS NULL)
+	</select>
+	
+	<!-- BY 진원 - 개인 출근 기록 -->
+	<insert id="insertAttendanceMember">
+		INSERT INTO ATTENDANCE_BOOK VALUES(#{memNo},SYSTIMESTAMP,NULL,NULL)
+	</insert>
+	
+	<!-- BY 진원 - 개인 퇴근 기록 -->
+	<update id="updateAttendanceMember" parameterType="Attendance">
+		UPDATE ATTENDANCE_BOOK SET END_DATE=SYSTIMESTAMP, TODAY_WORK=#{todayWork}
+		WHERE MEM_NO=#{memNo}
+		AND (TO_CHAR(START_DATE, 'YYYY-MM-DD') = TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD')
+			OR END_DATE IS NULL)
+	</update>
+	
+	<!-- BY 진원 - 부서 목록 -->
+	<select id="selectAllDepartment" resultType="Department">
+		SELECT
+			DEPT_CODE AS deptCode,
+			DEPT_NAME AS deptName,
+			DEPT_DEL_YN AS deptDelYN
+		FROM DEPARTMENT
+		WHERE DEPT_DEL_YN='N'
+		ORDER BY DEPT_NAME
+	</select>
 
 </mapper>

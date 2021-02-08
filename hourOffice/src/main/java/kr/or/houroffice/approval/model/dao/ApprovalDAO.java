@@ -28,4 +28,9 @@ public class ApprovalDAO {
 		return (ArrayList<AprLineMember>)list;
 	}
 
+	public int selectMyAprLineCount(SqlSessionTemplate sqlSession, int memNo) {
+		int count = sqlSession.selectOne("approval.selectMyAprLineCount",memNo);
+		return count;
+	}
+
 }
