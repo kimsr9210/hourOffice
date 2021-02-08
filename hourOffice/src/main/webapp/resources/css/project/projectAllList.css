@@ -65,13 +65,14 @@
 	width: 20%;
 	float: left;
 	font-size: 1.2rem;
+	color: white;
 	cursor: pointer;
 }
 
-.projectLike>a {
-	text-decoration: none;
-	color: white;
+.likeBtn {
+	color: yellow;
 }
+
 
 /* 새 프로젝트 버튼 */
 #newProjectBtn {

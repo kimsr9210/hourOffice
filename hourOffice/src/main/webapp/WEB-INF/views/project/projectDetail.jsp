@@ -1,3 +1,7 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectComment"%>
+<%@page import="org.springframework.web.bind.annotation.SessionAttribute"%>
+<%@page import="javax.websocket.Session"%>
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectBoard"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectMember"%>
 <%@page import="java.util.ArrayList"%>
@@ -28,11 +32,60 @@
 <!-- TextArea 자동 높이 조절 CDN -->
 <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
+
+    		
+
 <%
 	Project p = (Project)request.getAttribute("project");
-	ArrayList<ProjectMember> projectMemberList = (ArrayList<ProjectMember>)request.getAttribute("projectMemberList");
+	ArrayList<Member> projectMemberList = (ArrayList<Member>)request.getAttribute("projectMemberList");
 	ArrayList<ProjectBoard> boardList = (ArrayList<ProjectBoard>)request.getAttribute("boardList");
+	ArrayList<Member> boardMemberList = (ArrayList<Member>)request.getAttribute("boardMemberList");
+	ArrayList<ProjectMember> projectMgrList = (ArrayList<ProjectMember>)request.getAttribute("projectMgrList");
+	ArrayList<ProjectComment> commentList = (ArrayList<ProjectComment>)request.getAttribute("commentList");
+	ArrayList<Project> favoriteList = (ArrayList<Project>)request.getAttribute("favoriteList");
+	String boardType = (String)request.getAttribute("boardType");
+	Member m = (Member)session.getAttribute("member");
+	
+	
+	boolean like = false;
+	for(Project project : favoriteList){
+		if(project.getProNo()==p.getProNo()){
+			like = true;
+		}
+	}
 %>
+
+
+
+<style>
+	<%if(boardType.equals("post")) {%>
+	#projectNavi>li:nth-child(1)>a{
+		color : #2CF2D8;
+		font-weight: bolder;
+		}
+	<%}else if(boardType.equals("file")){%>
+	#projectNavi>li:nth-child(2)>a{
+		color : #2CF2D8;
+		font-weight: bolder;
+		}
+	<%}else if(boardType.equals("code")){%>
+	#projectNavi>li:nth-child(3)>a{
+		color : #2CF2D8;
+		font-weight: bolder;
+		}
+	<%}else if(boardType.equals("plan")){%>
+	#projectNavi>li:nth-child(4)>a{
+		color : #2CF2D8;
+		font-weight: bolder;
+		}
+	<%}else if(boardType.equals("work")){%>
+	#projectNavi>li:nth-child(5)>a{
+		color : #2CF2D8;
+		font-weight: bolder;
+		}
+	<%}%>	
+</style>
+
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -48,18 +101,36 @@
                             <div id="projectDetail">
                                 <div id="DetailTop">
                                     <p id="projectName">
-                                        <i class="far fa-star"></i>&nbsp;&nbsp;<%=p.getProSubject() %>
-                                        <i id="projectSetting" class="fas fa-cog"></i>
+                                    
+                                        <span id="projectFavor">
+										<%if(!like){ %>
+										<i class="far fa-star"></i>
+										<%}else{ %>
+											<i class="fas fa-star likeBtn"></i>
+										<%} %>
+										</span>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
+										<%=p.getProSubject() %>
+                                        <%
+                                        	for(ProjectMember pm : projectMgrList){
+                                        		if(pm.getMemNo()==m.getMemNo()){
+                                        %>
+                                        <span id="projectSetting"><i class="fas fa-cog"></i></span>
+                                        	<% } %>
+                                        <% } %>
                                     </p>
                                     <div id="projectOption">
                                         <p class="optionBold">프로젝트 설정</p>
                                         <p id="projectExit" class="optionRegular">프로젝트 나가기</p>
-                                        <p id="projectModify" class="optionRegular">프로젝트 수정</p>
-                                        <p id="projectDelete" class="optionRegular">프로젝트 삭제</p>
+                                        <%if(m.getMemNo()==p.getMemNo()){ %>
+                                       	 	<p id="projectModify" class="optionRegular">프로젝트 수정</p>
+                                        	<p id="projectDelete" class="optionRegular">프로젝트 삭제</p>
+                                        <%} %>
                                         <hr>
                                         <p class="optionBold">프로젝트 관리자 설정</p>
-                                        <p id="mgrComment" class="optionRegular">글/댓글 작성 권한 설정</p>
-                                        <p id="mgrFile" class="optionRegular">파일 다운로드 권한 설정</p>
+                                        <p id="projectComplate" class="optionRegular">프로젝트 완료 설정</p>
                                         <hr>
                                         <p class="optionBold">프로젝트 번호</p>
                                         <p class="optionRegular"><%=p.getProNo() %></p>
@@ -70,12 +141,12 @@
                                 </div>
                                 <div id="DetailBot">
                                     <ui id="projectNavi">
-                                        <li><a href="#"><i class="fas fa-list"></i> 전체</a></li>
-                                        <li><a href="#"><i class="fas fa-file"></i> 파일</a></li>
-                                        <li><a href="#"><i class="fas fa-laptop-code"></i> 코드</a></li>
-                                        <li><a href="#"><i class="far fa-calendar"></i> 일정</a></li>
-                                        <li><a href="#"><i class="fas fa-briefcase"></i> 할일</a></li>
-                                        <li><a href="#" id="memberAllListNavi"><i class="fas fa-users"></i> 멤버</a></li>
+                                        <li><a id="postNavi"><i class="fas fa-list"></i> 일반</a></li>
+                                        <li><a id="fileNavi"><i class="fas fa-file"></i> 파일</a></li>
+                                        <li><a id="codeNavi"><i class="fas fa-laptop-code"></i> 코드</a></li>
+                                        <li><a id="planNavi"><i class="far fa-calendar"></i> 일정</a></li>
+                                        <li><a id="workNavi"><i class="fas fa-briefcase"></i> 할일</a></li>
+                                        <li><a id="memberAllListNavi"><i class="fas fa-users"></i> 멤버</a></li>
                                     	
                                     </ui>
                                     <form action="/projectBoardWrite.ho" method="post">
@@ -86,58 +157,112 @@
                             </div>
                             
                             <!-- 게시물 여러개 -->
+                            <%if(boardType.equals("post")){ %>
                             <%for(ProjectBoard pb : boardList){ %>
+                            <%String name = ""; %>
+                            <%for(Member member : boardMemberList){ %>
+                            	<%if(member.getMemNo()==pb.getMemNo()){ %>
+                            	<%name = member.getMemName(); %>
+                            	<%} %>
+                            <%} %>
                             <div class="boardBox">
                             
                                 <div class="boardInfo">
                                     <div class="memberImg"><i class="fas fa-user-circle"></i></div>
                                     <div class="memberInfo">
-                                        <div class="memberName">백두진</div>
+                                    
+                                        <div class="memberName"><%=name %></div>
+                                    
                                         <div class="boardTime"><%=pb.getBoardDate() %></div>
                                     </div>
                                     <!--관리자 일 때-->
+                                    <%if(pb.getMemNo()==m.getMemNo()){ %>
                                     <div class="memberAdmin">
-                                        <i class="fas fa-ellipsis-v boardSet"></i>
+                                        <span class="boardSet"><i class="fas fa-ellipsis-v"></i></span>
                                         <div class="boardModifyBox">
-                                            <div id="boardModify" class="boardModifyList">게시물 수정</div>
-                                            <div id="boardDelete" class="boardModifyList">게시물 삭제</div>
+                                            <div class="boardModifyList boardModify">게시물 수정</div>
+                                            <div class="boardModifyList boardDelete">게시물 삭제</div>
+                                            <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
                                         </div>
                                     </div>
+                                    <%} %>
                                     <!--------------->
                                 </div>
                                 
                                 <div class="boardContents">
-                                    <textarea class="textarea"  disabled="disabled" readonly="readonly"><%=pb.getBoardText() %></textarea>
+                                	<form action="/updateProjectBoard.ho" method="post">
+	                                    <textarea class="textarea"  disabled="disabled" readonly="readonly" name="boardText"><%=pb.getBoardText() %></textarea>
+	                                    <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+	                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+	                                    <span class="boardModifyBtn textHide">수정&nbsp;</span>
+	                                    <span class="modifyCancelBtn textHide">취소</span>
+                                    </form>
                                 </div>
-                                
+                                <%
+                                int count = 0;
+                                for(ProjectComment pc : commentList){
+                                	if(pb.getBoardNo()==pc.getBoardNo()){
+                                		count++;
+                                	}
+                                }
+                                	
+                                %>
                                 <div class="commentCount">
-                                    1개 댓글
+                                    <%=count %>개 댓글
                                 </div>
                                 <!-- 댓글 하나 코드 -->
+                                <%for(ProjectComment pc : commentList){ %>
+                                <%if(pc.getBoardNo()==pb.getBoardNo()){ %>
+                                <%
+                                	String memName = "";
+                                	for(Member member : boardMemberList){
+                                		if(pc.getMemNo()==member.getMemNo()){
+                                			memName = member.getMemName();
+                                		}
+                                	}
+                                %>
                                 <div class="commentList">
                                     <div class="commentUserImg">
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div class="commentInfo">
-                                        <div class="commentName">백두진<span class="commentTime">2021-01-26 16:40</span></div>
-                                        <textarea class="commentTextArea" disabled="disabled" readonly="readonly">여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.여기는 댓글입니다.</textarea>
+                                        <div class="commentName">
+                                        	<%=memName %><span class="commentTime"><%=pc.getCommentDate() %></span>
+                                        	<%if(pc.getMemNo()==m.getMemNo()){ %>
+	                                        <span class="commentModifyBtn">수정</span>
+	                                        <span  class="commentDeleteBtn">삭제</span>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+	                                        <%} %>
+                                        </div>
+                                        <form action="/updateProjectComment.ho" method="get">
+	                                        <textarea class="commentTextArea" name="commentCon" disabled="disabled" readonly="readonly"><%=pc.getCommentCon() %></textarea>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo()%>"/>
+	                                        <input type="hidden" name="memNo" value="<%=pc.getMemNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+                                        </form>
                                     </div>
                                 </div>
-                                
+                                <%} %>
+                                <%} %>
                                 
                                 <div class="commentWrite">
                                     <div class="commentUser">
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div class="commentText">
-                                        <form action="#" method="post">
-                                            <input class="boardComment" type="text" name="comment" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
+                                        <form action="/insertBoardComment.ho" method="post">
+                                            <input class="boardComment" type="text" name="commentCon" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
+                                            <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+                                            <input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
                                         </form>
                                     </div>
                                 </div>
                                 
                                 
                             </div>
+                            <%} %>
                             <%} %>
                             
                             
@@ -152,16 +277,12 @@
                                 <div id="memberListBot">
                                     
                                     <!-- 멤버 목록 여러개 -->
+                                    <%for(Member member : projectMemberList) {%>
                                     <div class="memberList">
                                         <div><i class="fas fa-user-circle"></i></div>
-                                        <div class="memberListName">백두진</div>
+                                        <div class="memberListName"><%=member.getMemName() %></div>
                                     </div>
-                                    
-                                    <div class="memberList">
-                                        <div><i class="fas fa-user-circle"></i></div>
-                                        <div class="memberListName">이진원</div>
-                                    </div>
-                                    
+                                    <%} %>
                                     
                                 </div>
                                 
@@ -174,28 +295,30 @@
 		</div>
 	</div>
 	
-	    <!-- 새 프로젝트 박스 -->
+	<!-- 새 프로젝트 박스 -->
     <div id="newProjectBox">
         <div id="newProjectHeader">
             프로젝트 수정<div id="newProjectExit"><i class="fas fa-times"></i></div>
         </div>
-        <form id="projectForm" action="#" method="get">
-            <input type="text" value="<%=p.getProSubject() %>" name="pro_subject" id="newProjectSubject" />
-            <textarea placeholder="설명 글을 입력할 수 있습니다." name="pro_exp" id="newProjectExplain" ><%=p.getProExp() %></textarea>
+        <form id="projectForm" action="/updateProject.ho" method="post">
+            <input type="text" value="<%=p.getProSubject() %>" name="proSubject" id="newProjectSubject" />
+            <textarea placeholder="설명 글을 입력할 수 있습니다." name="proExp" id="newProjectExplain" ><%=p.getProExp() %></textarea>
             <br><br>
             <div id="newProjectOption">옵션 설정</div>
             <div class="optionList">
-                <section class="setting st-login">
-                <p><i class="fas fa-check"></i> 공개 프로젝트 여부
-                        <label class="btn-switch">
-                            <input type="checkbox" name="public_yn">
-                            <i class="slide-object"></i>
-                        </label>
-                    </p>
-                </section>
-            </div>
+				<section class="setting st-login">
+				<p>
+					<i class="fas fa-check"></i> 공개 프로젝트 여부 <label class="btn-switch">
+						<input type="checkbox" name="publicYN" id="public_check" value="on"/> <i
+						class="slide-object"></i>
+					</label>
+				</p>
+				</section>
+			</div>
+			<input type="hidden" name="publicYN" id="public_check_hidden" value="off"/>
             <br>
-            <input type="hidden" name="mem_no"/>
+            <input type="hidden" name="memNo" value="<%=p.getMemNo()%>"/>
+            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
             <div class="projectBtnSize">
                 <button type="submit" id="newProjectSubmitBtn">프로젝트 수정</button>
             </div>
@@ -205,7 +328,7 @@
     <!-- 프로젝트 멤버 추가 하기 -->
     <div id="inviteBox">
         <div id="inviteHeader">
-            <i id="inviteExit" class="fas fa-times"></i>
+            <span id="inviteExit"><i class="fas fa-times"></i></span>
             <div id="inviteName">초대하기</div>
         </div>
         <div id="inviteSearchBox">
@@ -233,7 +356,7 @@
     <!--참가자 목록 -->
     <div id="memberAllListBox">
         <div id="memberAllListHeader" class="displayNone">
-            <i id="memberAllListExit" class="fas fa-times"></i>
+            <span id="memberAllListExit"><i class="fas fa-times"></i></span>
             <div id="memberAllListName">프로젝트 참가자</div>
         </div>
         <div id="memberAllListSearchBox" class="displayNone">
@@ -244,60 +367,94 @@
         <div id="memberAllListContents">
             
             <!--얘가 여러개 생겨남-->
+            <%for(Member member : projectMemberList) {%>
+            <%
+            	char sessionMgrYN = 'N';
+            	char mgrYN = 'N';
+            	for(ProjectMember pm : projectMgrList){
+            		if(member.getMemNo()==pm.getMemNo()){
+            			mgrYN = pm.getMgrYN();
+            		}
+            		if(pm.getMgrYN()=='Y'){
+            			if(pm.getMemNo()==m.getMemNo()){
+            				sessionMgrYN = 'Y';
+            			}
+            		}
+            	}
+            %>
             <div class="memberAllListLabel">
                 <div class="memberAllListImg displayNone"><i class="fas fa-user-circle"></i></div>
                 <div class="memberAllListInfo displayNone">
-                    <div class="memberAllListName">이름</div>
-                    <div class="memberAllListPosition">직급</div>
+                    <div class="memberAllListName"><%=member.getMemName() %></div>
+                    <div class="memberAllListPosition"><%=member.getMemPosition() %></div>
                 </div>
                 <div class="memberAllListSet">
+                <%if(mgrYN=='Y'){ %>
                     <div class="memberAllListSetAdminDis displayNone">관리자</div>
+               	<%} %>
+               	<%if(sessionMgrYN=='Y'||member.getMemNo()==m.getMemNo()){ %>
                     <div class="memberAllListSetAdmin"><i class="fas fa-ellipsis-v"></i>
                         <!-- 프로젝트 관리자만 보임 -->
                         <div class="memberAdminBox">
-                            <div id="" class="memberAdminList">나가기</div>
-                            <div id="" class="memberAdminList">내보내기</div>
-                            <div id="" class="memberAdminList">관리자 지정</div>
-                            <div id="" class="memberAdminList">관리자 지정 해제</div>
+                        <%if(m.getMemNo()==member.getMemNo()){ %>
+                            <div class="memberAdminList outProject">나가기</div>
+                        <%} else{%>
+                            <div class="memberAdminList outProjectMember">내보내기</div>
+                            <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
+                            <input type="hidden" name="" value="<%=member.getMemName() %>"/>
+                        <%} %>
+                        <%if(mgrYN=='N'){ %>
+                            <div class="memberAdminList adminSet">관리자 지정</div>
+                            <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
+                            <input type="hidden" name="" value="<%=member.getMemName() %>"/>
+                        <%}else{%>
+                            <div class="memberAdminList adminCancel">관리자 지정 해제</div>
+                            <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
+                            <input type="hidden" name="" value="<%=member.getMemName() %>"/>
+                        <%} %>
                         </div>
                         <!--  -->
                     </div>
+                 <%} %>
                 </div>
             </div>
-            
+            <%} %>
             
         </div>
     </div>
         
-    <div id="boardCommentSet">
-        <div id="boardCommentHeader">
-            <i id="boardCommentExit" class="fas fa-times"></i>
-            <div id="boardCommentName">글/댓글 작성 권한 설정</div>
-        </div>
-        <div id="boardCommentContents">
-            <hr>
-            <p class="boardCommentBold">글</p>
-            <p class="boardCommentRegular"><input type="radio" name="board" value="all"/> 전체 작성 가능</p>
-            <p class="boardCommentRegular"><input type="radio" name="board" value="admin"/> 프로젝트 관리자만 작성 가능</p>
-            <hr>
-            <p class="boardCommentBold">댓글</p>
-            <p class="boardCommentRegular"><input type="radio" name="comment" value="all"/> 전체 작성 가능</p>
-            <p class="boardCommentRegular"><input type="radio" name="comment" value="admin"/> 프로젝트 관리자만 작성 가능</p>
-        </div>
-    </div>
     
-    <div id="fileSet">
-        <div id="fileHeader">
-            <i id="fileExit" class="fas fa-times"></i>
-            <div id="fileName">파일 다운로드 권한 설정</div>
-        </div>
-        <div id="fileContents">
-            <hr>
-            <p class="fileRegular"><input type="radio" name="file" value="all"/> 전체 다운로드 가능</p>
-            <p class="fileRegular"><input type="radio" name="file" value="admin"/> 관리자 + 글 작성 본인만 다운로드 가능</p>
-        </div>
-    </div>
+    
+    <form id="workListForm" action="/projectDetail.ho" method="post">
+    	<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+    	<input type="hidden" name="boardType" value="work"/>
+    </form>
+    
+    <form id="postListForm" action="/projectDetail.ho" method="post">
+    	<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+    	<input type="hidden" name="boardType" value="post"/>
+    </form>
+    
+    <form id="codeListForm" action="/projectDetail.ho" method="post">
+    	<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+    	<input type="hidden" name="boardType" value="code"/>
+    </form>
+    
+    <form id="planListForm" action="/projectDetail.ho" method="post">
+    	<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+    	<input type="hidden" name="boardType" value="plan"/>
+    </form>
+    
+    <form id="fileListForm" action="/projectDetail.ho" method="post">
+    	<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+    	<input type="hidden" name="boardType" value="file"/>
+    </form>
     <!-- 자바 스크립트    -->
+    <script>
+    	$(function(){
+    		
+    	});
+    </script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectDetail.js"></script>
 </body>

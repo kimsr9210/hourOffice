@@ -1,3 +1,5 @@
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -17,12 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/organizationChart.css" />
-	
-	<style>
-        /*div{
-            border: 1px solid #FFD8D8;
-        }*/
-    </style>
     
 	
 </head>
@@ -41,41 +37,39 @@
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
+						<% ArrayList<Member> list = (ArrayList<Member>)request.getAttribute("list"); %>
 						
 						<div id="contWrapper">
                         <div id="btnDiv">
-                            <button type="button" id="addBtn">+</button> <button type="button" class="delBtn">-</button>
+                            <button type="button" id="addBtn">+</button> <button type="button" class="delBtn">-</button><form action="/admin_tap_dropDepartment.ho" method="post" style="display:none"><input type="text" name="deptCode"/></form>
                         </div>
                         <div id="chart" class="float">
                             <ul id="treeMenu">
                                 <li>
                                     <i class="fas fa-building i-icon"></i><a href="#menu-top" class="open">칠판 그룹</a>
                                     <ul id="menu-top">
+                          			<% ArrayList<String> deptCodeList = new ArrayList<String>(); %>
+									<% for(Member member : list){ %>
+									<% if(!deptCodeList.contains(member.getDeptCode()) && member.getDeptCode()!=null){ %>
+									<% deptCodeList.add(member.getDeptCode()); %>	
                                         <li>
-                                            <a href="#subMenu1" id="D4" class="open"><i class="fas fa-plus-square i-icon"></i> 개발</a>
-                                            <ul id="subMenu1">
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
+                                            <a href="#subMenu<%=member.getDeptCode() %>" id="<%=member.getDeptCode() %>" class="open"><i class="fas fa-plus-square i-icon"></i> <span id="deptName-<%=member.getDeptCode() %>"><%=member.getDeptName() %></span></a>
+                                            <ul id="subMenu<%=member.getDeptCode() %>">
+                                	<% for(Member memInfo : list){ %>
+
+                                	<% if(member.getDeptCode().equals(memInfo.getDeptCode()) && memInfo.getMemName()!=null){ %>
+                                                <li><i class="fas fa-user-tie i-icon" style="cursor:default"></i> <a><%=memInfo.getMemName() %></a></li>
+                                	<% } %>
+                  
+                                	<% } %>
+                                	
                                             </ul>
                                         </li>
-                                        <li>
-                                            <a href="#subMenu2" id="D5" class="open"><i class="fas fa-plus-square i-icon"></i> 디자인</a>
-                                            <ul id="subMenu2">
-                                                <li><i class="fas fa-user-tie i-icon"></i> <a>주다빈</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#subMenu3" class="open"><i class="fas fa-plus-square i-icon"></i> 전산</a>
-                                            <ul id="subMenu3"></ul>
-                                        </li>
-                                        <li>
-                                            <a class="open"><i class="fas fa-plus-square i-icon"></i> 인사</a>
-                                            <ul id="subMenu4"></ul>
-                                        </li>
-                                        <li class="end">
-                                            <a class="open"><i class="fas fa-plus-square i-icon"></i> 총무</a>
-                                            <ul id="subMenu5"></ul>
-                                        </li>
+                                        
+                                	<% }else if(member.getDeptCode()==null){ %>
+                                		<li class="deptHaveno" style="margin: 0 5px;"><i class="fas fa-user-tie i-icon" style="cursor:default"></i> <a><%=member.getMemName() %></a></li>
+									<% } %>
+                                    <% } %>    
                                     </ul>
                                 </li>
                             </ul>
@@ -87,26 +81,28 @@
                             <p>부서코드</p><br>
                             </div>
                             <div>
-                                <p><span>개발</span><input type="text" class="deptName"/><i class="fas fa-pen dept-update i-icon"></i></p><br>
-                                <p>D4</p><br>
+                                <p class="dept-btn-div"><span id="deptName-InInfor">(부서명)</span><input type="text" class="deptName"/><span id="modityDept-icon" class="dept-update"><i class="fas fa-pen i-icon iconClass"></i></span></p><br>
+                                <p id="deptCode-InInfor">(부서코드)</p><br>
                             </div>
                             <p>부서원</p>
-                            <form id="change-form">
+                            <form id="change-form" action="/admin_tap_changeDepartment.ho" method="post">
                                 <table>    
                                     <tr>
-                                        <td><input type="checkbox" name="memNo" value="210126"/>
-                                        <td>주다빈</td>
-                                        <td>사원</td>
+                                        <td><input type="checkbox" name="memNo"/>
+                                        <td>(사원명)</td>
+                                        <td>(직위)</td>
                                     </tr>
                                 </table>
                                 <div id="positionChange">
                                    <select name="deptCode">
                                        <option value=""></option>
-                                       <option value="D1">인 &nbsp;사</option>
-                                        <option value="D2">총 &nbsp;무</option>
-                                        <option value="D3">전 &nbsp;산</option>
-                                        <option value="D4">개 &nbsp;발</option>
-                                        <option value="D5">디자인</option>
+                                <% for(String deptData : deptCodeList){ %>
+                                <% for(Member deptInfo : list){ %>
+                                <% if(deptData.equals(deptInfo.getDeptCode())){ %>
+                                       <option value="<%=deptInfo.getDeptCode() %>"><%=deptInfo.getDeptName() %></option>
+                                <% break; } %>
+                                <% } %>
+                                <% } %>
                                    </select>
                                     <button type="button" id="change-btn">부서이동</button>
                                 </div>
@@ -123,7 +119,7 @@
                 <p>부서명</p><br>
                 <p>부서코드 <i class="fas fa-question-circle i-icon" title="예) D1 또는 P3, 중복비허용"></i></p>
             </div>
-            <form>
+            <form action="/admin_tap_addDepartment.ho" method="post">
                 <div id="modal-right">
                     <p><input type="text" name="deptName"/></p><br>
                     <p><input type="text" name="deptCode"/></p>
@@ -134,17 +130,8 @@
    
         <div class="modal-layer"></div>
     </div>
-						
-						<!----------------------------------->
-					</div>
-				</div>
-			</div>
-		</div>
-		
-	<!-- 자바 스크립트    -->
-	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
-	
-	<script>
+    
+    <script>
         $(function(){
             // 조직도 셋팅
             var opener = $("a.open");
@@ -163,10 +150,51 @@
             var deptCode = ""; // 부서 코드 
             function treeControl (e) {
                 deptCode = $(this).attr('id');
-                alert(deptCode);
                 
                 if(deptCode!=null){
-                    //$.ajax(); 여기서 아작스처리해주기!!
+                	
+                	
+                <% deptCodeList = new ArrayList<String>(); %>
+                <% for(Member member : list){ %>
+                <% if(!deptCodeList.contains(member.getDeptCode()) && member.getDeptCode()!=null){ %>
+                <% deptCodeList.add(member.getDeptCode()); // 부서코드 중복비허용을 위한 코드 %>
+                
+                	if(deptCode=='<%=member.getDeptCode() %>'){
+                		
+                		var tblText = '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
+                		$('#infor-div #deptName-InInfor').text('<%=member.getDeptName() %>');
+                		$('#infor-div #deptCode-InInfor').text('<%=member.getDeptCode() %>');
+                		<% int childNum = 1;%>
+                <% for(Member memInfo : list){ %>
+                <% 	if(member.getDeptCode().equals(memInfo.getDeptCode())){ %>
+                		$('#infor-div #change-form > table').html(tblText);
+                		tblText += '<tr><td><input type="checkbox" name="memNo"/></td><td></td><td></td></tr>';
+                		<% childNum++; %>
+                <% }// if %>
+                <% }// for %>
+               		 	tblText = '';
+                	}// if - 추출한 부서코드가 member 부서코드랑 같을 때 - tr을 반복 추가하는 코드
+                	
+                <% }// if - 부서코드 중복비허용 코드%>
+                <% }// for %>
+                // 각 부서 정보 내의 사원 리스트 정보 추가하기
+                var trNum = 1;
+            	<% for(Member memInfor : list){ %>
+            		if(deptCode=='<%=memInfor.getDeptCode() %>'){
+            	<% if(memInfor.getMemName()!=null){ %>
+	            		$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:first-child>input').val('<%=memInfor.getMemNo() %>');
+	        			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:nth-child(2)').text('<%=memInfor.getMemName() %>');
+	        			$('#infor-div #change-form tr:nth-child('+trNum+')').find('td:last-child').text('<%=memInfor.getMemPosition() %>');
+	        				
+            		trNum++;
+            	<% }else{ %>
+		            	$('#infor-div #change-form tr:nth-child(1)').find('td:first-child>input').val('');
+		    			$('#infor-div #change-form tr:nth-child(1)').find('td:nth-child(2)').text('없음');
+		    			$('#infor-div #change-form tr:nth-child(1)').find('td:last-child').text('없음');
+            	<% } %>            		}
+            	<% } %>
+            	//---end
+                
                     $('#infor-div').show(); // 정보 div 열기
                 }
                 
@@ -196,26 +224,45 @@
             
             // 부서 삭제
             $('.delBtn').click(function(){
-                alert(deptCode);
-                if(confirm('해당 부서를 정말 삭제하시겠습니까?')){
-                    //$.ajax();
-                }
+            	if(deptCode!=null){
+	                if(confirm('해당 부서를 정말 삭제하시겠습니까?')){
+	                	$(this).next().children().val(deptCode);
+	                	$(this).next().submit();
+	                }
+            	}
             });
             
             // 부서 이름 변경
             $('.dept-update').click(function(){
-                
                 var newDeptName = $(this).prev().val();
                 var deptCode = $(this).parent().next().next().text();
                 
-                if($(this).attr('class').indexOf('fa-pen')>-1){
-                    $(this).removeClass('fa-pen').addClass('fa-check-circle').prev().show('10000').focus().prev().hide();
-                    
-                    
+                if($(this).children('.i-icon').attr('class').indexOf('fa-pen')>-1){
+                    $(this).children('.i-icon').removeClass('fa-pen').addClass('fa-check-circle');
+                    $(this).prev().show('10000').focus().prev().hide();
                 }else{
-                    // ajax 처리
+                    if(newDeptName!=""){
+                    $.ajax({
+                    	url: '/admin_tap_modifyDepartmentName.ho',
+                    	data: {'deptName':newDeptName,'deptCode':deptCode},
+                    	type: 'post',
+                    	success: function(result){
+                    		if(result) {
+                    			alert('여기서 이름 변경해주기 jqeury 작성');
+                    			$('#deptName-InInfor').text(newDeptName);
+                    			$('#deptName-D9').text(newDeptName);//--------------------------------------------------------------------------------------------------------------------------
+                    			$('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
+                                $('.dept-update').prev().hide('10000').val('').prev().show();
+                    			
+                    			alert('<a href="#subMenu'+deptCode+'" id="'+deptCode+'" class="open"><i class="fas fa-plus-square i-icon"></i> '+newDeptName+'</a>');
+                    		}else{
+                    			alert('부서명 변경을 실패했습니다. \n지속적인 오류시 관리자에 문의하세요.');
+                    		}
+                    	},
+                    	error: function(){alert('부서명 변경을 실패했습니다. \n관리자에 문의바랍니다.');}
+                    });
                     
-                    
+                    }
                 }
                 
                 
@@ -223,20 +270,30 @@
             
             // 부서 이름 변경 취소
             $('body').click(function(e){
-                var $popCallBtn = $(e.target).hasClass('dept-update')
-                var $popArea = $(e.target).hasClass('deptName')
+                
+                var $place = $(e.target).hasClass('dept-btn-div'); // p 태그
+                var $deptNameInInfor = $(e.target).is('path'); // i 태그 안의 path 태그
+                var $deptName = $(e.target).hasClass('deptName'); // 부서명 span 태그
+                var $modityDeptIcon = $(e.target).hasClass('dept-update'); // i 태그 감싼 span 태그
+                var $iconClass = $(e.target).hasClass('iconClass'); // i 태그
                 if($('.deptName').css('display') != 'none'){
-                    if ( !$popCallBtn && !$popArea ) {
-                        $('.dept-update').removeClass('fa-check-circle').addClass('fa-pen').prev().hide('10000').prev().show();
+                    if ( ((!$place && !$deptNameInInfor) && (!$deptName && !$modityDeptIcon)) && !$iconClass) {
+                        $('.dept-update').children('.i-icon').removeClass('fa-check-circle').addClass('fa-pen');
+                        $('.dept-update').prev().hide('10000').val('').prev().show();
+                        
                     }
                 }
+                    e.stopImmediatePropagation(); // 버블링 방지
             });
             
             // 부서 이동 btn
             $('#change-btn').click(function(){
-                if(confirm('해당 사원의 부서를 이동하시겠습니까?')){
-                    $('#change-form').submit();
-                }
+            	// checkbox 들 중에 checked가 존재 하면 실행
+            	if($('input[name=memNo]').is(':checked')){ 
+	                if(confirm('해당 사원의 부서를 이동하시겠습니까?')){
+	                    $('#change-form').submit();
+	                }	
+            	}
             });
             
             // 모달 닫기
@@ -244,14 +301,26 @@
                 $('#modal').hide();
                 $('#modal input').val('');
             });
-            
-            
-
         })
         
             
        
     </script>  
+    
+    
+    
+    
+						
+						<!----------------------------------->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	<!-- 자바 스크립트    -->
+	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
+	
+	
 
 	</div>
 </body>

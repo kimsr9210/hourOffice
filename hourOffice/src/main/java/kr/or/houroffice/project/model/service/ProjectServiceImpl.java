@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import kr.or.houroffice.project.model.dao.ProjectDAO;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectComment;
+import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectMember;
+import kr.or.houroffice.project.model.vo.ProjectPlan;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService{
@@ -79,5 +82,95 @@ public class ProjectServiceImpl implements ProjectService{
 		ArrayList<ProjectBoard> boardList = pDAO.selectProjectBoardList(proNo, sqlSession);
 		return boardList;
 	}
+
+	public ArrayList<Project> selectMyProjectList(int memNo) {
+		ArrayList<Project> myProjectList = pDAO.selectMyProjectList(memNo, sqlSession);
+		return myProjectList;
+	}
+
+	public int insertProjectFavor(ProjectFavorite pf) {
+		int result = pDAO.insertProjectFavor(pf, sqlSession);
+		return result;
+	}
+
+	public ArrayList<Project> selectProjectFavoriteList(int memNo) {
+		ArrayList<Project> favoriteList = pDAO.selectProjectFavoriteList(memNo, sqlSession);
+		return favoriteList;
+	}
+
+	public int deleteProjectFavor(ProjectFavorite pf) {
+		int result = pDAO.deleteProjectFavor(pf, sqlSession);
+		return result;
+	}
+
+	public int insertBoardComment(ProjectComment pc) {
+		int result = pDAO.insertBoardComment(pc, sqlSession);
+		return result;
+	}
+
+	public ArrayList<ProjectComment> selectBoardCommentList(int proNo) {
+		ArrayList<ProjectComment> commentList = pDAO.selectBoardCommentList(proNo, sqlSession);
+		return commentList;
+	}
+
+	public int updateProjectComment(ProjectComment pc) {
+		int result = pDAO.updateProjectComment(pc, sqlSession);
+		return result;
+	}
+
+	public int deleteProjectComment(int commentNo) {
+		int result = pDAO.deleteProjectComment(commentNo, sqlSession);
+		return result;
+	}
+
+	public int updateProject(Project p) {
+		int result = pDAO.updateProject(p, sqlSession);
+		return result;
+	}
+
+	public int updateProjectBoard(ProjectBoard pb) {
+		int result = pDAO.updateProjectBoard(pb, sqlSession);
+		return result;
+	}
+
+	public int deleteProjectBoard(int boardNo) {
+		int result = pDAO.deleteProjectBoard(boardNo, sqlSession);
+		return result;
+	}
+
+	public int updateProjectMemberExit(ProjectMember pm) {
+		int result = pDAO.updateProjectMemberExit(pm, sqlSession);
+		return result;
+	}
+
+	public int deleteProject(int proNo) {
+		int result = pDAO.deleteProject(proNo, sqlSession);
+		return result;
+	}
+
+	public int updateProjectMgrSet(ProjectMember pm) {
+		int result = pDAO.updateProjectMgrSet(pm, sqlSession);
+		return result;
+	}
+
+	public int updateProjectMgrCancel(ProjectMember pm) {
+		int result = pDAO.updateProjectMgrCancel(pm, sqlSession);
+		return result;
+	}
+
+	public int insertProjectPlan(ProjectPlan pp) {
+		int result = pDAO.insertProjectPlan(pp, sqlSession);
+		return result;
+	}
+
+	public int updateProjectComplate(Project p) {
+		int result = pDAO.updateProjectComplate(p, sqlSession);
+		return result;
+	}
+
+	
+	
+
+	
 
 }

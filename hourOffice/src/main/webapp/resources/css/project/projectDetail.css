@@ -63,25 +63,28 @@
 	color: white;
 	font-weight: 500;
 	font-size: 1rem;
+	cursor: pointer;
 }
 
 #projectNavi>li>a:hover {
 	font-weight: 800;
-	color: #AFE1FF;
+	color: #2CF2D8;
 }
 
 #newBoard {
 	width: 80px;
-	height: 30px;
-	border-radius: 5px;
+	height: 35px;
+	border-radius: 2px;
 	color: black;
-	font-weight: 800;
+	font-weight: 700;
 	text-align: center;
 	background-color: white;
 	border: 0;
 	cursor: pointer;
-    margin-top: 7px;
+	margin-top: 5px;
+	outline: none;
 }
+
 
 /* -----------------------게시물--------------------- */
 .boardBox {
@@ -155,6 +158,7 @@
 	resize: none;
 	font-family: "맑은 고딕";
 	font-size: 0.875rem;
+	outline: none;
 }
 
 .commentCount {
@@ -169,10 +173,11 @@
 	height: 55px;
 	padding: 10px 20px 0px 10px;
 	overflow: hidden;
-	background-color: #cccccc;
+	background-color: #F2F2F2;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	border: 1px solid #cccccc;
+	border-top: 1px solid #E6E6E6;
 }
 
 .commentUser {
@@ -201,7 +206,7 @@
 .commentInfo {
 	width: 93%;
 	float: left;
-	border-top: 1px solid #cccccc;
+	border-top: 1px solid #F2F2F2;
 }
 
 .commentName {
@@ -223,15 +228,22 @@
 	resize: none;
 	border: 0;
 	padding-bottom: 1rem;
+	outline: none;
+}
+.commentInfo {
+	width: 93%;
+	float: left;
+	border-top: 1px solid #F2F2F2;
 }
 
-.commentUserImg {
-	width: 7%;
-	font-size: 2rem;
-	float: left;
-	border-top: 1px solid #cccccc;
-	color: #999999;
-}
+.commentUserImg{
+           	width: 7%;
+            font-size: 2rem;
+            float: left;
+            color: #999999;
+			border-top: 1px solid #F2F2F2;
+            padding: 10px 0px 0px 10px;
+        }
 
 .commentTime {
 	color: #999999;
@@ -337,10 +349,10 @@
 /* 프로젝트 옵션 */
 #projectOption {
 	width: 200px;
-	height: 220px;
+	height: auto;
 	margin-left: 530px;
 	border: 1px solid #BFBFBF;
-	background-color: white;;
+	background-color: white;
 	border-radius: 5px;
 	position: absolute;
 	z-index: 1;
@@ -1005,4 +1017,37 @@
 
 .fileRegular {
 	padding: 5px;
+}
+
+.commentModifyBtn, .commentDeleteBtn{
+	color: #cccccc;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.commentModifyBtn:hover, .commentDeleteBtn:hover{
+	font-weight: bolder;
+}
+#projectFavor{
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+.likeBtn{
+	color: yellow;
+}
+
+.textHide{
+	color: #B3B3B3;
+	cursor: pointer;
+	display: none;
+	float:left;
+}
+
+.textHide:hover{
+	font-weight: bolder;
+	color: #999999;
+}
+
+#projectComplate{
+	cursor: pointer;
 }

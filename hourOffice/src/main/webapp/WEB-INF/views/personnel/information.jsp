@@ -1,3 +1,5 @@
+<%@page import="kr.or.houroffice.personnel.model.vo.MemDept"%>
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -48,6 +50,10 @@ th {
 
 <body>
 
+	<%Member m = (Member)session.getAttribute("member");%>
+	<%MemDept md = (MemDept)session.getAttribute("MemDept");%>
+	
+	
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -66,39 +72,40 @@ th {
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 
+
 <table>
         <tr>
             <th rowspan="5" class="imgbox"><div src="" id="pic"></div></th>
             <th>이름</th>
-            <td>홍길동</td>
+            <td><%=m.getMemName() %></td>
             <th>사번</th>
-            <td>001</td>
+            <td><%=m.getMemNo() %></td>
         </tr>
         <tr>
             
             <th>생년월일</th>
-            <td>1999-10-10</td>
+            <td><%=m.getMemBirth()%></td>
             <th>직위</th>
-            <td>사원</td>
+            <td><%=m.getMemPosition() %></td>
         </tr>
         <tr>
             
             <th>연락처</th>
-            <td>010-8888-1111</td>
+            <td><%=m.getMemPhone() %></td>
             <th>부서명</th>
-            <td>개발1팀</td>
+            <td><%=m.getDeptName() %></td>
         </tr>
         <tr>
             
             <th>이메일</th>
-            <td>kim@kr.or.iei.kh</td>
+            <td><%=m.getMemEmail() %></td>
             <th>내선번호</th>
-            <td>02)3333-1111</td>
+            <td><%=m.getMemTell() %></td>
         </tr>
         <tr>
             
             <th>주소</th>
-            <td id="add">서울</td>
+            <td id="add"><%=m.getMemAddress() %></td>
             <th>병역</th>
             <td>군필</td>
         </tr>
@@ -117,7 +124,7 @@ th {
             <td>1</td>
             <td>1</td>
             <td>1</td>
-            <td>1</td>
+            <td></td>
         </tr>
     </table><br><br>
 

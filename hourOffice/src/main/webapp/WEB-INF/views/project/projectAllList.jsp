@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="kr.or.houroffice.project.model.vo.Project"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -22,10 +23,11 @@
 	href="/resources/css/project/projectAllList.css" />
 </head>
 <body>
-
 <%
 	ArrayList<Project> myList = (ArrayList<Project>)request.getAttribute("myList");
 	ArrayList<Project> publicList = (ArrayList<Project>)request.getAttribute("publicList");
+	ArrayList<Project> favoriteList = (ArrayList<Project>)request.getAttribute("favoriteList");
+	Member m = (Member)session.getAttribute("member");
 %>
 
 	<div id="wrap">
@@ -50,16 +52,33 @@
 							<!-- 얘가 여러개 생겨남 -->
 						<%if(!myList.isEmpty()){ %>
 							<%for(Project p : myList) {%>
+							
+							<%
+								boolean like = false;
+								for(Project project : favoriteList){
+									if(project.getProNo()==p.getProNo()){
+										like = true;
+									}
+								}
+								
+							%>
 								<%if(p.getCompYN()=='N'){ %>
-								<form action="/projectDetail.ho" method="get">
+								<form action="/projectDetail.ho" method="post">
 								<div class="projectBox">
 									<a>
 										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
 										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
-										<a><i class="far fa-star"></i></a>
+									<%if(!like){ %>
+										<i class="far fa-star"></i>
+									<%}else{ %>
+										<i class="fas fa-star likeBtn"></i>
+									<%} %>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+    									<input type="hidden" name="boardType" value="post"/>
+										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
 									</div>
 								</div>
 								</form>
@@ -76,15 +95,31 @@
 						<div class="projectList">
 						<%if(!publicList.isEmpty()){ %>
 							<%for(Project p : publicList) {%>
-								<form action="/projectDetail.ho" method="get">
+							<%
+								boolean like = false;
+								for(Project project : favoriteList){
+									if(project.getProNo()==p.getProNo()){
+										like = true;
+									}
+								}
+								
+							%>
+								<form action="/projectDetail.ho" method="post">
 								<div class="projectBox">
 									<a>
 										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
 										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
-										<a><i class="far fa-star"></i></a>
+									<%if(!like){ %>
+										<i class="far fa-star"></i>
+									<%}else{ %>
+										<i class="fas fa-star likeBtn"></i>
+									<%} %>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
+    									<input type="hidden" name="boardType" value="post"/>
 									</div>
 								</div>
 								</form>
@@ -101,18 +136,38 @@
 						
 						
 						<%if(!myList.isEmpty()){ %>
+						
 							<%int count=0; %>
 							<%for(Project p : myList) {%>
+							<%
+								boolean like = false;
+								for(Project project : favoriteList){
+									if(project.getProNo()==p.getProNo()){
+										like = true;
+									}
+								}
+								
+							%>
 								<%if(p.getCompYN()=='Y'){ %>
 								<%count++; %>
 								<div class="projectBox">
+								<form action="/projectDetail.ho" method="post">
 									<a href="#">
-										<div class="projectSubject"><%=p.getProSubject() %></div>
+										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
 										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
 									</a>
 									<div class="projectLike">
-										<a href="#"><i class="far fa-star"></i></a>
+										<%if(!like){ %>
+										<i class="far fa-star"></i>
+										<%}else{ %>
+											<i class="fas fa-star likeBtn"></i>
+										<%} %>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
+    									<input type="hidden" name="boardType" value="post"/>
 									</div>
+								</form>
 								</div>
 								<%} %>
 							<%} %>
@@ -201,6 +256,8 @@
 		</div>
 	</div>
 	<!-- 자바 스크립트    -->
+	<script>
+	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectAllList.js"></script>
 </body>
