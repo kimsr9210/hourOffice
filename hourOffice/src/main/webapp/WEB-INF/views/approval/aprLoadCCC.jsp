@@ -29,53 +29,52 @@
 					<div id="TitleName">전자결재 작성</div>
                     <div id="TitleContents">
                         <div id="docu-type-wrap">
-							<label for="docuType">양식 선택 :</label> <select name="docuType"
-								id="docu-type" onchange="movePage(this.value);">
+							<label for="docuType">양식 선택 :</label> <select name="docuType" id="docu-type" onchange="movePage(this.value);">
 								<option value="/approvalForm.ho?docuType=H">연차신청서</option>
-								<option value="/approvalForm.ho?docuType=O" selected>연장근무신청서</option>
+								<option value="/approvalForm.ho?docuType=O">연장근무신청서</option>
 								<option value="/approvalForm.ho?docuType=L">지각불참사유서</option>
-								<option value="/approvalForm.ho?docuType=C">법인카드사용신청서</option>
+								<option value="/approvalForm.ho?docuType=C" selected>법인카드사용신청서</option>
 							</select>
 						</div>
-                        <form action="/insertAprOvt.ho" method="post">
-                            <span class="opt-check"><input type="checkbox" name="lockYN" value="Y"><label for="lockYN">비공개</label></span>
-                            <span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y"><label for="urgencyYN">긴급문서</label></span>
+                        <form action="/updateAprCCC.ho" method="post">
+                            <span class="opt-check"><input type="checkbox" name="lockYN" value="Y" <c:if test="${docu.lockYN == 'Y'.charAt(0) }">checked</c:if>><label for="lockYN">비공개</label></span>
+                            <span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y" <c:if test="${docu.urgencyYN == 'Y'.charAt(0) }">checked</c:if>><label for="urgencyYN">긴급문서</label></span>
                             <input type="submit" value="작성 완료">
                             <input type="reset" value="작성취소">
                             <div id="title-wrap">
-                                <div>문서 제목</div><div><input type="text" name="title"></div>
+                                <div>문서 제목</div><div><input type="text" name="title" value="${docu.title }"></div>
                             </div>
                             <fieldset id="form-wrap">
-                                <div id="form-title">연장근무신청서</div>
+                                <div id="form-title">법인카드사용신청서</div>
                                 <table id="docu-info">
                                     <tr>
 										<td>기안자</td>
-										<td>${sessionScope.member.memName}</td>
+										<td>${docu.memName}</td>
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose><c:when test="${sessionScope.member.deptCode eq 'D1 '}">인사부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D2 '}">총무부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D3 '}">전산부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D4 '}">개발부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D5 '}">디자인부</c:when>
+										<td><c:choose><c:when test="${docu.deptCode eq 'D1 '}">인사부</c:when>
+										<c:when test="${docu.deptCode eq 'D2 '}">총무부</c:when>
+										<c:when test="${docu.deptCode eq 'D3 '}">전산부</c:when>
+										<c:when test="${docu.deptCode eq 'D4 '}">개발부</c:when>
+										<c:when test="${docu.deptCode eq 'D5 '}">디자인부</c:when>
 										<c:otherwise>부서없음</c:otherwise></c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
-										<td>${today }</td>
+										<td><fmt:formatDate value="${docu.docuDate }" pattern="yyyy-MM-dd"/></td>
 									</tr>
                                     <tr>
                                         <td>문서번호</td>
-                                        <td></td>
+                                        <td>${docu.docuNo }<input name="docuNo" type="hidden" value="${docu.docuNo }"/></td>
                                     </tr>
                                 </table>
                                 <table id="apr-line-info">
                                     <tr><td colspan="3">결재선</td></tr>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><c:if test="${aprLine[0] != null }">${aprLine[0].memName } ${aprLine[0].memPosition }(${aprLine[0].deptName })</c:if></td>
+                                        <td><c:if test="${aprLine[1] != null }">${aprLine[1].memName } ${aprLine[1].memPosition }(${aprLine[1].deptName })</c:if></td>
+                                        <td><c:if test="${aprLine[2] != null }">${aprLine[2].memName } ${aprLine[2].memPosition }(${aprLine[2].deptName })</c:if></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -85,52 +84,53 @@
                                 </table>
                                 <table id="con-info">
                                     <tr>
-                                        <td>근무 구분</td>
+                                        <td>신청부서</td>
+                                        <td><select name="applyDept" id="dept_code" required>
+												<option value="인사부" <c:if test="${docu.applyDept eq '인사부' }">selected</c:if>>인사부</option>
+												<option value="총무부" <c:if test="${docu.applyDept eq '총무부' }">selected</c:if>>총무부</option>
+												<option value="전산부" <c:if test="${docu.applyDept eq '전산부' }">selected</c:if>>전산부</option>
+												<option value="개발부" <c:if test="${docu.applyDept eq '개발부' }">selected</c:if>>개발부</option>
+												<option value="디자인부" <c:if test="${docu.applyDept eq '디자인부' }">selected</c:if>>디자인부</option>
+										</select></td>
+                                        <td>*카드종류</td>
                                         <td>
-                                            <input type="radio" name="ovtType" id="ovtType_p" value="P" required><label for="ovtType_p"> 연장</label>
-                                            <input type="radio" name="ovtType" id="ovtType_o" value="O"><label for="ovtType_o"> 야간</label>
-                                            <input type="radio" name="ovtType" id="ovtType_h" value="H"><label for="ovtType_h">휴일</label>
+                                            <select name="cardType" id="card_type" disabled>
+                                            	<option value="" selected disabled hidden>==카드선택==</option>
+                                                <option value="1">법인카드1</option>
+                                                <option value="2">법인카드2</option>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>근무 일시</td>
+                                        <td>신청자</td>
                                         <td>
-                                            <input type="date" required name="ovtDate">
-                                            <span class="space"></span>
-                                            <select name="startHour" id="startHour">
-                                            <% for(int i=0; i<24; i++){%>
-                                                <option><%=i %></option>
-											<%} %>
-                                            </select>시 
-                                               <select name="startMinute" id="startMinute">
-                                                <option>00</option>
-                                            <% for(int i=10; i<60; i=i+10){%>
-                                                <option><%=i %></option>
-											<%} %>
-                                            </select>분 ~ 
-                                            <select name="endHour" id="endHour">
-                                                <% for(int i=0; i<24; i++){%>
-                                                <option><%=i %></option>
-											<%} %>
-                                            </select>시 
-                                               <select name="endMinute" id="endMinute">
-                                                <option>00</option>
-                                                <% for(int i=10; i<60; i=i+10){%>
-                                                <option><%=i %></option>
-											<%} %>
-                                            </select>분
+                                            <input type="text" name="applier" required value="${docu.applier }">
+                                        </td>
+                                        <td>반납예정일</td>
+                                        <td>
+                                            <input type="date" required name="returnDate" value="${docu.returnDate }">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>근무 시간</td>
+                                        <td>신청일</td>
                                         <td>
-                                            <input type="number" value="" name="totalHour" readonly> 시간
+                                        <input type="date" name="applyDate" required value="${docu.applyDate }">
+                                        </td>
+                                        <td>사용처</td>
+                                        <td>
+                                            <input type="text" name="usedPlace" required value="${docu.usedPlace }">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>신청 사유</td>
-                                        <td>
-                                            <textarea name="reasons" id="reasons" required></textarea>
+                                        <td>사용금액</td>
+                                        <td colspan="3">
+                                            <input type="text" required name="amounts" value="${docu.amounts }">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>신청목적</td>
+                                        <td colspan="3">
+                                            <textarea name="applyPurpose" id="applyPurpose" required>${docu.applyPurpose }</textarea>
                                         </td>
                                     </tr>
                                 </table>
@@ -144,8 +144,8 @@
                                 <c:if test="${!empty aprLineList }">
 									<c:forEach var="line" items="${aprLineList }">
 										<div class="line-list">
-										<span class="line-left"><input type="checkbox" name="aprLine" value="${line.memNo }"></span>
-										<span class="line-mid"><input type="checkbox" name="aprRef" value="${line.memNo }"></span>
+										<span class="line-left"><input type="checkbox" name="aprLine" value="${line.memNo }" <c:forEach var="ckLine" items="${aprLine }"><c:if test="${ckLine.memNo==line.memNo }">checked</c:if></c:forEach>></span>
+										<span class="line-mid"><input type="checkbox" name="aprRef" value="${line.memNo }" <c:forEach var="ckRef" items="${aprRef }"><c:if test="${ckRef.memNo==line.memNo }">checked</c:if></c:forEach>></span>
 										<span class="line-right">${line.memName } ${line.memPosition }(${line.deptName })</span>
 									</div>
 									</c:forEach>								
@@ -187,34 +187,13 @@
 						}
 					}
 				});
-			//시간 바꿀때마다 시간 계산
-			$('#con-info select').change(function(){
-				var startHour = Number($('#startHour option:selected').val());
-				var startMinute = Number($('#startMinute option:selected').val());
-				var endHour = Number($('#endHour option:selected').val());
-				var endMinute = Number($('#endMinute option:selected').val());
-				
-				var hour;
-				var minute;
-				
-				if(startHour<endHour){
-					hour = endHour - startHour;
-				}
-				
-				if(endMinute>=startMinute){
-					minute = endMinute - startMinute;
-				}else{
-					minute = (60 + endMinute) - startMinute;
-					hour--;
-				}
-				var totalHour = hour+(minute/60);
-				$('input[name=totalHour]').val(totalHour);
-			});
+
 		});
 		//페이지 호출 처리
 		function movePage(url) {
 			location.href = url;
 		}
 	</script>
+	
 </body>
 </html>

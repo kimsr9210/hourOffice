@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import="java.util.ArrayList"%>
-<%@ page import="kr.or.houroffice.approval.model.vo.AprLineMember"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,10 +20,6 @@
 </head>
 <body>
 <div id="wrap">
-<%
-			String today = (String) request.getAttribute("today");
-			ArrayList<AprLineMember> aprLineList = (ArrayList<AprLineMember>) request.getAttribute("aprLineList");
-		%>
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -35,15 +30,15 @@
                     <div id="TitleContents">
                         <div id="docu-type-wrap">
 							<label for="docuType">양식 선택 :</label> <select name="docuType" id="docu-type" onchange="movePage(this.value);">
-								<option value="/aprFormHol.ho">연차신청서</option>
-								<option value="/aprFormOvt.ho">연장근무신청서</option>
-								<option value="/aprFormLazy.ho" >지각불참사유서</option>
-								<option value="/aprFormCCC.ho" selected>법인카드사용신청서</option>
+								<option value="/approvalForm.ho?docuType=H">연차신청서</option>
+								<option value="/approvalForm.ho?docuType=O">연장근무신청서</option>
+								<option value="/approvalForm.ho?docuType=L">지각불참사유서</option>
+								<option value="/approvalForm.ho?docuType=C" selected>법인카드사용신청서</option>
 							</select>
 						</div>
                         <form action="/insertAprCCC.ho" method="post">
-                            <span class="opt-check"><input type="checkbox" name="lockYN"><label for="lockYN">비공개</label></span>
-                            <span class="opt-check"><input type="checkbox" name="urgencyYN"><label for="urgencyYN">긴급문서</label></span>
+                            <span class="opt-check"><input type="checkbox" name="lockYN" value="Y"><label for="lockYN">비공개</label></span>
+                            <span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y"><label for="urgencyYN">긴급문서</label></span>
                             <input type="submit" value="작성 완료">
                             <input type="reset" value="작성취소">
                             <div id="title-wrap">
@@ -67,7 +62,7 @@
 									</tr>
 									<tr>
 										<td>기안일</td>
-										<td><%=today%></td>
+										<td>${today }</td>
 									</tr>
                                     <tr>
                                         <td>문서번호</td>
@@ -91,17 +86,17 @@
                                     <tr>
                                         <td>신청부서</td>
                                         <td>
-                                            <select name="dept_code" id="dept_code" required>
-                                               <option value="D1">인사</option>
-                                                <option value="D2">총무</option>
-                                                <option value="D3">전산</option>
-                                                <option value="D4">개발</option>
-                                                <option value="D5">디자인</option>
+                                            <select name="applyDept" id="dept_code" required>
+                                               <option value="인사부">인사부</option>
+                                                <option value="총무부">총무부</option>
+                                                <option value="전산부">전산부</option>
+                                                <option value="개발부">개발부</option>
+                                                <option value="디자인부">디자인부</option>
                                             </select>
                                         </td>
                                         <td>*카드종류</td>
                                         <td>
-                                            <select name="card_type" id="card_type" disabled>
+                                            <select name="cardType" id="card_type" disabled>
                                             	<option value="" selected disabled hidden>==카드선택==</option>
                                                 <option value="1">법인카드1</option>
                                                 <option value="2">법인카드2</option>
@@ -115,29 +110,29 @@
                                         </td>
                                         <td>반납예정일</td>
                                         <td>
-                                            <input type="date" required>
+                                            <input type="date" required name="returnDate">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>신청일</td>
                                         <td>
-                                        <input type="date" name="apply_date" required>
+                                        <input type="date" name="applyDate" required>
                                         </td>
                                         <td>사용처</td>
                                         <td>
-                                            <input type="text" name="used_place" required>
+                                            <input type="text" name="usedPlace" required>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>사용금액</td>
                                         <td colspan="3">
-                                            <input type="text" required>
+                                            <input type="text" required name="amounts">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>신청목적</td>
                                         <td colspan="3">
-                                            <textarea name="reasons" id="reasons" required></textarea>
+                                            <textarea name="applyPurpose" id="applyPurpose" required></textarea>
                                         </td>
                                     </tr>
                                 </table>
@@ -148,17 +143,15 @@
                                     <span class="line-mid">참조</span>
                                     <span class="line-right">대상</span>
                                 </div>
-                                <%
-									if (!aprLineList.isEmpty()) {
-										for (int i = 0; i < aprLineList.size(); i++) {
-								%>
-								<div class="line-list">
-									<span class="line-left"><input type="checkbox" name="aprLine" value="<%=aprLineList.get(i).getMemNo()%>"></span>
-									<span class="line-mid"><input type="checkbox" name="aprRef" value="<%=aprLineList.get(i).getMemNo()%>"></span>
-									<span class="line-right"><%=aprLineList.get(i).getMemName()%> <%=aprLineList.get(i).getMemPosition()%>(<%=aprLineList.get(i).getDeptName()%>)</span>
-								</div>
-								<%}//for
-								}//if	%>
+                                <c:if test="${!empty aprLineList }">
+									<c:forEach var="line" items="${aprLineList }">
+										<div class="line-list">
+										<span class="line-left"><input type="checkbox" name="aprLine" value="${line.memNo }"></span>
+										<span class="line-mid"><input type="checkbox" name="aprRef" value="${line.memNo }"></span>
+										<span class="line-right">${line.memName } ${line.memPosition }(${line.deptName })</span>
+									</div>
+									</c:forEach>								
+								</c:if>
                             </fieldset>
                         </form>
                     </div>

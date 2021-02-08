@@ -37,39 +37,37 @@
 								<option value="/approvalForm.ho?docuType=C">법인카드사용신청서</option>
 							</select>
 						</div>
-						<form action="/insertAprLazy.ho" method="post">
-							<span class="opt-check"><input type="checkbox" name="lockYN" value="Y"><label for="lockYN">비공개</label></span>
-							<span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y"><label for="urgencyYN">긴급문서</label></span> <input type="submit" value="작성 완료">
+						<form action="/updateAprLazy.ho" method="post">
+							<span class="opt-check"><input type="checkbox" name="lockYN" value="Y" <c:if test="${docu.lockYN == 'Y'.charAt(0) }">checked</c:if>><label for="lockYN">비공개</label></span>
+                            <span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y" <c:if test="${docu.urgencyYN == 'Y'.charAt(0) }">checked</c:if>><label for="urgencyYN">긴급문서</label></span>
+							<input type="submit" value="작성 완료">
 							<input type="reset" value="작성취소">
 							<div id="title-wrap">
-								<div>문서 제목</div>
-								<div>
-									<input type="text" name="title">
-								</div>
+								<div>문서 제목</div><div><input type="text" name="title" value="${docu.title }"></div>
 							</div>
 							<fieldset id="form-wrap">
 								<div id="form-title">지각불참사유서</div>
 								<table id="docu-info">
 									<tr>
 										<td>기안자</td>
-										<td>${sessionScope.member.memName}</td>
+										<td>${docu.memName}</td>
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose><c:when test="${sessionScope.member.deptCode eq 'D1 '}">인사부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D2 '}">총무부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D3 '}">전산부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D4 '}">개발부</c:when>
-										<c:when test="${sessionScope.member.deptCode eq 'D5 '}">디자인부</c:when>
+										<td><c:choose><c:when test="${docu.deptCode eq 'D1 '}">인사부</c:when>
+										<c:when test="${docu.deptCode eq 'D2 '}">총무부</c:when>
+										<c:when test="${docu.deptCode eq 'D3 '}">전산부</c:when>
+										<c:when test="${docu.deptCode eq 'D4 '}">개발부</c:when>
+										<c:when test="${docu.deptCode eq 'D5 '}">디자인부</c:when>
 										<c:otherwise>부서없음</c:otherwise></c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
-										<td>${today }</td>
+										<td><fmt:formatDate value="${docu.docuDate }" pattern="yyyy-MM-dd"/></td>
 									</tr>
 									<tr>
 										<td>문서번호</td>
-										<td></td>
+										<td>${docu.docuNo }<input name="docuNo" type="hidden" value="${docu.docuNo }"/></td>
 									</tr>
 								</table>
 								<table id="apr-line-info">
@@ -77,9 +75,9 @@
 										<td colspan="3">결재선</td>
 									</tr>
 									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
+										<td><c:if test="${aprLine[0] != null }">${aprLine[0].memName } ${aprLine[0].memPosition }(${aprLine[0].deptName })</c:if></td>
+                                        <td><c:if test="${aprLine[1] != null }">${aprLine[1].memName } ${aprLine[1].memPosition }(${aprLine[1].deptName })</c:if></td>
+                                        <td><c:if test="${aprLine[2] != null }">${aprLine[2].memName } ${aprLine[2].memPosition }(${aprLine[2].deptName })</c:if></td>
 									</tr>
 									<tr>
 										<td></td>
@@ -91,28 +89,28 @@
 									<tr>
 										<td>부서</td>
 										<td><select name="dept" id="dept_code" required>
-												<option value="인사부">인사부</option>
-												<option value="총무부">총무부</option>
-												<option value="전산부">전산부</option>
-												<option value="개발부">개발부</option>
-												<option value="디자인부">디자인부</option>
+												<option value="인사부" <c:if test="${docu.dept eq '인사부' }">selected</c:if>>인사부</option>
+												<option value="총무부" <c:if test="${docu.dept eq '총무부' }">selected</c:if>>총무부</option>
+												<option value="전산부" <c:if test="${docu.dept eq '전산부' }">selected</c:if>>전산부</option>
+												<option value="개발부" <c:if test="${docu.dept eq '개발부' }">selected</c:if>>개발부</option>
+												<option value="디자인부" <c:if test="${docu.dept eq '디자인부' }">selected</c:if>>디자인부</option>
 										</select></td>
 									</tr>
 									<tr>
 										<td>직위</td>
-										<td><input type="text" required name="position"></td>
+										<td><input type="text" required name="position" value="${docu.position }"></td>
 									</tr>
 									<tr>
 										<td>성명</td>
-										<td><input type="text" required name="mName"></td>
+										<td><input type="text" required name="mName" value="${docu.mName }"></td>
 									</tr>
 									<tr>
 										<td>지각/불참일</td>
-										<td><input type="date" required name="lazyDate"></td>
+										<td><input type="date" required name="lazyDate" value="${docu.lazyDate }"></td>
 									</tr>
 									<tr>
 										<td>지각/불참사유</td>
-										<td><textarea name="reasons" id="reasons" required></textarea>
+										<td><textarea name="reasons" id="reasons" required>${docu.reasons}</textarea>
 										</td>
 									</tr>
 								</table>
@@ -125,8 +123,8 @@
 								<c:if test="${!empty aprLineList }">
 									<c:forEach var="line" items="${aprLineList }">
 										<div class="line-list">
-										<span class="line-left"><input type="checkbox" name="aprLine" value="${line.memNo }"></span>
-										<span class="line-mid"><input type="checkbox" name="aprRef" value="${line.memNo }"></span>
+										<span class="line-left"><input type="checkbox" name="aprLine" value="${line.memNo }" <c:forEach var="ckLine" items="${aprLine }"><c:if test="${ckLine.memNo==line.memNo }">checked</c:if></c:forEach>></span>
+										<span class="line-mid"><input type="checkbox" name="aprRef" value="${line.memNo }" <c:forEach var="ckRef" items="${aprRef }"><c:if test="${ckRef.memNo==line.memNo }">checked</c:if></c:forEach>></span>
 										<span class="line-right">${line.memName } ${line.memPosition }(${line.deptName })</span>
 									</div>
 									</c:forEach>								
