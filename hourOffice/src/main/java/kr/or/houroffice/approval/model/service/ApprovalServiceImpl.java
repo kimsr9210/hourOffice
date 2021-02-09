@@ -18,6 +18,7 @@ import kr.or.houroffice.approval.model.vo.AprFormLazy;
 import kr.or.houroffice.approval.model.vo.AprFormOvt;
 import kr.or.houroffice.approval.model.vo.AprLineMember;
 import kr.or.houroffice.approval.model.vo.AprListPage;
+import kr.or.houroffice.approval.model.vo.CCCForm;
 import kr.or.houroffice.common.PageList;
 import kr.or.houroffice.member.model.vo.Member;
 
@@ -195,8 +196,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return list;
 	}
 	
-	public int insertAprMark(ApprovalLine al) { //결재 승인 or 반려 처리
-		int result = aprDAO.insertAprMark(sqlSession, al);
+	public int insertAprMark(ApprovalLine al, char docuType) { //결재 승인 or 반려 처리
+		int result = aprDAO.insertAprMark(sqlSession, al, docuType);
 		return result;
 	}
 
@@ -275,6 +276,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 			return 1;
 		}
 		return 0;
+	}
+
+
+	public int updateCardType(CCCForm cf) {
+		int result = aprDAO.updateCardType(sqlSession, cf);
+		return result;
 	}
 
 }

@@ -43,7 +43,7 @@
                             <input type="submit" value="작성 완료">
                             <input type="reset" value="작성취소">
                             <div id="title-wrap">
-                                <div>문서 제목</div><div><input type="text" name="title"></div>
+                                <div>문서 제목</div><div><input type="text" name="title" required></div>
                             </div>
                             <fieldset id="form-wrap">
                                 <div id="form-title">연장근무신청서</div>
@@ -124,7 +124,7 @@
                                     <tr>
                                         <td>근무 시간</td>
                                         <td>
-                                            <input type="number" value="" name="totalHour" readonly> 시간
+                                            <input type="number" value="0" name="totalHour" readonly> 시간
                                         </td>
                                     </tr>
                                     <tr>
@@ -169,7 +169,13 @@
 					var cidx = $('input[name=aprLine]:checked').index($this);
 					var nidx = $('input[name=aprLine]').index($this);
 
+					var $ref = $(this).parent().next().children();
 					if ($this.prop('checked')) {
+						if($ref.prop('checked')){
+	                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+	                        return false;
+	                    }
+						
 						if (aprLength < 4) {
 							for (var i = 0; i < aprLength; i++) {
 								$('#apr-line-info tr:nth-child(2) td').eq(i).html($('input[name=aprLine]:checked').eq(i).parent().next().next().html());
@@ -178,6 +184,7 @@
 							alert('결재선은 3개까지만 선택 가능합니다.');
 							return false;
 						}
+						
 					} else {
 						for (var i = 0; i < 3; i++) {
 							$('#apr-line-info tr:nth-child(2) td').eq(i).html('');
@@ -187,6 +194,17 @@
 						}
 					}
 				});
+			//참조와 결재선 동시 선택 불가
+			$('input[name=aprRef]').click(function(){
+                var $ref = $(this);
+                var $line = $(this).parent().prev().children();
+                if($ref.prop('checked')){
+                    if($line.prop('checked')){
+                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+                        return false;
+                    }
+                }
+            });
 			//시간 바꿀때마다 시간 계산
 			$('#con-info select').change(function(){
 				var startHour = Number($('#startHour option:selected').val());
@@ -210,6 +228,17 @@
 				var totalHour = hour+(minute/60);
 				$('input[name=totalHour]').val(totalHour);
 			});
+			//submit전에 검사
+			$('form').submit(function(){
+                if($('input[name=aprLine]:checked').length==0){
+                    alert('결재선을 1개 이상 선택해야 합니다.');
+                    return false;
+                }
+                if($('input[name=totalHour]').val()==0){
+                	alert('초과 근무 시간이 없습니다.');
+                	return false;
+                }
+            });
 		});
 		//페이지 호출 처리
 		function movePage(url) {

@@ -22,6 +22,7 @@ import kr.or.houroffice.approval.model.vo.AprFormLazy;
 import kr.or.houroffice.approval.model.vo.AprFormOvt;
 import kr.or.houroffice.approval.model.vo.AprLineMember;
 import kr.or.houroffice.approval.model.vo.AprListPage;
+import kr.or.houroffice.approval.model.vo.CCCForm;
 import kr.or.houroffice.common.PageList;
 import kr.or.houroffice.member.model.vo.Member;
 
@@ -295,15 +296,34 @@ public class ApprovalController {
 		
 		ArrayList<ApprovalLine> al = aprService.selectOneAprLine(docuNo);
 		mav.addObject("aprLine", al);
+		ArrayList<ApprovalRef> af = aprService.selectOneAprRef(docuNo); 
+		ArrayList<Integer> aprNoList = new ArrayList<Integer>(); //결재선과 결재참조 사번 확보
+		for(ApprovalLine apr : al){
+			aprNoList.add(apr.getMemNo());
+		}
+		for(ApprovalRef apr : af){
+			aprNoList.add(apr.getMemNo());
+		}
+		mav.addObject("aprNoList", aprNoList);
 		
 		return mav;
 	}
 	
 	//결재 처리
 	@RequestMapping(value="/aprMark.ho")
-	public String aprMark(@SessionAttribute("member") Member m, ApprovalLine al, Model model){
+	public String aprMark(@SessionAttribute("member") Member m, ApprovalLine al, 
+			@RequestParam(value="cardType", required=false, defaultValue="0") int cardType, 
+			@RequestParam("docuType") String docuType, Model model){
 		al.setMemNo(m.getMemNo());
-		int result = aprService.insertAprMark(al);
+		
+		if(cardType!=0){
+			CCCForm cf = new CCCForm();
+			cf.setDocuNo(al.getDocuNo());
+			cf.setCardType(cardType);
+			int cardResult = aprService.updateCardType(cf); //결재시 카드를 선택한 경우만
+		}
+		
+		int result = aprService.insertAprMark(al, docuType.charAt(0));
 		if(result>0){
 			model.addAttribute("msg", "전자결재 처리 성공");
 		}else{
@@ -342,8 +362,18 @@ public class ApprovalController {
 			break;
 		}
 		
+		//결재선 정보,결재참조정보
 		ArrayList<ApprovalLine> al = aprService.selectOneAprLine(docuNo);
 		mav.addObject("aprLine", al);
+		ArrayList<ApprovalRef> af = aprService.selectOneAprRef(docuNo); 
+		ArrayList<Integer> aprNoList = new ArrayList<Integer>(); //결재선과 결재참조 사번 확보
+		for(ApprovalLine apr : al){
+			aprNoList.add(apr.getMemNo());
+		}
+		for(ApprovalRef apr : af){
+			aprNoList.add(apr.getMemNo());
+		}
+		mav.addObject("aprNoList", aprNoList);
 		
 		return mav;
 	}

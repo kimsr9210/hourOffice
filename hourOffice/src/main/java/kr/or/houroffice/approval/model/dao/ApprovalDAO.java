@@ -16,6 +16,7 @@ import kr.or.houroffice.approval.model.vo.AprFormLazy;
 import kr.or.houroffice.approval.model.vo.AprFormOvt;
 import kr.or.houroffice.approval.model.vo.AprLineMember;
 import kr.or.houroffice.approval.model.vo.AprListPage;
+import kr.or.houroffice.approval.model.vo.CCCForm;
 import kr.or.houroffice.member.model.vo.Member;
 
 @Repository("ApprovalDAO")
@@ -161,7 +162,7 @@ public class ApprovalDAO {
 		return (ArrayList<ApprovalLine>)list;
 	}
 
-	public int insertAprMark(SqlSessionTemplate sqlSession, ApprovalLine al) {
+	public int insertAprMark(SqlSessionTemplate sqlSession, ApprovalLine al, char docuType) {
 		int result1 = sqlSession.update("approval.insertAprMark",al); //결재선 처리
 		int lineCount = sqlSession.selectOne("approval.getLineCount", al.getDocuNo()); //결재선 갯수 파악
 		al.setLineCount(lineCount);
@@ -171,7 +172,7 @@ public class ApprovalDAO {
 		
 		int result3 =1;
 		int result4 =1;
-		if(lineCount==0){ //결재처리가 완료되었으면
+		if(lineCount==0 && docuType=='H'){ //결재처리가 완료되었으면 & 연차 신청서인 경우에만
 			//문서번호를 조회해서 연차 정보를 가져다가 연차내역에 추가하고 멤버 연차 갯수에 변경
 			AprFormHol afh = selectOneAprHol(sqlSession, al.getDocuNo()); //문서정보 받아오기
 			result3 = sqlSession.insert("approval.insertHolidayList", afh);//연차 내역 추가
@@ -223,9 +224,9 @@ public class ApprovalDAO {
 		return result;
 	}
 
-//	public void selectDeptList(SqlSessionTemplate sqlSession) {
-//		sqlSession.selectList("approval.selectDeptList");
-//	}
-
+	public int updateCardType(SqlSessionTemplate sqlSession, CCCForm cf) {
+		int result = sqlSession.update("approval.updateCardType",cf);
+		return result;
+	}
 
 }

@@ -349,9 +349,13 @@
   	<update id="updateFinalDate" parameterType="ApprovalLine">
   		UPDATE APPROVAL SET APR_TYPE = 
   		<choose>
-  			<when test="#{lineCount==0 and refusalCount>1}">'R'</when>
-  			<when test="#{lineCount==0 and refusalCount==0}">'C'</when>
-  			<otherwise>'I'</otherwise>
+  			<when test="#{lineCount>1}">'I'</when><!-- 1이어야 지금 입력하고 완성됨 -->
+  			<otherwise> <!-- #{lineCount==0} -->
+  				<choose>
+		  			<when test="#{refusalCount>0}">'R'</when>
+  					<otherwise>'C'</otherwise><!-- #{refusalCount==0} -->
+  				</choose>
+  			</otherwise>
   		</choose>
   		, FINAL_DATE = #{aprDate}
   		WHERE DOCU_NO = #{docuNo}
@@ -432,11 +436,8 @@
   	<delete id="deleteAprRef">
   		DELETE FROM APPROVAL_REF WHERE DOCU_NO = #{docuNo}
   	</delete>
-  	
-  	<!-- <select id="selectDeptList" resultType="Department">
-  		SELECT 
-  		DEPT_CODE AS deptCode,
-  		DEPT_NAME AS deptName
-  		FROM DEPARTMENT WHERE DEPT_DEL_YN = 'N' ORDER BY DEPT_CODE
-  	</select> -->
+
+	<update id="updateCardType" parameterType="CCCForm">
+		UPDATE CCC_FORM SET CARD_TYPE = #{cardType} WHERE DOCU_NO = #{docuNo}
+	</update>
 </mapper>

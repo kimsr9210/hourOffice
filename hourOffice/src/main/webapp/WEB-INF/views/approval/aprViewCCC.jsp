@@ -20,6 +20,24 @@
 </head>
 <body>
 <div id="wrap">
+<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
+	<c:choose>
+	<c:when test="${docu.lockYN eq 'Y'.charAt(0) }"><!-- 비공개일때, 작성자도 아니고, 결재선도 아니고, 참조도 아니면 비공개 알람.  -->
+		<c:choose>
+			<c:when test="${sessionScope.member.memNo == docu.memNo }"><c:set var="canRead" value="yes"/></c:when>
+			<c:otherwise>
+				<c:set var="canRead" value="no"/>
+				<c:forEach items="${aprNoList }" var="listMemNo">
+				<c:if test="${sessionScope.member.memNo == listMemNo }"><c:set var="canRead" value="yes"/></c:if>
+				</c:forEach>
+			</c:otherwise>
+		</c:choose>
+	</c:when>
+	<c:otherwise><c:set var="canRead" value="yes"/></c:otherwise>
+	</c:choose>
+	
+	<c:choose>
+	<c:when test="${pageScope.canRead == 'yes' }">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -90,11 +108,21 @@
                                         <td>신청부서</td>
                                         <td>${docu.applyDept }</td>
                                         <td>*카드종류</td>
-                                        <td>
-                                        <c:choose> <!-- 결재선인 경우에만 변경가능-->
-                                        	<c:when test="${docu.cardType eq 1}">법인카드1</c:when>
-                                        	<c:when test="${docu.cardType eq 2}">법인카드2</c:when>
-                                        	<c:otherwise>미할당</c:otherwise>
+                                        <td><c:choose>
+	                                        <c:when test="${sessionScope.member.memNo == aprLine[0].memNo or sessionScope.member.memNo == aprLine[1].memNo or sessionScope.member.memNo == aprLine[2].memNo}">
+	                                        <select name="cardType" id="card_type">
+	                                            	<option value="" selected disabled hidden>==카드선택==</option>
+	                                                <option value="1">법인카드1</option>
+	                                                <option value="2">법인카드2</option>
+	                                            </select>
+	                                        </c:when>
+                                        	<c:otherwise>
+		                                        <c:choose>
+		                                        	<c:when test="${docu.cardType eq 1}">법인카드1</c:when>
+		                                        	<c:when test="${docu.cardType eq 2}">법인카드2</c:when>
+		                                        	<c:otherwise>미할당</c:otherwise>
+		                                        </c:choose>
+                                        	</c:otherwise>
                                         </c:choose>
                                         </td>
                                     </tr>
@@ -121,7 +149,7 @@
                                 </table>
                             </fieldset>
                             <c:choose>
-                            	<c:when test="${docu.aprType!='W'.charAt(0) }"><!-- 결재가 완료됐으면 -->
+                            	<c:when test="${docu.aprType=='R'.charAt(0) or docu.aprType=='C'.charAt(0) }"><!-- 결재가 완료됐으면 무조건-->
                             		<fieldset id="apr-com-wrap">
 		                                <div>관련의견</div>
 		                                <div class="apr-comment"><c:forEach var="line" items="${aprLine }"><div><span>${line.memName } ${line.memPosition }</span><span>${line.aprComment }</span></div></c:forEach></div>
@@ -133,9 +161,10 @@
 					                            <fieldset id="apr-com-wrap">
 				                                <div>관련의견</div>
 				                                <div class="line-name">${sessionScope.member.memName } ${sessionScope.member.memPosition }</div>
-				                                <textarea name="aprComment" id="line-comment" ></textarea>
+				                                <textarea name="aprComment" id="line-comment" required></textarea>
 				                            </fieldset>
 				                            <div id="apr-btn-wrap">
+				                            	<input type="hidden" name="docuType" value="C"/>
 				                                <button id="ref_btn" type="submit" formaction="/aprMark.ho?docuNo=${docu.docuNo }&aprType=R">결재 반려</button>
 				                                <button id="apr_btn"  type="submit" formaction="/aprMark.ho?docuNo=${docu.docuNo }&aprType=A">결재 승인</button>
 				                            </div>
@@ -157,5 +186,8 @@
 			history.back(-1);
 		}
 	</script>
+	</c:when>
+	<c:otherwise><script>alert("비공개입니다."); history.back(-1);</script></c:otherwise>
+	</c:choose>
 </body>
 </html>
