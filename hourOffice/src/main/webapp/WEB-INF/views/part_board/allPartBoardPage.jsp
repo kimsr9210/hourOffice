@@ -63,7 +63,7 @@
                   	<% for(PartBoard pb : list){ %>
                             <tr>
                                 <td><%=pb.getPartNo() %></td>
-                                <td><div><a href="/partBoard.ho?deptCode=${list[0].deptCode }&partNo=<%=pb.getPartNo()%>"><%=pb.getPartContent() %></a></div></td>
+                                <td><div><a href="/postInPartBoard.ho?deptCode=${list[0].deptCode }&partNo=<%=pb.getPartNo()%>"><%=pb.getPartTitle() %></a></div></td>
                                 <td><%=pb.getPartWriter() %></td>
                     <% if(format.format(pb.getPartDate()).equals(format.format(toDay))){ %>
                     <% format = new SimpleDateFormat("hh:mm"); %>
@@ -76,7 +76,7 @@
                     <% } %>
                         </table>
                         
-                        <div id="pageNavi">< 1 2 3 4 5 ></div>
+                        <div id="pageNavi">${pageNavi.url }</div>
                         <div id="search-div">
                             <form action="/searchPartBoard.ho?" method="get">
                             <select name="searchType">

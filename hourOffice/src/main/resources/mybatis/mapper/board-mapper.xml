@@ -5,7 +5,7 @@
   <!-- 공통 파일 DB 저장 매퍼 -->
   
   <!-- BY 다빈  부서별 게시판 - 게시판 select -->
-  <select id="allPartBoardList" parameterType="String" resultType="PartBoard">
+  <select id="allPartBoardList" parameterType="hashmap" resultType="PartBoard">
   	SELECT 
 		PART_NO AS partNo,
 		PART_TITLE AS partTitle,
@@ -24,14 +24,80 @@
 			A.*,
 			D.DEPT_NAME
 		FROM PART_BOARD A LEFT JOIN DEPARTMENT D ON A.DEPT_CODE=D.DEPT_CODE 
-		WHERE A.PART_DEL_YN='N' AND A.DEPT_CODE='D2'
-	) WHERE NUM BETWEEN 1 AND 10
+		WHERE A.PART_DEL_YN='N' AND A.DEPT_CODE=#{deptCode} 
+		<choose>
+			<when test="searchType != null">
+				<choose>
+					<when test="searchType == 'both'"></when>
+					<otherwise>AND ${searchType} LIKE #{keyword}</otherwise>
+				</choose>
+			</when>
+		</choose>
+	) WHERE NUM BETWEEN #{start} AND #{end}
   </select>
+  <!-- BY 다빈  부서별 게시판 - 게시글 one select -->
+  <select id="getOnePost" parameterType="hashmap" resultType="PartBoard">
+  	SELECT 
+        A.PART_NO AS partNo,
+		A.PART_TITLE AS partTitle,
+		A.DEPT_CODE AS deptCode,
+		A.PART_DATE AS partDate,
+		A.MEM_NO AS memNo,
+		A.PART_WRITER AS partWriter,
+		A.PART_CONTENT AS partContent,
+		A.PART_HITS AS partHits,
+		A.PART_DEL_YN AS partDelYN,
+		A.PART_DEL_DATE AS partDelDate,
+		D.DEPT_NAME AS deptName,
+		M.MEM_POSITION AS memPosition,
+        M.MEM_PROFILE AS memProfile
+	FROM PART_BOARD A LEFT JOIN DEPARTMENT D ON A.DEPT_CODE=D.DEPT_CODE LEFT JOIN MEMBER M ON A.MEM_NO=M.MEM_NO 
+	WHERE PART_DEL_YN='N' 
+	<choose>
+		<when test="deptCode != null">AND A.DEPT_CODE=#{deptCode} </when>
+	</choose>
+	AND PART_NO=#{postNo}
+  </select>
+  <!-- BY 다빈  부서별 게시판 - 게시글의 댓글 List select -->
+  <select id="getPostComntList" parameterType="hashmap" resultType="PartComments">
+  	SELECT 
+		PART_COMNT_NO AS partComntNo,
+		PART_NO AS partNo,
+		A.MEM_NO AS memNo,
+		PART_COMNT_WRITER AS partComntWriter,
+		PART_COMNT_EMAIL AS partComntEmail,
+		PART_COMNT_DATE AS partComntDate,
+		PART_COMNT AS partComnt,
+		MEM_POSITION AS memPosition,
+		MEM_PROFILE AS memProfile
+	FROM (
+		SELECT 
+			ROW_NUMBER() OVER(ORDER BY A.PART_COMNT_DATE DESC) AS NUM,A.* 
+		FROM PART_COMMENTS A 
+		WHERE PART_NO=#{postNo}
+		) A  LEFT JOIN MEMBER M ON A.MEM_NO=M.MEM_NO 
+	WHERE NUM BETWEEN #{start} AND #{end}
+  </select>
+  <!-- BY 다빈  부서별 게시판 - 게시글의 댓글 insert -->
+  <insert id="addComnt" parameterType="PartComments">
+  	INSERT INTO PART_COMMENTS VALUES(
+  		PART_COMMENTS_SEQ.NEXTVAL,
+  		#{partNo},
+  		#{memNo},
+  		#{partComntWriter},
+  		<choose>
+  			<when test="partComntEmail != null">#{partComntEmail},</when>
+  			<otherwise>'.',</otherwise>
+  		</choose>
+  		DEFAULT,
+  		#{partComnt})
+  </insert>
+  
   <!-- BY 다빈  부서별 게시판 - 게시판 insert - 게시판번호 채번 -->
   <select id="selectNumber" resultType="int">
   	SELECT PART_BOARD_SEQ.NEXTVAL FROM DUAL
   </select>
-  <!-- BY 다빈  부서별 게시판 - 게시판 insert-->
+  <!-- BY 다빈  부서별 게시판 - 게시판 insert -->
   <insert id="addPost" parameterType="PartBoard">
   	INSERT INTO PART_BOARD VALUES(
   		#{partNo},
@@ -46,6 +112,7 @@
   		NULL
   	)
   </insert>
+  <!-- BY 다빈  부서별 게시판 - 게시판 insert file -->
   <insert id="insertPartFile" parameterType="BoardFile">
   	INSERT INTO PART_FILE VALUES(
   		PART_BOARD_FILE_SEQ.NEXTVAL,
@@ -58,4 +125,27 @@
   	)
   </insert>
   
+  
+  
+  
+  <!-- 전체 List 수 -->
+  <select id="countPostList" parameterType="hashmap" resultType="int">
+  	SELECT COUNT(*) FROM ${boardType} WHERE 
+  	<choose>
+  		<when test="delType != null">${delType}='N' </when>
+  		<when test="comntPostNo != null">PART_NO=${comntPostNo} </when>
+  	</choose>
+  	<choose>
+  		<when test="deptCode != null">AND DEPT_CODE=#{deptCode}
+  			<choose>
+  				<when test="searchType != null">
+  				<choose>
+  					<when test="searchType == 'both'"></when>
+					<otherwise>AND ${searchType} LIKE #{keyword}</otherwise>
+  				</choose>
+  				</when>
+  			</choose>
+  		</when>
+  	</choose>
+  </select>
 </mapper>

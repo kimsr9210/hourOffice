@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,8 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import kr.or.houroffice.board.model.service.PartBoardService;
 import kr.or.houroffice.board.model.vo.BoardFile;
 import kr.or.houroffice.board.model.vo.PartBoard;
+import kr.or.houroffice.board.model.vo.PartComments;
+import kr.or.houroffice.common.Page;
 import kr.or.houroffice.member.model.service.AdminMemberService;
 import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.Member;
@@ -38,61 +43,120 @@ public class PartBoardController {
 	@Resource(name="partBService")
 	private PartBoardService bService;
 	
+	private Page page;
+	
 	// 부서별 게시판 all select
 	@RequestMapping(value="/allPartBoardPage.ho")
 	public String allPartBoardPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
 			if(m.getDeptCode()!=null){
-				int countAll = mService.selectCountAllMember();
 				
-				int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
-				if(request.getParameter("currentPage")==null) {
-					currentPage = 1;
-				}else {
-					currentPage = Integer.parseInt(request.getParameter("currentPage"));
-				}	
-				int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+				Page page = createPage(request,10,10); // (request , 한 페이지당 게시물수 , 한 페이지당 보여줄 네비 수)
 				
-				
-				
-				ArrayList<PartBoard> list = bService.selectBoardList(m.getDeptCode());
-				
-				
-				
-				// 페이징 처리 - 네비
-				int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
-				//String pageNavi = bService.getPageNavi(currentPage,recordCountPerPage,naviCountPerPage);
-				
-				
-				
-				
-				
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("deptCode", m.getDeptCode());
+				map.put("page", page);
+				// 리스트
+				List<Object> list = bService.selectBoardList(map);
+				// 페이지네비
+				Page pageNavi = bService.getPageNavi(map);
 				
 				model.addAttribute("list",list);
+				model.addAttribute("pageNavi",pageNavi);
 			}else{ // 부서가 없는 사람
-				
+				model.addAttribute("msg","부서별 게시판입니다.\n부서가 없는 사람은 접근할 수 없습니다.");
+				model.addAttribute("location","login.jsp");
 			}
 			
 		}else{ // 로그인 안 한 사람
 			return "redirect:login.jsp";
 		}
-		return "/part_board/allPartBoardPage";
+		return "part_board/allPartBoardPage";
 	}
-	//
+	// 부서별 게시판 all select - 검색 select
 	@RequestMapping(value="/searchPartBoard.ho")
-	public String searchBoard(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword, @RequestParam("deptCode") String pageDeptCode, @SessionAttribute("member") Member m){
-		System.out.println(searchType+" / "+keyword);
+	public String searchBoard(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword, 
+							@RequestParam("deptCode") String pageDeptCode, Model model, HttpServletRequest request, HttpServletResponse response, @SessionAttribute("member") Member m)
+	{
+		response.setHeader("Content-Type", "text/html;charset=utf-8");
 		if(m!=null && pageDeptCode.equals(m.getDeptCode())){
-			System.out.println("확인");
+			Page page = createPage(request,10,10); // (request , 한 페이지당 게시물수 , 한 페이지당 보여줄 네비 수)
+			
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("deptCode", m.getDeptCode());
+			map.put("page", page);
+			if(!searchType.equals("both")){
+				map.put("searchType", "part_"+searchType); // 쿼리문 데이터
+			}
+			map.put("keyword", "%"+keyword+"%"); // 쿼리문 데이터
+			map.put("searchTypeOrg", searchType); // 네비 데이터
+			map.put("keywordOrg", keyword); // 네비 데이터
+			
+			// 리스트
+			List<Object> list = bService.selectSearchBoardList(map);
+			// 페이지네비
+			Page pageNavi = bService.getPageNavi(map);
+			
+			model.addAttribute("list",list);
+			model.addAttribute("pageNavi",pageNavi);
 		}
-		return "";
+		return "part_board/allPartBoardPage";
 	}
 	
-	// 부서별 게시판 one select
-	@RequestMapping(value="/partBoard.ho")
-	public String partBoard(){
-		return "/part_board/partBoard";
+	// 부서별 게시판 - 게시글 one select
+	@RequestMapping(value="/postInPartBoard.ho")
+	public String partBoard(@RequestParam("deptCode") String pageDeptCode, @RequestParam("partNo") int partNo, Model model, 
+						HttpServletRequest request, @SessionAttribute("member") Member m)
+	{
+		if(m != null && pageDeptCode.equals(m.getDeptCode())){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("deptCode", pageDeptCode);
+			map.put("postNo", partNo);
+			PartBoard pb = (PartBoard)bService.selectOnePost(map); // 게시글 정보
+			
+			// 게시글 파일
+			
+			// 게시글 댓글
+			int comntCount = bService.selectComntCount(partNo);
+			
+			Page comntPage = createPage(request, 5, 5);
+			map.put("page", comntPage);
+			map.put("comntPostNo", partNo);
+			List<Object> comntList = bService.selectPostComments(map);
+			//Page pageNavi = bService.getComntPageNavi(map);
+			
+			model.addAttribute("pb",pb);
+			model.addAttribute("comntList",comntList);
+			model.addAttribute("comntCount",comntCount);
+		}
+		return "part_board/partBoard";
 	}
+	@RequestMapping(value="/writeComntPartBoard.ho")
+	public String writeComnt(PartComments comnt, Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
+		if(m != null){
+			comnt.setMemNo(m.getMemNo());
+			comnt.setPartComntWriter(m.getMemName());
+			comnt.setPartComntEmail(m.getMemEmail());
+			int result = bService.insertPostComnt(comnt);
+			if(result>0){
+				return partBoard(m.getDeptCode(),comnt.getPartNo(),model,request,m);
+			}else{
+				model.addAttribute("msg","댓글 작성이 실패하였습니다. \n지속적인 문젝 발생시 관리자에 문의하세요.");
+				model.addAttribute("location","");
+				return "result";
+			}
+		}else{ // 비로그인 시 
+			return "redirect:login.jsp";
+		}
+		
+	}
+	
+	// 부서별 게시판 게시글 삭제
+	@RequestMapping(value="/deltetPostPartBoard.ho")
+	public void deletePost(@RequestParam("memNo") int memNo, @RequestParam("postNo") int postNo){
+		
+	}
+	
 	
 	// 부서별 게시판 - 새글쓰기 page
 	@RequestMapping(value="/writePostPartBoard.ho")
@@ -104,7 +168,7 @@ public class PartBoardController {
 				if(dept.getDeptCode().equals(pageDeptCode+" ")) model.addAttribute("deptName", dept.getDeptName());
 				// 부서 이름 거르기
 			}
-			return "/part_board/writePostPartBoard";
+			return "part_board/writePostPartBoard";
 		}
 		return "redirect:login.jsp";
 	}
@@ -197,7 +261,24 @@ public class PartBoardController {
 	// 부서별 게시판 update
 	@RequestMapping(value="/partBoardModify.ho")
 	public String partBoardModify(){
-		return "/part_board/partBoardModify";
+		return "part_board/partBoardModify";
 	}
-
+	
+	
+	
+	// 페이징처리 할 때 필요한 페이지 객체 만들기
+	private Page createPage(HttpServletRequest request,int RCPP, int NCPP){
+		page = new Page();
+		
+		int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
+		if(request.getParameter("currentPage")==null) {
+			page.setCurrentPage(1);
+		}else {
+			page.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+		}
+		page.setRecordCountPerPage(RCPP); // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+		page.setNaviCountPerPage(NCPP); // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리(네비)를 위한 변수
+		
+		return page;
+	}
 }

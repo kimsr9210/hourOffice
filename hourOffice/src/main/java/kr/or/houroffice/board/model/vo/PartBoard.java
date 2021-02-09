@@ -16,12 +16,15 @@ public class PartBoard {
 	private char partDelYN;			// 게시물 삭제 YN
 	private Timestamp partDelDate;	// 게시물 삭제일
 	private String deptName;		// 부서 이름
+	private String memPosition;		// 작성자 직위
+	private String memProfile;		// 작성자 프로필사진
 	public PartBoard() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public PartBoard(int partNo, String partTitle, String deptCode, Timestamp partDate, int memNo, String partWriter,
-			String partContent, int partHits, char partDelYN, Timestamp partDelDate, String deptName) {
+			String partContent, int partHits, char partDelYN, Timestamp partDelDate, String deptName,
+			String memPosition, String memProfile) {
 		super();
 		this.partNo = partNo;
 		this.partTitle = partTitle;
@@ -34,6 +37,8 @@ public class PartBoard {
 		this.partDelYN = partDelYN;
 		this.partDelDate = partDelDate;
 		this.deptName = deptName;
+		this.memPosition = memPosition;
+		this.memProfile = memProfile;
 	}
 	public int getPartNo() {
 		return partNo;
@@ -101,5 +106,18 @@ public class PartBoard {
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
 	}
+	public String getMemPosition() {
+		return memPosition;
+	}
+	public void setMemPosition(String memPosition) {
+		this.memPosition = memPosition;
+	}
+	public String getMemProfile() {
+		return memProfile;
+	}
+	public void setMemProfile(String memProfile) {
+		this.memProfile = memProfile;
+	}
+	
 	
 }
