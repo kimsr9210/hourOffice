@@ -31,6 +31,46 @@
 <script
 	src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
+<style>
+	#codeTextBox{
+		width:100%;
+		height:auto;
+	}
+	
+	
+.codeWriteText {
+	width: 90%;
+	margin: 30px;
+	font-family: "맑은 고딕";
+	font-size: 0.875rem;
+	resize: none;
+	border: 0;
+	outline: none;
+	background-color: black;
+	color: white;
+	border: 2px solid red;
+}
+
+.codeYellow{
+	font-weight: bolder;
+	color: yellow;
+}
+
+.codeGreen{
+	font-weight: bolder;
+	color: green;
+}
+
+.codeRed{
+	font-weight: bolder;
+	color: red;
+}
+
+.codeBlue{
+	font-weight: bolder;
+	color: blue;
+}
+</style>
 
 	<%
 	Project p = (Project)request.getAttribute("project");
@@ -68,7 +108,7 @@
 										<%if(!like){ %>
 										<i class="far fa-star"></i>
 										<%}else{ %>
-											<i class="fas fa-star likeBtn"></i>
+										<i class="fas fa-star likeBtn"></i>
 										<%} %>
 										</span>
 										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
@@ -90,8 +130,7 @@
 										<p id="projectDelete" class="optionRegular">프로젝트 삭제</p>
 										<hr>
 										<p class="optionBold">프로젝트 관리자 설정</p>
-										<p id="mgrComment" class="optionRegular">글/댓글 작성 권한 설정</p>
-										<p id="mgrFile" class="optionRegular">파일 다운로드 권한 설정</p>
+                                        <p id="projectComplate" class="optionRegular">프로젝트 완료 설정</p>
 										<hr>
 										<p class="optionBold">프로젝트 번호</p>
 										<p class="optionRegular"><%=p.getProNo() %></p>
@@ -105,8 +144,7 @@
 							<p id="boardWriteTitle">게시물 작성</p>
 							<div id="boardWrite">
 								<ul id="boardSelect">
-									<li><span class="modeSelect"><i class="far fa-edit"></i>
-											글작성</span></li>
+									<li><span class="modeSelect"><i class="far fa-edit"></i> 글작성</span></li>
 									<li><span class="modeSelect"><i
 											class="fas fa-laptop-code"></i> 코드</span></li>
 									<li><span class="modeSelect"><i
@@ -117,32 +155,26 @@
 								<div id="boardWriteContents">
 
 									<!-- 일반 글 작성일 때 -->
-									<form action="/insertProjectBoard.ho" method="get"> <input
+									<form action="/insertProjectBoard.ho" method="post"  enctype="multipart/form-data"> <input
 											type="hidden" value="<%=p.getProNo() %>" name="proNo" /> <input
 											type="hidden" value="${sessionScope.member.memNo }"
 											name="memNo" />
 										<div id="writeBox" class="boardAllStyle">
-											<textarea class="boardWriteText" name="boardText"
+											<textarea id="postTextarea" class="boardWriteText" name="boardText"
 												placeholder="내용을 입력해 주세요"></textarea>
-
+											<img id="img1" class="imgUp"/>
 											<div class="boardWriteBot">
 												<div class="fileUploadBox">
-													<input type="file" class="fileUpload" /> <input type="file"
-														class="imgUpload" /> <label for="fileUpload"
-														class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload" class="fileUploadImg"><i
-														class="far fa-image"></i></label>
-
+													<input type="file" class="fileUpload" id="fileUpload1" name="file"/>
+													<input type="file" class="imgUpload" id="imgUpload1" name="imgFile"/>
+													<label for="fileUpload1" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+													<label for="imgUpload1" class="fileUploadImg"><i class="far fa-image"></i></label>
 												</div>
 												<div class="fileNameBox">
-													<input text="text" class="fileName" /> <input text="text"
-														class="fileSize" />
+													<input text="text" class="fileName" readonly="readonly"/>
+													<input text="text" class="fileSize" readonly="readonly"/>
 												</div>
 												<div class="boardUpload">
-													<select name="public" class="publicYN">
-														<option value="public" selected>전체공개</option>
-														<option value="admin">관리자만</option>
-													</select>
 													<button type="submit" class="uploadBtn">올리기</button>
 												</div>
 											</div>
@@ -150,39 +182,38 @@
 									</form>
 
 									<!-- 코드 일때 -->
-									<form action="/insertProjectBoard.ho" method="get">
-										<input type="hidden" value="post" name="type" /> <input
-											type="hidden" value="<%=p.getProNo() %>" name="proNo" /> <input
-											type="hidden" value="${sessionScope.member.memNo }"
-											name="memNo" />
+									<form action="/insertProjectCode.ho" method="post">
+										<input type="hidden" value="<%=p.getProNo() %>" name="proNo" />
+										<input type="hidden" value="${sessionScope.member.memNo }" name="memNo" />
 										<div id="codeBox" class="boardAllStyle">
-											<textarea class="boardWriteText" name="boardText"
+										<div id="codeTextBox">
+											<textarea id="codeText"class="codeWriteText" name="codeText"
+												placeholder="코드을 입력해 주세요"></textarea>
+											<textarea id="codeTextarea"class="boardWriteText" name="boardText"
 												placeholder="내용을 입력해 주세요"></textarea>
-
+	
+												
+												
+												
+										</div>
+											<img id="img1" class="imgUp"/>
 											<div class="boardWriteBot">
 												<div class="fileUploadBox">
-													<input type="file" class="fileUpload" /> <input type="file"
-														class="imgUpload" /> <label for="fileUpload"
-														class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload" class="fileUploadImg"><i
-														class="far fa-image"></i></label>
-
+													<input type="file" class="fileUpload" id="fileUpload2" name="file"/>
+													<input type="file" class="imgUpload" id="imgUpload2" name="imgFile"/>
+													<label for="fileUpload1" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+													<label for="imgUpload1" class="fileUploadImg"><i class="far fa-image"></i></label>
 												</div>
 												<div class="fileNameBox">
-													<input text="text" class="fileName" /> <input text="text"
-														class="fileSize" />
+													<input text="text" class="fileName" readonly="readonly"/>
+													<input text="text" class="fileSize" readonly="readonly"/>
 												</div>
 												<div class="boardUpload">
-													<select name="public" class="publicYN">
-														<option value="public" selected>전체공개</option>
-														<option value="admin">관리자만</option>
-													</select>
 													<button type="submit" class="uploadBtn">올리기</button>
 												</div>
 											</div>
 										</div>
 									</form>
-
 
 									<!--일정 일 때-->
 									<form action="/insertProjectPlan.ho" method="post">
@@ -202,23 +233,7 @@
 													id="scheduleMemo" type="text" name="memo" placeholder="메모를 입력하세요"/>
 											</div>
 											<div class="boardWriteBot">
-												<div class="fileUploadBox">
-													<input type="file" class="fileUpload" /> <input type="file"
-														class="imgUpload" /> <label for="fileUpload"
-														class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload" class="fileUploadImg"><i
-														class="far fa-image"></i></label>
-
-												</div>
-												<div class="fileNameBox">
-													<input text="text" class="fileName" /> <input text="text"
-														class="fileSize" />
-												</div>
 												<div class="boardUpload">
-													<select name="public" class="publicYN">
-														<option value="public" selected>전체공개</option>
-														<option value="admin">관리자만</option>
-													</select>
 													<button type="submit" class="uploadBtn">올리기</button>
 												</div>
 											</div>
@@ -255,23 +270,7 @@
 													readonly="readonly" />
 											</div>
 											<div class="boardWriteBot">
-												<div class="fileUploadBox">
-													<input type="file" class="fileUpload" /> <input type="file"
-														class="imgUpload" /> <label for="fileUpload"
-														class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload" class="fileUploadImg"><i
-														class="far fa-image"></i></label>
-
-												</div>
-												<div class="fileNameBox">
-													<input text="text" class="fileName" /> <input text="text"
-														class="fileSize" />
-												</div>
 												<div class="boardUpload">
-													<select name="public" class="publicYN">
-														<option value="public" selected>전체공개</option>
-														<option value="admin">관리자만</option>
-													</select>
 													<button type="submit" class="uploadBtn">올리기</button>
 												</div>
 											</div>
@@ -321,7 +320,7 @@
 	<!-- 새 프로젝트 박스 -->
     <div id="newProjectBox">
         <div id="newProjectHeader">
-            프로젝트 수정<div id="newProjectExit"><i class="fas fa-times"></i></div>
+            프로젝트 수정<div id="newProjectExit"><i cl ass="fas fa-times"></i></div>
         </div>
         <form id="projectForm" action="/updateProject.ho" method="post">
             <input type="text" value="<%=p.getProSubject() %>" name="proSubject" id="newProjectSubject" />
@@ -478,7 +477,260 @@
 	<!-- 자바 스크립트    -->
 	<script>
 		$(function(){
+
+			//프로젝트 나가기
+			$('#projectExit, .outProject').click(function(){
+				var proNo = '<%=p.getProNo()%>';
+				var proMemNo = '<%=p.getMemNo()%>';
+				var memNo = '<%=m.getMemNo()%>'
+				var result = window.confirm("해당 프로젝트에서 나가시겠습니까?");
+				if(result){
+					if(proMemNo==memNo){
+						alert('프로젝트 생성자는 프로젝트를 나갈 수 없습니다');
+					}else{
+						$.ajax({
+			            	url : "/updateProjectMemberExit.ho",
+			            	data : {"proNo" : proNo, "memNo" : memNo},
+			            	type : "post",
+			            	success : function(result){
+			            		if(result=="true"){
+			            			alert("해당 프로젝트에서 나갔습니다.");
+			            		}else{
+			            			alert("해당 프로젝트 나가기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+			            		}
+			            	},
+			            	error : function(){
+			            		console.log("프로젝트 나가기 ajax 통신 실패");
+			            	}
+			            });
+						
+					}
+					location.replace('/projectAllList.ho');
+				}
+			});
 			
+			//프로젝트 삭제
+			$('#projectDelete').click(function(){
+				var proNo = '<%=p.getProNo()%>';
+				var proMemNo = '<%=p.getMemNo()%>';
+				var memNo = '<%=m.getMemNo()%>';
+				var proSubject = '<%=p.getProSubject()%>'
+				var result = window.confirm("해당 프로젝트를 삭제하시겠습니까?");
+				if(result){
+					if(!(proMemNo==memNo)){
+						alert('프로젝트 생성자만 삭제할 수 있습니다.');
+					}else{
+						$.ajax({
+			            	url : "/deleteProject.ho",
+			            	data : {"proNo" : proNo},
+			            	type : "post",
+			            	success : function(result){
+			            		if(result=="true"){
+			            			alert("해당 프로젝트가 삭제되었습니다.")
+			            		}else{
+			            			alert("해당 프로젝트 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+			            		}
+			            	},
+			            	error : function(){
+			            		console.log("프로젝트 삭제 ajax 통신 실패");
+			            	}
+			            });
+						location.replace('/projectAllList.ho');
+					}
+				}
+			});
+			
+			//프로젝트 내보내기
+			$('.outProjectMember').click(function(){
+				var memNo = $(this).next().val();
+				var memName = $(this).next().next().val();
+				var proMemNo = '<%=p.getMemNo()%>';
+				var proNo = '<%=p.getProNo()%>';
+				var result = window.confirm("["+memName+"] 님을 해당 프로젝트에서 내보내시겠습니까?");
+				if(memNo==proMemNo){
+					alert('프로젝트 생성자는 내보낼 수 없습니다');
+				}else{
+					if(result){
+						$.ajax({
+				            url : "/updateProjectMemberExit.ho",
+				            data : {"proNo" : proNo, "memNo" : memNo},
+				            type : "post",
+				            success : function(result){
+				            	if(result=="true"){
+				            		alert("["+memName+"] 님을 해당 프로젝트에서 내보냈습니다");
+				            	}else{
+				            		alert("참가자 내보내기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+				            	}
+				            },
+				            error : function(){
+				            	console.log("참가자 내보내기 ajax 통신 실패");
+				            }
+				        });
+					}
+		    		location.reload();
+				}
+			});
+			
+			//관리자 지정
+			$('.adminSet').click(function(){
+				var memNo = $(this).next().val();
+				var memName = $(this).next().next().val();
+				var proMemNo = '<%=p.getMemNo()%>';
+				var proNo = '<%=p.getProNo()%>';
+				var result = window.confirm("["+memName+"] 님을 관리자로 설정하시겠습니까?");
+				if(result){
+					$.ajax({
+				           url : "/updateProjectMgrSet.ho",
+				           data : {"proNo" : proNo, "memNo" : memNo},
+				           type : "post",
+				           success : function(result){
+				           	if(result=="true"){
+				           		alert("["+memName+"] 님을 관리자로 설정하였습니다");
+				           	}else{
+				           		alert("관리자 권한 지정에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+				           	}
+				           },
+				           error : function(){
+				           	console.log("관리자 지정 ajax 통신 실패");
+				           }
+				       });
+				}
+		    	location.reload();
+			});
+			
+			//관리자 지정 해제
+			$('.adminCancel').click(function(){
+				var memNo = $(this).next().val();
+				var memName = $(this).next().next().val();
+				var proMemNo = '<%=p.getMemNo()%>';
+				var proNo = '<%=p.getProNo()%>';
+				var result = window.confirm("["+memName+"] 님의 관리자 권한을 해제하시겠습니까?");
+				if(memNo==proMemNo){
+					alert('프로젝트 생성자는 관리자 권한을 해제할 수 없습니다');
+				}else{
+					if(result){
+						$.ajax({
+				            url : "/updateProjectMgrCancel.ho",
+				            data : {"proNo" : proNo, "memNo" : memNo},
+				            type : "post",
+				            success : function(result){
+				            	if(result=="true"){
+				            		alert("["+memName+"] 님의 관리자 권한을 해제하였습니다");
+				            	}else{
+				            		alert("관리자 권한 해제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+				            	}
+				            },
+				            error : function(){
+				            	console.log("관리자 지정 해제 ajax 통신 실패");
+				            }
+				        });
+					}
+		    		location.reload();
+				}
+			});
+			//이미지 미리 보기
+			$('#imgUpload1').on("change", handleImgFileSelectPost);
+			$('#imgUpload2').on("change", handleImgFileSelectCode);
+			
+			function handleImgFileSelectPost(e) {
+				var files = e.target.files;
+				var filesArr = Array.prototype.slice.call(files);
+				
+				filesArr.forEach(function(f) {
+					if(!f.type.match("image.*")){
+						alert("확장자는 이미지 확장자만 가능합니다.");
+						return;
+					}
+					
+					sel_file = f;
+					var reader = new FileReader();
+					reader.onload = function(e){
+						$('#img1').attr("src", e.target.result);
+					}
+					reader.readAsDataURL(f);
+				})
+			}
+			
+			function handleImgFileSelectCode(e) {
+				var files = e.target.files;
+				var filesArr = Array.prototype.slice.call(files);
+				
+				filesArr.forEach(function(f) {
+					sel_file = f;
+					var reader = new FileReader();
+					reader.onload = function(e){
+						$('#img2').attr("src", e.target.result);
+					}
+					reader.readAsDataURL(f);
+				})
+			}
+			
+			// 파일 올릴 시 이름 보여주기
+			$('.fileUpload').change(function() {
+				$(this).parent().next().children().eq(0).val("첨부파일 : "+$(this)[0].files[0].name);
+				$(this).parent().next().children().eq(1).val($(this)[0].files[0].size + ' KB');
+			});
+			
+			//프로젝트 완료처리
+    		$('#projectComplate').click(function(){
+    			var compYN = "<%=p.getCompYN()%>";
+    			var proNo = "<%=p.getProNo()%>";
+    			console.log(compYN);
+    			if(compYN=='Y'){
+    				var result = window.confirm("현재 프로젝트는 완료되어있습니다\n미완료 처리 하시겠습니까?");
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectComplate.ho",
+    			            data : {"proNo" : proNo, "compYN" : compYN},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("현재 프로젝트는 미완료 처리 되었습니다");
+    			            	}else{
+    			            		alert("현재 프로젝트의 완료처리가 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("프로젝트 완료처리 ajax 통신 실패");
+    			            }
+    			        });
+    					
+    					location.reload();
+    				}
+    			}else{
+    				var result = window.confirm("현재 프로젝트를 완료처리 하시겠습니까?");
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectComplate.ho",
+    			            data : {"proNo" : proNo, "compYN" : compYN},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("현재 프로젝트는 완료처리 되었습니다");
+    			            	}else{
+    			            		alert("현재 프로젝트의 완료처리에 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("프로젝트 완료처리 ajax 통신 실패");
+    			            }
+    			        });
+    					location.reload();
+    				}
+    			}
+    		});
+    		
+    		function adjustHeight() {
+    			var textEle = $('#codeText');
+    			textEle[0].style.height = 'auto';
+    			var textEleHeight = textEle.prop('scrollHeight');
+    			textEle.css('height', textEleHeight);
+    		}
+    		;
+    		var textEle = $('#codeText');
+    		textEle.on('keyup', function() {
+    			adjustHeight();
+    		});
 		});
 	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
