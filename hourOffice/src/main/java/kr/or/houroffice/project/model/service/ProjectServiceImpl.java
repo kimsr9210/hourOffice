@@ -169,6 +169,11 @@ public class ProjectServiceImpl implements ProjectService{
 		return result;
 	}
 
+
+	//BY 진원 - 특정한 게시물에 대한 댓글 목록
+	public ArrayList<ProjectComment> selectOneBoardComment(int boardNo){
+		return pDAO.selectOneBoardComment(sqlSession,boardNo);
+	}
 	public int insertProjectBoardFile(ProjectFileData pfd) {
 		int result = pDAO.insertProjectBoardFile(pfd, sqlSession);
 		return result;

@@ -266,6 +266,12 @@ public class AdminMemberDAO {
 		return sqlSession.update("member.deleteDepartment",deptCode);
 	}
 
+	//BY 진원   조직도 - 부서목록
+	public ArrayList<Department> selectAllDepartment(SqlSessionTemplate sqlSession) {
+		List<Department> list = sqlSession.selectList("member.selectAllDepartment");
+		return (ArrayList<Department>) list;
+	}
+
 	
 
 	
