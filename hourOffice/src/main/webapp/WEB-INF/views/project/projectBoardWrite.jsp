@@ -46,30 +46,11 @@
 	resize: none;
 	border: 0;
 	outline: none;
-	background-color: black;
+	background-color: #272822;
 	color: white;
 	border: 2px solid red;
 }
 
-.codeYellow{
-	font-weight: bolder;
-	color: yellow;
-}
-
-.codeGreen{
-	font-weight: bolder;
-	color: green;
-}
-
-.codeRed{
-	font-weight: bolder;
-	color: red;
-}
-
-.codeBlue{
-	font-weight: bolder;
-	color: blue;
-}
 </style>
 
 	<%
@@ -182,16 +163,16 @@
 									</form>
 
 									<!-- 코드 일때 -->
-									<form action="/insertProjectCode.ho" method="post">
+									<form action="/insertProjectCode.ho" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<%=p.getProNo() %>" name="proNo" />
 										<input type="hidden" value="${sessionScope.member.memNo }" name="memNo" />
 										<div id="codeBox" class="boardAllStyle">
 										<div id="codeTextBox">
-											<textarea id="codeText"class="codeWriteText" name="codeText"
+											<textarea id="codeText" class="codeWriteText" name="codeText"
 												placeholder="코드을 입력해 주세요"></textarea>
-											<textarea id="codeTextarea"class="boardWriteText" name="boardText"
+											<textarea id="codeTextarea" class="boardWriteText" name="boardText"
 												placeholder="내용을 입력해 주세요"></textarea>
-	
+
 												
 												
 												

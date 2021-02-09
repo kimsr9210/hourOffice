@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectCode"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectComment"%>
 <%@page import="org.springframework.web.bind.annotation.SessionAttribute"%>
 <%@page import="javax.websocket.Session"%>
@@ -38,6 +39,44 @@
 		margin: 0px 30px 0px 30px;
 		height: auto;
 	}
+	
+.codeTextBox {
+	width: 90%;
+	margin: 30px;
+	font-family: "맑은 고딕";
+	font-size: 0.875rem;
+	resize: none;
+	border: 0;
+	outline: none;
+	background-color: #272822;
+	color: white;
+	border: 2px solid red;
+}
+
+.codeTextBox>*{
+	font-size: 1rem;
+	color: white;
+}
+
+.codeYellow{
+	font-weight: bolder;
+	color: #f2c13f;
+}
+
+.codeGreen{
+	font-weight: bolder;
+	color: green;
+}
+
+.codeRed{
+	font-weight: bolder;
+	color: #f86634;
+}
+
+.codeBlue{
+	font-weight: bolder;
+	color: #36bcfc;
+}
 </style>
     		
 
@@ -49,6 +88,7 @@
 	ArrayList<ProjectMember> projectMgrList = (ArrayList<ProjectMember>)request.getAttribute("projectMgrList");
 	ArrayList<ProjectComment> commentList = (ArrayList<ProjectComment>)request.getAttribute("commentList");
 	ArrayList<Project> favoriteList = (ArrayList<Project>)request.getAttribute("favoriteList");
+	ArrayList<ProjectCode> codeList = (ArrayList<ProjectCode>)request.getAttribute("codeList");
 	String boardType = (String)request.getAttribute("boardType");
 	Member m = (Member)session.getAttribute("member");
 	
@@ -188,6 +228,7 @@
                                             <div class="boardModifyList boardModify">게시물 수정</div>
                                             <div class="boardModifyList boardDelete">게시물 삭제</div>
                                             <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+                                            <input type="hidden" name="boardType" value="post"/>
                                         </div>
                                     </div>
                                     <%} %>
@@ -202,6 +243,7 @@
 	                                    <%} %>
 	                                    <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
 	                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+	                                    <input type="hidden" name="boardType" value="post"/>
 	                                    <span class="boardModifyBtn textHide">수정&nbsp;</span>
 	                                    <span class="modifyCancelBtn textHide">취소</span>
                                     </form>
@@ -262,6 +304,123 @@
                                         <form action="/insertBoardComment.ho" method="post">
                                             <input class="boardComment" type="text" name="commentCon" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
                                             <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+                                            <input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                            <%} %>
+                            <%} %>
+                            
+                            
+                            
+                            <!-- 코드 게시물 여러개 -->
+                            <%if(boardType.equals("code")){ %>
+                            <%for(ProjectCode pCode : codeList){ %>
+                            <%String name = ""; %>
+                            <%for(Member member : boardMemberList){ %>
+                            	<%if(member.getMemNo()==pCode.getMemNo()){ %>
+                            	<%name = member.getMemName(); %>
+                            	<%} %>
+                            <%} %>
+                            <div class="boardBox">
+                                <div class="boardInfo">
+                                    <div class="memberImg"><i class="fas fa-user-circle"></i></div>
+                                    <div class="memberInfo">
+                                    
+                                        <div class="memberName"><%=name %></div>
+                                    
+                                        <div class="boardTime"><%=pCode.getCodeDate() %></div>
+                                    </div>
+                                    <!--관리자 일 때-->
+                                    <%if(pCode.getMemNo()==m.getMemNo()){ %>
+                                    <div class="memberAdmin">
+                                        <span class="boardSet"><i class="fas fa-ellipsis-v"></i></span>
+                                        <div class="boardModifyBox">
+                                            <div class="boardModifyList boardModify">게시물 수정</div>
+                                            <div class="boardModifyList boardDelete">게시물 삭제</div>
+                                            <input type="hidden" name="boardNo" value="<%=pCode.getCodeNo() %>"/>
+                                            <input type="hidden" name="boardType" value="code"/>
+                                        </div>
+                                    </div>
+                                    <%} %>
+                                    <!--------------->
+                                </div>
+                                
+                                <div class="boardContents">
+                                	<form action="/updateProjectBoard.ho" method="post">
+                                		<div class="codeTextBox">
+                                		<%=pCode.getCodeText() %>
+                                		</div>
+	                                    <textarea class="textarea"  disabled="disabled" readonly="readonly" name="boardText"><%=pCode.getBoardText() %></textarea>
+	                                    <%if(pCode.getImgName()!=null){ %>
+	                                    <img class="imgUp" src="/resources/file/project/<%=pCode.getImgName()%>"/>
+	                                    <%} %>
+	                                    <input type="hidden" name="boardNo" value="<%=pCode.getCodeNo()%>"/>
+	                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
+	                                    <span class="boardModifyBtn textHide">수정&nbsp;</span>
+	                                    <span class="modifyCancelBtn textHide">취소</span>
+                                    </form>
+                                </div>
+                                <%
+                                int count = 0;
+                                for(ProjectComment pc : commentList){
+                                	if(pCode.getCodeNo()==pc.getBoardNo()){
+                                		count++;
+                                	}
+                                }
+                                	
+                                %>
+                                <div class="commentCount">
+                                    <%=count %>개 댓글
+                                </div>
+                                <!-- 댓글 하나 코드 -->
+                                <%for(ProjectComment pc : commentList){ %>
+                                <%if(pc.getBoardNo()==pCode.getCodeNo()){ %>
+                                <%
+                                	String memName = "";
+                                	for(Member member : boardMemberList){
+                                		if(pc.getMemNo()==member.getMemNo()){
+                                			memName = member.getMemName();
+                                		}
+                                	}
+                                %>
+                                <div class="commentList">
+                                    <div class="commentUserImg">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div class="commentInfo">
+                                        <div class="commentName">
+                                        	<%=memName %><span class="commentTime"><%=pc.getCommentDate() %></span>
+                                        	<%if(pc.getMemNo()==m.getMemNo()){ %>
+	                                        <span class="commentModifyBtn">수정</span>
+	                                        <span  class="commentDeleteBtn">삭제</span>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+	                                        <%} %>
+                                        </div>
+                                        <form action="/updateProjectComment.ho" method="get">
+	                                        <textarea class="commentTextArea" name="commentCon" disabled="disabled" readonly="readonly"><%=pc.getCommentCon() %></textarea>
+	                                        <input type="hidden" name="commentNo" value="<%=pc.getCommentNo()%>"/>
+	                                        <input type="hidden" name="memNo" value="<%=pc.getMemNo() %>"/>
+                                            <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
+                                        </form>
+                                    </div>
+                                </div>
+                                <%} %>
+                                <%} %>
+                                
+                                <div class="commentWrite">
+                                    <div class="commentUser">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div class="commentText">
+                                        <form action="/insertBoardComment.ho" method="post">
+                                            <input class="boardComment" type="text" name="commentCon" placeholder=" 댓글을 입력하세요 (Enter는 입력)"/>
+                                            <input type="hidden" name="boardNo" value="<%=pCode.getCodeNo()%>"/>
                                             <input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
                                             <input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
                                         </form>
