@@ -245,9 +245,44 @@
 		WHERE PRO_NO=#{proNo}
 	</update>
 	
+
+	<!-- BY 진원 - 한 게시물에 대한 댓글 목록 -->
+	<select id="selectOneBoardComment" resultType="ProjectComment">
+		SELECT 
+		    COMMENT_NO as commentNo,
+		    BOARD_NO as boardNo,
+		    MEM_NO as memNo,
+		    COMMENT_CON as commentCon,
+		    COMMENT_DATE as commentDate,
+		    DEL_YN as delYN
+		FROM PRO_COMMENT
+		WHERE DEL_YN='N' AND BOARD_NO =#{boardNo}
+		ORDER BY COMMENT_DATE DESC
+	</select>
+  
 	<!-- 프로젝트 게시물에 사진 올릴 시 -->
 	<insert id="insertProjectBoardFile" parameterType="ProjectFileData">
 		INSERT INTO PRO_FILE VALUES(PRO_FILE_SEQ.NEXTVAL, #{proNo}, #{memNo}, #{originalFileName}, #{changedFileName}, #{filePath}, #{fileSize}, #{uploadTime}, 'N')
 	</insert>
 	
+	<!-- 프로젝트 게시물에 사진 올릴 시 -->
+	<insert id="insertProjectCode" parameterType="ProjectCode">
+		INSERT INTO PRO_CODE VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, SYSTIMESTAMP, #{codeText}, #{boardText}, 'N', #{imgName})
+	</insert>
+	
+	<!-- 프로젝트 코드 목록 가져오기 -->
+	<select id="selectProjectCodeList" resultType="ProjectCode">
+		SELECT 
+		    CODE_NO as codeNo,
+		    PRO_NO as proNo,
+		    MEM_NO as memNo,
+		    CODE_DATE as codeDate,
+		    CODE_TEXT as codeText,
+		    BOARD_TEXT as boardText,
+		    DEL_YN as delYN,
+		    IMG_NAME as imgName
+		FROM PRO_CODE
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo}
+		ORDER by CODE_NO DESC
+	</select>
 </mapper>

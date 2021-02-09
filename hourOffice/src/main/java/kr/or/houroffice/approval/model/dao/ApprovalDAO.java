@@ -52,6 +52,10 @@ public class ApprovalDAO {
 		return (ArrayList<AprLineMember>)list;
 	}
 
+	public int selectMyAprLineCount(SqlSessionTemplate sqlSession, int memNo) {
+		int count = sqlSession.selectOne("approval.selectMyAprLineCount",memNo);
+		return count;
+  }
 	public int insertApproval(SqlSessionTemplate sqlSession, AprForm af) {//결재문서 입력
 		int result = sqlSession.insert("approval.insertApproval",af);
 		if(result>0){

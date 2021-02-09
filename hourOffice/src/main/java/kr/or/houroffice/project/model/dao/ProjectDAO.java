@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectCode;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
@@ -153,9 +154,25 @@ public class ProjectDAO {
 		return result;
 	}
 
+	//BY 진원 - 한 게시물에 대한 댓글 목록
+	public ArrayList<ProjectComment> selectOneBoardComment(SqlSessionTemplate sqlSession, int boardNo) {
+		List commentList = sqlSession.selectList("project.selectOneBoardComment", boardNo);
+		return (ArrayList<ProjectComment>) commentList;
+  }
+  
 	public int insertProjectBoardFile(ProjectFileData pfd, SqlSessionTemplate sqlSession) {
 		int result = sqlSession.insert("project.insertProjectBoardFile",pfd);
 		return result;
+	}
+
+	public int insertProjectCode(ProjectCode pc, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectCode",pc);
+		return result;
+	}
+
+	public ArrayList<ProjectCode> selectProjectCodeList(int proNo, SqlSessionTemplate sqlSession) {
+		List codeList = sqlSession.selectList("project.selectProjectCodeList", proNo);
+		return (ArrayList<ProjectCode>)codeList;
 	}
 
 	

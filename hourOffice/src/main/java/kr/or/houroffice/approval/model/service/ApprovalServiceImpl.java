@@ -33,10 +33,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Qualifier(value="sqlSessionTemplate")
 	private SqlSessionTemplate sqlSession;
 	
-//	public void selectDeptList(){
-//		aprDAO.selectDeptList(sqlSession);
-//	}
-	
 	public PageList selectApprovalList(AprListPage alp, char listType) {
 		ArrayList<Approval> list = null;
 		switch(listType){
@@ -66,6 +62,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		ArrayList<AprLineMember> list = aprDAO.selectCCCLinePeople(sqlSession,m);
 		return list;
 	}
+	
+	// BY 진원  - 자신이 결재해야할 문서개수 조회
+	public int selectMyAprLineCount(int memNo){
+		return aprDAO.selectMyAprLineCount(sqlSession, memNo);
+	}
 
 	public int insertAprCommon(AprForm af){ //결재 입력 공통 호출
 		//기본 결재 정보
@@ -81,7 +82,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 			int[] aprLine = af.getAprLine();
 			if(aprLine != null){
 				for(int i=0; i<aprLine.length;i++){
-					System.out.println(aprLine[i]);
 					al.setMemNo(aprLine[i]);
 					int result = aprDAO.insertApprovalLine(sqlSession,al);
 				}
