@@ -77,8 +77,8 @@
 									<%} %>
 										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
 										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
-    									<input type="hidden" name="boardType" value="post"/>
 										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
+    									<input type="hidden" name="boardType" value="post"/>
 									</div>
 								</div>
 								</form>

@@ -1,8 +1,16 @@
 package kr.or.houroffice.project.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sun.org.apache.xerces.internal.util.Status;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.houroffice.member.model.service.MemberService;
 import kr.or.houroffice.member.model.vo.Member;
@@ -23,6 +32,7 @@ import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
+import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
 
@@ -198,9 +208,96 @@ public class ProjectController {
 	
 	//일반 게시글 올리기
 	@RequestMapping(value="/insertProjectBoard.ho")
-	public ModelAndView insertProjectBoard(ProjectBoard pb){
+	public ModelAndView insertProjectBoard(HttpServletRequest request,
+											HttpSession session) throws Exception{
+
+		// 업로드 유저 ID 값 가져오기(session에서 가져오기)
+		Member m = (Member)session.getAttribute("member");
+		String changedImgFileName = "";
+		String changedFileName = "";
 		
+		
+		String uploadPath = "/resources/file/project/";
+
+		ServletContext context = request.getServletContext();
+		String realUploadPath = context.getRealPath(uploadPath);
+		int uploadFileSizeLimit = 1000 * 1024 * 1024; // 1000MB
+		
+		String encType = "UTF-8";
+		MultipartRequest multi = new MultipartRequest(request, realUploadPath, uploadFileSizeLimit, encType,
+						new DefaultFileRenamePolicy());
+		
+		int proNo = Integer.parseInt(multi.getParameter("proNo"));
+		String boardText = multi.getParameter("boardText");
+
+		// 파일 이름 가져오기
+		request.setCharacterEncoding("UTF-8");
+		
+		
+		String originalImgFileName = multi.getFilesystemName("imgFile");
+		int fileUser = m.getMemNo();
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // 포멧만들기
+		long currentTime = Calendar.getInstance().getTimeInMillis(); // 시간값 가져오기
+		Timestamp uploadTime = Timestamp.valueOf(formatter.format(currentTime));
+		
+		
+		File file = new File(realUploadPath + "\\" + originalImgFileName);
+
+		file.renameTo(new File(realUploadPath + "\\" + currentTime + "_ho"));
+		changedImgFileName = currentTime + "_ho";
+		
+		File reNameFile = new File(realUploadPath + "\\" + changedImgFileName);
+		String filePath = reNameFile.getPath();
+
+		long fileSize = reNameFile.length();
+		if(originalImgFileName!=null){
+			ProjectFileData pfd = new ProjectFileData();
+			pfd.setProNo(proNo);
+			pfd.setMemNo(fileUser);
+			pfd.setOriginalFileName(originalImgFileName);
+			pfd.setChangedFileName(changedImgFileName);
+			pfd.setFilePath(filePath);
+			pfd.setFileSize(fileSize);
+			pfd.setUploadTime(uploadTime);
+			int resultFile = pService.insertProjectBoardFile(pfd);
+		} else{
+			changedImgFileName = "";
+		}
+		
+		String originalFileName = multi.getFilesystemName("file");
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); // 포멧만들기
+		currentTime = Calendar.getInstance().getTimeInMillis(); // 시간값 가져오기
+		uploadTime = Timestamp.valueOf(formatter.format(currentTime));
+		file = new File(realUploadPath + "\\" + originalFileName);
+		file.renameTo(new File(realUploadPath + "\\" + currentTime + "_ho"));
+		changedFileName = currentTime + "_ho";
+		reNameFile = new File(realUploadPath + "\\" + changedFileName);
+		filePath = reNameFile.getPath();
+		fileSize = reNameFile.length();
+		
+		if(originalFileName!=null){
+			ProjectFileData pfd = new ProjectFileData();
+			pfd.setProNo(proNo);
+			pfd.setMemNo(fileUser);
+			pfd.setOriginalFileName(originalFileName);
+			pfd.setChangedFileName(changedFileName);
+			pfd.setFilePath(filePath);
+			pfd.setFileSize(fileSize);
+			pfd.setUploadTime(uploadTime);
+			int resultFile = pService.insertProjectBoardFile(pfd);
+		} else{
+			changedFileName = "";
+		}
+		
+		
+	    ProjectBoard pb = new ProjectBoard();
+	    pb.setProNo(proNo);
+	    pb.setBoardText(boardText);
+	    pb.setImgName(changedImgFileName);
+	    pb.setMemNo(m.getMemNo());
 		int result = pService.insertProjectBoard(pb);
+		System.out.println(boardText);
 		ModelAndView mav = new ModelAndView();
 		
 		if(result>0){
@@ -212,6 +309,7 @@ public class ProjectController {
 		mav.addObject("boardType", "post");
 		mav.setViewName("project/projectDetailResult");
 		return mav;
+		
 	}
 	
 	//프로젝트 즐겨찾기 등록 ajax
@@ -446,4 +544,64 @@ public class ProjectController {
 		}
 	}
 	
+	
+	
+	@RequestMapping(value="/insertProjectCode.ho")
+	public void insertProjectCode(@RequestParam String codeText){
+		
+		//Pattern pattern = Pattern.compile(".+[.][a-zA-Z0-9][(].+");
+		
+		
+		String[] pTag = codeText.split("\n");
+		
+		
+		
+		for(int i=0; i<pTag.length; i++){
+			
+			pTag[i] = pTag[i].replace(" public ", "<span class=\"codeYellow\"> public </span>");
+			pTag[i] = pTag[i].replace(" void ", "<span class=\"codeYellow\"> void </span>");
+			pTag[i] = pTag[i].replace("this", "<span class=\"codeYellow\">this</span>");
+			pTag[i] = pTag[i].replace("super", "<span class=\"codeYellow\">super</span>");
+			pTag[i] = pTag[i].replace("implements", "<span class=\"codeYellow\">implements</span>");
+			pTag[i] = pTag[i].replace("while", "<span class=\"codeYellow\">while</span>");
+			pTag[i] = pTag[i].replace("private", "<span class=\"codeYellow\">private</span>");
+			pTag[i] = pTag[i].replace("switch", "<span class=\"codeYellow\">switch</span>");
+			pTag[i] = pTag[i].replace("case ", "<span class=\"codeYellow\">case</span>");
+			pTag[i] = pTag[i].replace("new ", "<span class=\"codeYellow\">new</span>");
+			pTag[i] = pTag[i].replace("break", "<span class=\"codeYellow\">break</span>");
+			pTag[i] = pTag[i].replace("default", "<span class=\"codeYellow\">default</span>");
+			pTag[i] = pTag[i].replace("for", "<span class=\"codeYellow\">for</span>");
+			pTag[i] = pTag[i].replace("return", "<span class=\"codeYellow\">return</span>");
+			pTag[i] = pTag[i].replace("import", "<span class=\"codeYellow\">import</span>");
+			pTag[i] = pTag[i].replace("else", "<span class=\"codeYellow\">else</span>");
+			pTag[i] = pTag[i].replace("if", "<span class=\"codeYellow\">if</span>");
+			pTag[i] = pTag[i].replace("class", "<span class=\"codeYellow\">class</span>");
+
+			
+
+			pTag[i] = pTag[i].replace("true", "<span class=\"codeRed\">true</span>");
+			pTag[i] = pTag[i].replace("false", "<span class=\"codeRed\">false</span>");
+			
+
+			pTag[i] = "<pre class=\"codeLineNumber"+i+"\">"+pTag[i]+"</pre>";
+			
+			
+			Pattern pattern = Pattern.compile("[.][a-zA-Z0-9]+[(]");
+			Matcher matcher = pattern.matcher(pTag[i]);
+			while(matcher.find()){
+				String method = matcher.group().substring(1, matcher.group().length()-1);
+				pTag[i] = pTag[i].replace(method, "<span class=\"codeBlue\">"+ method +"</span>");
+			}
+			
+			
+			if(i==0){
+				codeText=pTag[i];
+			}else{
+				codeText+=pTag[i];
+			}
+		}
+		//System.out.println(codeText);
+		
+		
+	}
 }
