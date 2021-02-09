@@ -18,11 +18,11 @@
 		<typeAlias type="kr.or.houroffice.timecard.model.vo.Holiday" alias="Holiday"/> <!-- 연차내역(켈린더) --> 
 		<typeAlias type="kr.or.houroffice.personnel.model.vo.MemDept" alias="MemDept"/> <!-- 인사정보 --> 
 		<typeAlias type="kr.or.houroffice.personnel.model.vo.Contact" alias="Contact"/> <!-- 개인주소록 -->
+				<typeAlias type="kr.or.houroffice.member.model.vo.Attendance" alias="Attendance"/><!-- 근태기록 -->
 		<typeAlias type="kr.or.houroffice.board.model.vo.PartBoard" alias="PartBoard"/> <!-- 부서별 게시판 -->
 		<typeAlias type="kr.or.houroffice.board.model.vo.PartComments" alias="PartComments"/> <!-- 부서별 게시판 댓글 -->
 		<typeAlias type="kr.or.houroffice.board.model.vo.BoardFile" alias="BoardFile"/> <!-- 게시판 파일 -->
 
-		<!-- 전자결재 객체 -->
 		<typeAlias type="kr.or.houroffice.approval.model.vo.Approval" alias="Approval"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.ApprovalLine" alias="ApprovalLine"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.ApprovalRef" alias="ApprovalRef"/>
