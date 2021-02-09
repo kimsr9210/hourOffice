@@ -129,7 +129,30 @@
 	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / insert-->
 	<insert id="signUpMember" parameterType="Member">
-		INSERT INTO MEMBER VALUES(${memNo},'03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4',#{memPosition},#{deptCode},#{memName},#{memBirth},#{memGender},#{memPhone},NULL,NULL,#{memProfile},DEFAULT,DEFAULT,DEFAULT,NULL,DEFAULT,NULL,NULL,#{memAddress})
+		INSERT INTO MEMBER VALUES(
+			${memNo},
+			'03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4',
+			#{memPosition},
+		<choose>
+			<when test="deptCode != ''">#{deptCode},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
+			#{memName},
+			#{memBirth},
+			#{memGender},
+			#{memPhone},
+			NULL,
+			NULL,
+			#{memProfile},
+			DEFAULT,
+			DEFAULT,
+			DEFAULT,
+			NULL,
+			DEFAULT,
+			NULL,
+			NULL,
+			#{memAddress}
+		)
 	</insert>
 	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 등록 / 학력 insert-->
@@ -146,9 +169,19 @@
 			<when test="item.acaGradDate != null">#{item.acaGradDate},</when>
 			<otherwise>NULL,</otherwise>
 		</choose>
-			#{item.acaSchoolName},
-			#{item.acaMajorName},
-			#{item.acaGrad}
+		<choose>
+			<when test="item.acaSchoolName != ''">#{item.acaSchoolName},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
+		<choose>
+			<when test="item.acaMajorName != ''">#{item.acaMajorName},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>	
+		<choose>
+			<when test="item.acaGrad != ''">#{item.acaGrad}</when>
+			<otherwise>NULL</otherwise>
+		</choose>
+			
 		)
 		</foreach>
 	</insert> 
@@ -163,8 +196,14 @@
 			<when test="item.licDate != null">#{item.licDate},</when>
 			<otherwise>NULL,</otherwise>
 		</choose>
-			#{item.licName},
-			#{item.licOrigin}
+		<choose>
+			<when test="item.licName != ''">#{item.licName},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
+		<choose>
+			<when test="item.licOrigin != ''">#{item.licOrigin}</when>
+			<otherwise>NULL</otherwise>
+		</choose>
 		)
 		</foreach>
 	</insert> 
@@ -183,9 +222,18 @@
 			<when test="item.carResignDate != null">#{item.carResignDate},</when>
 			<otherwise>NULL,</otherwise>
 		</choose>
-			#{item.carPlace},
-			#{item.carPosition},
-			#{item.carContent}
+		<choose>
+			<when test="item.carPlace != ''">#{item.carPlace},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
+		<choose>
+			<when test="item.carPosition != ''">#{item.carPosition},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
+		<choose>
+			<when test="item.carContent != ''">#{item.carContent}</when>
+			<otherwise>NULL</otherwise>
+		</choose>
 		)
 		</foreach>
 	</insert> 
@@ -195,7 +243,10 @@
 		INSERT INTO MILITARY 
 		VALUES(
 			${memNo},
-			#{milServiceType},
+		<choose>
+			<when test="milServiceType != ''">#{milServiceType},</when>
+			<otherwise>NULL,</otherwise>
+		</choose>
 		<choose>
 			<when test="milJoinDate != null">#{milJoinDate},</when>
 			<otherwise>NULL,</otherwise>
@@ -204,11 +255,18 @@
 			<when test="milLeaveDate != null">#{milLeaveDate},</when>
 			<otherwise>NULL,</otherwise>
 		</choose>
-			#{milReason}
+		<choose>
+			<when test="milReason != ''">#{milReason}</when>
+			<otherwise>NULL</otherwise>
+		</choose>
 		)
 	</insert>
 	
 	<!-- 한명의 사원 정보를 가져오는 매퍼는 맨 위에 있음 -->
+	<!-- BY 다빈 - 관리자탭(인사관리) - 부서 select -->
+	<select id="deptAll" resultType="Department">
+		SELECT DEPT_CODE AS deptCode, DEPT_NAME AS deptName, DEPT_DEL_YN AS deptDelYN FROM DEPARTMENT WHERE DEPT_DEL_YN='N'
+	</select>
 	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 학력 select -->
 	<select id="oneMemberInfoAca" parameterType="Member" resultType="AcademicAbility">
 		SELECT 
@@ -243,6 +301,7 @@
 		FROM CAREER 
 		WHERE MEM_NO=#{memNo}
 	</select>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 병력 select -->
 	<select id="oneMemberInfoMil" parameterType="Member" resultType="Military">
 		SELECT 
 			MEM_NO AS memNo, 
@@ -253,6 +312,12 @@
 		FROM MILITARY 
 		WHERE MEM_NO=#{memNo}
 	</select>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 정보 변경 delete -->
+	<delete id="allDeleteMemberInfo" parameterType="hashmap">
+		DELETE FROM ${tableName} WHERE MEM_NO=#{memNo}
+	</delete>
+	<!-- BY 다빈 - 관리자탭(인사관리) - 사원 정보 변경 insert -->
+	<!-- 사원 등록할 때 작성한 insert 매퍼 사용 -->
 	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 조직도 select -->
 	<select id="selectDeptList" resultType="Member">
