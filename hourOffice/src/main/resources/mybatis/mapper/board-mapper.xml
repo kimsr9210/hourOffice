@@ -16,15 +16,16 @@
 		PART_CONTENT AS partContent,
 		PART_HITS AS partHits,
 		PART_DEL_YN AS partDelYN,
-		PART_DEL_DATE AS partDelDate 
+		PART_DEL_DATE AS partDelDate,
+		DEPT_NAME AS deptName
 	FROM (
 		SELECT 
 			ROW_NUMBER() OVER (ORDER BY A.PART_DATE DESC) AS NUM,
-			A.*
-		FROM PART_BOARD A 
-		WHERE PART_DEL_YN='N' AND DEPT_CODE=#{deptCode}
-		) 
-	WHERE NUM BETWEEN 1 AND 10
+			A.*,
+			D.DEPT_NAME
+		FROM PART_BOARD A LEFT JOIN DEPARTMENT D ON A.DEPT_CODE=D.DEPT_CODE 
+		WHERE A.PART_DEL_YN='N' AND A.DEPT_CODE='D2'
+	) WHERE NUM BETWEEN 1 AND 10
   </select>
   <!-- BY 다빈  부서별 게시판 - 게시판 insert - 게시판번호 채번 -->
   <select id="selectNumber" resultType="int">

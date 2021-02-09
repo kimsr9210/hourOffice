@@ -23,6 +23,7 @@ import kr.or.houroffice.board.model.service.PartBoardService;
 import kr.or.houroffice.board.model.vo.BoardFile;
 import kr.or.houroffice.board.model.vo.PartBoard;
 import kr.or.houroffice.member.model.service.AdminMemberService;
+import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.Member;
 
 @Controller
@@ -39,9 +40,33 @@ public class PartBoardController {
 	
 	// 부서별 게시판 all select
 	@RequestMapping(value="/allPartBoardPage.ho")
-	public String allPartBoardPage(Model model, @SessionAttribute("member") Member m){
+	public String allPartBoardPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
+			
+			int countAll = mService.selectCountAllMember();
+			
+			int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
+			if(request.getParameter("currentPage")==null) {
+				currentPage = 1;
+			}else {
+				currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			}	
+			int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+			
+			
+			
 			ArrayList<PartBoard> list = bService.selectBoardList(m.getDeptCode());
+			
+			
+			
+			// 페이징 처리 - 네비
+			int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
+			//String pageNavi = bService.getPageNavi(currentPage,recordCountPerPage,naviCountPerPage);
+			
+			
+			
+			
+			
 			
 			model.addAttribute("list",list);
 		}else{
@@ -59,16 +84,16 @@ public class PartBoardController {
 	// 부서별 게시판 - 새글쓰기 page
 	@RequestMapping(value="/writePostPartBoard.ho")
 	public String writePost(@RequestParam("deptCode") String pageDeptCode, Model model, @SessionAttribute("member") Member m){
-		return "/part_board/writePostPartBoard";
-		/*
-		if(m!=null){
+		String deptCode = m.getDeptCode().replaceAll(" ", ""); // 공백제거
+		if(m!=null && pageDeptCode.equals(deptCode)){
 			ArrayList<Department> deptList = mService.selectDeptAll();
-			
-			model.addAttribute("deptList",deptList);
-			model.addAttribute("pageDeptCode", pageDeptCode); // 현재 보여야할 게시판의 부서 코드
+			for(Department dept : deptList){
+				if(dept.getDeptCode().equals(pageDeptCode+" ")) model.addAttribute("deptName", dept.getDeptName());
+				// 부서 이름 거르기
+			}
 			return "/part_board/writePostPartBoard";
 		}
-		return "redirect:login.jsp";*/
+		return "redirect:login.jsp";
 	}
 	// 부서별 게시판 - 게시글 등록 insert
 	@RequestMapping(value="/savePostPartBoard.ho")
@@ -98,27 +123,24 @@ public class PartBoardController {
 																new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
 			
 			// 위의 코드까지 하면 파일 업로드는 완료
-			String pageDeptCode = multi.getParameter("deptCode"); // deptcode 페이지에서 보내온 부서 코드
-			if(pageDeptCode.equals(m.getDeptCode())){System.out.println("dd");
+			
+			// 게시판 insert 비즈니스 로직
+			PartBoard pb = new PartBoard(); 
+			
+			pb.setPartTitle(multi.getParameter("partTitle"));	// 제목
+			pb.setDeptCode(m.getDeptCode());					// 부서코드
+			pb.setMemNo(m.getMemNo());							// 사번
+			pb.setPartWriter(m.getMemName());					// 작성자
+			pb.setPartContent(multi.getParameter("partContent"));//글내용
+			//System.out.println(pb.getPartTitle()+" / "+pb.getDeptCode()+" / "+pb.getMemNo()+" / "+pb.getPartWriter()+" / "+pb.getPartContent());
+			
+			// 비즈니스 로직
+			int partNo = bService.insertPost(pb);
+			// 게시글 고유번호
+			if(partNo>0){
 				
-				// 게시판 insert 비즈니스 로직
-				PartBoard pb = new PartBoard(); 
+				if(multi.getFilesystemName("attachedFile")!=null){
 				
-				pb.setPartTitle(multi.getParameter("partTitle"));	// 제목
-				pb.setDeptCode(multi.getParameter("deptCode"));		// 부서코드
-				pb.setMemNo(m.getMemNo());							// 사번
-				pb.setPartWriter(m.getMemName());					// 작성자
-				pb.setPartContent(multi.getParameter("partContent"));//글내용
-				
-				//System.out.println(pb.getPartTitle()+" / "+pb.getDeptCode()+" / "+pb.getMemNo()+" / "+pb.getPartWriter()+" / "+pb.getPartContent());
-				
-				// 비즈니스 로직
-				int partNo = bService.insertPost(pb);
-				// 게시글 고유번호
-				if(partNo>0){
-					
-					if(multi.getFilesystemName("attachedFile")!=null){
-					
 					// 서버에 실제로 업로드 된 파일이름 가져오기
 					String originalFileName = multi.getFilesystemName("attachedFile");
 					
@@ -127,8 +149,8 @@ public class PartBoardController {
 					// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
 					File file = new File(realUploadPath+"\\"+originalFileName);
 					// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
-					file.renameTo(new File(realUploadPath+"\\"+pageDeptCode+partNo+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
-					String changedFileName = pageDeptCode+partNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+					file.renameTo(new File(realUploadPath+"\\"+m.getDeptCode()+partNo+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
+					String changedFileName = m.getDeptCode()+partNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
 					// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
 					File reNameFile = new File(realUploadPath+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
 					String filePath = reNameFile.getPath(); // 경로
@@ -142,23 +164,17 @@ public class PartBoardController {
 					pf.setPath(filePath);
 					pf.setSize(fileSize);
 					
-					
 					bService.insertPostFile(pf); // 파일 DB에 저장
-					} // 파일 null이 아니면 디비 저장 if 문
-					
-					model.addAttribute("msg","성공");
-					
-					
-				}else{
-					model.addAttribute("msg","실패");
-				}// 게시글 디비 저장 실패 if 문
+				} // 파일 null이 아니면 디비 저장 if 문
 				
-				model.addAttribute("location","/allPartBoardPage.ho");
+				model.addAttribute("msg","성공");
+				
 			}else{
-				// 다른 부서 사람 / 잘못된 접근이라고 경고해주자
-				model.addAttribute("msg","잘못된 접근입니다.");
-				model.addAttribute("location","/index.jsp");
-			}
+				model.addAttribute("msg","실패");
+			}// 게시글 디비 저장 실패 if 문
+			
+			model.addAttribute("location","/allPartBoardPage.ho");
+			
 		}else{
 			return "redirect:login.jsp";
 		} // 로그인을 하지 않았다면

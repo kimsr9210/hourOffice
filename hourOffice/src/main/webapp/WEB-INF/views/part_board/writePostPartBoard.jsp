@@ -46,7 +46,7 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						개발부서 게시판 <span>글쓰기</span>
+						${deptName } 게시판 <span>글쓰기</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -61,7 +61,6 @@
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="partContent" id="txtArea" required></textarea>
                                 <div></div>
-                                <input type="text" name="deptCode" value="D2 " style="display:none;"/>
                             <div><button id="save-btn">저장</button> <button type="button" class="delBtn">취소</button></div>
                             </form>
                         </div>

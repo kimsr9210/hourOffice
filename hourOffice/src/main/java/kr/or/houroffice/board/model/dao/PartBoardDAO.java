@@ -13,6 +13,8 @@ public class PartBoardDAO {
 
 	// 부서별 게시판  - selectAll
 	public List<PartBoard> selectBoardList(SqlSessionTemplate sqlSession, String deptCode) {
+		//int start = currentPage * recordCountPerPage - (recordCountPerPage-1);
+		//int end = currentPage * recordCountPerPage;
 		return sqlSession.selectList("board.allPartBoardList",deptCode);
 	}
 
