@@ -42,37 +42,50 @@ public class PartBoardController {
 	@RequestMapping(value="/allPartBoardPage.ho")
 	public String allPartBoardPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
+			if(m.getDeptCode()!=null){
+				int countAll = mService.selectCountAllMember();
+				
+				int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
+				if(request.getParameter("currentPage")==null) {
+					currentPage = 1;
+				}else {
+					currentPage = Integer.parseInt(request.getParameter("currentPage"));
+				}	
+				int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
+				
+				
+				
+				ArrayList<PartBoard> list = bService.selectBoardList(m.getDeptCode());
+				
+				
+				
+				// 페이징 처리 - 네비
+				int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
+				//String pageNavi = bService.getPageNavi(currentPage,recordCountPerPage,naviCountPerPage);
+				
+				
+				
+				
+				
+				
+				model.addAttribute("list",list);
+			}else{ // 부서가 없는 사람
+				
+			}
 			
-			int countAll = mService.selectCountAllMember();
-			
-			int currentPage; // 현재 페이지값을 가지고 있는 변수 - 페이징 처리를 위한 변수
-			if(request.getParameter("currentPage")==null) {
-				currentPage = 1;
-			}else {
-				currentPage = Integer.parseInt(request.getParameter("currentPage"));
-			}	
-			int recordCountPerPage = 10; // 한 페이지당 몇개의 게시물이 보이게 될 것인지 - 페이징 처리를 위한 변수
-			
-			
-			
-			ArrayList<PartBoard> list = bService.selectBoardList(m.getDeptCode());
-			
-			
-			
-			// 페이징 처리 - 네비
-			int naviCountPerPage = 10; // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리를 위한 변수
-			//String pageNavi = bService.getPageNavi(currentPage,recordCountPerPage,naviCountPerPage);
-			
-			
-			
-			
-			
-			
-			model.addAttribute("list",list);
-		}else{
+		}else{ // 로그인 안 한 사람
 			return "redirect:login.jsp";
 		}
 		return "/part_board/allPartBoardPage";
+	}
+	//
+	@RequestMapping(value="/searchPartBoard.ho")
+	public String searchBoard(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword, @RequestParam("deptCode") String pageDeptCode, @SessionAttribute("member") Member m){
+		System.out.println(searchType+" / "+keyword);
+		if(m!=null && pageDeptCode.equals(m.getDeptCode())){
+			System.out.println("확인");
+		}
+		return "";
 	}
 	
 	// 부서별 게시판 one select

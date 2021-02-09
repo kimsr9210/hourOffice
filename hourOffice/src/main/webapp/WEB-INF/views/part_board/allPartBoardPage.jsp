@@ -78,13 +78,14 @@
                         
                         <div id="pageNavi">< 1 2 3 4 5 ></div>
                         <div id="search-div">
-                            <form action="#" method="get">
+                            <form action="/searchPartBoard.ho?" method="get">
                             <select name="searchType">
                                 <option value="both">제목+내용</option>
-                                <option value="notName">제목</option>
-                                <option value="notContent">내용</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="writer">작성자</option>
                             </select>
-                            <input type="text" name="text"/>
+                            <input type="text" name="keyword"/><input type="text" name="deptCode" value="${list[0].deptCode }" style="display:none;"/>
                             <button><i class="fas fa-search i-icon"></i></button>
                             </form>
                         </div>
