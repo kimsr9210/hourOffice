@@ -1,25 +1,44 @@
 $(function() {
 	/* textarea 키를 누를 때 마다 자동 높이 조절*/
 	function adjustHeight() {
-		var textEle = $('textarea');
+		var textEle = $('#postTextarea');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
 		textEle.css('height', textEleHeight);
 	}
 	;
-	var textEle = $('textarea');
+	var textEle = $('#postTextarea');
 	textEle.on('keyup', function() {
 		adjustHeight();
 	});
 	/* TextArea 자동 높이 조절 CDN */
 	autosize($('textarea'));
 
-	/* 파일 올릴 시 이름 보여주기 */
-	$('#fileUpload').change(function() {
-		$('#fileName').val($(this)[0].files[0].name);
-		$('#fileSize').val($(this)[0].files[0].size + ' KB');
+	function adjustHeight() {
+		var textEle = $('#codeTextarea');
+		textEle[0].style.height = 'auto';
+		var textEleHeight = textEle.prop('scrollHeight');
+		textEle.css('height', textEleHeight);
+	}
+	;
+	var textEle = $('#codeTextarea');
+	textEle.on('keyup', function() {
+		adjustHeight();
 	});
-
+	
+	
+	function adjustHeight() {
+		var textEle = $('#codeText');
+		textEle[0].style.height = 'auto';
+		var textEleHeight = textEle.prop('scrollHeight');
+		textEle.css('height', textEleHeight);
+	}
+	;
+	var textEle = $('#codeText');
+	textEle.on('keyup', function() {
+		adjustHeight();
+	});
+	
 	/* 프로젝트 옵션 선택 시 박스 나타내기 */
 	$('#projectSetting').click(function() {
 		console.log(this);
@@ -239,154 +258,4 @@ $(function() {
 		return true;
 	});
 	
-	//프로젝트 나가기
-	$('#projectExit, .outProject').click(function(){
-		var proNo = '<%=p.getProNo()%>';
-		var proMemNo = '<%=p.getMemNo()%>';
-		var memNo = '<%=m.getMemNo()%>'
-		var result = window.confirm("해당 프로젝트에서 나가시겠습니까?");
-		if(result){
-			if(proMemNo==memNo){
-				alert('프로젝트 생성자는 프로젝트를 나갈 수 없습니다');
-			}else{
-				$.ajax({
-	            	url : "/updateProjectMemberExit.ho",
-	            	data : {"proNo" : proNo, "memNo" : memNo},
-	            	type : "post",
-	            	success : function(result){
-	            		if(result=="true"){
-	            			alert("해당 프로젝트에서 나갔습니다.");
-	            		}else{
-	            			alert("해당 프로젝트 나가기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-	            		}
-	            	},
-	            	error : function(){
-	            		console.log("프로젝트 나가기 ajax 통신 실패");
-	            	}
-	            });
-				
-			}
-			location.replace('/projectAllList.ho');
-		}
-	});
-	
-	//프로젝트 삭제
-	$('#projectDelete').click(function(){
-		var proNo = '<%=p.getProNo()%>';
-		var proMemNo = '<%=p.getMemNo()%>';
-		var memNo = '<%=m.getMemNo()%>';
-		var proSubject = '<%=p.getProSubject()%>'
-		var result = window.confirm("해당 프로젝트를 삭제하시겠습니까?");
-		if(result){
-			if(!(proMemNo==memNo)){
-				alert('프로젝트 생성자만 삭제할 수 있습니다.');
-			}else{
-				$.ajax({
-	            	url : "/deleteProject.ho",
-	            	data : {"proNo" : proNo},
-	            	type : "post",
-	            	success : function(result){
-	            		if(result=="true"){
-	            			alert("해당 프로젝트가 삭제되었습니다.")
-	            		}else{
-	            			alert("해당 프로젝트 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-	            		}
-	            	},
-	            	error : function(){
-	            		console.log("프로젝트 삭제 ajax 통신 실패");
-	            	}
-	            });
-				location.replace('/projectAllList.ho');
-			}
-		}
-	});
-	
-	//프로젝트 내보내기
-	$('.outProjectMember').click(function(){
-		var memNo = $(this).next().val();
-		var memName = $(this).next().next().val();
-		var proMemNo = '<%=p.getMemNo()%>';
-		var proNo = '<%=p.getProNo()%>';
-		var result = window.confirm("["+memName+"] 님을 해당 프로젝트에서 내보내시겠습니까?");
-		if(memNo==proMemNo){
-			alert('프로젝트 생성자는 내보낼 수 없습니다');
-		}else{
-			if(result){
-				$.ajax({
-		            url : "/updateProjectMemberExit.ho",
-		            data : {"proNo" : proNo, "memNo" : memNo},
-		            type : "post",
-		            success : function(result){
-		            	if(result=="true"){
-		            		alert("["+memName+"] 님을 해당 프로젝트에서 내보냈습니다");
-		            	}else{
-		            		alert("참가자 내보내기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-		            	}
-		            },
-		            error : function(){
-		            	console.log("참가자 내보내기 ajax 통신 실패");
-		            }
-		        });
-			}
-    		location.reload();
-		}
-	});
-	
-	//관리자 지정
-	$('.adminSet').click(function(){
-		var memNo = $(this).next().val();
-		var memName = $(this).next().next().val();
-		var proMemNo = '<%=p.getMemNo()%>';
-		var proNo = '<%=p.getProNo()%>';
-		var result = window.confirm("["+memName+"] 님을 관리자로 설정하시겠습니까?");
-		if(result){
-			$.ajax({
-		           url : "/updateProjectMgrSet.ho",
-		           data : {"proNo" : proNo, "memNo" : memNo},
-		           type : "post",
-		           success : function(result){
-		           	if(result=="true"){
-		           		alert("["+memName+"] 님을 관리자로 설정하였습니다");
-		           	}else{
-		           		alert("관리자 권한 지정에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-		           	}
-		           },
-		           error : function(){
-		           	console.log("관리자 지정 ajax 통신 실패");
-		           }
-		       });
-		}
-    	location.reload();
-	});
-	
-	//관리자 지정 해제
-	$('.adminCancel').click(function(){
-		var memNo = $(this).next().val();
-		var memName = $(this).next().next().val();
-		var proMemNo = '<%=p.getMemNo()%>';
-		var proNo = '<%=p.getProNo()%>';
-		var result = window.confirm("["+memName+"] 님의 관리자 권한을 해제하시겠습니까?");
-		if(memNo==proMemNo){
-			alert('프로젝트 생성자는 관리자 권한을 해제할 수 없습니다');
-		}else{
-			if(result){
-				$.ajax({
-		            url : "/updateProjectMgrCancel.ho",
-		            data : {"proNo" : proNo, "memNo" : memNo},
-		            type : "post",
-		            success : function(result){
-		            	if(result=="true"){
-		            		alert("["+memName+"] 님의 관리자 권한을 해제하였습니다");
-		            	}else{
-		            		alert("관리자 권한 해제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-		            	}
-		            },
-		            error : function(){
-		            	console.log("관리자 지정 해제 ajax 통신 실패");
-		            }
-		        });
-			}
-    		location.reload();
-		}
-	});
 });

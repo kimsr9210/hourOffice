@@ -92,7 +92,7 @@
 	
 	<!-- 프로젝트 게시물 생성 -->
 	<insert id="insertProjectBoard" parameterType="ProjectBoard">
-		INSERT INTO PRO_BOARD VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, SYSTIMESTAMP, 'N', #{boardText})
+		INSERT INTO PRO_BOARD VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, SYSTIMESTAMP, 'N', #{boardText}, #{imgName})
 	</insert>
 	
 	<!-- 해당 프로젝트 게시물 가져오기 -->
@@ -103,7 +103,8 @@
 			MEM_NO as memNo,
 			BOARD_DATE as boardDate,
 			DEL_YN as delYN,
-			BOARD_TEXT as boardText
+			BOARD_TEXT as boardText,
+			IMG_NAME as imgName
 		FROM PRO_BOARD
 		WHERE DEL_YN='N' AND PRO_NO=#{proNo}
 		ORDER by BOARD_NO DESC
@@ -243,5 +244,25 @@
 			COMP_YN=#{compYN}
 		WHERE PRO_NO=#{proNo}
 	</update>
+	
+
+	<!-- BY 진원 - 한 게시물에 대한 댓글 목록 -->
+	<select id="selectOneBoardComment" resultType="ProjectComment">
+		SELECT 
+		    COMMENT_NO as commentNo,
+		    BOARD_NO as boardNo,
+		    MEM_NO as memNo,
+		    COMMENT_CON as commentCon,
+		    COMMENT_DATE as commentDate,
+		    DEL_YN as delYN
+		FROM PRO_COMMENT
+		WHERE DEL_YN='N' AND BOARD_NO =#{boardNo}
+		ORDER BY COMMENT_DATE DESC
+	</select>
+  
+	<!-- 프로젝트 게시물에 사진 올릴 시 -->
+	<insert id="insertProjectBoardFile" parameterType="ProjectFileData">
+		INSERT INTO PRO_FILE VALUES(PRO_FILE_SEQ.NEXTVAL, #{proNo}, #{memNo}, #{originalFileName}, #{changedFileName}, #{filePath}, #{fileSize}, #{uploadTime}, 'N')
+	</insert>
 	
 </mapper>

@@ -10,6 +10,7 @@ import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
+import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
 
@@ -149,6 +150,17 @@ public class ProjectDAO {
 
 	public int updateProjectComplate(Project p, SqlSessionTemplate sqlSession) {
 		int result = sqlSession.insert("project.updateProjectComplate",p);
+		return result;
+	}
+
+	//BY 진원 - 한 게시물에 대한 댓글 목록
+	public ArrayList<ProjectComment> selectOneBoardComment(SqlSessionTemplate sqlSession, int boardNo) {
+		List commentList = sqlSession.selectList("project.selectOneBoardComment", boardNo);
+		return (ArrayList<ProjectComment>) commentList;
+  }
+  
+	public int insertProjectBoardFile(ProjectFileData pfd, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectBoardFile",pfd);
 		return result;
 	}
 

@@ -32,7 +32,13 @@
 <!-- TextArea 자동 높이 조절 CDN -->
 <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
-
+<style>
+	.imgUp{
+		max-width: 90%;
+		margin: 0px 30px 0px 30px;
+		height: auto;
+	}
+</style>
     		
 
 <%
@@ -166,7 +172,6 @@
                             	<%} %>
                             <%} %>
                             <div class="boardBox">
-                            
                                 <div class="boardInfo">
                                     <div class="memberImg"><i class="fas fa-user-circle"></i></div>
                                     <div class="memberInfo">
@@ -192,6 +197,9 @@
                                 <div class="boardContents">
                                 	<form action="/updateProjectBoard.ho" method="post">
 	                                    <textarea class="textarea"  disabled="disabled" readonly="readonly" name="boardText"><%=pb.getBoardText() %></textarea>
+	                                    <%if(pb.getImgName()!=null){ %>
+	                                    <img class="imgUp" src="/resources/file/project/<%=pb.getImgName()%>"/>
+	                                    <%} %>
 	                                    <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
 	                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
 	                                    <span class="boardModifyBtn textHide">수정&nbsp;</span>
@@ -452,6 +460,203 @@
     <!-- 자바 스크립트    -->
     <script>
     	$(function(){
+    		//프로젝트 나가기
+    		$('#projectExit, .outProject').click(function(){
+    			var proNo = '<%=p.getProNo()%>';
+    			var proMemNo = '<%=p.getMemNo()%>';
+    			var memNo = '<%=m.getMemNo()%>'
+    			var result = window.confirm("해당 프로젝트에서 나가시겠습니까?");
+    			if(result){
+    				if(proMemNo==memNo){
+    					alert('프로젝트 생성자는 프로젝트를 나갈 수 없습니다');
+    				}else{
+    					$.ajax({
+    		            	url : "/updateProjectMemberExit.ho",
+    		            	data : {"proNo" : proNo, "memNo" : memNo},
+    		            	type : "post",
+    		            	success : function(result){
+    		            		if(result=="true"){
+    		            			alert("해당 프로젝트에서 나갔습니다.");
+    		            		}else{
+    		            			alert("해당 프로젝트 나가기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+    		            		}
+    		            	},
+    		            	error : function(){
+    		            		console.log("프로젝트 나가기 ajax 통신 실패");
+    		            	}
+    		            });
+    					location.replace('/projectAllList.ho');
+    				}
+    			}
+    		});
+    		
+    		//프로젝트 삭제
+    		$('#projectDelete').click(function(){
+    			var proNo = '<%=p.getProNo()%>';
+    			var proMemNo = '<%=p.getMemNo()%>';
+    			var memNo = '<%=m.getMemNo()%>';
+    			var proSubject = '<%=p.getProSubject()%>'
+    			var result = window.confirm("해당 프로젝트를 삭제하시겠습니까?");
+    			if(result){
+    				if(!(proMemNo==memNo)){
+    					alert('프로젝트 생성자만 삭제할 수 있습니다.');
+    				}else{
+    					$.ajax({
+    		            	url : "/deleteProject.ho",
+    		            	data : {"proNo" : proNo},
+    		            	type : "post",
+    		            	success : function(result){
+    		            		if(result=="true"){
+    		            			alert("해당 프로젝트가 삭제되었습니다.")
+    		            		}else{
+    		            			alert("해당 프로젝트 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+    		            		}
+    		            	},
+    		            	error : function(){
+    		            		console.log("프로젝트 삭제 ajax 통신 실패");
+    		            	}
+    		            });
+    					location.replace('/projectAllList.ho');
+    				}
+    			}
+    		});
+    		
+    		//프로젝트 내보내기
+    		$('.outProjectMember').click(function(){
+    			var memNo = $(this).next().val();
+    			var memName = $(this).next().next().val();
+    			var proMemNo = '<%=p.getMemNo()%>';
+    			var proNo = '<%=p.getProNo()%>';
+    			var result = window.confirm("["+memName+"] 님을 해당 프로젝트에서 내보내시겠습니까?");
+    			if(memNo==proMemNo){
+    				alert('프로젝트 생성자는 내보낼 수 없습니다');
+    			}else{
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectMemberExit.ho",
+    			            data : {"proNo" : proNo, "memNo" : memNo},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("["+memName+"] 님을 해당 프로젝트에서 내보냈습니다");
+    			            	}else{
+    			            		alert("참가자 내보내기에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("참가자 내보내기 ajax 통신 실패");
+    			            }
+    			        });
+    				}
+    	    		location.reload();
+    			}
+    		});
+    		
+    		//관리자 지정
+    		$('.adminSet').click(function(){
+    			var memNo = $(this).next().val();
+    			var memName = $(this).next().next().val();
+    			var proMemNo = '<%=p.getMemNo()%>';
+    			var proNo = '<%=p.getProNo()%>';
+    			var result = window.confirm("["+memName+"] 님을 관리자로 설정하시겠습니까?");
+    			if(result){
+    				$.ajax({
+    			           url : "/updateProjectMgrSet.ho",
+    			           data : {"proNo" : proNo, "memNo" : memNo},
+    			           type : "post",
+    			           success : function(result){
+    			           	if(result=="true"){
+    			           		alert("["+memName+"] 님을 관리자로 설정하였습니다");
+    			           	}else{
+    			           		alert("관리자 권한 지정에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+    			           	}
+    			           },
+    			           error : function(){
+    			           	console.log("관리자 지정 ajax 통신 실패");
+    			           }
+    			       });
+    			}
+    	    	location.reload();
+    		});
+    		
+    		//관리자 지정 해제
+    		$('.adminCancel').click(function(){
+    			var memNo = $(this).next().val();
+    			var memName = $(this).next().next().val();
+    			var proMemNo = '<%=p.getMemNo()%>';
+    			var proNo = '<%=p.getProNo()%>';
+    			var result = window.confirm("["+memName+"] 님의 관리자 권한을 해제하시겠습니까?");
+    			if(memNo==proMemNo){
+    				alert('프로젝트 생성자는 관리자 권한을 해제할 수 없습니다');
+    			}else{
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectMgrCancel.ho",
+    			            data : {"proNo" : proNo, "memNo" : memNo},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("["+memName+"] 님의 관리자 권한을 해제하였습니다");
+    			            	}else{
+    			            		alert("관리자 권한 해제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("관리자 지정 해제 ajax 통신 실패");
+    			            }
+    			        });
+    				}
+    	    		location.reload();
+    			}
+    		});
+    		//프로젝트 완료처리
+    		$('#projectComplate').click(function(){
+    			var compYN = "<%=p.getCompYN()%>";
+    			var proNo = "<%=p.getProNo()%>";
+    			console.log(compYN);
+    			if(compYN=='Y'){
+    				var result = window.confirm("현재 프로젝트는 완료되어있습니다\n미완료 처리 하시겠습니까?");
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectComplate.ho",
+    			            data : {"proNo" : proNo, "compYN" : compYN},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("현재 프로젝트는 미완료 처리 되었습니다");
+    			            	}else{
+    			            		alert("현재 프로젝트의 완료처리가 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("프로젝트 완료처리 ajax 통신 실패");
+    			            }
+    			        });
+    					
+    					location.reload();
+    				}
+    			}else{
+    				var result = window.confirm("현재 프로젝트를 완료처리 하시겠습니까?");
+    				if(result){
+    					$.ajax({
+    			            url : "/updateProjectComplate.ho",
+    			            data : {"proNo" : proNo, "compYN" : compYN},
+    			            type : "post",
+    			            success : function(result){
+    			            	if(result=="true"){
+    			            		alert("현재 프로젝트는 완료처리 되었습니다");
+    			            	}else{
+    			            		alert("현재 프로젝트의 완료처리에 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
+    			            	}
+    			            },
+    			            error : function(){
+    			            	console.log("프로젝트 완료처리 ajax 통신 실패");
+    			            }
+    			        });
+    					location.reload();
+    				}
+    			}
+    		});
     		
     	});
     </script>

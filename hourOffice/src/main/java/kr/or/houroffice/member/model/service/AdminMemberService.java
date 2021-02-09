@@ -179,6 +179,10 @@ public class AdminMemberService {
 		return mDAO.updateDepartmentDelete(sqlSession,deptCode);
 	}
 	
+	//BY 진원   조직도 - 부서목록
+	public ArrayList<Department> selectAllDepartment(){
+		return mDAO.selectAllDepartment(sqlSession);
+	}
 	
 	
 	

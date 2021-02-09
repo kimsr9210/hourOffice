@@ -161,4 +161,10 @@
 	</div>
 
 </body>
+<script>
+	$('.fa-home').parents('.sideNaviClick').click(function(){
+		
+		location.replace('/main.ho');
+	});
+</script>
 </html>

@@ -12,6 +12,7 @@ import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
+import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
 
@@ -165,6 +166,16 @@ public class ProjectServiceImpl implements ProjectService{
 
 	public int updateProjectComplate(Project p) {
 		int result = pDAO.updateProjectComplate(p, sqlSession);
+		return result;
+	}
+
+
+	//BY 진원 - 특정한 게시물에 대한 댓글 목록
+	public ArrayList<ProjectComment> selectOneBoardComment(int boardNo){
+		return pDAO.selectOneBoardComment(sqlSession,boardNo);
+	}
+	public int insertProjectBoardFile(ProjectFileData pfd) {
+		int result = pDAO.insertProjectBoardFile(pfd, sqlSession);
 		return result;
 	}
 
