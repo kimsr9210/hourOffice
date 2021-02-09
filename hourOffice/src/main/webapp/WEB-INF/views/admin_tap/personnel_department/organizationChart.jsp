@@ -196,6 +196,8 @@
                 
                     $('#infor-div').show(); // 정보 div 열기
                 }else{
+                	$('#infor-div #deptName-InInfor').text('(없음)');
+            		$('#infor-div #deptCode-InInfor').text('(없음)');
                 <% for(Member member : list){ %>
                 	if(<%=member.getDeptCode()%>==null){
                 		$('#infor-div #change-form > table').html(tblText);
