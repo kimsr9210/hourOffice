@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.or.houroffice.member.model.vo.AcademicAbility;
 import kr.or.houroffice.member.model.vo.Career;
+import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.License;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.member.model.vo.Military;
@@ -197,6 +198,10 @@ public class AdminMemberDAO {
 	////////////////////////////////////////사원 등록 메소드   ////////////////////////////////////////
 
 	// 사원 정보 ----------------------------------------------------------------------------------------------------------
+	// 관리자탭 (인사관리) - 부서 select
+	public List selectDeptAll(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("member.deptAll");
+	}
 	// 관리자탭 (인사관리) - 사원 정보 select
 	public Member selectOneMember(SqlSessionTemplate sqlSession, Member m) {
 		return (Member)sqlSession.selectOne("member.selectOneAsMemNo",m);
@@ -216,6 +221,17 @@ public class AdminMemberDAO {
 	// 관리자탭 (인사관리) - 사원 정보 - 병력 select
 	public Military selectOneMemberMil(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.selectOne("member.oneMemberInfoMil",m);
+	}
+	// 관리자탭 (인사관리) - 사원 정보 - 사원 정보 변경 - all delete
+	public int updateDeleteMemberInfo(SqlSessionTemplate sqlSession, Member m, String[] tbl) {
+		int result = 0;
+		for(int i=0; i<tbl.length; i++){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("memNo", m.getMemNo());
+			map.put("tableName", tbl[i]);
+			result += sqlSession.delete("member.allDeleteMemberInfo",map); // 성공했으면 +1
+		}
+		return result;
 	}
 	
 	// 조직도 ----------------------------------------------------------------------------------------------------------
@@ -249,6 +265,10 @@ public class AdminMemberDAO {
 	public int updateDepartmentDelete(SqlSessionTemplate sqlSession, String deptCode) {
 		return sqlSession.update("member.deleteDepartment",deptCode);
 	}
+
+	
+
+	
 
 	
 
