@@ -20,7 +20,10 @@
 
 </head>
 <body>
-<div id="wrap">
+<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
+<c:choose>
+	<c:when test="${sessionScope.member.memNo == docu.memNo }">
+	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -54,12 +57,10 @@
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose><c:when test="${docu.deptCode eq 'D1 '}">인사부</c:when>
-										<c:when test="${docu.deptCode eq 'D2 '}">총무부</c:when>
-										<c:when test="${docu.deptCode eq 'D3 '}">전산부</c:when>
-										<c:when test="${docu.deptCode eq 'D4 '}">개발부</c:when>
-										<c:when test="${docu.deptCode eq 'D5 '}">디자인부</c:when>
-										<c:otherwise>부서없음</c:otherwise></c:choose></td>
+										<td><c:choose>
+                                        	<c:when test="${docu.deptCode != null }">${docu.deptName }</c:when>
+                                        	<c:otherwise>부서없음</c:otherwise>
+                                        </c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
@@ -103,7 +104,7 @@
                                         <td>반차 여부</td>
                                         <td>
                                         <input type="radio" name="afternoonOff" id="afternoonOff_a" value="A" required <c:if test="${docu.afternoonOff == 'A'.charAt(0) }">checked</c:if>><label for="afternoonOff_a"> 전일</label>
-                                        <input type="radio" name="afternoonOff" id="afternoonOff_m" value="N" <c:if test="${docu.afternoonOff == 'N'.charAt(0) }">checked</c:if>><label for="afternoonOff_m"> 오전</label>
+                                        <input type="radio" name="afternoonOff" id="afternoonOff_m" value="M" <c:if test="${docu.afternoonOff == 'N'.charAt(0) }">checked</c:if>><label for="afternoonOff_m"> 오전</label>
                                         <input type="radio" name="afternoonOff" id="afternoonOff_p" value="P" <c:if test="${docu.afternoonOff == 'P'.charAt(0) }">checked</c:if>><label for="afternoonOff_p"> 오후</label>
                                         </td>
                                     </tr>
@@ -155,7 +156,13 @@
 					var cidx = $('input[name=aprLine]:checked').index($this);
 					var nidx = $('input[name=aprLine]').index($this);
 
+					var $ref = $(this).parent().next().children();
 					if ($this.prop('checked')) {
+						if($ref.prop('checked')){
+	                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+	                        return false;
+	                    }
+						
 						if (aprLength < 4) {
 							for (var i = 0; i < aprLength; i++) {
 								$('#apr-line-info tr:nth-child(2) td').eq(i).html($('input[name=aprLine]:checked').eq(i).parent().next().next().html());
@@ -164,6 +171,7 @@
 							alert('결재선은 3개까지만 선택 가능합니다.');
 							return false;
 						}
+						
 					} else {
 						for (var i = 0; i < 3; i++) {
 							$('#apr-line-info tr:nth-child(2) td').eq(i).html('');
@@ -173,6 +181,17 @@
 						}
 					}
 				});
+			//참조와 결재선 동시 선택 불가
+			$('input[name=aprRef]').click(function(){
+                var $ref = $(this);
+                var $line = $(this).parent().prev().children();
+                if($ref.prop('checked')){
+                    if($line.prop('checked')){
+                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+                        return false;
+                    }
+                }
+            });
 			
 			
 			//휴가일수 계산
@@ -183,7 +202,7 @@
 					var startDate = $('input[name=startDate]').val();
 					var endDate = $('input[name=endDate]').val();
 					var day = 1000*60*60*24 //밀리초, 초, 분, 시간
-					var countDay = (new Date(endDate)-new Date(startDate))/day+1; //0은
+					var countDay = (new Date(endDate)-new Date(startDate))/day+1; 
 					if(countDay<=0){
 						alert('휴가 기간이 0보다 작을 수 없습니다.');
 						$('input[name=countDay]').val(0);
@@ -219,7 +238,7 @@
 			$('input[name=afternoonOff]').change(function(){
 				var offType =  $(this).val();
 				var $countDay = $('input[name=countDay]');
-				if(($countDay.val()==0.5 ||$countDay.val()==1) && (offType == 'N' || offType=='P')){
+				if(($countDay.val()==0.5 ||$countDay.val()==1) && (offType == 'M' || offType=='P')){
 					$countDay.val(0.5);
 				}else{
 					var startDate = $('input[name=startDate]').val();
@@ -245,12 +264,25 @@
 					$('input[name=remaining]').val(remaining-cDay);
 				}
 			});
-			
+			//submit전에 검사
+			$('form').submit(function(){
+                if($('input[name=aprLine]:checked').length==0){
+                    alert('결재선을 1개 이상 선택해야 합니다.');
+                    return false;
+                }
+                if($('input[name=countDay]').val()==0){
+                	alert('사용할 연차가 없습니다.');
+                    return false;
+                }
+            });
 		});
 		//페이지 호출 처리
 		function movePage(url) {
 			location.href = url;
 		}
 	</script>
+	</c:when>
+	<c:otherwise><script>alert("작성자 이외에는 접근할 수 없습니다."); history.back(-1);</script></c:otherwise>
+</c:choose>
 </body>
 </html>
