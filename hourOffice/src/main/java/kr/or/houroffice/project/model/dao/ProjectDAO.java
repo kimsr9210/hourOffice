@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectCode;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
@@ -156,6 +157,16 @@ public class ProjectDAO {
 	public int insertProjectBoardFile(ProjectFileData pfd, SqlSessionTemplate sqlSession) {
 		int result = sqlSession.insert("project.insertProjectBoardFile",pfd);
 		return result;
+	}
+
+	public int insertProjectCode(ProjectCode pc, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectCode",pc);
+		return result;
+	}
+
+	public ArrayList<ProjectCode> selectProjectCodeList(int proNo, SqlSessionTemplate sqlSession) {
+		List codeList = sqlSession.selectList("project.selectProjectCodeList", proNo);
+		return (ArrayList<ProjectCode>)codeList;
 	}
 
 	
