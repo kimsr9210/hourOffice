@@ -19,7 +19,10 @@
 
 </head>
 <body>
-<div id="wrap">
+<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
+<c:choose>
+	<c:when test="${sessionScope.member.memNo == docu.memNo }">
+	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -54,12 +57,10 @@
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose><c:when test="${docu.deptCode eq 'D1 '}">인사부</c:when>
-										<c:when test="${docu.deptCode eq 'D2 '}">총무부</c:when>
-										<c:when test="${docu.deptCode eq 'D3 '}">전산부</c:when>
-										<c:when test="${docu.deptCode eq 'D4 '}">개발부</c:when>
-										<c:when test="${docu.deptCode eq 'D5 '}">디자인부</c:when>
-										<c:otherwise>부서없음</c:otherwise></c:choose></td>
+										<td><c:choose>
+                                        	<c:when test="${docu.deptCode != null }">${docu.deptName }</c:when>
+                                        	<c:otherwise>부서없음</c:otherwise>
+                                        </c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
@@ -169,7 +170,13 @@
 					var cidx = $('input[name=aprLine]:checked').index($this);
 					var nidx = $('input[name=aprLine]').index($this);
 
+					var $ref = $(this).parent().next().children();
 					if ($this.prop('checked')) {
+						if($ref.prop('checked')){
+	                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+	                        return false;
+	                    }
+						
 						if (aprLength < 4) {
 							for (var i = 0; i < aprLength; i++) {
 								$('#apr-line-info tr:nth-child(2) td').eq(i).html($('input[name=aprLine]:checked').eq(i).parent().next().next().html());
@@ -178,6 +185,7 @@
 							alert('결재선은 3개까지만 선택 가능합니다.');
 							return false;
 						}
+						
 					} else {
 						for (var i = 0; i < 3; i++) {
 							$('#apr-line-info tr:nth-child(2) td').eq(i).html('');
@@ -187,6 +195,17 @@
 						}
 					}
 				});
+			//참조와 결재선 동시 선택 불가
+			$('input[name=aprRef]').click(function(){
+                var $ref = $(this);
+                var $line = $(this).parent().prev().children();
+                if($ref.prop('checked')){
+                    if($line.prop('checked')){
+                        alert("결재선과 참조는 동시에 선택할 수 없습니다.");
+                        return false;
+                    }
+                }
+            });
 			//시간 바꿀때마다 시간 계산
 			$('#con-info select').change(function(){
 				var startHour = Number($('#startHour option:selected').val());
@@ -210,11 +229,26 @@
 				var totalHour = hour+(minute/60);
 				$('input[name=totalHour]').val(totalHour);
 			});
+			//submit전에 검사
+			$('form').submit(function(){
+                if($('input[name=aprLine]:checked').length==0){
+                    alert('결재선을 1개 이상 선택해야 합니다.');
+                    return false;
+                }
+                if($('input[name=totalHour]').val()==0){
+                	alert('초과 근무 시간이 없습니다.');
+                	return false;
+                }
+            });
 		});
 		//페이지 호출 처리
 		function movePage(url) {
 			location.href = url;
+			
 		}
 	</script>
+	</c:when>
+	<c:otherwise><script>alert("작성자 이외에는 접근할 수 없습니다."); history.back(-1);</script></c:otherwise>
+</c:choose>
 </body>
 </html>

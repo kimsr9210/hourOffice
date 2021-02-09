@@ -94,8 +94,12 @@
   			FINAL_DATE as finalDate
   			FROM (SELECT ROW_NUMBER() OVER(ORDER BY DOCU_DATE DESC) 
 			AS ROW_NUM, APR.*, M.MEM_NAME FROM APPROVAL APR JOIN MEMBER M ON APR.MEM_NO = M.MEM_NO
-            WHERE APR.DEPT_CODE = #{deptCode}
-			<if test="aprStatus != null">AND APR_TYPE = #{aprStatus}</if>
+            WHERE 
+            <choose>
+	  			<when test="deptCode != null">APR.DEPT_CODE = #{deptCode}</when>
+	  			<otherwise>APR.DEPT_CODE IS NULL</otherwise>
+  			</choose>
+			<if test="aprStatus != null">AND APR.APR_TYPE = #{aprStatus}</if>
 			<choose>
 			<when test="searchType == 'title'">AND APR.TITLE LIKE '%'||#{keyword}||'%'</when>
 			<when test="searchType == 'member'">AND M.MEM_NAME LIKE '%'||#{keyword}||'%'</when>
@@ -108,7 +112,12 @@
   		SELECT COUNT(*) FROM APPROVAL APR JOIN MEMBER M ON APR.MEM_NO = M.MEM_NO WHERE 
   		<choose>
   			<when test="memNo != 0">APR.MEM_NO = #{memNo}</when>
-  			<otherwise>APR.DEPT_CODE = #{deptCode}</otherwise>
+  			<otherwise>
+  				<choose>
+	  			<when test="deptCode != null">APR.DEPT_CODE = #{deptCode}</when>
+	  			<otherwise>APR.DEPT_CODE IS NULL</otherwise>
+  				</choose>
+  			</otherwise>
   		</choose>
   		<if test="aprStatus != null">AND APR.APR_TYPE = #{aprStatus}</if>
   		<choose>
@@ -152,7 +161,12 @@
 			MEM_NAME as memName,
 			DEPT_CODE as deptCode,
 			DEPT_NAME as deptName
-  		FROM MEM_DEPT WHERE DEPT_CODE = #{deptCode} AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		FROM MEM_DEPT WHERE 
+  		<choose>
+  			<when test="deptCode != null">DEPT_CODE = #{deptCode}</when>
+  			<otherwise>DEPT_CODE IS NULL</otherwise>
+  		</choose> 
+  		AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
   		ORDER BY DEPT_CODE
   	</select>
   	
@@ -163,7 +177,12 @@
 			MEM_NAME as memName,
 			DEPT_CODE as deptCode,
 			DEPT_NAME as deptName
-  		FROM MEM_DEPT WHERE DEPT_CODE IN ('D2',#{deptCode}) AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		FROM MEM_DEPT WHERE
+  		<choose>
+  			<when test="deptCode != null">DEPT_CODE IN ('D2',#{deptCode})</when>
+  			<otherwise>DEPT_CODE IS NULL</otherwise>
+  		</choose> 
+  		AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
   		ORDER BY DEPT_CODE
   	</select>
   	
@@ -179,7 +198,12 @@
   	<insert id="insertApproval" parameterType="AprForm">
   		 <selectKey keyProperty="docuNo" resultType="Integer" order="BEFORE"> select (TO_CHAR(SYSDATE,'YYMM')||LPAD(APPROVAL_SEQ.NEXTVAL, 4,0)) from dual </selectKey>
   		INSERT INTO APPROVAL VALUES
-  		(#{docuNo}, #{memNo}, #{deptCode}, SYSTIMESTAMP, #{docuType}, #{title}, 'W',
+  		(#{docuNo}, #{memNo}, 
+  		<choose>
+  			<when test="deptCode !=null">#{deptCode},</when>
+  			<otherwise>NULL,</otherwise>
+  		</choose>
+  		 SYSTIMESTAMP, #{docuType}, #{title}, 'W',
   		<choose>
   			<when test="urgencyYN=='Y'">'Y'</when>
   			<otherwise>'N'</otherwise>
@@ -358,11 +382,11 @@
   	<update id="updateFinalDate" parameterType="ApprovalLine">
   		UPDATE APPROVAL SET APR_TYPE = 
   		<choose>
-  			<when test="#{lineCount>1}">'I'</when><!-- 1이어야 지금 입력하고 완성됨 -->
-  			<otherwise> <!-- #{lineCount==0} -->
+  			<when test="lineCount > 0">'I'</when><!-- 결재선 갯수가 0이어야 완성됨 : DB에 트랜잭션 처리가 바로 반영이 안될 수 있음-->
+  			<otherwise> <!-- lineCount==0 -->
   				<choose>
-		  			<when test="#{refusalCount>0}">'R'</when>
-  					<otherwise>'C'</otherwise><!-- #{refusalCount==0} -->
+		  			<when test="refusalCount > 0">'R'</when>
+  					<otherwise>'C'</otherwise><!-- refusalCount==0 -->
   				</choose>
   			</otherwise>
   		</choose>
