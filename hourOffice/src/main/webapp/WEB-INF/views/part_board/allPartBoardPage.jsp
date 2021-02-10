@@ -66,8 +66,8 @@
                                 <td><div><a href="/postInPartBoard.ho?deptCode=${list[0].deptCode }&partNo=<%=pb.getPartNo()%>"><%=pb.getPartTitle() %></a></div></td>
                                 <td><%=pb.getPartWriter() %></td>
                     <% if(format.format(pb.getPartDate()).equals(format.format(toDay))){ %>
-                    <% format = new SimpleDateFormat("hh:mm"); %>
-                    			<td><%=format.format(pb.getPartDate()) %></td>
+                    <% SimpleDateFormat formatToDay = new SimpleDateFormat("hh:mm"); %>
+                    			<td><%=formatToDay.format(pb.getPartDate()) %></td>
 					<% }else{ %>
 								<td><%=format.format(pb.getPartDate()) %></td>
                     <% } %>

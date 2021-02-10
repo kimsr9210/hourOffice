@@ -28,7 +28,8 @@
 		<choose>
 			<when test="searchType != null">
 				<choose>
-					<when test="searchType == 'both'"></when>
+					<when test="searchTypeOrg == 'both'">AND (PART_TITLE LIKE #{keyword} OR DBMS_LOB.INSTR(PART_CONTENT, #{keywordOrg} ) > 0)</when>
+					<when test="searchTypeOrg == 'content'">AND (DBMS_LOB.INSTR(${searchType}, #{keywordOrg} ) > 0)</when>
 					<otherwise>AND ${searchType} LIKE #{keyword}</otherwise>
 				</choose>
 			</when>
@@ -58,6 +59,8 @@
 	</choose>
 	AND PART_NO=#{postNo}
   </select>
+  
+  
   <!-- BY 다빈  부서별 게시판 - 게시글의 댓글 List select -->
   <select id="getPostComntList" parameterType="hashmap" resultType="PartComments">
   	SELECT 
@@ -125,8 +128,10 @@
   	)
   </insert>
   
-  
-  
+  <!-- 게시글 삭제 update -->
+  <update id="deletePost" parameterType="hashmap">
+  	UPDATE ${boardType} SET ${ynType}='Y', ${dateType}=SYSTIMESTAMP WHERE ${noType}=#{postNo}
+  </update>
   
   <!-- 전체 List 수 -->
   <select id="countPostList" parameterType="hashmap" resultType="int">
@@ -147,5 +152,29 @@
   			</choose>
   		</when>
   	</choose>
+  </select>
+  <!-- 조회수 +1 -->
+  <update id="countingHits" parameterType="hashmap">
+  	UPDATE ${boardType} SET ${hitsType}=${hitsType}+1 WHERE ${noType}=#{postNo} AND ${ynType}='N'
+  </update>
+  <!-- 다음글 -->
+  <select id="nextPost" parameterType="hashmap" resultType="int">
+  	SELECT MIN(${type}_NO) FROM (
+		SELECT 
+			ROW_NUMBER() OVER (ORDER BY A.${type}_DATE DESC) AS NUM,
+			A.*
+		FROM ${boardType} A
+		WHERE ${type}_DEL_YN='N' AND DEPT_CODE=#{deptCode}
+	) WHERE ${type}_NO>#{postNo}
+  </select>
+  <!-- 이전글 -->
+  <select id="prevPost" parameterType="hashmap" resultType="int">
+  	SELECT MAX(${type}_NO) FROM (
+		SELECT 
+			ROW_NUMBER() OVER (ORDER BY A.${type}_DATE DESC) AS NUM,
+			A.*
+		FROM ${boardType} A
+		WHERE ${type}_DEL_YN='N' AND DEPT_CODE=#{deptCode}
+	) WHERE #{postNo}>${type}_NO
   </select>
 </mapper>

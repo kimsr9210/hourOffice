@@ -52,12 +52,25 @@
 						<% ArrayList<PartComments> comntList = (ArrayList<PartComments>)request.getAttribute("comntList"); %>
 						<% SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss"); %>
 						
-						<div id="title"><span><a href="/writePostPartBoard.ho?deptCode=${pb.deptCode }"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span><a href="/allPartBoardPage.ho"><button type="button">목록</button></a><a href="#"><i class="fas fa-arrow-down i-icon"></i> 아랫글</a><a href="#"><i class="fas fa-arrow-up i-icon"></i> 윗글</a></div>
+						<div id="title">
+							<span><a href="/writePostPartBoard.ho?deptCode=${pb.deptCode }"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span>
+							<a href="/allPartBoardPage.ho"><button type="button">목록</button></a>
+						<% if((Integer)request.getAttribute("prevPost")>0){ %>
+							<a href="/postInPartBoard.ho?deptCode=${pb.deptCode }&partNo=${prevPost}"><i class="fas fa-arrow-down i-icon"></i> 아랫글</a>
+						<% }else{ %>
+							<a style="color:lightgray;"><i class="fas fa-arrow-down i-icon" style="color:lightgray; cursor:default;"></i> 아랫글</a>
+						<% } %>
+						<% if((Integer)request.getAttribute("nextPost")>0){ %>
+							<a href="/postInPartBoard.ho?deptCode=${pb.deptCode }&partNo=${nextPost}"><i class="fas fa-arrow-up i-icon"></i> 윗글</a>
+						<% }else{ %>
+							<a style="color:lightgray;"><i class="fas fa-arrow-up i-icon" style="color:lightgray; cursor:default;"></i> 윗글</a>
+						<% } %>
+						</div>
                         <hr>
                         <div id="board-content">
                             <div>
                         <% if(pb.getMemNo()==member.getMemNo()){ %>
-                            	<span><a href="/partBoardModify.ho"><i class="fas fa-feather i-icon"></i> 수정하기</a></span> <span id="del-btn"><i class="far fa-trash-alt i-icon"></i> 삭제</span>
+                            	<span><a href="/partBoardModify.ho?partNo=${pb.partNo }&deptCode=${pb.deptCode}"><i class="fas fa-feather i-icon"></i> 수정하기</a></span> <span id="del-btn"><i class="far fa-trash-alt i-icon"></i> 삭제</span>
                         <% } %>
                             </div>
                             <div>${pb.partTitle }</div>
@@ -117,8 +130,14 @@
                     	url:'/deltetPostPartBoard.ho',
                     	data:{memNo,postNo},
                     	type:'post',
-                    	success:function(){},
-                    	error:function(){}
+                    	success:function(result){
+                    		if(result){
+                    			location.replace('/allPartBoardPage.ho');
+                    		}else{
+                    			alert('글 삭제에 실패하였습니다. \n지속적인 문제 발생시 관리자에 문의하세요.');
+                    		}
+                    	},
+                    	error:function(){alert('글 삭제에 실패하였습니다. \n지속적인 오류 발생시 관리자에 문의하세요.');}
                     });
                 }
             });

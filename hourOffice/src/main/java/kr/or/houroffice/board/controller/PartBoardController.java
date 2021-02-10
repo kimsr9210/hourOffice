@@ -87,6 +87,8 @@ public class PartBoardController {
 			map.put("page", page);
 			if(!searchType.equals("both")){
 				map.put("searchType", "part_"+searchType); // 쿼리문 데이터
+			}else{
+				map.put("searchType", searchType); // 쿼리문 데이터
 			}
 			map.put("keyword", "%"+keyword+"%"); // 쿼리문 데이터
 			map.put("searchTypeOrg", searchType); // 네비 데이터
@@ -109,28 +111,59 @@ public class PartBoardController {
 						HttpServletRequest request, @SessionAttribute("member") Member m)
 	{
 		if(m != null && pageDeptCode.equals(m.getDeptCode())){
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("deptCode", pageDeptCode);
-			map.put("postNo", partNo);
-			PartBoard pb = (PartBoard)bService.selectOnePost(map); // 게시글 정보
-			
-			// 게시글 파일
-			
-			// 게시글 댓글
-			int comntCount = bService.selectComntCount(partNo);
-			
-			Page comntPage = createPage(request, 5, 5);
-			map.put("page", comntPage);
-			map.put("comntPostNo", partNo);
-			List<Object> comntList = bService.selectPostComments(map);
-			//Page pageNavi = bService.getComntPageNavi(map);
-			
-			model.addAttribute("pb",pb);
-			model.addAttribute("comntList",comntList);
-			model.addAttribute("comntCount",comntCount);
+			// 조회수 +1
+			bService.updateHits(partNo);
+			return onePost(pageDeptCode,partNo,model,request,m);
 		}
+		model.addAttribute("msg","잘못된 접근입니다.");
+		return "part_board/allPartBoardPage";
+	}
+	private String onePost(String pageDeptCode, int partNo, Model model, HttpServletRequest request, Member m) {
+		// 댓글 등록하면 해당 페이지를 제 로딩하려고 했는데 
+		// 이렇게 분리하지 않으면 조회수가 댓글 등록할 때마다 오름 ;;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("deptCode", pageDeptCode);
+		map.put("postNo", partNo);
+		PartBoard pb = (PartBoard)bService.selectOnePost(map); // 게시글 정보
+		
+		// 다음글
+		int nextPostNo = bService.selectNextPost(map);
+		// 이전글
+		int prevPostNo = bService.selectPrevPost(map);
+		// 게시글 파일
+		System.out.println(nextPostNo + " / "+prevPostNo+" / "+pageDeptCode);
+		// 게시글 댓글
+		int comntCount = bService.selectComntCount(partNo);
+		
+		Page comntPage = createPage(request, 5, 5);
+		map.put("page", comntPage);
+		map.put("comntPostNo", partNo);
+		List<Object> comntList = bService.selectPostComments(map);
+		//Page pageNavi = bService.getComntPageNavi(map);
+		
+		model.addAttribute("pb",pb);
+		model.addAttribute("comntList",comntList);
+		model.addAttribute("comntCount",comntCount);
+		model.addAttribute("nextPost",nextPostNo);
+		model.addAttribute("prevPost",prevPostNo);
 		return "part_board/partBoard";
 	}
+	// 부서별 게시판 - 게시글 삭제
+	@RequestMapping(value="/deltetPostPartBoard.ho")
+	public void deletePost(@RequestParam("memNo") int memNo, @RequestParam("postNo") int postNo, HttpServletResponse response, 
+							@SessionAttribute("member") Member m) throws IOException{
+		if(m != null){
+			HashMap<String,Object> map = new HashMap<String, Object>();
+			map.put("memNo",memNo);
+			map.put("postNo", postNo);
+			int result = bService.deletePost(map);
+			if(result>0){
+				response.getWriter().print(true);
+			}
+		}
+		response.getWriter().print(false);
+	}
+	//  부서별 게시판 - 댓글 등록
 	@RequestMapping(value="/writeComntPartBoard.ho")
 	public String writeComnt(PartComments comnt, Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m != null){
@@ -139,10 +172,10 @@ public class PartBoardController {
 			comnt.setPartComntEmail(m.getMemEmail());
 			int result = bService.insertPostComnt(comnt);
 			if(result>0){
-				return partBoard(m.getDeptCode(),comnt.getPartNo(),model,request,m);
+				return onePost(m.getDeptCode(),comnt.getPartNo(),model,request,m);
 			}else{
-				model.addAttribute("msg","댓글 작성이 실패하였습니다. \n지속적인 문젝 발생시 관리자에 문의하세요.");
-				model.addAttribute("location","");
+				model.addAttribute("msg","댓글 작성이 실패하였습니다. \n지속적인 문제 발생시 관리자에 문의하세요.");
+				model.addAttribute("location","/postInPartBoard.ho?deptCode="+m.getDeptCode()+"&partNo="+comnt.getPartNo());
 				return "result";
 			}
 		}else{ // 비로그인 시 
@@ -151,11 +184,7 @@ public class PartBoardController {
 		
 	}
 	
-	// 부서별 게시판 게시글 삭제
-	@RequestMapping(value="/deltetPostPartBoard.ho")
-	public void deletePost(@RequestParam("memNo") int memNo, @RequestParam("postNo") int postNo){
-		
-	}
+	
 	
 	
 	// 부서별 게시판 - 새글쓰기 page

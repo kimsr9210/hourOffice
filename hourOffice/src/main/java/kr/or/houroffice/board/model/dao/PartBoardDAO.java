@@ -36,6 +36,14 @@ public class PartBoardDAO {
 	public Object selectOnePost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		return sqlSession.selectOne("board.getOnePost",map);
 	}
+	// 부서별 게시판  - 게시물 - 삭제 delete
+	public int deletePost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("boardType", "PART_BOARD");
+		map.put("ynType", "PART_DEL_YN");
+		map.put("dateType", "PART_DEL_DATE");
+		map.put("noType", "PART_NO");
+		return sqlSession.update("board.deletePost",map);
+	}
 	// 부서별 게시판  - 게시물 - 댓글 select
 	public List<Object> selectPostComments(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		Page page = (Page)map.get("page");
@@ -47,6 +55,8 @@ public class PartBoardDAO {
 	public int insertPostComnt(SqlSessionTemplate sqlSession, PartComments comnt) {
 		return sqlSession.insert("board.addComnt",comnt);
 	}
+	
+	
 
 	// 부서별 게시판 - 게시글 등록 - 게시판 번호 채번
 	public Object selectNumber(SqlSessionTemplate sqlSession) {
@@ -183,12 +193,42 @@ public class PartBoardDAO {
 		
 		return sqlSession.selectOne("board.countPostList", map);
 	}
+	// 총 댓글 수 
 	public int selectComntCount(SqlSessionTemplate sqlSession, int partNo) {
 		HashMap<String,String> map = new HashMap<String, String>();
 		map.put("boardType", "PART_COMMENTS");
 		map.put("comntPostNo", partNo+"");
 		return sqlSession.selectOne("board.countPostList", map);
 	}
+	// 조회수 +1
+	public int updateHits(SqlSessionTemplate sqlSession, int postNo) {
+		HashMap<String,String> map = new HashMap<String, String>();
+		map.put("boardType", "PART_BOARD"); // 테이블명
+		map.put("hitsType", "PART_HITS");	// 조회수 컬럼
+		map.put("noType", "PART_NO");		// 게시물 고유번호 컬럼
+		map.put("postNo", postNo+"");		// 게시물 고유번호 데이터
+		map.put("ynType", "PART_DEL_YN"); 	// 삭제여부 컬럼
+		return sqlSession.update("board.countingHits",map);
+	}
+	// 다음글 postNo
+	public int selectNextPost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("boardType", "PART_BOARD"); // 테이블명
+		map.put("type", "PART");		// 컬럼 타입
+		if(sqlSession.selectOne("board.nextPost",map)!=null){
+			return sqlSession.selectOne("board.nextPost",map);
+		}
+		return 0;
+	}
+	// 이전 글 postNo
+	public int selectPrevPost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("boardType", "PART_BOARD"); // 테이블명
+		map.put("type", "PART");		// 컬럼 타입
+		if(sqlSession.selectOne("board.prevPost",map)!=null){
+			return sqlSession.selectOne("board.prevPost",map);
+		}
+		return 0;
+	}
+	
 	
 	
 	
