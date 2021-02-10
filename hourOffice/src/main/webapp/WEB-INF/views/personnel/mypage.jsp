@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.personnel.model.vo.MemDept"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -20,7 +21,7 @@
 </head>
 
 <style>
-#photo {
+.photo {
 	border: 1px #aaa solid;
 	width: 180px;
 	height: 180px;
@@ -80,6 +81,8 @@ th {
 	background: #eee;
 	height: 50px;
 }
+
+input{height:20px;}
 </style>
 
 <script>
@@ -93,6 +96,9 @@ th {
 
 <body>
 
+	<% MemDept md  = (MemDept)request.getAttribute("memDept"); %>
+
+
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -105,7 +111,7 @@ th {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						연차내역
+						내 개인정보
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -125,24 +131,31 @@ th {
 									<input type="reset" id="cxlbtn" value="취소" />
 								</td>
 							</tr>
+							
+							<% if(md == null){ %>
+								<tr>
+									<td rowspan="5">회원 정보가 없습니다.</td>
+								</tr>
+							<% } else { %>
 
 							<tr>
+								<!--  사진등록-->
 								<td rowspan="5">
-									<div id="photo" src="" style="margin: 30px"></div> <!--  파일등록-->
+									<div class="photo" style="margin: 30px"><img src="/resources/images/profile/2102001_조로리.jpeg" class="photo"></div> 
 									<form action="" method="post" enctype="multipart/form-data">
-										<input type="file" id="pic" value="사진선택" /> 
+										<input type="file" id="pic"/>
 										<input type="submit" value="등록" id="upload" />
 									</form>
 								</td>
 								<th>사번</th>
-								<td></td>
+								<td><%=md.getMemNo() %></td>
 								<td></td>
 								<td></td>
 							</tr>
 
 							<tr>
 								<th>성명</th>
-								<td></td>
+								<td><%=md.getMemName() %></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -150,7 +163,7 @@ th {
 							<tr>
 
 								<th>부서</th>
-								<td></td>
+								<td><%=md.getDeptName() %></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -158,7 +171,7 @@ th {
 							<tr>
 
 								<th>직위</th>
-								<td></td>
+								<td><%=md.getMemPosition() %></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -166,7 +179,7 @@ th {
 							<tr>
 
 								<th>내선번호</th>
-								<td></td>
+								<td><%=md.getMemTell() %></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -175,7 +188,7 @@ th {
 								<tr>
 									<td></td>
 									<th>휴대전화번호</th>
-									<td><input type="text"></td>
+									<td><%=md.getMemPhone() %><input type="hidden"></td>
 									<td></td>
 									<td></td>
 								</tr>
@@ -184,7 +197,7 @@ th {
 									<td></td>
 									<th>이메일</th>
 									<td>
-										<span class="text_span">이메일</span>
+										<span class="text_span"><%=md.getMemEmail() %></span>
 										<input type="text" class="text_input" style="display:none;">
 									</td>
 									<td></td>
@@ -194,7 +207,7 @@ th {
 								<tr>
 									<td></td>
 									<th>주소</th>
-									<td><span class="text_span">주소</span><input type="text" class="text_input" style="display:none;"></td>
+									<td><span class="text_span"><%=md.getMemAddress() %></span><input type="text" class="text_input" style="display:none;"></td>
 									<td></td>
 									<td></td>
 								</tr>
@@ -217,6 +230,8 @@ th {
 									style="float: left;" /></td>
 								<td></td>
 							</tr>
+							
+							<% } %>
 						</table>
 						<br>
 						<br>

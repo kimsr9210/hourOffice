@@ -5,54 +5,57 @@
 
 	<sql id="sql_selectAddbook">
 		SELECT M.* FROM (
-			SELECT
-				RNUM,
-				M.MEM_NO AS memNo,
-				M.MEM_POSITION AS memPosition,
-				M.MEM_NAME AS memName,
-				M.MEM_BIRTH AS memBirth,
-				M.MEM_ADDRESS AS
-				memAddress,
-				M.MEM_PHONE AS MEMPHONE,
-				M.MEM_TELL AS MEMTELL,
-				M.MEM_EMAIL
-				AS MEMEMAIL,
-				M.MEM_PROFILE AS MEMPROFILE,
-				( SELECT
-				DEPT_NAME
-				FROM
-				DEPARTMENT
-				WHERE
-				DEPT_CODE = M.DEPT_CODE
-				) AS deptName,
-				M.MEM_DEL_YN
-			FROM (SELECT ROW_NUMBER()OVER(ORDER BY
-			MEM_JOIN_DATE DESC) AS RNUM,
-			MEMBER.* FROM MEMBER) M
+		SELECT
+		RNUM,
+		M.MEM_NO AS memNo,
+		M.MEM_POSITION AS memPosition,
+		M.MEM_NAME AS memName,
+		M.MEM_BIRTH AS
+		memBirth,
+		M.MEM_ADDRESS AS
+		memAddress,
+		M.MEM_PHONE AS MEMPHONE,
+		M.MEM_TELL AS MEMTELL,
+		M.MEM_EMAIL
+		AS MEMEMAIL,
+		M.MEM_PROFILE AS
+		MEMPROFILE,
+		( SELECT
+		DEPT_NAME
+		FROM
+		DEPARTMENT
+		WHERE
+		DEPT_CODE = M.DEPT_CODE
+		) AS deptName,
+		M.MEM_DEL_YN
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY
+		MEM_JOIN_DATE DESC) AS RNUM,
+		MEMBER.* FROM MEMBER) M
 		) M
 	</sql>
 
-	<!-- 사내주소록 쿼리 -->
+	<sql id="sql_selectMyAddbook">
+		SELECT
+		MEM_NO AS memNo,
+		CNT_NO AS cntNo,
+		NAME,
+		COMPANY,
+		APPOINTMENT,
+		OFFICENUMBER,
+		PH,
+		EMAIL,
+		ENROLLDATE,
+		END_YN AS endYN
+		FROM
+		CONTACT
+	</sql>
+
+	<!-- 사내주소록 -->
 	<select id="selectAddbook" resultType="Member">
 		<include refid="sql_selectAddbook"></include>
 		<where>
 			AND M.MEM_DEL_YN='N'
 		</where>
-	</select>
-
-	<!-- 인사정보 쿼리 -->
-	<select id="information" resultType="MemDept">
-		SELECT
-		mem_dept.mem_no as memNo,
-		License.lic_Date as licDate
-		FROM
-		mem_dept
-		LEFT OUTER JOIN license ON mem_dept.mem_no = license.mem_no
-		LEFT OUTER JOIN career ON mem_dept.mem_no = career.mem_no
-		LEFT OUTER JOIN military ON mem_dept.mem_no = military.mem_no
-		WHERE
-		MEM_DEL_YN='N'
-		AND mem_dept.mem_no = #{memNo}
 	</select>
 
 	<!-- 사원전체 주소록 검색(서치)쿼리 -->
@@ -72,11 +75,122 @@
 		</where>
 	</select>
 
+	<!-- 개인주소록 Search -->
+	<select id="myaddbookSearch" parameterType="hashmap" resultType="Contact">
+		<include refid="sql_selectMyAddbook"></include>
+		<where> <!-- MAPPER 기능 : 처음 <where> 절은 > and 생략 -->
+			<if test="selectBox == 'name'">
+				AND name LIKE '%'||#{searchText}||'%'
+			</if>
+			<if test="selectBox == 'company'">
+				AND company LIKE '%'||#{searchText}||'%'
+			</if>
+			<if test="selectBox == 'appointment'">
+				AND appointment LIKE '%'||#{searchText}||'%'
+			</if>
+		</where>
+	</select>
 
+	<!-- 개인주소록 selectList -->
+	<select id="selectMyaddbook" resultType="Contact">
+		SELECT
+			MEM_NO AS memNo,
+			CNT_NO AS cntNo,
+			NAME,
+			COMPANY,
+			APPOINTMENT,
+			OFFICENUMBER,
+			PH,
+			EMAIL,
+			ENROLLDATE,
+			END_YN AS endYN
+		FROM CONTACT
+			WHERE end_YN='N'
+	</select>
+
+	<!-- 개인주소록 insert -->
 	<select id="insertMyaddbook" parameterType="hashmap" resultType="int">
 		INSERT INTO contact
 		VALUES(#{memNo},CONTACT_SEQ.NEXTVAL,#{name},#{company},#{position},#{tell},#{ph},#{email},DEFAULT,'N')
 		<!-- INSERT INTO CONTACT VALUES(2101001,CONTACT_SEQ.NEXTVAL,'삼성','개발1팀',0212341234,'01011112222','K@NAVER.COM','회사',DEFAULT,'N'); -->
 	</select>
+
+	<!-- 개인주소록 수정 (update) -->
+	<update id="updateMyaddbook" parameterType="hashmap">
+		UPDATE CONTACT
+		SET
+		name = #{name}
+		,company = #{company}
+		,appointment = #{position}
+		,officenumber = #{tell}
+		,ph = #{ph}
+		,email = #{email}
+		WHERE cnt_no= #{cntNo}
+	</update>
+
+	<!-- UPDATE 태그는 자동으로 int로 리턴합니다. resultType을 명시할필요는 없어요 -->
+	<!-- 개인주소록 삭제(update) -->
+	<update id="deleteMyaddbook" parameterType="String">
+		UPDATE CONTACT
+		SET END_YN = 'Y'
+		where cnt_no=#{cntNo}
+	</update>
+
+	<!-- 내 개인정보 (마이페이지) -->
+	<select id="mypage" resultType="MemDept">
+		SELECT 
+			mem_no AS memNo, 
+			mem_name AS memName,
+			dept_name AS deptName,
+			mem_position AS memPosition,
+			mem_email AS memEmail,
+			mem_address AS memAddress,
+			mem_profile AS memProfile,
+			mem_phone AS memPhone,
+			mem_tell AS memTell,
+			mem_pwd AS memPwd
+		FROM mem_dept
+		WHERE mem_resign_yn='N'
+		AND mem_no = #{memNo}
+	</select>
+
+	<!-- 인사정보 쿼리 -->
+	<select id="information" resultType="MemDept">
+		SELECT
+		mem_dept.mem_no as memNo,
+		License.lic_Date as licDate,
+		License.lic_Name as licName,
+		License.lic_Origin as licOrigin,
+		career.car_Join_Date as carJoinDate,
+		career.car_Resign_Date as carResignDate,
+		career.car_Place as carPlace,
+		career.car_Position as carPosition,
+		career.car_Content as carContent,
+
+		Academic_Ability.Aca_enroll_Date as AcaEnrollDate,
+		Academic_Ability.Aca_Grad_Date as AcaGradDate,
+		Academic_Ability.Aca_School_Name as AcaSchoolName,
+		Academic_Ability.Aca_Major_Name as AcaMajorName,
+		Academic_Ability.Aca_Grad as AcaGrad
+
+		FROM
+		mem_dept
+		LEFT OUTER JOIN
+		license ON mem_dept.mem_no = license.mem_no
+		LEFT OUTER JOIN career ON
+		mem_dept.mem_no = career.mem_no
+		LEFT OUTER
+		JOIN military ON
+		mem_dept.mem_no = military.mem_no
+		LEFT OUTER JOIN Academic_Ability ON
+		mem_dept.mem_no =
+		Academic_Ability.mem_no
+		WHERE
+		MEM_DEL_YN='N'
+		AND
+		mem_dept.mem_no =
+		#{memNo}
+	</select>
+
 
 </mapper>

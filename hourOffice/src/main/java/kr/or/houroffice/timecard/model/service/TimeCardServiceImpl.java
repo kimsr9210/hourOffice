@@ -1,12 +1,15 @@
 package kr.or.houroffice.timecard.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import kr.or.houroffice.member.model.vo.Attendance;
 import kr.or.houroffice.timecard.model.dao.TimeCardDAO;
 import kr.or.houroffice.timecard.model.vo.Holiday;
 
@@ -24,6 +27,12 @@ public class TimeCardServiceImpl implements TimeCardService {
 	@Override
 	public ArrayList<Holiday> selectHoliday() {
 		ArrayList<Holiday> list = tDAO.selectHoliday(sqlSession);
+		return list;
+	}
+
+	//근태 조회 (리스트)
+	public ArrayList<Attendance> selectWork(int memNo) {
+		ArrayList<Attendance> list = tDAO.selectWork(sqlSession,memNo);
 		return list;
 	}
 		

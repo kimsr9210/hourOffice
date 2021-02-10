@@ -239,8 +239,8 @@ to {
 							<tr>
 								<td></td>
 								<td width="33%"></td>
-								<td width="33%"><a href="" id="aform">연장근무 신청서</a> <a
-									href="" id="aform">지각 불참 사유서</a>
+								<td width="33%"><a href="/approvalForm.ho?docuType=O" id="aform">연장근무 신청서</a> <a
+									href="/approvalForm.ho?docuType=L" id="aform">지각 불참 사유서</a>
 							</tr>
 						</table>
 
@@ -287,6 +287,8 @@ to {
 
 								<button id="go" class="btnStyle">출근하기</button>
 								<button id="back" class="btnStyle">퇴근하기</button>
+								
+								
 
 							</div>
 							<script src="/resources/js/memberMain/memberMain_work.js"></script>
@@ -316,7 +318,7 @@ to {
 									<option value='12'>12월</option>
 								</select> 
 								<select name="sh_week" id="sh_week">
-								</select>
+								</select><br><br>
 								
 								<table border="1px" width="100%"
 									style="text-align: center; margin: auto;">

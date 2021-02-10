@@ -26,7 +26,7 @@
                
 tr{height: 30px;}
 select{height: 25px;}
-#searchText{height: 25px;}
+#search{height: 25px;}
 </style>
 
 <body>

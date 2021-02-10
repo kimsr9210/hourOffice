@@ -36,9 +36,9 @@ th {
 	background: #eee;
 }
 
-#pic {
+.pic {
 	border: 1px black solid;
-	width: 180px;
+	width: 160px;
 	height: 180px;
 	margin: 0px auto;
 }
@@ -77,7 +77,9 @@ th {
 
 <table>
         <tr>
-            <th rowspan="5" class="imgbox"><div src="" id="pic"></div></th>
+            <th rowspan="5" class="imgbox">
+            <div class="pic"><img src="/resources/images/profile/2102001_조로리.jpeg" class="pic"></div></th>
+            
             <th>이름</th>
             <td><%=m.getMemName() %></td>
             <th>사번</th>
@@ -112,6 +114,23 @@ th {
             <td>군필</td>
         </tr>
     </table><br><br>
+    
+    <table>
+        <tr>
+            <th>학교명</th>
+            <th>입학일</th>
+            <th>졸업일</th>
+            <th>전공명</th>
+            <th>졸업여부</th>
+        </tr>
+        <tr>
+            <td><%=md.getAcaSchoolName() %></td>
+            <td><%=md.getAcaEnrollDate() %></td>
+            <td><%=md.getAcaGradDate() %></td>
+            <td><%=md.getAcaMajorName() %></td>
+            <td><%=md.getAcaGrad() %></td>
+        </tr>
+    </table><br><br>
 
     <table>
         <tr>
@@ -122,11 +141,11 @@ th {
             <th>취득일</th>
         </tr>
         <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td><%=md.getMemNo()%></td>
+            <td><%=md.getLicName() %></td>
+            <td>12345678</td>
+            <td><%=md.getLicOrigin() %></td>
+            <td>A</td>
+            <td><%=md.getLicDate()%></td>
         </tr>
     </table><br><br>
 
@@ -139,11 +158,11 @@ th {
             <th>퇴사일</th>
         </tr>
         <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+            <td><%=md.getCarPlace() %></td>
+            <td><%=md.getCarPosition() %></td>
+            <td><%=md.getCarContent() %></td>
+            <td><%=md.getCarJoinDate() %></td>
+            <td><%=md.getCarResignDate() %></td>
         </tr>
     </table>
 

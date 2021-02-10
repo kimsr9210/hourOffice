@@ -1,3 +1,6 @@
+<%@page import="kr.or.houroffice.personnel.model.vo.Contact"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -25,7 +28,7 @@
 </head>
 
 <style>
-#sbbtn {
+.sbbtn {
 	background-color: #1D9F8E;
 	color: white;
 	border: 0;
@@ -41,7 +44,18 @@
 	border-radius: 5px;
 	width: 80px;
 	height: 25px;
+	
 }
+
+#update-user{
+	background-color: #1D9F8E;
+	color: white;
+	border: 0;
+	border-radius: 5px;
+	width: 80px;
+	height: 25px;
+	margin-left: 5px;
+	}
 
 #delbtn {
 	background-color: #FF6363;
@@ -50,7 +64,7 @@
 	border-radius: 5px;
 	width: 80px;
 	height: 25px;
-	margin-left: 20px;
+	margin-left: 5px;
 }
 
 tr {
@@ -65,16 +79,25 @@ select {
 	height: 25px;
 }
 
-.addname{display: inline-block;
-	width:100px;
-	text-align:center;
-	}
-	
-.textbox{width:200px;
+.addname {
+	display: inline-block;
+	width: 100px;
+	text-align: center;
 }
 
+.textbox {
+	width: 200px;
+}
 </style>
+
 <script>
+	$(document).ready(
+		function() {
+			$('.ckall').click(function() {
+			$('.ck').prop('checked',this.checked);
+		});
+	});
+
 	$(function() {
 		var dialog, form;
 		function addUser() {
@@ -84,6 +107,9 @@ select {
 			
 			// Id = addName
 			//$("#addName")
+			var url = null;
+			var type = null;
+			
 			
 			var addName = $("#addName").val();
 			var addCompany = $("#addCompany").val();
@@ -93,21 +119,33 @@ select {
 			var addEmail = $("#addEmail").val();
 
 			var object = {"name":addName,"company":addCompany,"position":addPosition,"tell":addTell,"ph":addPh,"email":addEmail};
+			
+			if($("#writeType").val() == "insert"){
+				url = "/myaddbook.ho";
+				type = "POST";
+			} else {
+				url = "/myaddbookUpdate.ho";
+				type = "PUT";
+				object.cntNo = $("input[type=checkbox]:checked").val();
+			}
+			
 			// ajax 이벤트 추가
 			$.ajax({
-				url : "/myaddbook.ho",
-				dataType: 'json',
+				url : url,
 		        data: JSON.stringify(object), //리스트(object)를 json 형식으로 저장하기 -> 키 벨류
+		        dataType: 'text',
 		        contentType:'application/json; charset=utf-8',
-				type : "POST",
-				success : function(){
-					console.log("서버 호출을 정상적으로 완료 하였습니다.");
+				type : type,
+				success : function(data){
+					if(data == 'success'){
+						alert('등록이 정상적으로 처리되었습니다.');
+						location.href = '/myaddbook.ho';
+					} else {
+						alert('등록이 정상적으로 처리되지않았습니다. \n 관리자에게 문의하세요.');
+					}
 				},
-				error : function(){
+				error : function(e){
 					console.log("서버 호출을 정상적으로 처리하지 못하였습니다.!!");
-				},
-				complete : function(){
-					dialog.dialog("close");
 				}
 				
 			});
@@ -127,8 +165,10 @@ select {
 			close : function() {
 				form[0].reset();
 			}
-		});
-
+		});//
+		
+		
+		
 		//여기가 잘못된거같은데 모르겠네
 		form = dialog.find("form").on("submit", function(event) {
 			event.preventDefault();
@@ -136,23 +176,85 @@ select {
 		});
 
 		$("#create-user").button().on("click", function() {
+			$("#writeType").val("insert");
 			dialog.dialog("open");
 		});
+		
+		$("#update-user").button().on("click", function() {
+			$("#writeType").val("update");
+			var chk_idx = $("input[type=checkbox]:checked").val();
+			$("#addName").val($(".name_"+chk_idx).text());
+			$("#addCompany").val($(".company_"+chk_idx).text());
+			
+			$("#addPosition").val($(".appointment_"+chk_idx).text());
+			$("#addTell").val($(".officeNumber_"+chk_idx).text());
+			$("#addPh").val($(".ph_"+chk_idx).text());
+			$("#addEmail").val($(".email_"+chk_idx).text());
+			dialog.dialog("open");
+		});
+		
+		//-- 삭제 -->
+		$('#delbtn').click(function() {
+			var result = window.confirm("연락처 삭제 하시겠습니까?");
+			var ck = $("input[type=checkbox]:checked").val();
+		
+			if (result == true) {
+				$.ajax({
+					url :  "/myaddbookDelete.ho?ck="+ck, 
+					dataType: 'text',
+					type : "DELETE",
+					success : function(data){
+						if(data == 'success'){
+							alert('삭제가 완료되었습니다.');
+							location.href = '/myaddbook.ho';
+						} else {
+							alert('삭제가 정상적으로 처리되지않았습니다. \n 관리자에게 문의하세요.');
+						}
+					},
+					error : function(e){
+						alert('오류가 발생하였습니다. \n 관리자에게 문의하세요.');
+						console.log("서버 호출을 정상적으로 처리하지 못하였습니다.!!");
+					}
+				});
+			}
+		});
+		
 	});
+
 </script>
 
+
 <body>
+	<%
+		//jsp 페이지에서 사용하기 위하여 데이터를 꺼내는 작업
+		//어레이리스트는 오브젝트 타입 , 다운캐스팅을 해줘야한다.   (ArrayList<Contact>)
+		ArrayList<Contact> list = (ArrayList<Contact>) request.getAttribute("list");
+		String pageNavi = (String) request.getAttribute("pageNavi");
+		Member sessionMember = (Member) session.getAttribute("member");
+	%>
 
-
-	<div id="dialog-form" title="연락처등록"><br>
-	<form>
-			<div class="addname" >이름</div><input  id="addName" class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname" >회사</div><input id="addCompany" class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname" >직급</div><input id="addPosition" class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname" >내선번호</div><input id="addTell" class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname" >휴대폰</div><input id="addPh" class="textbox" type="text" class="text" /><br><br><br>
-			<div class="addname" >이메일</div><input id="addEmail" class="textbox" type="text" class="text" /><br><br>
-	</form>
+	<div id="dialog-form" title="연락처등록">
+		<br> <input type="hidden" id="writeType" value="insert" />
+		<form>
+			<div class="addname">이름</div>
+			<input id="addName" class="textbox" type="text" class="text" /><br>
+			<br> <br>
+			<div class="addname">회사</div>
+			<input id="addCompany" class="textbox" type="text" class="text" /><br>
+			<br> <br>
+			<div class="addname">직급</div>
+			<input id="addPosition" class="textbox" type="text" class="text" /><br>
+			<br> <br>
+			<div class="addname">내선번호</div>
+			<input id="addTell" class="textbox" type="text" class="text" /><br>
+			<br> <br>
+			<div class="addname">휴대폰</div>
+			<input id="addPh" class="textbox" type="text" class="text" /><br>
+			<br> <br>
+			<div class="addname">이메일</div>
+			<input id="addEmail" class="textbox" type="text" class="text" /><br>
+			<br>
+		</form>
 	</div>
 
 	<div id="wrap">
@@ -180,48 +282,29 @@ select {
 								</td>
 
 								<td width="7%">
-									<form>
-										<button type="submit" id="delbtn">삭제</button>
-									</form>
+									<button id="update-user">수정</button>
 								</td>
 
-
-								<script>
-									$(function() {
-										$('#delbtn').click(function() {
-										var result = window.confirm("연락처 삭제 하시겠습니까?");
-										if (result == true) {
-
-										}
-									});
-									});
-									
-								</script>
-
-								<!-- 체크박스 모두선택하기 -->
-								<script>
-								$(document).ready(
-								function() {
-								$('.ckall').click(function() {
-								$('.ck').prop('checked',this.checked);
-									});
-								});
-								</script>
+								<td width="7%">
+									<!-- <form action="/myaddbookDelete.ho" method="post">
+										<input type="hidden" name="_method" value="delete" /> -->
+									<button type="submit" id="delbtn">삭제</button> <!-- </form> -->
+								</td>
 
 								<td style="text-align: right;">
-									<form>
-										<select>
-											<option>이름</option>
-											<option>회사</option>
-											<option>직급</option>
-										</select> <input type="text" id="search" name="search" /> <input
-											type="submit" id="sbbtn" value="검색" />
+									<form action="/myaddbookSearch.ho" method="get">
+										<select name="selectBox">
+											<option value="" selected>전체</option>
+											<option value="name">이름</option>
+											<option value="company">회사</option>
+											<option value="appointment">직책</option>
+										</select> <input type="text" id="search" name="searchText" /> <input
+											type="submit" class="sbbtn" name="searchBtn" value="검색" />
 									</form>
 								</td>
 							</tr>
 						</table>
-						<br>
-						<br>
+						<br> <br>
 
 
 						<table border="1px" width="100%"
@@ -231,36 +314,41 @@ select {
 								<th><input type="checkbox" class="ckall"></th>
 								<th>이름</th>
 								<th>회사</th>
-								<th>직위</th>
+								<th>직책</th>
 								<th>내선번호</th>
 								<th>휴대폰</th>
 								<th>이메일</th>
 							</tr>
 
-							<!-- 반복문 for 작성 -->
+							<%
+								for (Contact ct : list) {
+							%>
 							<tr>
-								<td><input type="checkbox" class="ck"></td>
-								<td>김소련</td>
-								<td>삼성</td>
-								<td>팀장</td>
-								<td>02)2049-3618</td>
-								<td>010-1111-2222</td>
-								<td>kim@kr.or.iei.kh</td>
+								<td><input type="checkbox" class="ck"
+									value="<%=ct.getCntNo()%>"></td>
+								<td class="name_<%=ct.getCntNo()%>"><%=ct.getName()%></td>
+								<td class="company_<%=ct.getCntNo()%>"><%=ct.getCompany()%></td>
+								<td class="appointment_<%=ct.getCntNo()%>"><%=ct.getAppointment()%></td>
+								<td class="officeNumber_<%=ct.getCntNo()%>"><%=ct.getOfficeNumber()%></td>
+								<td class="ph_<%=ct.getCntNo()%>"><%=ct.getPh()%></td>
+								<td class="email_<%=ct.getCntNo()%>"><%=ct.getEmail()%></td>
 							</tr>
+							<%
+								}
+							%>
 
 						</table>
 						<br>
 
-						<p style="text-align: center;">1 2 3 4 5 ></p>
+						<%-- <%=pageNavi%> --%>
 
 						<!----------------------------------->
 					</div>
-
 				</div>
 			</div>
 		</div>
-		
-		
+
+
 
 		<!-- 자바 스크립트    -->
 		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
@@ -268,8 +356,8 @@ select {
 	</div>
 
 	</div>
-	
-	
+
+
 </body>
 </html>
 
