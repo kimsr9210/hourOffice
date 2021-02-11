@@ -42,6 +42,10 @@ public class PartBoardService implements BoardService{
 	public Object selectOnePost(HashMap<String,Object> map) {
 		return bDAO.selectOnePost(sqlSession,map);
 	}
+	@Override // 부서별 게시판 - 게시글 - 파일 select
+	public BoardFile selectPostFile(HashMap<String, Object> map) {
+		return bDAO.selectPostFile(sqlSession,map);
+	}
 	@Override // 부서별 게시판 - 게시글 - 삭제 delete
 	public int deletePost(HashMap<String, Object> map) {
 		return bDAO.deletePost(sqlSession,map);
@@ -77,6 +81,14 @@ public class PartBoardService implements BoardService{
 	}
 	
 	
+	@Override // 부서별 게시판 - 게시글 수정 - update
+	public int updatePost(HashMap<String, Object> map) {
+		return bDAO.updatePost(sqlSession,map);
+	}
+	@Override // 부서별 게시판 - 게시글 수정 - 파일 update
+	public int updatePostFile(BoardFile bf) {
+		return bDAO.updatePostFile(sqlSession,bf);
+	}
 	
 	
 	
@@ -101,6 +113,10 @@ public class PartBoardService implements BoardService{
 	public int selectPrevPost(HashMap<String, Object> map) {
 		return bDAO.selectPrevPost(sqlSession,map);
 	}
+	
+	
+	
+	
 	
 	
 	

@@ -60,6 +60,19 @@
 	AND PART_NO=#{postNo}
   </select>
   
+  <select id="getPostFile" parameterType="hashmap" resultType="BoardFile">
+  	SELECT 
+		${type}FILE_NO AS fileNo,
+		${type}NO AS postNo,
+		${type}ORIG_NAME AS origName,
+		${type}CHG_NAME AS chgName,
+		${type}PATH AS filePath,
+		${type}SIZE AS fileSize,
+		${type}UPLOAD_DATE AS uploadDate
+	FROM ${type}FILE WHERE 
+	${type}NO=#{postNo} AND ${type}FILE_NO=#{fileNo}
+  </select>
+  
   
   <!-- BY 다빈  부서별 게시판 - 게시글의 댓글 List select -->
   <select id="getPostComntList" parameterType="hashmap" resultType="PartComments">
@@ -116,14 +129,14 @@
   	)
   </insert>
   <!-- BY 다빈  부서별 게시판 - 게시판 insert file -->
-  <insert id="insertPartFile" parameterType="BoardFile">
-  	INSERT INTO PART_FILE VALUES(
-  		PART_BOARD_FILE_SEQ.NEXTVAL,
-  		#{postNo},
-  		#{origName},
-  		#{chgName},
-  		#{path},
-  		#{size},
+  <insert id="insertPostFile" parameterType="hashmap">
+  	INSERT INTO ${type}FILE VALUES(
+  		${typeBoard}FILE_SEQ.NEXTVAL,
+  		#{pf.postNo},
+  		#{pf.origName},
+  		#{pf.chgName},
+  		#{pf.filePath},
+  		#{pf.fileSize},
   		DEFAULT
   	)
   </insert>
@@ -132,6 +145,27 @@
   <update id="deletePost" parameterType="hashmap">
   	UPDATE ${boardType} SET ${ynType}='Y', ${dateType}=SYSTIMESTAMP WHERE ${noType}=#{postNo}
   </update>
+  
+  
+  <!-- 게시글 수정 update -->
+  <update id="modifyPost" parameterType="hashmap">
+  	UPDATE ${boardType} SET ${type}TITLE=#{pb.partTitle},${type}CONTENT=#{pb.partContent} WHERE ${type}NO=#{pb.partNo} 
+  	<choose>
+  		<when test="deptCode != null">AND DEPT_CODE=#{deptCode}</when>
+  	</choose>
+  </update>
+  <!-- 게시글 수정 파일 update-->
+  <update id="updatePostFile" parameterType="hashmap">
+  	UPDATE ${type}FILE SET 
+		${type}ORIG_NAME=#{bf.origName},
+		${type}CHG_NAME=#{bf.chgName},
+		${type}PATH=#{bf.filePath},
+		${type}SIZE=#{bf.fileSize},
+		${type}UPLOAD_DATE=SYSTIMESTAMP 
+	WHERE ${type}FILE_NO=#{bf.fileNo} AND ${type}NO=#{bf.postNo}
+  </update>
+  <!-- 게시글 수정 파일 delete -->
+  
   
   <!-- 전체 List 수 -->
   <select id="countPostList" parameterType="hashmap" resultType="int">

@@ -107,13 +107,13 @@ public class PartBoardController {
 	
 	// 부서별 게시판 - 게시글 one select
 	@RequestMapping(value="/postInPartBoard.ho")
-	public String partBoard(@RequestParam("deptCode") String pageDeptCode, @RequestParam("partNo") int partNo, Model model, 
+	public String partBoard(PartBoard pb, Model model, 
 						HttpServletRequest request, @SessionAttribute("member") Member m)
 	{
-		if(m != null && pageDeptCode.equals(m.getDeptCode())){
+		if(m != null && pb.getDeptCode().equals(m.getDeptCode())){
 			// 조회수 +1
-			bService.updateHits(partNo);
-			return onePost(pageDeptCode,partNo,model,request,m);
+			bService.updateHits(pb.getPartNo());
+			return onePost(pb.getDeptCode(),pb.getPartNo(),model,request,m);
 		}
 		model.addAttribute("msg","잘못된 접근입니다.");
 		return "part_board/allPartBoardPage";
@@ -131,7 +131,8 @@ public class PartBoardController {
 		// 이전글
 		int prevPostNo = bService.selectPrevPost(map);
 		// 게시글 파일
-		System.out.println(nextPostNo + " / "+prevPostNo+" / "+pageDeptCode);
+		BoardFile pFile= bService.selectPostFile(map);
+		
 		// 게시글 댓글
 		int comntCount = bService.selectComntCount(partNo);
 		
@@ -142,6 +143,7 @@ public class PartBoardController {
 		//Page pageNavi = bService.getComntPageNavi(map);
 		
 		model.addAttribute("pb",pb);
+		model.addAttribute("pf",pFile);
 		model.addAttribute("comntList",comntList);
 		model.addAttribute("comntCount",comntCount);
 		model.addAttribute("nextPost",nextPostNo);
@@ -267,16 +269,16 @@ public class PartBoardController {
 					pf.setPostNo(partNo);
 					pf.setOrigName(originalFileName);
 					pf.setChgName(changedFileName);
-					pf.setPath(filePath);
-					pf.setSize(fileSize);
+					pf.setFilePath(filePath);
+					pf.setFileSize(fileSize);
 					
 					bService.insertPostFile(pf); // 파일 DB에 저장
 				} // 파일 null이 아니면 디비 저장 if 문
 				
-				model.addAttribute("msg","성공");
+				model.addAttribute("msg","글 등록이 성공하였습니다.");
 				
 			}else{
-				model.addAttribute("msg","실패");
+				model.addAttribute("msg","글 등록에 실패하였습니다 \n지속적인 실패시 관리자에 문의하세요.");
 			}// 게시글 디비 저장 실패 if 문
 			
 			model.addAttribute("location","/allPartBoardPage.ho");
@@ -287,12 +289,127 @@ public class PartBoardController {
 		return "result";
 	}
 	
-	// 부서별 게시판 update
+	// 부서별 게시판 update 페이지
 	@RequestMapping(value="/partBoardModify.ho")
-	public String partBoardModify(){
+	public String partBoardModify(PartBoard pb, Model model, @SessionAttribute("member") Member m){
+		if(m!=null){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("deptCode", pb.getDeptCode()+" "); // 넘어오는 데이터가 ㅜ 공백이 없음.....하...
+			map.put("postNo", pb.getPartNo());
+			PartBoard result = (PartBoard)bService.selectOnePost(map);
+			
+			model.addAttribute("pb",result);
+		}
 		return "part_board/partBoardModify";
 	}
+	// 부서별 게시판 update 
+	@RequestMapping(value="/updatePostPartBoard.ho")
+	public String updatePostPartBoad(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException{
+		
+			
+		// 파일이 업로드 되는 경로
+		String uploadPath = "/resources/file/part_board/";
+
+		// 최대 파일 사이즈를 정하기 위한 값
+		int uploadFileSizeLimit = 10*1024*1024; // 최대 10MB 까지 업로드 가능
+
+		// 파일 이름 인코딩 값
+		String encType = "UTF-8"; 
+		
+		// 정보를 가지고 있는 객체
+		// @Autowired	ServletContext context;
 	
+		// context.getRealPath(); -> WebContent까지의 절대 경로 (실제경로)
+		String realUploadPath = context.getRealPath(uploadPath);
+		
+		// MultipartRequest 객체 생성 (생성하면서 마지막 5번째 정책 설정 객체 만들기)
+		MultipartRequest multi = new MultipartRequest(request, // 1. request
+														realUploadPath, // 2. 실제 업로드 되는 경로 
+														uploadFileSizeLimit, // 3. 최대 파일 사이즈 크기
+														encType, // 4. 인코딩 타입
+														new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
+	
+		if(m!=null){
+			String fileNo = multi.getParameter("fileNo");
+			
+			if(Integer.parseInt(multi.getParameter("memNo"))==m.getMemNo()){
+				
+				// 게시판 insert 비즈니스 로직
+				PartBoard pb = new PartBoard(); 
+				
+				pb.setPartNo(Integer.parseInt(multi.getParameter("partNo")));	// 게시글 번호	
+				pb.setPartTitle(multi.getParameter("partTitle"));				// 제목
+				pb.setDeptCode(multi.getParameter("deptCode"));					// 부서코드
+				pb.setMemNo(Integer.parseInt(multi.getParameter("memNo")));		// 사번
+				pb.setPartWriter(m.getMemName());								// 작성자
+				pb.setPartContent(multi.getParameter("partContent"));			//글내용
+				//System.out.println(pb.getPartNo()+" / "+pb.getPartTitle()+" / "+pb.getDeptCode()+" / "+pb.getMemNo()+" / "+pb.getPartWriter()+" / "+pb.getPartContent());
+				
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("pb", pb);
+				int result = bService.updatePost(map);
+				
+				if(result>0){
+					
+					if(multi.getFilesystemName("attachedFile")!=null){
+						// 2. 파일이 있는 경우
+						// 2-1) 원래 파일이 있는 경우 - update
+						// 2-2) 원래 파일이 없는 경우 - insert
+						
+						// 서버에 실제로 업로드 된 파일이름 가져오기
+						String originalFileName = multi.getFilesystemName("attachedFile");
+						
+						long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
+						
+						// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
+						File file = new File(realUploadPath+"\\"+originalFileName);
+						// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
+						file.renameTo(new File(realUploadPath+"\\"+m.getDeptCode()+pb.getPartNo()+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
+						String changedFileName = m.getDeptCode()+pb.getPartNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
+						File reNameFile = new File(realUploadPath+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
+						String filePath = reNameFile.getPath(); // 경로
+						// 해당 업로드된 file의 사이즈
+						long fileSize = reNameFile.length();
+						
+						BoardFile pf  = new BoardFile();
+						pf.setPostNo(pb.getPartNo());
+						pf.setOrigName(originalFileName);
+						pf.setChgName(changedFileName);
+						pf.setFilePath(filePath);
+						pf.setFileSize(fileSize);
+						
+						if(fileNo != null){ // 기존에 파일이 있었다면
+							bService.updatePostFile(pf); // 파일 DB에 updqte 저장
+						}else{
+							bService.insertPostFile(pf); // 파일 DB에 insert저장
+						}
+					}else{
+						// 1. 파일이 없는 경우
+						// 1-1) 원래 파일이 있는 경우 - delete 
+						// 1-2) 원래 파일이 없는 경우 - 아무것도 안 해도 됨
+						
+						if(fileNo != null){
+							HashMap<String, Object> mapf = new HashMap<String, Object>();
+							mapf.put("fileNo", Integer.parseInt(fileNo));
+							mapf.put("postNo", pb.getPartNo());
+							
+						}
+						
+					}
+					
+					model.addAttribute("msg","글 수정이 성공하였습니다.");
+					model.addAttribute("location","/postInPartBoard.ho?deptCode="+pb.getDeptCode()+"&partNo="+pb.getPartNo());
+				}else{
+					model.addAttribute("msg","글 수정에 실패하였습니다. \n지속적인 실패시 관리자에 문의하세요.");
+					model.addAttribute("location","/partBoardModify.ho?deptCode="+pb.getDeptCode()+"&partNo="+pb.getPartNo());
+				}
+				
+			}
+			
+		}
+		return "redirect:login.jsp";
+	}
 	
 	
 	// 페이징처리 할 때 필요한 페이지 객체 만들기

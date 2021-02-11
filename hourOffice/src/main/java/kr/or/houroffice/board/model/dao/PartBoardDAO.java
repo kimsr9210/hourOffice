@@ -36,6 +36,11 @@ public class PartBoardDAO {
 	public Object selectOnePost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		return sqlSession.selectOne("board.getOnePost",map);
 	}
+	// 부서별 게시판  - 게시물 - 파일 select
+	public BoardFile selectPostFile(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("type", "PART_");
+		return sqlSession.selectOne("board.getPostFile",map);
+	}
 	// 부서별 게시판  - 게시물 - 삭제 delete
 	public int deletePost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		map.put("boardType", "PART_BOARD");
@@ -58,26 +63,8 @@ public class PartBoardDAO {
 	
 	
 
-	// 부서별 게시판 - 게시글 등록 - 게시판 번호 채번
-	public Object selectNumber(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("board.selectNumber");
-		
-	}
-	// 부서별 게시판 - 게시글 등록 - 게시판 insert
-	public int insertPost(SqlSessionTemplate sqlSession, PartBoard pb) {
-		return sqlSession.insert("board.addPost", pb);
-	}
-	// 부서별 게시판 - 게시글 등록 - 파일 insert
-	public int insertPostFile(SqlSessionTemplate sqlSession, BoardFile pf) {
-		return sqlSession.insert("board.insertPartFile",pf);
-	}
 	
 	
-
-	
-
-	// 부서별 게시판 - 게시글 등록 - 파일 insert
-	// 부서별 게시판 - 게시글 등록 - 댓글 insert
 	
 	
 	// 페이징 처리 네비
@@ -185,6 +172,44 @@ public class PartBoardDAO {
 			
 	}
 	
+	// 부서별 게시판 - 게시글 등록 - 게시판 번호 채번
+	public Object selectNumber(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("board.selectNumber");
+		
+	}
+	// 부서별 게시판 - 게시글 등록 - 게시판 insert
+	public int insertPost(SqlSessionTemplate sqlSession, PartBoard pb) {
+		return sqlSession.insert("board.addPost", pb);
+	}
+	// 부서별 게시판 - 게시글 등록 - 파일 insert
+	public int insertPostFile(SqlSessionTemplate sqlSession, BoardFile pf) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("pf", pf);
+		map.put("type", "PART_");
+		map.put("typeBoard", "PART_BOARD_");
+		return sqlSession.insert("board.insertPostFile",map);
+	}
+
+
+	// 부서별 게시판 - 게시글 수정 - update
+	public int updatePost(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("boardType", "PART_BOARD"); // 테이블 명
+		map.put("type", "PART_");	// 컬럼 명
+		map.put("deptCode", ((PartBoard)map.get("pb")).getDeptCode());
+		return sqlSession.update("board.modifyPost",map);
+	}
+	// 부서별 게시판 - 게시글 수정 - 파일 update
+	public int updatePostFile(SqlSessionTemplate sqlSession, BoardFile bf) {
+		HashMap<String,Object> map = new HashMap<String, Object>();
+		map.put("bf", bf);
+		map.put("type", "PART_");
+		return sqlSession.insert("board.updatePostFile",map);
+	}
+	// 부서별 게시판 - 게시글 수정 - 파일 delete
+	
+	
+	
+	
 
 	// 총 게시물 수
 	public int selectCountAllPostList(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
@@ -228,6 +253,9 @@ public class PartBoardDAO {
 		}
 		return 0;
 	}
+	
+	
+	
 	
 	
 	

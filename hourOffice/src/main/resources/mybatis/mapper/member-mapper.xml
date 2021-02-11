@@ -90,7 +90,7 @@
 	
 	<!-- BY 다빈 - 관리자탭(인사관리) - 통합사원 - 사원 삭제 update -->
 	<update id="resignMember" parameterType="java.util.List">
-		UPDATE MEMBER SET MEM_RESIGN_YN='Y'
+		UPDATE MEMBER SET MEM_RESIGN_YN='Y', MEM_RESIGN_DATE=SYSTIMESTAMP
 		<foreach collection="list" item="item" open="WHERE MEM_DEL_YN='N' AND (" close=")" separator="OR">
 		  MEM_NO=#{item}
 		</foreach>

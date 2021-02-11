@@ -33,7 +33,9 @@
         })
     </script>
     
-    
+    <style>
+    	
+    </style>
 	
 </head>
 <body>
@@ -56,7 +58,7 @@
 						<div id="txt-content">
                             <form id="frm" action="/savePostPartBoard.ho" method="post" enctype="multipart/form-data">
                             <div><span>제목</span> <input type="text" name="partTitle"/></div>
-                            <div><span>첨부파일</span> <div id="attachedFile"></div><input type="file" name="attachedFile" style="display:none"/></div>
+                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span></span></div><input type="file" name="attachedFile" style="display:none"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="partContent" id="txtArea" required></textarea>
@@ -66,9 +68,16 @@
                         </div>
 						
 						
-	<!-- smartEditor2 api 페이지 로딩시 초기화 -->
+	
 	<script>
+	
+		
+	
 		$(function(){
+			var files; // 파일 변수
+			
+			$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
+			<!-- smartEditor2 api 페이지 로딩시 초기화 -->
 		    //전역변수
 		    var obj = [];              
 		    //스마트에디터 프레임생성
@@ -91,24 +100,46 @@
 		        $("#frm").submit();
 		    });
 		    
-		    $('#attachedFile').click(function(){
-		    	$(this).next().click(); // input 태그
+		    $('#attached-btn').click(function(){
+		    	$(this).next().next().click(); // input 태그
+		    	
 		    });
 		    
 		    $('input[type=file]').on("change",handlefileSelect);
 		    function handlefileSelect(e){
-		    	var files = e.target.files;
+		    	files = e.target.files;
 		    	var filesArr = Array.prototype.slice.call(files);
 		    	
 		    	filesArr.forEach(function(f){
 		    		var reader = new FileReader();
 		    		reader.onload = function(e){
-		    			$('#attachedFile').html('<div>'+f.name+'<span>X</span></div>');
+		    			$('#attachedFile').children(':first-child').css('visibility','');
+		    			$('#attachedFile > span:last-child').text(f.name);
 		    		}
 		    		reader.readAsDataURL(f);
 		    	});
 		    }
-		})
+		    
+		    $('#attachedFile').hover(function(){
+		    	if($(this).children(':last-child').text()!=''){
+		    		$('#file-icon > .i-icon').removeClass('fa-file-alt').addClass('fa-times-circle');
+		    	}
+		    },function(){
+		    	$('#file-icon > .i-icon').removeClass('fa-times-circle').addClass('fa-file-alt');
+		    });
+		    
+		    
+		    $('#file-icon').click(function(){
+		    	$('#attachedFile').children(':first-child').css('visibility','hidden');
+		    	$('#attachedFile').children(':last-child').text('');
+		    	$('input[type=file]').val('');
+		    	//files[0].select; // 파일 선택
+		    	//document.selection.clear; // 선택된 파일 삭제
+		    	
+		    });
+		    
+		}) 
+		
 	</script>		
 						
 	
