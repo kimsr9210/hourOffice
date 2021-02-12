@@ -63,7 +63,7 @@
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="partContent" id="txtArea" required></textarea>
                                 <div></div>
-                            <div><button id="save-btn">저장</button> <button type="button" class="delBtn">취소</button></div>
+                            <div><button type="button" id="save-btn">저장</button> <button type="button" class="delBtn">취소</button></div>
                             </form>
                         </div>
 						
@@ -96,8 +96,17 @@
 		    $("#save-btn").click(function(){
 		        //id가 smarteditor인 textarea에 에디터에서 대입
 		        obj.getById["txtArea"].exec("UPDATE_CONTENTS_FIELD", []);
-		        //폼 submit
-		        $("#frm").submit();
+		        var $txtArea = $('#txtArea').val();
+		        
+		        if($('input[name=partTitle]').val()==''){
+		        	alert('제목을 입력해주세요.');
+		        	return;
+		        }else if($txtArea == ""  || $txtArea == null || $txtArea == '&nbsp;' || $txtArea == '<p>&nbsp;</p>' || $txtArea == '<p><br></p>' ){
+		        	alert('내용을 입력해주세요.');	
+		        }else{
+			        //폼 submit
+			       	$("#frm").submit();
+		        }
 		    });
 		    
 		    $('#attached-btn').click(function(){

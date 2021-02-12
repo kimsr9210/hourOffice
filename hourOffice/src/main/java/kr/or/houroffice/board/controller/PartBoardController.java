@@ -1,6 +1,7 @@
 package kr.or.houroffice.board.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,15 +65,18 @@ public class PartBoardController {
 				
 				model.addAttribute("list",list);
 				model.addAttribute("pageNavi",pageNavi);
-			}else{ // 부서가 없는 사람
-				model.addAttribute("msg","부서별 게시판입니다.\n부서가 없는 사람은 접근할 수 없습니다.");
-				model.addAttribute("location","login.jsp");
-			}
+				
+				return "part_board/allPartBoardPage";
+			} // 부서가 없는 사람
+			model.addAttribute("msg","부서가 없는 사람은 부서별 게시판을 이용할 수 없습니다.");
+			model.addAttribute("location","/main.ho");
+				
+			return "result";
 			
-		}else{ // 로그인 안 한 사람
-			return "redirect:login.jsp";
-		}
-		return "part_board/allPartBoardPage";
+			
+		} // 로그인 안 한 사람
+		return "redirect:login.jsp";
+		
 	}
 	// 부서별 게시판 all select - 검색 select
 	@RequestMapping(value="/searchPartBoard.ho")
@@ -90,6 +95,7 @@ public class PartBoardController {
 			}else{
 				map.put("searchType", searchType); // 쿼리문 데이터
 			}
+			map.put("type", "PART_");
 			map.put("keyword", "%"+keyword+"%"); // 쿼리문 데이터
 			map.put("searchTypeOrg", searchType); // 네비 데이터
 			map.put("keywordOrg", keyword); // 네비 데이터
@@ -130,24 +136,23 @@ public class PartBoardController {
 		int nextPostNo = bService.selectNextPost(map);
 		// 이전글
 		int prevPostNo = bService.selectPrevPost(map);
-		// 게시글 파일
-		BoardFile pFile= bService.selectPostFile(map);
 		
 		// 게시글 댓글
 		int comntCount = bService.selectComntCount(partNo);
 		
-		Page comntPage = createPage(request, 5, 5);
+		Page comntPage = createPage(request, 5, 10);
 		map.put("page", comntPage);
 		map.put("comntPostNo", partNo);
+		map.put("comntCount", comntCount);
 		List<Object> comntList = bService.selectPostComments(map);
-		//Page pageNavi = bService.getComntPageNavi(map);
+		Page pageNavi = bService.getComntPageNavi(map);
 		
 		model.addAttribute("pb",pb);
-		model.addAttribute("pf",pFile);
 		model.addAttribute("comntList",comntList);
 		model.addAttribute("comntCount",comntCount);
 		model.addAttribute("nextPost",nextPostNo);
 		model.addAttribute("prevPost",prevPostNo);
+		model.addAttribute("pageNavi",pageNavi);
 		return "part_board/partBoard";
 	}
 	// 부서별 게시판 - 게시글 삭제
@@ -173,19 +178,28 @@ public class PartBoardController {
 			comnt.setPartComntWriter(m.getMemName());
 			comnt.setPartComntEmail(m.getMemEmail());
 			int result = bService.insertPostComnt(comnt);
-			if(result>0){
-				return onePost(m.getDeptCode(),comnt.getPartNo(),model,request,m);
-			}else{
+			if(result<=0){
 				model.addAttribute("msg","댓글 작성이 실패하였습니다. \n지속적인 문제 발생시 관리자에 문의하세요.");
-				model.addAttribute("location","/postInPartBoard.ho?deptCode="+m.getDeptCode()+"&partNo="+comnt.getPartNo());
-				return "result";
 			}
+			model.addAttribute("location","/postInPartBoardRe.ho?deptCode="+m.getDeptCode()+"&partNo="+comnt.getPartNo());
+			return "result";
 		}else{ // 비로그인 시 
 			return "redirect:login.jsp";
 		}
 		
 	}
-	
+	// 댓글 등록 후 페이지 재로딩 메소드
+	@RequestMapping(value="/postInPartBoardRe.ho")
+	public String partBoard2(PartBoard pb, Model model, 
+						HttpServletRequest request, @SessionAttribute("member") Member m)
+	{
+		if(m != null && pb.getDeptCode().equals(m.getDeptCode())){
+			
+			return onePost(pb.getDeptCode(),pb.getPartNo(),model,request,m);
+		}
+		model.addAttribute("msg","잘못된 접근입니다.");
+		return "part_board/allPartBoardPage";
+	}
 	
 	
 	
@@ -373,29 +387,39 @@ public class PartBoardController {
 						long fileSize = reNameFile.length();
 						
 						BoardFile pf  = new BoardFile();
+						pf.setFileNo(Integer.parseInt(fileNo));
 						pf.setPostNo(pb.getPartNo());
 						pf.setOrigName(originalFileName);
 						pf.setChgName(changedFileName);
 						pf.setFilePath(filePath);
 						pf.setFileSize(fileSize);
 						
-						if(fileNo != null){ // 기존에 파일이 있었다면
-							bService.updatePostFile(pf); // 파일 DB에 updqte 저장
+						if(!fileNo.equals("0")){ // 기존에 파일이 있었다면
+							// 2-1))
+							int result21 = bService.updatePostFile(pf); // 파일 DB에 updqte 저장
+							
 						}else{
+							// 2-2))
 							bService.insertPostFile(pf); // 파일 DB에 insert저장
 						}
 					}else{
 						// 1. 파일이 없는 경우
 						// 1-1) 원래 파일이 있는 경우 - delete 
 						// 1-2) 원래 파일이 없는 경우 - 아무것도 안 해도 됨
-						
-						if(fileNo != null){
-							HashMap<String, Object> mapf = new HashMap<String, Object>();
-							mapf.put("fileNo", Integer.parseInt(fileNo));
-							mapf.put("postNo", pb.getPartNo());
+						// 1-3) 파일 첨부 수정을 안 한 경우
+						if(!fileNo.equals("0")){ // 기존에 파일이 있었다면
 							
+							if(multi.getParameter("havefile")==null){
+								// 1-1))
+								HashMap<String, Object> mapf = new HashMap<String, Object>();
+								mapf.put("fileNo", Integer.parseInt(fileNo));
+								mapf.put("postNo", pb.getPartNo());
+								
+								bService.deletePostFile(mapf);
+							}
+							// 1-3))
 						}
-						
+						// 1-2))
 					}
 					
 					model.addAttribute("msg","글 수정이 성공하였습니다.");
@@ -404,7 +428,7 @@ public class PartBoardController {
 					model.addAttribute("msg","글 수정에 실패하였습니다. \n지속적인 실패시 관리자에 문의하세요.");
 					model.addAttribute("location","/partBoardModify.ho?deptCode="+pb.getDeptCode()+"&partNo="+pb.getPartNo());
 				}
-				
+				return "result";
 			}
 			
 		}
@@ -426,5 +450,47 @@ public class PartBoardController {
 		page.setNaviCountPerPage(NCPP); // page Navi값이 몇개씩 보여줄 것인지 - 페이징 처리(네비)를 위한 변수
 		
 		return page;
+	}
+	// 파일 다운로드
+	@RequestMapping(value="/downloadFilePartBoard.ho")
+	public void downloadFile(PartBoard pb, HttpServletResponse response) throws IOException{
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("postNo", pb.getPartNo());
+		map.put("fileNo", pb.getFileNo());
+		BoardFile bf = bService.selectPostFile(map);
+
+		if(bf != null){
+			// 가져온 파일 정보를 가지고 해당 파일을 물리적으로 접근
+			File file = new File(bf.getFilePath());
+			// 웹 브라우저를 통해 문자열이 아닌 데이터가 전송되려면 바이너리 타입으로 처리
+			response.setContentType("application/octet-stream");
+			// 파일의 사이즈를 전달
+			response.setContentLength((int)bf.getFileSize());
+			// os에 맞게 인코딩
+			// windows는 기본적으로 ISO-8859-1
+			String fileName = new String(bf.getOrigName().getBytes(), "ISO-8859-1");
+			
+			// 파일이름을 header를 통해 전달
+			response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+			
+			
+			// 위 코드까지는 파일이름 + 파일을 전송할수잇는 웹 환경을 셋팅
+			
+			// 아래코드는 실제 파일이 가지고 있는 데이터를 보내는 작업
+			// 해당되는 파일의 데이터를 가져올 수있는 통로
+			FileInputStream fileIn = new FileInputStream(file);
+			// 클라이언트에게 데이터를 전달하는 통로
+			ServletOutputStream out = response.getOutputStream();
+			
+			// 4KByte 씩 처리
+			byte[] outputByte = new byte[4096];
+			
+			// inputStream으로 데이터를 읽어다가 output 스트림으로 전송
+			while(fileIn.read(outputByte,0,4096) != -1){
+				out.write(outputByte,0,4096);
+			}
+			fileIn.close();
+			out.close();
+		}
 	}
 }

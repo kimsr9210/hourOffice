@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.board.model.vo.PartBoard"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -51,9 +52,9 @@
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
 						<div id="txt-content">
-                            <form action="/updatePostPartBoard.ho" method="post" enctype="multipart/form-data">
+                            <form id="frm" action="/updatePostPartBoard.ho" method="post" enctype="multipart/form-data">
                             <div><span>제목</span> <input type="text"  name="partTitle" value="${pb.partTitle }"/></div>
-                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span></span></div><input type="file" name="attachedFile" style="display:none"/></div>
+                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span>${pb.origName }</span></div><input type="file" name="attachedFile" style="display:none"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="partContent" id="txtArea" required>${pb.partContent }</textarea>
@@ -63,7 +64,7 @@
                                 	<input type="text" name="deptCode" value="${pb.deptCode }" style="display:none;"/>
                                 	<input type="text" name="memNo" value="${pb.memNo }" style="display:none;"/>
                                 </div>
-                            <div><button id="save-btn">수정</button> <button type="button" class="delBtn">취소</button></div>
+                            <div><button type="button" id="save-btn">수정</button> <button type="button" class="delBtn">취소</button></div>
                             </form>
                         </div>
 
@@ -74,9 +75,10 @@
 	
 		$(function(){
 			var files; // 파일 변수
-			
-			$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
-			
+			var havefile = '<%=((PartBoard)request.getAttribute("pb")).getFileNo()%>';
+			if(havefile==0){
+				$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
+			}
 		    //전역변수
 		    var obj = [];              
 		    //스마트에디터 프레임생성
@@ -91,13 +93,30 @@
 		            bUseModeChanger : true // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
 		        }
 		    });
-		    //전송버튼
+		    
+		  //전송버튼
 		    $("#save-btn").click(function(){
+		        
+		        $('textarea').next().append('<input type="text" name="fileNo" value="'+havefile+'" style="display:none;"/>');
+		        if($('#attachedFile').children(':last-child').text()!=''){
+		    		$('textarea').next().append('<input type="text" name="havefile" value="U" style="display:none;"/>');
+		    	}
+		      	
 		        //id가 smarteditor인 textarea에 에디터에서 대입
 		        obj.getById["txtArea"].exec("UPDATE_CONTENTS_FIELD", []);
-		        //폼 submit
-		        $("#frm").submit();
+		        var $txtArea = $('#txtArea').val();
+		        
+		        if($('input[name=partTitle]').val()==''){ // 제목 공백
+		        	alert('제목을 입력해주세요.');
+		        	return;
+		        }else if($txtArea == ""  || $txtArea == null || $txtArea == '&nbsp;' || $txtArea == '<p>&nbsp;</p>' || $txtArea == '<p><br></p>' ){ // 내용 공백
+		        	alert('내용을 입력해주세요.');	
+		        }else{
+			        //폼 submit
+			       	$("#frm").submit();
+		        }
 		    });
+		    
 		    
 		    $('#attached-btn').click(function(){
 		    	$(this).next().next().click(); // input 태그

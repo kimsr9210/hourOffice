@@ -63,8 +63,6 @@ public class PartBoardService implements BoardService{
 		return bDAO.insertPostComnt(sqlSession,comnt);
 	}
 	
-	
-	
 	// 부서별 게시판 - 게시글 등록 - 게시글 insert
 	public int insertPost(PartBoard pb) {
 		int partNo = (Integer)bDAO.selectNumber(sqlSession);
@@ -80,7 +78,6 @@ public class PartBoardService implements BoardService{
 		return bDAO.insertPostFile(sqlSession,pf);
 	}
 	
-	
 	@Override // 부서별 게시판 - 게시글 수정 - update
 	public int updatePost(HashMap<String, Object> map) {
 		return bDAO.updatePost(sqlSession,map);
@@ -89,7 +86,10 @@ public class PartBoardService implements BoardService{
 	public int updatePostFile(BoardFile bf) {
 		return bDAO.updatePostFile(sqlSession,bf);
 	}
-	
+	@Override // 부서별 게시판 - 게시글 수정 - 파일 delete
+	public int deletePostFile(HashMap<String, Object> map) {
+		return bDAO.deletePostFile(sqlSession,map);
+	}
 	
 	
 	@Override // 페이징처리 네비만들기
@@ -98,8 +98,7 @@ public class PartBoardService implements BoardService{
 	}
 	// 댓글 페이징처리 네비만들기
 	public Page getComntPageNavi(HashMap<String, Object> map) {
-		bDAO.getComntPageNavi(sqlSession,map);
-		return null;
+		return bDAO.getComntPageNavi(sqlSession,map);
 	}
 	@Override // 게시글 조회수 +1
 	public int updateHits(int postNo) {
@@ -113,16 +112,5 @@ public class PartBoardService implements BoardService{
 	public int selectPrevPost(HashMap<String, Object> map) {
 		return bDAO.selectPrevPost(sqlSession,map);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 
 }

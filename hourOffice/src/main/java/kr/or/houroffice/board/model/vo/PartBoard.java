@@ -18,13 +18,24 @@ public class PartBoard {
 	private String deptName;		// 부서 이름
 	private String memPosition;		// 작성자 직위
 	private String memProfile;		// 작성자 프로필사진
+	
+	private int fileNo;				// 파일 고유번호
+	//private int postNo;				// 게시물 번호
+	private String origName;		// 파일 오리지널 이름
+	private String chgName;			// 파일 바뀐 이름
+	private String filePath;		// 파일 저장 경로
+	private long fileSize;			// 파일 크기
+	private Timestamp uploadDate;	// 파일 업로드일
+	
 	public PartBoard() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public PartBoard(int partNo, String partTitle, String deptCode, Timestamp partDate, int memNo, String partWriter,
 			String partContent, int partHits, char partDelYN, Timestamp partDelDate, String deptName,
-			String memPosition, String memProfile) {
+			String memPosition, String memProfile, int fileNo, String origName, String chgName, String filePath,
+			long fileSize, Timestamp uploadDate) {
 		super();
 		this.partNo = partNo;
 		this.partTitle = partTitle;
@@ -39,7 +50,14 @@ public class PartBoard {
 		this.deptName = deptName;
 		this.memPosition = memPosition;
 		this.memProfile = memProfile;
+		this.fileNo = fileNo;
+		this.origName = origName;
+		this.chgName = chgName;
+		this.filePath = filePath;
+		this.fileSize = fileSize;
+		this.uploadDate = uploadDate;
 	}
+
 	public int getPartNo() {
 		return partNo;
 	}
@@ -117,6 +135,54 @@ public class PartBoard {
 	}
 	public void setMemProfile(String memProfile) {
 		this.memProfile = memProfile;
+	}
+
+	public int getFileNo() {
+		return fileNo;
+	}
+
+	public void setFileNo(int fileNo) {
+		this.fileNo = fileNo;
+	}
+
+	public String getOrigName() {
+		return origName;
+	}
+
+	public void setOrigName(String origName) {
+		this.origName = origName;
+	}
+
+	public String getChgName() {
+		return chgName;
+	}
+
+	public void setChgName(String chgName) {
+		this.chgName = chgName;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public Timestamp getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Timestamp uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 	
 	

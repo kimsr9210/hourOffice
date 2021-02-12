@@ -22,6 +22,7 @@ public interface BoardService {
 	// 게시판 - 게시글 수정 파일 update
 	public int updatePostFile(BoardFile bf);
 	// 게시판 - 게시글 수정 파일 delete
+	public int deletePostFile(HashMap<String, Object> map);
 	
 	// 페이징 처리 메소드
 	public Page getPageNavi(HashMap<String, Object> map);

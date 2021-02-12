@@ -3,6 +3,7 @@ package kr.or.houroffice.board.model.dao;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.type.IntegerTypeHandler;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -134,11 +135,13 @@ public class PartBoardDAO {
 	}
 	
 	// 페이징 처리 네비 - 댓글
-	public void getComntPageNavi(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+	public Page getComntPageNavi(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		String pageDeptCode = (String)map.get("deptCode");
+		int partNo = (Integer)map.get("postNo");
 		Page page = (Page)map.get("page");
 		map.put("boardType", "PART_COMMENTS");
 		map.remove("post");
-		int postTotalCount = selectCountAllPostList(sqlSession,map); // 전체 게시물을 구하기 위한 메소드
+		int postTotalCount = (Integer)map.get("comntCount");
 		page.setPostTotalCount(postTotalCount); // 전체 게시물 수 셋팅
 		// 생성될 페이지 개수 구하기
 						
@@ -152,24 +155,25 @@ public class PartBoardDAO {
 		// 이제 pageNavi의 모양을 구성해야 함
 		
 		StringBuilder sb = new StringBuilder();
-		/*
+		
 		if(startNavi != 1) { //href='/myReviewNote.rw?libraryOwner="+memberId+"&currentPage="+(startNavi-1)+"'
-			sb.append("<a class='page-link' href='/allPartBoardPage.ho?deptCode="+pageDeptCode+"&currentPage="+(startNavi-1)+"'><</a>");
+			sb.append("<a class='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi-1)+"'><</a>");
 		}
 						
 		for(int i=startNavi; i<=endNavi; i++) {
 			if(i==page.getCurrentPage()) {
-				sb.append("<a class='page-link' href='/allPartBoardPage.ho?deptCode="+pageDeptCode+"&currentPage="+i+"'><B>"+i+"</B></a>");
+				sb.append("<a class='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"'><B>"+i+"</B></a>");
 			}else {
-				sb.append("<a class='page-link' href='/allPartBoardPage.ho?deptCode="+pageDeptCode+"&currentPage="+i+"'>"+i+"</a>");
+				sb.append("<a class='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"'>"+i+"</a>");
 			}
 		}
 				
 		//만약 마지막 pageNavi가 아니라면 '>' 모양을 추가해라 (마지막 pageNavi이면 추가하지 말아라)
 		if(endNavi != pageTotalCount) {
-			sb.append("<a class='page-link' href='/allPartBoardPage.ho?deptCode="+pageDeptCode+"&currentPage="+(startNavi+1)+"'>></a>");
-		}*/
-			
+			sb.append("<a class='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi+1)+"'>></a>");
+		}
+		page.setUrl(sb+"");
+		return page;
 	}
 	
 	// 부서별 게시판 - 게시글 등록 - 게시판 번호 채번
@@ -206,7 +210,10 @@ public class PartBoardDAO {
 		return sqlSession.insert("board.updatePostFile",map);
 	}
 	// 부서별 게시판 - 게시글 수정 - 파일 delete
-	
+	public int deletePostFile(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("type", "PART_");
+		return sqlSession.delete("board.deletePostFile",map);
+	}
 	
 	
 	
@@ -253,6 +260,7 @@ public class PartBoardDAO {
 		}
 		return 0;
 	}
+	
 	
 	
 	
