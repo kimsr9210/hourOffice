@@ -30,6 +30,32 @@
 			width:100%; height: 100%;
 			border-radius:100%;
 		}
+		/*페이지 네비 css*/
+#page-navi {
+    height: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-list {
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkgray;
+    text-align: center;
+}
+.page-link {
+    width: 100%;
+    height: 100%;
+    line-height: 28px;
+    display: inline-block;
+}
+
+.page-link:hover{
+    background: #eaeaea;
+}
 	</Style>
 </head>
 <body>
@@ -123,7 +149,7 @@
                        	<% } %>
                        	<% } %>
                             </table>
-                            <div id="pageNavi">${pageNavi.url }</div>
+                            <ul id="page-navi">${pageNavi.url }</ul>
                         </div>
 						
 						

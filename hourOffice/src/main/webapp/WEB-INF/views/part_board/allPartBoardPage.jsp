@@ -26,9 +26,35 @@
 
 <style>
 	th{
-		
 		background-color:#D2E6E6;
 	}
+	
+	/*페이지 네비 css*/
+#page-navi {
+    height: 30px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-list {
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkgray;
+    text-align: center;
+}
+.page-link {
+    width: 100%;
+    height: 100%;
+    line-height: 28px;
+    display: inline-block;
+}
+
+.page-link:hover{
+    background: #eaeaea;
+}
 </style>
 	
 </head>
@@ -76,7 +102,7 @@
                     <% } %>
                         </table>
                         
-                        <div id="pageNavi">${pageNavi.url }</div>
+                        <ul id="page-navi">${pageNavi.url }</ul>
                         <div id="search-div">
                             <form action="/searchPartBoard.ho?" method="get">
                             <select name="searchType">
