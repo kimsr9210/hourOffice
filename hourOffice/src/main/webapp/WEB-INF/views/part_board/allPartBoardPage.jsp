@@ -23,38 +23,13 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/board/board.css" />
 	<!-- CSS 테이블만 있는 것 -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/board/userBoard.css" />
+	<!-- 페이지 네비 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/board/pageNavi.css" />
 
 <style>
 	th{
 		background-color:#D2E6E6;
 	}
-	
-	/*페이지 네비 css*/
-#page-navi {
-    height: 30px;
-    margin-top: 50px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.page-list {
-    width: 30px;
-    height: 30px;
-    border: 1px solid darkgray;
-    text-align: center;
-}
-.page-link {
-    width: 100%;
-    height: 100%;
-    line-height: 28px;
-    display: inline-block;
-}
-
-.page-link:hover{
-    background: #eaeaea;
-}
 </style>
 	
 </head>
