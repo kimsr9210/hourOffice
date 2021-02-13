@@ -79,7 +79,7 @@
                         
                         <ul id="page-navi">${pageNavi.url }</ul>
                         <div id="search-div">
-                            <form action="/searchPartBoard.ho?" method="get">
+                            <form action="/searchPartBoard.ho" method="get">
                             <select name="searchType">
                                 <option value="both">제목+내용</option>
                                 <option value="title">제목</option>
@@ -90,9 +90,6 @@
                             <button><i class="fas fa-search i-icon"></i></button>
                             </form>
                         </div>
-						
-						
-						
 						
 						
 						<!----------------------------------->

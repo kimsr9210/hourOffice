@@ -154,6 +154,7 @@
                     	type:'post',
                     	success:function(result){
                     		if(result){
+                    			alert('해당 글이 삭제되었습니다.');
                     			location.replace('/allPartBoardPage.ho');
                     		}else{
                     			alert('글 삭제에 실패하였습니다. \n지속적인 문제 발생시 관리자에 문의하세요.');

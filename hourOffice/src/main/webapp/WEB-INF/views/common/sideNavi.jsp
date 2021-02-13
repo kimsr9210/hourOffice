@@ -102,7 +102,7 @@
 		<ui class="categoryBox">
 		<li class="categoryName">전사 게시판</li>
 		<li class="categoryList"><a href="#">사내규정 게시판</a></li>
-		<li class="categoryList"><a href="#">공지사항 게시판</a></li>
+		<li class="categoryList"><a href="/allNoticePage.ho">공지사항 게시판</a></li>
 		<li class="categoryList"><a href="#">문의사항 게시판</a></li>
 		<li class="categoryName">부서 게시판</li>
 		<li class="categoryList"><a href="/allPartBoardPage.ho">부서별 게시판</a></li>
@@ -152,7 +152,7 @@
 		<li class="categoryList"><a href="/admin_tap_allListMember.ho">통합사원 관리</a></li>
 		<li class="categoryList"><a href="/admin_tap_organizationChart.ho">조직도 관리</a></li>
 		<li class="categoryName">총무 관리자</li>
-		<li class="categoryList"><a href="#">공지사항 관리</a></li>
+		<li class="categoryList"><a href="/admin_tap_allNoticePage.ho">공지사항 관리</a></li>
 		<li class="categoryList"><a href="#">사내규정 관리</a></li>
 		<li class="categoryName">전산 관리자</li>
 		<li class="categoryList"><a href="/adminMainPage.ho">관리자 페이지</a></li>

@@ -73,7 +73,7 @@ public class PartBoardService implements BoardService{
 		}
 		return 0;
 	}
-	// 부서별 게시판 - 게시글 등록 - 파일 insert
+	@Override// 부서별 게시판 - 게시글 등록 - 파일 insert
 	public int insertPostFile(BoardFile pf) {
 		return bDAO.insertPostFile(sqlSession,pf);
 	}

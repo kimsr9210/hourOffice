@@ -51,6 +51,12 @@ $(function(){
                 $('input[name=checkMem]').prop('checked',false);
                 checkMem = []; // 변수 비워주기
             }else{
+            	$('input[type=checkbox]').each(function(){
+            		if($(this).val()=='all'){
+            			$(this).prop('checked',false);
+            			checkPost.splice(checkPost.indexOf($(this).val()),1);
+            		}
+            	});
                 checkMem.splice(checkMem.indexOf($(this).val()),1);
             }
         }

@@ -1,4 +1,3 @@
-<%@page import="kr.or.houroffice.board.model.vo.PartBoard"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -19,6 +18,11 @@
 	<!-- 게시글 쓰기 공통 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/board/postWrite.css" />
 	
+	<!-- 스마트에디터2 라이브러리 -->
+    <script type="text/javascript" src="/resources/api/smarteditor2/js/service/HuskyEZCreator.js" charset="utf-8"></script> 
+    <!-- api 이미지 업로드 라이브러리 추가 -->
+    <!-- <script type="text/javascript" src="./quick_photo_uploader/plugin/hp_SE2M_AttachQuickPhoto.js" charset="utf-8"> </script> -->
+    
 	
     <script>
         $(function(){
@@ -29,11 +33,6 @@
         })
     </script>
     
-    <!-- 스마트에디터2 라이브러리 -->
-    <script type="text/javascript" src="/resources/api/smarteditor2/js/service/HuskyEZCreator.js" charset="utf-8"></script> 
-   <!-- api 이미지 업로드 라이브러리 추가 -->
-   <!-- <script type="text/javascript" src="./quick_photo_uploader/plugin/hp_SE2M_AttachQuickPhoto.js" charset="utf-8"> </script> -->
-	
 </head>
 <body>
 	<div id="wrap">
@@ -45,40 +44,32 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						${pb.deptName } 게시판 <span>글 수정</span>
+						총무관리 전체 공지 <span>글쓰기</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
+						
 						<div id="txt-content">
-                            <form id="frm" action="/updatePostPartBoard.ho" method="post" enctype="multipart/form-data">
-                            <div><span>제목</span> <input type="text"  name="partTitle" value="${pb.partTitle }"/></div>
-                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span>${pb.origName }</span></div><input type="file" name="attachedFile" style="display:none"/></div>
+                            <form id="frm" action="/savePostNotice.ho" method="post"  enctype="multipart/form-data">
+                            <div><span>제목</span> <input type="text" name="title"/></div>
+                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span></span></div><input type="file" name="attachedFile" style="display:none"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
-                            <textarea name="partContent" id="txtArea" required>${pb.partContent }</textarea>
+                            <textarea name="content" id="txtArea" required></textarea>
                             
-                                <div><!-- <span>알림</span> <input type="checkbox" name="push"/> 푸쉬 -->
-                                	<input type="text" name="partNo" value="${pb.partNo }" style="display:none"/>
-                                	<input type="text" name="deptCode" value="${pb.deptCode }" style="display:none;"/>
-                                	<input type="text" name="memNo" value="${pb.memNo }" style="display:none;"/>
-                                </div>
-                            <div><button type="button" id="save-btn">수정</button> <button type="button" class="delBtn">취소</button></div>
+                                <div><span>알림</span> <input type="checkbox" name="push"/> 푸쉬</div>
+                            <div><button type="button" id="save-btn">저장</button> <button type="button" class="delBtn">취소</button></div>
                             </form>
                         </div>
-
-	<!-- smartEditor2 api 페이지 로딩시 초기화 -->
+                        
 	<script>
-	
-		
-	
 		$(function(){
 			var files; // 파일 변수
-			var havefile = '<%=((PartBoard)request.getAttribute("pb")).getFileNo()%>';
-			if(havefile==0){
-				$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
-			}
+			
+			$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
+			<!-- smartEditor2 api 페이지 로딩시 초기화 -->
 		    //전역변수
 		    var obj = [];              
 		    //스마트에디터 프레임생성
@@ -93,23 +84,16 @@
 		            bUseModeChanger : true // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
 		        }
 		    });
-		    
-		  //전송버튼
+		    //전송버튼
 		    $("#save-btn").click(function(){
-		        
-		        $('textarea').next().append('<input type="text" name="fileNo" value="'+havefile+'" style="display:none;"/>');
-		        if($('#attachedFile').children(':last-child').text()!=''){
-		    		$('textarea').next().append('<input type="text" name="havefile" value="U" style="display:none;"/>');
-		    	}
-		      	
 		        //id가 smarteditor인 textarea에 에디터에서 대입
 		        obj.getById["txtArea"].exec("UPDATE_CONTENTS_FIELD", []);
 		        var $txtArea = $('#txtArea').val();
 		        
-		        if($('input[name=partTitle]').val()==''){ // 제목 공백
+		        if($('input[name=notTitle]').val()==''){
 		        	alert('제목을 입력해주세요.');
 		        	return;
-		        }else if($txtArea == ""  || $txtArea == null || $txtArea == '&nbsp;' || $txtArea == '<p>&nbsp;</p>' || $txtArea == '<p><br></p>' ){ // 내용 공백
+		        }else if($txtArea == ""  || $txtArea == null || $txtArea == '&nbsp;' || $txtArea == '<p>&nbsp;</p>' || $txtArea == '<p><br></p>' ){
 		        	alert('내용을 입력해주세요.');	
 		        }else{
 			        //폼 submit
@@ -117,12 +101,11 @@
 		        }
 		    });
 		    
-		    // 첨부파일 버튼
 		    $('#attached-btn').click(function(){
 		    	$(this).next().next().click(); // input 태그
 		    	
 		    });
-		    // 파일을 선택하면
+		    
 		    $('input[type=file]').on("change",handlefileSelect);
 		    function handlefileSelect(e){
 		    	files = e.target.files;
@@ -137,7 +120,7 @@
 		    		reader.readAsDataURL(f);
 		    	});
 		    }
-		    // 파일 icon을 호버하면 선택한 파일 삭제버튼 나옴
+		    
 		    $('#attachedFile').hover(function(){
 		    	if($(this).children(':last-child').text()!=''){
 		    		$('#file-icon > .i-icon').removeClass('fa-file-alt').addClass('fa-times-circle');
@@ -146,7 +129,7 @@
 		    	$('#file-icon > .i-icon').removeClass('fa-times-circle').addClass('fa-file-alt');
 		    });
 		    
-		    // 파일 icon을 클릭하면 선택한 파일 삭제
+		    
 		    $('#file-icon').click(function(){
 		    	$('#attachedFile').children(':first-child').css('visibility','hidden');
 		    	$('#attachedFile').children(':last-child').text('');
@@ -169,9 +152,7 @@
 
 	<!-- 자바 스크립트    -->
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
-	
-	
-	
+
 	</div>
 </body>
 </html>

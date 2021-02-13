@@ -67,12 +67,8 @@
                             </form>
                         </div>
 						
-						
 	
 	<script>
-	
-		
-	
 		$(function(){
 			var files; // 파일 변수
 			

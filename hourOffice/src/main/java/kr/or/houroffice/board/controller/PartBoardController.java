@@ -161,8 +161,9 @@ public class PartBoardController {
 							@SessionAttribute("member") Member m) throws IOException{
 		if(m != null){
 			HashMap<String,Object> map = new HashMap<String, Object>();
+			int[] postNoList = {postNo}; // 동적 쿼리문 보낼 때를 위해...배열로 담아서.. 
 			map.put("memNo",memNo);
-			map.put("postNo", postNo);
+			map.put("postNo", postNoList);
 			int result = bService.deletePost(map);
 			if(result>0){
 				response.getWriter().print(true);
@@ -292,7 +293,7 @@ public class PartBoardController {
 				model.addAttribute("msg","글 등록이 성공하였습니다.");
 				
 			}else{
-				model.addAttribute("msg","글 등록에 실패하였습니다 \n지속적인 실패시 관리자에 문의하세요.");
+				model.addAttribute("msg","글 등록에 실패하였습니다. 지속적인 실패시 관리자에 문의하세요.");
 			}// 게시글 디비 저장 실패 if 문
 			
 			model.addAttribute("location","/allPartBoardPage.ho");
@@ -320,30 +321,31 @@ public class PartBoardController {
 	@RequestMapping(value="/updatePostPartBoard.ho")
 	public String updatePostPartBoad(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException{
 		
-			
-		// 파일이 업로드 되는 경로
-		String uploadPath = "/resources/file/part_board/";
-
-		// 최대 파일 사이즈를 정하기 위한 값
-		int uploadFileSizeLimit = 10*1024*1024; // 최대 10MB 까지 업로드 가능
-
-		// 파일 이름 인코딩 값
-		String encType = "UTF-8"; 
-		
-		// 정보를 가지고 있는 객체
-		// @Autowired	ServletContext context;
-	
-		// context.getRealPath(); -> WebContent까지의 절대 경로 (실제경로)
-		String realUploadPath = context.getRealPath(uploadPath);
-		
-		// MultipartRequest 객체 생성 (생성하면서 마지막 5번째 정책 설정 객체 만들기)
-		MultipartRequest multi = new MultipartRequest(request, // 1. request
-														realUploadPath, // 2. 실제 업로드 되는 경로 
-														uploadFileSizeLimit, // 3. 최대 파일 사이즈 크기
-														encType, // 4. 인코딩 타입
-														new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
-	
 		if(m!=null){
+			
+			// 파일이 업로드 되는 경로
+			String uploadPath = "/resources/file/part_board/";
+
+			// 최대 파일 사이즈를 정하기 위한 값
+			int uploadFileSizeLimit = 10*1024*1024; // 최대 10MB 까지 업로드 가능
+
+			// 파일 이름 인코딩 값
+			String encType = "UTF-8"; 
+			
+			// 정보를 가지고 있는 객체
+			// @Autowired	ServletContext context;
+		
+			// context.getRealPath(); -> WebContent까지의 절대 경로 (실제경로)
+			String realUploadPath = context.getRealPath(uploadPath);
+			
+			// MultipartRequest 객체 생성 (생성하면서 마지막 5번째 정책 설정 객체 만들기)
+			MultipartRequest multi = new MultipartRequest(request, // 1. request
+															realUploadPath, // 2. 실제 업로드 되는 경로 
+															uploadFileSizeLimit, // 3. 최대 파일 사이즈 크기
+															encType, // 4. 인코딩 타입
+															new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
+		
+			
 			String fileNo = multi.getParameter("fileNo");
 			
 			if(Integer.parseInt(multi.getParameter("memNo"))==m.getMemNo()){
@@ -396,7 +398,7 @@ public class PartBoardController {
 						
 						if(!fileNo.equals("0")){ // 기존에 파일이 있었다면
 							// 2-1))
-							int result21 = bService.updatePostFile(pf); // 파일 DB에 updqte 저장
+							bService.updatePostFile(pf); // 파일 DB에 updqte 저장
 							
 						}else{
 							// 2-2))
