@@ -42,7 +42,7 @@ public class NoticeController {
 	
 	// 사용자 공지사항 목록 
 	@RequestMapping(value="/allNoticePage.ho") // view page
-	public String allNoticeBaord(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
+	public String postListPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
 			HashMap<String, Object> map = listPage(request,"client");
 			
@@ -144,7 +144,7 @@ public class NoticeController {
 	//admin ---------------------------------------------------------------------------
 	// 공지사항 - 전체 목록
 	@RequestMapping(value="/admin_tap_allNoticePage.ho") // view page
-	public String adminAllNoticeBoard(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){ 
+	public String adminPostListPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){ 
 		if(m!=null){
 			if(m.getMemRightCode()=='D'){
 				
@@ -183,7 +183,7 @@ public class NoticeController {
 	}
 	// 공지사항 - 새글쓰기
 	@RequestMapping(value="/admin_tap_noticeWrite.ho") // view page
-	public String adminWriteNotice(Model model, @SessionAttribute("member") Member m){
+	public String adminWritePostPage(Model model, @SessionAttribute("member") Member m){
 		if(m!=null){
 			if(m.getMemRightCode()=='D'){
 				return "admin_tap/general_affairs_department/writePostNotice";
@@ -251,9 +251,9 @@ public class NoticeController {
 						
 						bService.insertPostFile(pf); // 파일 DB에 저장
 					}
-					model.addAttribute("msg","글 등록이 성공하였습니다.");
-				}else{  // 게시글 디비 저장에 실패했다면 ↓
-					model.addAttribute("msg","글 등록에 실패하였습니다. 지속적인 실패시 관리자에 문의하세요.");
+					model.addAttribute("msg","새 글이 등록되었습니다.");
+				}else{ // 게시글 디비 저장에 실패했다면 ↓
+					model.addAttribute("msg","새 글 등록에 실패하였습니다. 지속적인 실패시 관리자에 문의하세요.");
 				}
 				model.addAttribute("location","/admin_tap_allNoticePage.ho");
 			}else{// 관리자 권한이 없다면 ↓
@@ -266,8 +266,8 @@ public class NoticeController {
 	}
 	
 	// 공지사항 - 글 수정
-	@RequestMapping(value="/admin_tap_noticeModify.ho") // view page
-	public String adminModityNotice(@RequestParam("notNo") int postNo, Model model, @SessionAttribute("member") Member m){
+	@RequestMapping(value="/admin_tap_modifyNotice.ho") // view page
+	public String adminModifyPost(@RequestParam("notNo") int postNo, Model model, @SessionAttribute("member") Member m){
 		if(m!=null){
 			if(m.getMemRightCode()=='D'){
 				
@@ -409,14 +409,16 @@ public class NoticeController {
 	
 	// 공지사항 - 글 삭제 (ajax) - update
 	@RequestMapping(value="/admin_tap_deleteNotice.ho")
-	public void deletePost(@RequestParam(value="postNoList[]") List<String> postNoList,HttpServletResponse response) throws IOException{
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("postNo", postNoList);
-		int result =  bService.deletePost(map);
-		if(result>0){
-			response.getWriter().print(true);
-		}else {
-			response.getWriter().print(false);
+	public void deletePost(@RequestParam(value="postNoList[]") List<String> postNoList,HttpServletResponse response, @SessionAttribute("member") Member m) throws IOException{
+		if(m.getMemRightCode()=='D'){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("postNo", postNoList);
+			int result =  bService.deletePost(map);
+			if(result>0){
+				response.getWriter().print(true);
+			}else {
+				response.getWriter().print(false);
+			}
 		}
 	}
 	

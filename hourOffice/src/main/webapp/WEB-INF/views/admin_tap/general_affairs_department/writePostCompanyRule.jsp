@@ -23,7 +23,18 @@
     <!-- api 이미지 업로드 라이브러리 추가 -->
     <!-- <script type="text/javascript" src="./quick_photo_uploader/plugin/hp_SE2M_AttachQuickPhoto.js" charset="utf-8"> </script> -->
     
-	
+	<style>
+		#frm > div:first-child{
+			height: 80px;
+			margin-bottom: 10px;
+			padding-bottom: 20px;
+		}
+		
+		#frm > div:first-child > input{
+			width: 1050px;
+			margin-left: 30px;
+		}
+	</style>
     <script>
         $(function(){
             // 취소버튼 클릭 이벤트
@@ -32,6 +43,7 @@
             });
         })
     </script>
+    
     
 </head>
 <body>
@@ -44,26 +56,23 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						총무관리 전체 공지 <span>글쓰기</span>
+						총무관리 사내 규정 <span>글쓰기</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
-						
 						<div id="txt-content">
-                            <form id="frm" action="/savePostNotice.ho" method="post"  enctype="multipart/form-data">
+                            <form id="frm" action="/savePostCompanyRule.ho" method="post">
                             <div><span>제목</span> <input type="text" name="title"/></div>
-                            <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span></span></div><input type="file" name="attachedFile" style="display:none"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="content" id="txtArea" required></textarea>
                             
-                                <div><span>알림</span> <input type="checkbox" name="push"/> 푸쉬</div>
+                                <div></div>
                             <div><button type="button" id="save-btn">저장</button> <button type="button" class="delBtn">취소</button></div>
                             </form>
                         </div>
-                        
 	<script>
 		$(function(){
 			var files; // 파일 변수
@@ -101,49 +110,11 @@
 		        }
 		    });
 		    
-		    $('#attached-btn').click(function(){
-		    	$(this).next().next().click(); // input 태그
-		    	
-		    });
-		    
-		    $('input[type=file]').on("change",handlefileSelect);
-		    function handlefileSelect(e){
-		    	files = e.target.files;
-		    	var filesArr = Array.prototype.slice.call(files);
-		    	
-		    	filesArr.forEach(function(f){
-		    		var reader = new FileReader();
-		    		reader.onload = function(e){
-		    			$('#attachedFile').children(':first-child').css('visibility','');
-		    			$('#attachedFile > span:last-child').text(f.name);
-		    		}
-		    		reader.readAsDataURL(f);
-		    	});
-		    }
-		    
-		    $('#attachedFile').hover(function(){
-		    	if($(this).children(':last-child').text()!=''){
-		    		$('#file-icon > .i-icon').removeClass('fa-file-alt').addClass('fa-times-circle');
-		    	}
-		    },function(){
-		    	$('#file-icon > .i-icon').removeClass('fa-times-circle').addClass('fa-file-alt');
-		    });
-		    
-		    
-		    $('#file-icon').click(function(){
-		    	$('#attachedFile').children(':first-child').css('visibility','hidden');
-		    	$('#attachedFile').children(':last-child').text('');
-		    	$('input[type=file]').val('');
-		    	//files[0].select; // 파일 선택
-		    	//document.selection.clear; // 선택된 파일 삭제
-		    	
-		    });
-		    
 		}) 
 		
 	</script>
-						
-						
+	
+	
 						<!----------------------------------->
 					</div>
 				</div>
@@ -154,5 +125,6 @@
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 
 	</div>
+	
 </body>
 </html>

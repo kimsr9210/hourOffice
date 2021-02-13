@@ -49,7 +49,7 @@ public class PartBoardController {
 	
 	// 부서별 게시판 all select
 	@RequestMapping(value="/allPartBoardPage.ho")
-	public String allPartBoardPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
+	public String postListPage(Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
 			if(m.getDeptCode()!=null){
 				

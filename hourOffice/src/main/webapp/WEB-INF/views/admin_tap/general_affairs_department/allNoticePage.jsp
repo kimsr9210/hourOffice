@@ -127,7 +127,7 @@
                             <tr>
                                 <td><input type="checkbox" name="postNo" value="<%=bp.getPostNo()%>"/></td>
                                 <td><%=bp.getPostNo() %></td>
-                                <td><div><a href="/admin_tap_noticeModify.ho?notNo=<%=bp.getPostNo()%>"><%=bp.getTitle() %></a></div></td>
+                                <td><div><a href="/admin_tap_modifyNotice.ho?notNo=<%=bp.getPostNo()%>"><%=bp.getTitle() %></a></div></td>
                                 <td><%=bp.getWriter() %> <%=bp.getMemPosition() %></td>
                 <% if(format.format(bp.getPostingDate()).equals(format.format(toDay))){ %>
                                 <td><%=formatToDay.format(bp.getPostingDate()) %></td>

@@ -44,7 +44,18 @@
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
-						<div id="title"><span><i class="fas fa-feather-alt"></i></span><a href="/allNoticePage.ho"><button type="button">목록</button></a><a href="/notice.ho?notNo=${prevPost }"><i class="fas fa-arrow-down i-icon"></i> 아랫글</a><a href="/notice.ho?notNo=${nextPost }"><i class="fas fa-arrow-up i-icon"></i> 윗글</a></div>
+						<div id="title"><span><i class="fas fa-feather-alt"></i></span><a href="/allNoticePage.ho"><button type="button">목록</button></a>
+					<% if((Integer)request.getAttribute("prevPost")>0){ %>
+						<a href="/notice.ho?notNo=${prevPost }"><i class="fas fa-arrow-down i-icon"></i> 아랫글</a>
+					<% }else{ %>
+						<a style="color:lightgray;"><i class="fas fa-arrow-down i-icon" style="color:lightgray; cursor:default;"></i> 아랫글</a>
+					<% } %>
+					<% if((Integer)request.getAttribute("nextPost")>0){ %>
+						<a href="/notice.ho?notNo=${nextPost }"><i class="fas fa-arrow-up i-icon"></i> 윗글</a></div>
+					<% }else{ %>
+						<a style="color:lightgray;"><i class="fas fa-arrow-up i-icon" style="color:lightgray; cursor:default;"></i> 윗글</a></div>
+					<% } %>	
+						
                         <hr>
                         <div id="board-content">
                             <div><span><i class="fas fa-feather-alt"></i></span></div>
