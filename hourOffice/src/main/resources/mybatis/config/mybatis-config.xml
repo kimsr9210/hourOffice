@@ -37,7 +37,16 @@
 		<typeAlias type="kr.or.houroffice.approval.model.vo.LazinessForm" alias="LazinessForm"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.OvertimeForm" alias="OvertimeForm"/>
 		<typeAlias type="kr.or.houroffice.approval.model.vo.AprListPage" alias="AprListPage"/>
-
+		
+		<typeAlias type="kr.or.houroffice.mail.model.vo.Mail" alias="Mail"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailRef" alias="MailRef"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailRef" alias="MailReceive"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailFile" alias="MailFile"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailGetter" alias="MailGetter"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailInfo" alias="MailInfo"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailListPage" alias="MailListPage"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.MailList" alias="MailList"/>
+		<typeAlias type="kr.or.houroffice.mail.model.vo.SendingMail" alias="SendingMail"/>
 	</typeAliases>
 </configuration>
 

@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+}
+a{ text-decoration: none;}
+a:visited{text-decoration: none; color: black;}
+a:active{ text-decoration: none;}
+/*여기까지 공통*/
+/*주소록*/
+#wrapper {
+    background-color: #eaeaea;
+    width: 800px;
+    height: 650px;
+}
+
+#title {
+    font-size: 1.5rem;
+    padding: 20px;
+}
+
+#dept-list {
+    width: 220px;
+    height: 500px;
+    background-color: white;
+    border: 1px solid darkgray;
+    margin-left: 20px;
+    padding: 10px;
+    overflow-y:auto;
+}
+
+#mem-list {
+    width: 220px;
+    height: 500px;
+    overflow-y:auto;
+    background-color: white;
+    border: 1px solid darkgray;
+    margin-left: 10px;
+    padding: 10px;
+}
+
+#selected-area {
+    width: 300px;
+    height: 500px;
+    margin-left: 5px;
+}
+/*선택된 영역 세부 조정*/
+#con-wrap {
+    display: flex;
+}
+
+#dept-list>span{
+    display: inline-block;
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#mem-list>span{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.cont-btn {
+    width: 50px;
+    height: 50%;
+    float: left;
+    padding-top: 35%;
+    text-align: center;
+}
+.fa-plus-square{
+    color: #1D9F8E;
+    font-size: 2rem;
+    cursor: pointer;
+}
+.fa-minus-square{
+    color: #FF6363;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.list-title {
+    float: left;
+    width: 248px;
+    height: 30px;
+    padding-left: 10px;
+    line-height: 30px;
+}
+
+.selected-list {
+    float: left;
+    width: 248px;
+    height: calc(50% - 30px);
+    background-color: white;
+    border: 1px solid darkgray;
+    padding: 10px;
+    overflow: auto;
+}
+
+#btn-wrap {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+}
+
+#btn-wrap button{
+    width: 120px;
+    height: 30px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+#reset-btn {
+    background-color: #FF6363;
+}
+
+#add-btn {
+    background-color: #1D9F8E;
+}
+
+#receiver-list>span{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#ref-list>span{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 5px;
+}

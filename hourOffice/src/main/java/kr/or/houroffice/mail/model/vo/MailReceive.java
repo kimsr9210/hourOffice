@@ -2,30 +2,36 @@ package kr.or.houroffice.mail.model.vo;
 
 import java.sql.Timestamp;
 
-public class MailRef {
-	private int mailRefNo; // 참조번호
+public class MailReceive {
+	private int recNo; // 수신번호
 	private int mailNo; // 메일번호
-	private int memNo; // 참조 사원
+	private int memNo; // 수신인
 	private Timestamp recDate; // 읽은 날짜
 	private char readYN; // 읽음여부
 	private char keepYN; // 보관여부
 	private char delYN; // 삭제여부
-	public MailRef() {
+	
+	private char listType; //참조인지 수신인지 구분.
+	public MailReceive() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MailRef(int mailRefNo, int mailNo, int memNo, Timestamp recDate, char readYN, char keepYN, char delYN) {
+	
+	public MailReceive(int recNo, int mailNo, int memNo, Timestamp recDate, char readYN, char keepYN, char delYN,
+			char listType) {
 		super();
-		this.mailRefNo = mailRefNo;
+		this.recNo = recNo;
 		this.mailNo = mailNo;
 		this.memNo = memNo;
 		this.recDate = recDate;
 		this.readYN = readYN;
 		this.keepYN = keepYN;
 		this.delYN = delYN;
+		this.listType = listType;
 	}
-	public int getMailRefNo() {
-		return mailRefNo;
+
+	public int getRecNo() {
+		return recNo;
 	}
 	public int getMailNo() {
 		return mailNo;
@@ -45,8 +51,8 @@ public class MailRef {
 	public char getDelYN() {
 		return delYN;
 	}
-	public void setMailRefNo(int mailRefNo) {
-		this.mailRefNo = mailRefNo;
+	public void setRecNo(int recNo) {
+		this.recNo = recNo;
 	}
 	public void setMailNo(int mailNo) {
 		this.mailNo = mailNo;
@@ -67,4 +73,12 @@ public class MailRef {
 		this.delYN = delYN;
 	}
 
+	public char getListType() {
+		return listType;
+	}
+
+	public void setListType(char listType) {
+		this.listType = listType;
+	}
+	
 }
