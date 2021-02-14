@@ -259,7 +259,7 @@ $(function() {
 	
 	//게시물 수정 버튼 누를 시
 	$('.boardModify').click(function(){
-		var $textBox = $(this).parents('.boardInfo').next().children().children('.textarea');
+		var $textBox = $(this).parents('.boardInfo').next().children().children().eq(0);
 		var $modify = $(this).parents('.boardInfo').next().children().children('.textHide');
         $textBox.removeAttr('disabled');
         $textBox.removeAttr('readonly');
@@ -292,11 +292,10 @@ $(function() {
         $('.boardModifyBox').css('display','none');
 		var result = window.confirm("해당 게시물을 삭제하시겠습니까?");
 		var boardNo = $(this).next().val();
-		var boardType = $(this).next().next().val();
 		if(result){
 			$.ajax({
             	url : "/deleteProjectBoard.ho",
-            	data : {"boardNo" : boardNo, "boardType" : boardType},
+            	data : {"boardNo" : boardNo},
             	type : "post",
             	success : function(result){
             		if(result=="true"){

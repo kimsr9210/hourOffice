@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import kr.or.houroffice.project.model.dao.ProjectDAO;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
-import kr.or.houroffice.project.model.vo.ProjectCode;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
@@ -178,16 +177,6 @@ public class ProjectServiceImpl implements ProjectService{
 	public int insertProjectBoardFile(ProjectFileData pfd) {
 		int result = pDAO.insertProjectBoardFile(pfd, sqlSession);
 		return result;
-	}
-
-	public int insertProjectCode(ProjectCode pc) {
-		int result = pDAO.insertProjectCode(pc, sqlSession);
-		return result;
-	}
-
-	public ArrayList<ProjectCode> selectProjectCodeList(int proNo) {
-		ArrayList<ProjectCode> codeList = pDAO.selectProjectCodeList(proNo, sqlSession);
-		return codeList;
 	}
 
 	

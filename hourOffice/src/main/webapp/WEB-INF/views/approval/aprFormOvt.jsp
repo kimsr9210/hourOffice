@@ -20,7 +20,6 @@
 </head>
 <body>
 <div id="wrap">
-<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -55,14 +54,12 @@
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose>
-											<c:when test="${sessionScope.member.deptCode !=null }">
-												<c:forEach items="${deptList }" var="dept">
-													<c:if test="${sessionScope.member.deptCode eq dept.deptCode }">${dept.deptName }</c:if>
-												</c:forEach>
-											</c:when>
-											<c:otherwise>부서없음</c:otherwise>
-										</c:choose></td>
+										<td><c:choose><c:when test="${sessionScope.member.deptCode eq 'D1 '}">인사부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D2 '}">총무부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D3 '}">전산부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D4 '}">개발부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D5 '}">디자인부</c:when>
+										<c:otherwise>부서없음</c:otherwise></c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
@@ -101,26 +98,26 @@
                                             <input type="date" required name="ovtDate">
                                             <span class="space"></span>
                                             <select name="startHour" id="startHour">
-                                            <c:forEach varStatus="i" begin="0" end="23" step="1">
-                                            	<option>${i.index }</option>
-                                            </c:forEach>
+                                            <% for(int i=0; i<24; i++){%>
+                                                <option><%=i %></option>
+											<%} %>
                                             </select>시 
                                                <select name="startMinute" id="startMinute">
                                                 <option>00</option>
-                                                <c:forEach varStatus="i" begin="10" end="50" step="10">
-                                            	<option>${i.index }</option>
-                                            	</c:forEach>
+                                            <% for(int i=10; i<60; i=i+10){%>
+                                                <option><%=i %></option>
+											<%} %>
                                             </select>분 ~ 
                                             <select name="endHour" id="endHour">
-                                                <c:forEach varStatus="i" begin="0" end="23" step="1">
-                                            	<option>${i.index }</option>
-                                            </c:forEach>
+                                                <% for(int i=0; i<24; i++){%>
+                                                <option><%=i %></option>
+											<%} %>
                                             </select>시 
                                                <select name="endMinute" id="endMinute">
                                                 <option>00</option>
-                                                <c:forEach varStatus="i" begin="10" end="50" step="10">
-                                            	<option>${i.index }</option>
-                                            	</c:forEach>
+                                                <% for(int i=10; i<60; i=i+10){%>
+                                                <option><%=i %></option>
+											<%} %>
                                             </select>분
                                         </td>
                                     </tr>

@@ -9,7 +9,7 @@ public class AprFormHol extends AprForm{//form에서 정보 받아오기 & form�
 	private Date endDate;
 	private char afternoonOff;
 	private String reasons;
-	private double countDay;
+	private int countDay;
 	
 	public AprFormHol() {
 		super();
@@ -23,7 +23,7 @@ public class AprFormHol extends AprForm{//form에서 정보 받아오기 & form�
 		// TODO Auto-generated constructor stub
 	}
 
-	public AprFormHol(char holType, Date startDate, Date endDate, char afternoonOff, String reasons, double countDay) {
+	public AprFormHol(char holType, Date startDate, Date endDate, char afternoonOff, String reasons, int countDay) {
 		super();
 		this.holType = holType;
 		this.startDate = startDate;
@@ -47,7 +47,7 @@ public class AprFormHol extends AprForm{//form에서 정보 받아오기 & form�
 	public String getReasons() {
 		return reasons;
 	}
-	public double getCountDay() {
+	public int getCountDay() {
 		return countDay;
 	}
 	public void setHolType(char holType) {
@@ -65,7 +65,7 @@ public class AprFormHol extends AprForm{//form에서 정보 받아오기 & form�
 	public void setReasons(String reasons) {
 		this.reasons = reasons;
 	}
-	public void setCountDay(double countDay) {
+	public void setCountDay(int countDay) {
 		this.countDay = countDay;
 	}
 	

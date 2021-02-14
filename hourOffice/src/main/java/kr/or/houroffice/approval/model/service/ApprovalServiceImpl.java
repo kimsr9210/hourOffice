@@ -33,6 +33,10 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Qualifier(value="sqlSessionTemplate")
 	private SqlSessionTemplate sqlSession;
 	
+//	public void selectDeptList(){
+//		aprDAO.selectDeptList(sqlSession);
+//	}
+	
 	public PageList selectApprovalList(AprListPage alp, char listType) {
 		ArrayList<Approval> list = null;
 		switch(listType){
@@ -82,6 +86,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 			int[] aprLine = af.getAprLine();
 			if(aprLine != null){
 				for(int i=0; i<aprLine.length;i++){
+					System.out.println(aprLine[i]);
 					al.setMemNo(aprLine[i]);
 					int result = aprDAO.insertApprovalLine(sqlSession,al);
 				}

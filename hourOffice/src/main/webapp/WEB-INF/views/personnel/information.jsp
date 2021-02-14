@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="kr.or.houroffice.personnel.model.vo.MemDept"%>
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -36,9 +37,9 @@ th {
 	background: #eee;
 }
 
-#pic {
+.pic {
 	border: 1px black solid;
-	width: 180px;
+	width: 160px;
 	height: 180px;
 	margin: 0px auto;
 }
@@ -50,8 +51,11 @@ th {
 
 <body>
 
-	<%Member m = (Member)session.getAttribute("member");%>
-	<%MemDept md = (MemDept)session.getAttribute("MemDept");%>
+	<%
+		Member m = (Member)session.getAttribute("member");
+		ArrayList<MemDept> list = (ArrayList<MemDept>) request.getAttribute("memDept");
+		//MemDept md  = (MemDept)request.getAttribute("memDept");
+	%>
 	
 	
 	<div id="wrap">
@@ -75,7 +79,9 @@ th {
 
 <table>
         <tr>
-            <th rowspan="5" class="imgbox"><div src="" id="pic"></div></th>
+            <th rowspan="5" class="imgbox">
+            
+            <div class="pic"><img src="/resources/images/profile/<%=m.getMemProfile()%>" class="pic"></div></th>
             <th>이름</th>
             <td><%=m.getMemName() %></td>
             <th>사번</th>
@@ -110,6 +116,25 @@ th {
             <td>군필</td>
         </tr>
     </table><br><br>
+    
+    <table>
+        <tr>
+            <th>학교명</th>
+            <th>입학일</th>
+            <th>졸업일</th>
+            <th>전공명</th>
+            <th>졸업여부</th>
+        </tr>
+        <%for(MemDept md : list){ %>
+        <tr>
+            <td><%=md.getAcaSchoolName() %></td>
+            <td><%=md.getAcaEnrollDate() %></td>
+            <td><%=md.getAcaGradDate() %></td>
+            <td><%=md.getAcaMajorName() %></td>
+            <td><%=md.getAcaGrad() %></td>
+        </tr>
+        <%} %>
+    </table><br><br>
 
     <table>
         <tr>
@@ -119,13 +144,15 @@ th {
             <th>등급</th>
             <th>취득일</th>
         </tr>
+        <%for(MemDept md : list){ %>
         <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td></td>
+            <td><%=md.getLicName() %></td>
+            <td>12345678</td>
+            <td><%=md.getLicOrigin() %></td>
+            <td>A</td>
+            <td><%=md.getLicDate()%></td>
         </tr>
+        <%} %>
     </table><br><br>
 
     <table>
@@ -136,14 +163,16 @@ th {
             <th>입사일</th>
             <th>퇴사일</th>
         </tr>
+         <%for(MemDept md : list){ %>
         <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+            <td><%=md.getCarPlace() %></td>
+            <td><%=md.getCarPosition() %></td>
+            <td><%=md.getCarContent() %></td>
+            <td><%=md.getCarJoinDate() %></td>
+            <td><%=md.getCarResignDate() %></td>
         </tr>
-    </table>
+        <%} %>
+    </table><br>
 
 						<!----------------------------------->
 					</div>

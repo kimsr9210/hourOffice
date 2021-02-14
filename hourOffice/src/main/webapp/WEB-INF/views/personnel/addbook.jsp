@@ -2,6 +2,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,16 +27,45 @@
                
 tr{height: 30px;}
 select{height: 25px;}
-#searchText{height: 25px;}
+#search{height: 25px;}
+
+/*페이지 네비 css*/
+#page-navi {
+    height: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-list {
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkgray;
+    text-align: center;
+}
+.page-link {
+    width: 100%;
+    height: 100%;
+    line-height: 28px;
+    display: inline-block;
+}
+
+.page-link:hover{
+    background: #eaeaea;
+}
+
+.pic{width: 45px;
+    height: 45px;
+    border-radius:50%}
 </style>
 
 <body>
 	
 	<% 
-		//jsp 페이지에서 사용하기 위하여 데이터를 꺼내는 작업
-		//어레이리스트는 오브젝트 타입 , 다운캐스팅을 해줘야한다.   (ArrayList<Member>)
-		ArrayList<Member> list  = (ArrayList<Member>)request.getAttribute("list");
 		Member sessionMember = (Member)session.getAttribute("member");
+	
 	%>
 
 	<div id="wrap">
@@ -64,7 +94,7 @@ select{height: 25px;}
                             
         <tr style="text-align:right;">
             <td>
-                <form action="/addbookSearch.ho" method="get">
+                <form action="/addbook.ho" method="get">
                     <select name="selectBox">
                     	<option value="" selected>전체</option>
                         <option value="name">이름</option>
@@ -81,8 +111,7 @@ select{height: 25px;}
 
     <table border="1px" width="100%" style="text-align:center; margin:auto; border-collapse:collapse;">
         <tr style="background-color:#1D9F8E; color:white;">
-        
-  
+  			<th>순서</th>
             <th>프로필</th>
             <th>이름</th>
             <th>소속부서</th>
@@ -94,23 +123,23 @@ select{height: 25px;}
 
         <!-- 반복문 for 작성 -->
         <!-- 탈퇴자는 리스트에서 안보이게 만들어야됨 -->
-        <%for(Member m : list) {%>
+        <c:forEach var="result" items="${requestScope.result.list}">
         <tr>
-            <td>사진</td>
-            <td><%=m.getMemName() %></td>
-            <td><%=m.getDeptName() %></td>
-            <td><%=m.getMemPosition() %></td>
-            <td><%=m.getMemTell() %></td>
-            <td><%=m.getMemPhone() %></td>
-            <td><%=m.getMemEmail() %></td>
+        	<td>${result.rnum}</td>
+            <td><img src="/resources/images/profile/${result.memProfile}" class="pic"></td>
+            <td>${result.memName}</td>
+            <td>${result.deptName}</td>
+            <td>${result.memPosition}</td>
+            <td>${result.memTell}</td>
+            <td>${result.memPhone}</td>
+            <td>${result.memEmail}</td>
         </tr>
-		<%} %>
+        </c:forEach>
 
 
     </table><br>
     
-    <p style="text-align: center;"> 1 2 3 4 5 ></p>
-    <div id="pageNavi">${pageNavi }</div>              
+    <ul id="page-navi">${requestScope.result.pageNavi}</ul>            
 
 
 						<!----------------------------------->
