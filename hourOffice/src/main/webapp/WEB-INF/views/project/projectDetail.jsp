@@ -1,3 +1,4 @@
+
 <%@page import="kr.or.houroffice.project.model.vo.ProjectRequest"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -490,7 +491,6 @@
                                             <div class="boardModifyList boardModify">게시물 수정</div>
                                             <div class="boardModifyList boardDelete">게시물 삭제</div>
                                             <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
-                                            <input type="hidden" name="boardType" value="post"/>
                                         </div>
                                     </div>
                                     <%} %>
@@ -505,7 +505,6 @@
 	                                    <%} %>
 	                                    <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
 	                                    <input type="hidden" name="proNo" value="<%=p.getProNo() %>"/>
-	                                    <input type="hidden" name="boardType" value="post"/>
 	                                    <span class="boardModifyBtn textHide">수정&nbsp;</span>
 	                                    <span class="modifyCancelBtn textHide">취소</span>
                                     </form>
@@ -935,6 +934,7 @@
                             
                             <%} %>
                             <!------------------------------------------------------------------------->
+
                         </div>
                         <div id="projectRight">
                             <button id="backward"><i class="fas fa-chevron-left"></i> 이전 화면</button>

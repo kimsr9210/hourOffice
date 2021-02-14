@@ -20,7 +20,6 @@
 </head>
 <body>
 	<div id="wrap">
-<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
 			<%@ include file="/WEB-INF/views/common/sideNavi.jsp"%>
@@ -40,8 +39,7 @@
 						</div>
 						<form action="/insertAprLazy.ho" method="post">
 							<span class="opt-check"><input type="checkbox" name="lockYN" value="Y"><label for="lockYN">비공개</label></span>
-							<span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y"><label for="urgencyYN">긴급문서</label></span> 
-							<input type="submit" value="작성 완료">
+							<span class="opt-check"><input type="checkbox" name="urgencyYN" value="Y"><label for="urgencyYN">긴급문서</label></span> <input type="submit" value="작성 완료">
 							<input type="reset" value="작성취소">
 							<div id="title-wrap">
 								<div>문서 제목</div><div><input type="text" name="title" required></div>
@@ -55,14 +53,12 @@
 									</tr>
 									<tr>
 										<td>기안부서</td>
-										<td><c:choose>
-											<c:when test="${sessionScope.member.deptCode !=null }">
-												<c:forEach items="${deptList }" var="dept">
-													<c:if test="${sessionScope.member.deptCode eq dept.deptCode }">${dept.deptName }</c:if>
-												</c:forEach>
-											</c:when>
-											<c:otherwise>부서없음</c:otherwise>
-										</c:choose></td>
+										<td><c:choose><c:when test="${sessionScope.member.deptCode eq 'D1 '}">인사부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D2 '}">총무부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D3 '}">전산부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D4 '}">개발부</c:when>
+										<c:when test="${sessionScope.member.deptCode eq 'D5 '}">디자인부</c:when>
+										<c:otherwise>부서없음</c:otherwise></c:choose></td>
 									</tr>
 									<tr>
 										<td>기안일</td>
@@ -92,10 +88,11 @@
 									<tr>
 										<td>부서</td>
 										<td><select name="dept" id="dept_code" required>
-											<c:forEach items="${deptList }" var="dept">
-												<option value="${dept.deptName }">${dept.deptName }</option>
-											</c:forEach>
-											<option value="부서없음">부서없음</option>
+												<option value="인사부">인사부</option>
+												<option value="총무부">총무부</option>
+												<option value="전산부">전산부</option>
+												<option value="개발부">개발부</option>
+												<option value="디자인부">디자인부</option>
 										</select></td>
 									</tr>
 									<tr>

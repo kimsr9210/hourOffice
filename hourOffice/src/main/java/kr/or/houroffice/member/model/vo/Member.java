@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Member {
+	private int rnum;
 	private int memNo;
 	private String memPwd;
 	private String memPosition;
@@ -29,11 +30,12 @@ public class Member {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Member(int memNo, String memPwd, String memPosition, String deptCode, String memName, Date memBirth,
+	public Member(int rnum, int memNo, String memPwd, String memPosition, String deptCode, String memName, Date memBirth,
 			char memGender, String memAddress, String memPhone, String memTell, String memEmail, String memProfile,
 			int memHolidayCount, Timestamp memJoinDate, char memResignYN, Timestamp memResignDate, char memDelYN,
 			Timestamp memDelDate, char memRightCode, String deptName) {
 		super();
+		this.rnum = rnum;
 		this.memNo = memNo;
 		this.memPwd = memPwd;
 		this.memPosition = memPosition;
@@ -56,6 +58,12 @@ public class Member {
 		this.deptName = deptName;
 	}
 	
+	public int getRnum() {
+		return rnum;
+	}
+	public void setRnum(int rnum) {
+		this.rnum = rnum;
+	}
 	public int getMemNo() {
 		return memNo;
 	}
