@@ -30,6 +30,7 @@
 	th{
 		background-color:#D2E6E6;
 	}
+	
 </style>
 	
 </head>
