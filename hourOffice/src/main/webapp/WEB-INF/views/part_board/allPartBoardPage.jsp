@@ -43,13 +43,13 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						${list[0].deptName } 게시판
+						${sessionScope.member.deptName } 게시판
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 						
-						<span><a href="/writePostPartBoard.ho?deptCode=${list[0].deptCode }"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span>
+						<span><a href="/writePostPartBoard.ho?deptCode=${sessionScope.member.deptCode }"><i class="fas fa-feather-alt i-icon"></i> 새글쓰기</a></span>
 						<table>
                             <tr>
                                 <th>번호</th>

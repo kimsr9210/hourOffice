@@ -44,18 +44,13 @@ public class CompanyRuleController {
 	public String searchRule(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword,
 							Model model, HttpServletRequest request, @SessionAttribute("member") Member m){
 		if(m!=null){
-			if(m.getMemRightCode()=='D'){
 				
-				HashMap<String, Object> map = searchListPage(searchType,keyword,request,"client");
-				
-				model.addAttribute("list",map.get("list"));
-				model.addAttribute("pageNavi",map.get("pageNavi"));
-				
-				return "company_rule/allCompanyRulePage";
-			}// 관리자 권한이 없다면 ↓
-			model.addAttribute("msg","접근 권한이 없습니다.");
-			model.addAttribute("location","/main.ho");
-			return "result";
+			HashMap<String, Object> map = searchListPage(searchType,keyword,request,"client");
+			
+			model.addAttribute("list",map.get("list"));
+			model.addAttribute("pageNavi",map.get("pageNavi"));
+			
+			return "company_rule/allCompanyRulePage";
 		}// 로그인을 하지 않았다면 ↓
 		return "redirect:login.jsp";
 	}
