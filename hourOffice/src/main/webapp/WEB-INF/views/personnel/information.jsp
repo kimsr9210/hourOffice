@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="kr.or.houroffice.personnel.model.vo.MemDept"%>
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -52,7 +53,8 @@ th {
 
 	<%
 		Member m = (Member)session.getAttribute("member");
-		MemDept md  = (MemDept)request.getAttribute("memDept");
+		ArrayList<MemDept> list = (ArrayList<MemDept>) request.getAttribute("memDept");
+		//MemDept md  = (MemDept)request.getAttribute("memDept");
 	%>
 	
 	
@@ -78,8 +80,8 @@ th {
 <table>
         <tr>
             <th rowspan="5" class="imgbox">
-            <div class="pic"><img src="/resources/images/profile/2102001_조로리.jpeg" class="pic"></div></th>
             
+            <div class="pic"><img src="/resources/images/profile/<%=m.getMemProfile()%>" class="pic"></div></th>
             <th>이름</th>
             <td><%=m.getMemName() %></td>
             <th>사번</th>
@@ -123,6 +125,7 @@ th {
             <th>전공명</th>
             <th>졸업여부</th>
         </tr>
+        <%for(MemDept md : list){ %>
         <tr>
             <td><%=md.getAcaSchoolName() %></td>
             <td><%=md.getAcaEnrollDate() %></td>
@@ -130,6 +133,7 @@ th {
             <td><%=md.getAcaMajorName() %></td>
             <td><%=md.getAcaGrad() %></td>
         </tr>
+        <%} %>
     </table><br><br>
 
     <table>
@@ -140,6 +144,7 @@ th {
             <th>등급</th>
             <th>취득일</th>
         </tr>
+        <%for(MemDept md : list){ %>
         <tr>
             <td><%=md.getLicName() %></td>
             <td>12345678</td>
@@ -147,6 +152,7 @@ th {
             <td>A</td>
             <td><%=md.getLicDate()%></td>
         </tr>
+        <%} %>
     </table><br><br>
 
     <table>
@@ -157,6 +163,7 @@ th {
             <th>입사일</th>
             <th>퇴사일</th>
         </tr>
+         <%for(MemDept md : list){ %>
         <tr>
             <td><%=md.getCarPlace() %></td>
             <td><%=md.getCarPosition() %></td>
@@ -164,7 +171,8 @@ th {
             <td><%=md.getCarJoinDate() %></td>
             <td><%=md.getCarResignDate() %></td>
         </tr>
-    </table>
+        <%} %>
+    </table><br>
 
 						<!----------------------------------->
 					</div>

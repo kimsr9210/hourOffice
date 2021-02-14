@@ -21,9 +21,7 @@ public class TimeCardDAO {
 	}
 
 	//근태 조회 (리스트)
-	public ArrayList<Attendance> selectWork(SqlSessionTemplate sqlSession, int memNo) {
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("memNo", memNo);
+	public ArrayList<Attendance> selectWork(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		List<Attendance> list = sqlSession.selectList("timeCard.selectWork",map);
 		return (ArrayList<Attendance>) list;
 	}

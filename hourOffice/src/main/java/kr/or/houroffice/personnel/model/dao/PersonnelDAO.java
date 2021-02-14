@@ -15,30 +15,83 @@ import kr.or.houroffice.personnel.model.vo.MemDept;
 @Repository("PersonnelDAO")
 public class PersonnelDAO {
 
-	public ArrayList<Member> selectAddbook(SqlSessionTemplate sqlSession) {
-		List<Member> list = sqlSession.selectList("personnel.selectAddbook");
-		return (ArrayList<Member>) list;
-	}
-
-	// 사원 전체 주소록 검색(서치) 결과
-	public ArrayList<Member> addbookSearch(SqlSessionTemplate sqlSession, String selectBox, String searchText,
-			int currentPage, int recordCountPerpage) {
-
-		int start = currentPage * recordCountPerpage - (recordCountPerpage - 1);
-		int end = currentPage * recordCountPerpage;
-
+	public int addbookCount(SqlSessionTemplate sqlSession, String selectBox, String searchText) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("start", start);
-		map.put("end", end);
 		map.put("selectBox", selectBox);
 		map.put("searchText", searchText);
-		List<Member> list = sqlSession.selectList("personnel.allMemberList", map);
+		int result = sqlSession.selectOne("personnel.addbookCount", map);
+		return result;
+	}
+	
+	public int myAddbookCount(SqlSessionTemplate sqlSession, String selectBox, String searchText, int memNo) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("selectBox", selectBox);
+		map.put("searchText", searchText);
+		map.put("memNo", memNo);
+		int result = sqlSession.selectOne("personnel.myAddbookCount", map);
+		return result;
+	}
+	
+	//사내 주소록, 검색(search)
+	public ArrayList<Member> addbookSearch(SqlSessionTemplate sqlSession, String selectBox, String searchText, int currentPage, int recordCountPerpage, int naviCountPerPage) {
+		
+		// currentPage : 선택한 현재 페이지
+		// naviCountPerPage : PageNavi 값이 몇개씩 보여줄 것인지
+		// recordCountPerpage : 한 페이지당 몇개씩 게시물이 보이게 할 것인지를 정함.
+		
+		int startPage = (currentPage - 1) * recordCountPerpage + 1;
+		int endPage = (startPage + recordCountPerpage) -1;
+				
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("selectBox", selectBox);
+		map.put("searchText", searchText);
+		map.put("start", startPage);
+		map.put("end", endPage);
+
+		List<Member> list = sqlSession.selectList("personnel.addbookSearch", map);
 
 		return (ArrayList<Member>) list;
 	}
+	
+	//개인주소록, 검색(search)
+	public ArrayList<Contact> myaddbookSearch(SqlSessionTemplate sqlSession, String selectBox, String searchText,int memNo, int currentPage, int recordCountPerpage, int naviCountPerPage) {
+
+		int startPage = (currentPage - 1) * recordCountPerpage + 1;
+		int endPage = (startPage + recordCountPerpage) -1;
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("memNo", memNo);
+		map.put("selectBox", selectBox);
+		map.put("searchText", searchText);
+		map.put("start", startPage);
+		map.put("end", endPage);
+		
+		List<Contact> list = sqlSession.selectList("personnel.myaddbookSearch", map);
+		
+		return (ArrayList<Contact>) list;
+	}
+	
+	public int insertMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
+		int result = sqlSession.insert("personnel.insertMyaddbook", params);
+		return result;
+	}
+	
+	public int updateMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
+		int result = sqlSession.update("personnel.updateMyaddbook",params);
+		return result;
+	}
+
+	//개인주소록 삭제
+	public int deleteMyaddbook(SqlSessionTemplate sqlSession, String ck) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("cntNo", ck);
+		int result = sqlSession.update("personnel.deleteMyaddbook",map);
+		return result;
+	}
+
 
 	// 서치 페이지 네비 메소드
-	public String getPageNavi(SqlSessionTemplate sqlSession, String selectBox, String searchText, int currentPage,
+	public String getPageNavi(SqlSessionTemplate sqlSession, String url, String selectBox, String searchText, int currentPage,
 			int recordCountPerpage, int naviCountPerPage, int postTotalCount) {
 
 		// 키워드르 바탕으로 검색된 pageNavi를 만드는메소드
@@ -116,93 +169,43 @@ public class PersonnelDAO {
 		// 만약 첫번째 pageVavi가 아니라면 '<'모양을 추가해라 (첫번째 pageNavi이면 추가하지 말아라)
 		// 스타트네비가 1과 같지 않다면 1 2 3 4 5 추가하면안됨
 		if (startNavi != 1) {
-			sb.append("<a href='/addbook.ho?searchText=" + searchText + "&currentPage=" + (startNavi - 1) + "'><</a> "); // 전페이지로
-																															// 감
+			sb.append("<a href='/"+url+".ho?searchText=" + searchText + "&currentPage=" + (startNavi - 1) + "'><</a> "); // 전페이지로 감
 		}
 
 		for (int i = startNavi; i <= endNavi; i++) {
 			if (i == currentPage) // 현재 페이지가 i와 같다면
 			{
-				sb.append("<a href='/addbook.ho?searchText=" + searchText + "&currentPage=" + i + "'><b>" + i
+				sb.append("<a href='/"+url+".ho?searchText=" + searchText + "&currentPage=" + i + "'><b>" + i
 						+ "</b></a> "); // 볼드 추가
 
 			} else {
-				sb.append("<a href='/addbook.ho?searchText=" + searchText + "&currentPage=" + i + "'>" + i + "</a> "); // 볼드빼기
+				sb.append("<a href='/"+url+".ho?searchText=" + searchText + "&currentPage=" + i + "'>" + i + "</a> "); // 볼드빼기
 
 			}
 		}
 		// 만약 마지막 pageVavi가 아니라면 '>'모양을 추가해라 (마지막 pageNavi이면 추가하지 말아라)
 
 		if (endNavi != pageTotalCount) {
-			sb.append("<a href='/addbook.ho?searchText=" + searchText + "&currentPage=" + (endNavi + 1) + "'>></a> "); // 전페이지로
+			sb.append("<a href='/"+url+".ho?searchText=" + searchText + "&currentPage=" + (endNavi + 1) + "'>></a> "); // 전페이지로
 											 																			// 감
 		}
-
+		
 		// System.out.println(sb); 확인하는 코드
-
-		return sb.toString();
-
-	}
-
-	public int postSerarchTotalCount(SqlSessionTemplate sqlSession, String searchText) {
-		int postTotalCount = 0;
-		return postTotalCount;
-	}
+		return sb.toString(); }
 	
 	//내 개인정보 (마이페이지)
 	public MemDept mypage(SqlSessionTemplate sqlSession, int memNo) {
+
 		MemDept md = sqlSession.selectOne("personnel.mypage",memNo);
 		return md;
 	}
 
 	// 인사정보
-	public MemDept information(SqlSessionTemplate sqlSession, int memNo) {
-		MemDept md = sqlSession.selectOne("personnel.information", memNo);
-		return md;
+	public ArrayList<MemDept> information(SqlSessionTemplate sqlSession, int memNo) {
+		List list = sqlSession.selectList("personnel.information", memNo);
+		return (ArrayList<MemDept>)list; 
 	}
 
-
-	public ArrayList<Contact> selectMyaddbook(SqlSessionTemplate sqlSession) {
-		// List<Member> list = sqlSession.selectList("personnel.selectAddbook");
-		List<Contact> list = sqlSession.selectList("personnel.selectMyaddbook");
-		return (ArrayList<Contact>) list;
-
-	}
-	
-	public int insertMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
-		int result = sqlSession.insert("personnel.insertMyaddbook", params);
-		return result;
-	}
-	
-	public int updateMyaddbook(SqlSessionTemplate sqlSession, Map<String, Object> params) {
-		int result = sqlSession.update("personnel.updateMyaddbook",params);
-		return result;
-	}
-
-	//개인주소록 삭제
-	public int deleteMyaddbook(SqlSessionTemplate sqlSession, String ck) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("cntNo", ck);
-		int result = sqlSession.update("personnel.deleteMyaddbook",map);
-		return result;
-	}
-
-	
-	public ArrayList<Contact> myaddbookSearch(SqlSessionTemplate sqlSession, String selectBox, String searchText, int currentPage,
-			int recordCountPerpage) {
-
-		int start = currentPage * recordCountPerpage - (recordCountPerpage - 1);
-		int end = currentPage * recordCountPerpage;
-
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("start", start);
-		map.put("end", end);
-		map.put("selectBox", selectBox);
-		map.put("searchText", searchText);
-		List<Contact> list = sqlSession.selectList("personnel.myaddbookSearch", map);
-		
-		return (ArrayList<Contact>) list;
-	}
 
 
 }

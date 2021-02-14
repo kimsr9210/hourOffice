@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import kr.or.houroffice.member.model.vo.Attendance;
 import kr.or.houroffice.member.model.vo.Member;
-import kr.or.houroffice.personnel.model.vo.Contact;
 import kr.or.houroffice.timecard.model.service.TimeCardServiceImpl;
 import kr.or.houroffice.timecard.model.vo.Holiday;
 
@@ -48,8 +48,8 @@ public class TimecardController {
 	
 	//근태 조회 (리스트)
 	@RequestMapping(value ="/work.ho")
-	public ModelAndView work(@SessionAttribute("member") Member m, HttpSession session, HttpServletRequest request) {
-		ArrayList<Attendance> list = tService.selectWork(m.getMemNo());
+	public ModelAndView work(@SessionAttribute("member") Member m, HttpServletRequest request) {
+		ArrayList<Attendance> list = tService.selectWork(request,m.getMemNo());
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("list", list);
@@ -57,11 +57,17 @@ public class TimecardController {
 		return mav;
 	}
 	
+	//근태 조회 (AJAX)
+	@RequestMapping(value ="/workSearch.ho")
+	public ArrayList<Attendance> workSearch(@SessionAttribute("member") Member m, HttpServletRequest request) {
+		
+		ArrayList<Attendance> list = tService.selectWork(request,m.getMemNo());
+		
+		return list;
+	}
+	
 	@RequestMapping(value ="/test.ho")
 	public String test() {
 		return "personnel/test";
 	}
-
-	
-	
 }

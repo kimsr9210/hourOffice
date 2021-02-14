@@ -425,7 +425,7 @@
 	
 	<!-- BY 진원 - 개인 출근 기록 -->
 	<insert id="insertAttendanceMember">
-		INSERT INTO ATTENDANCE_BOOK VALUES(#{memNo},SYSTIMESTAMP,NULL,NULL)
+		INSERT INTO ATTENDANCE_BOOK VALUES(#{memNo},SYSDATE,SYSTIMESTAMP,NULL,NULL)
 	</insert>
 	
 	<!-- BY 진원 - 개인 퇴근 기록 -->

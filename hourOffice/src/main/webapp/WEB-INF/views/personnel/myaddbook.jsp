@@ -3,6 +3,7 @@
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -20,10 +21,8 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css"
-	href="/resources/css/header&sideNavi.css" />
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/header&sideNavi.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 
@@ -44,10 +43,9 @@
 	border-radius: 5px;
 	width: 80px;
 	height: 25px;
-	
 }
 
-#update-user{
+#update-user {
 	background-color: #1D9F8E;
 	color: white;
 	border: 0;
@@ -55,7 +53,7 @@
 	width: 80px;
 	height: 25px;
 	margin-left: 5px;
-	}
+}
 
 #delbtn {
 	background-color: #FF6363;
@@ -88,29 +86,55 @@ select {
 .textbox {
 	width: 200px;
 }
+
+/*페이지 네비 css*/
+#page-navi {
+    height: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-list {
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkgray;
+    text-align: center;
+}
+.page-link {
+    width: 100%;
+    height: 100%;
+    line-height: 28px;
+    display: inline-block;
+}
+
+.page-link:hover{
+    background: #eaeaea;
+}
+
 </style>
 
 <script>
-	$(document).ready(
-		function() {
-			$('.ckall').click(function() {
-			$('.ck').prop('checked',this.checked);
+	$(document).ready(function() {
+		$('.ckall').click(function() {
+			$('.ck').prop('checked', this.checked);
 		});
 	});
 
 	$(function() {
 		var dialog, form;
 		function addUser() {
-			
+
 			// Class = addName
 			//$(".addName")
-			
+
 			// Id = addName
 			//$("#addName")
 			var url = null;
 			var type = null;
-			
-			
+
 			var addName = $("#addName").val();
 			var addCompany = $("#addCompany").val();
 			var addPosition = $("#addPosition").val();
@@ -118,9 +142,16 @@ select {
 			var addPh = $("#addPh").val();
 			var addEmail = $("#addEmail").val();
 
-			var object = {"name":addName,"company":addCompany,"position":addPosition,"tell":addTell,"ph":addPh,"email":addEmail};
-			
-			if($("#writeType").val() == "insert"){
+			var object = {
+				"name" : addName,
+				"company" : addCompany,
+				"position" : addPosition,
+				"tell" : addTell,
+				"ph" : addPh,
+				"email" : addEmail
+			};
+
+			if ($("#writeType").val() == "insert") {
 				url = "/myaddbook.ho";
 				type = "POST";
 			} else {
@@ -128,26 +159,26 @@ select {
 				type = "PUT";
 				object.cntNo = $("input[type=checkbox]:checked").val();
 			}
-			
+
 			// ajax 이벤트 추가
 			$.ajax({
 				url : url,
-		        data: JSON.stringify(object), //리스트(object)를 json 형식으로 저장하기 -> 키 벨류
-		        dataType: 'text',
-		        contentType:'application/json; charset=utf-8',
+				data : JSON.stringify(object), //리스트(object)를 json 형식으로 저장하기 -> 키 벨류
+				dataType : 'text',
+				contentType : 'application/json; charset=utf-8',
 				type : type,
-				success : function(data){
-					if(data == 'success'){
+				success : function(data) {
+					if (data == 'success') {
 						alert('등록이 정상적으로 처리되었습니다.');
 						location.href = '/myaddbook.ho';
 					} else {
 						alert('등록이 정상적으로 처리되지않았습니다. \n 관리자에게 문의하세요.');
 					}
 				},
-				error : function(e){
+				error : function(e) {
 					console.log("서버 호출을 정상적으로 처리하지 못하였습니다.!!");
 				}
-				
+
 			});
 		}
 
@@ -166,9 +197,7 @@ select {
 				form[0].reset();
 			}
 		});//
-		
-		
-		
+
 		//여기가 잘못된거같은데 모르겠네
 		form = dialog.find("form").on("submit", function(event) {
 			event.preventDefault();
@@ -179,48 +208,54 @@ select {
 			$("#writeType").val("insert");
 			dialog.dialog("open");
 		});
-		
+
 		$("#update-user").button().on("click", function() {
 			$("#writeType").val("update");
 			var chk_idx = $("input[type=checkbox]:checked").val();
-			$("#addName").val($(".name_"+chk_idx).text());
-			$("#addCompany").val($(".company_"+chk_idx).text());
-			
-			$("#addPosition").val($(".appointment_"+chk_idx).text());
-			$("#addTell").val($(".officeNumber_"+chk_idx).text());
-			$("#addPh").val($(".ph_"+chk_idx).text());
-			$("#addEmail").val($(".email_"+chk_idx).text());
+			$("#addName").val($(".name_" + chk_idx).text());
+			$("#addCompany").val($(".company_" + chk_idx).text());
+
+			$("#addPosition").val($(".appointment_" + chk_idx).text());
+			$("#addTell").val($(".officeNumber_" + chk_idx).text());
+			$("#addPh").val($(".ph_" + chk_idx).text());
+			$("#addEmail").val($(".email_" + chk_idx).text());
 			dialog.dialog("open");
 		});
-		
+
 		//-- 삭제 -->
 		$('#delbtn').click(function() {
 			var result = window.confirm("연락처 삭제 하시겠습니까?");
-			var ck = $("input[type=checkbox]:checked").val();
-		
+			var ck = null;
+			for(var i=0; i<$("input.ck[type=checkbox]:checked").length;i++){
+				if(i == 0){
+					ck = $("input.ck[type=checkbox]:checked")[i].value;
+					continue;
+				}
+				ck += ","+$("input.ck[type=checkbox]:checked")[i].value;
+			}
+
 			if (result == true) {
 				$.ajax({
-					url :  "/myaddbookDelete.ho?ck="+ck, 
-					dataType: 'text',
+					url : "/myaddbookDelete.ho?ck=" + ck,
+					dataType : 'text',
 					type : "DELETE",
-					success : function(data){
-						if(data == 'success'){
+					success : function(data) {
+						if (data == 'success') {
 							alert('삭제가 완료되었습니다.');
 							location.href = '/myaddbook.ho';
 						} else {
 							alert('삭제가 정상적으로 처리되지않았습니다. \n 관리자에게 문의하세요.');
 						}
 					},
-					error : function(e){
+					error : function(e) {
 						alert('오류가 발생하였습니다. \n 관리자에게 문의하세요.');
 						console.log("서버 호출을 정상적으로 처리하지 못하였습니다.!!");
 					}
 				});
 			}
 		});
-		
-	});
 
+	});
 </script>
 
 
@@ -228,8 +263,6 @@ select {
 	<%
 		//jsp 페이지에서 사용하기 위하여 데이터를 꺼내는 작업
 		//어레이리스트는 오브젝트 타입 , 다운캐스팅을 해줘야한다.   (ArrayList<Contact>)
-		ArrayList<Contact> list = (ArrayList<Contact>) request.getAttribute("list");
-		String pageNavi = (String) request.getAttribute("pageNavi");
 		Member sessionMember = (Member) session.getAttribute("member");
 	%>
 
@@ -292,7 +325,7 @@ select {
 								</td>
 
 								<td style="text-align: right;">
-									<form action="/myaddbookSearch.ho" method="get">
+									<form action="/myaddbook.ho" method="get">
 										<select name="selectBox">
 											<option value="" selected>전체</option>
 											<option value="name">이름</option>
@@ -320,44 +353,30 @@ select {
 								<th>이메일</th>
 							</tr>
 
-							<%
-								for (Contact ct : list) {
-							%>
-							<tr>
-								<td><input type="checkbox" class="ck"
-									value="<%=ct.getCntNo()%>"></td>
-								<td class="name_<%=ct.getCntNo()%>"><%=ct.getName()%></td>
-								<td class="company_<%=ct.getCntNo()%>"><%=ct.getCompany()%></td>
-								<td class="appointment_<%=ct.getCntNo()%>"><%=ct.getAppointment()%></td>
-								<td class="officeNumber_<%=ct.getCntNo()%>"><%=ct.getOfficeNumber()%></td>
-								<td class="ph_<%=ct.getCntNo()%>"><%=ct.getPh()%></td>
-								<td class="email_<%=ct.getCntNo()%>"><%=ct.getEmail()%></td>
-							</tr>
-							<%
-								}
-							%>
-
+							<c:forEach var="result" items="${requestScope.result.list}">
+								<tr>
+									<td><input type="checkbox" class="ck" value="${result.cntNo}"></td>
+									<td class="name_${result.cntNo}">${result.name}</td>
+									<td class="company_${result.cntNo}">${result.company}</td>
+									<td class="appointment_${result.cntNo}">${result.appointment}</td>
+									<td class="officeNumber_${result.cntNo}">${result.officeNumber}</td>
+									<td class="ph_${result.cntNo}">${result.ph}</td>
+									<td class="email_${result.cntNo}">${result.email}</td>
+								</tr>
+							</c:forEach>
 						</table>
 						<br>
 
 						<%-- <%=pageNavi%> --%>
-
+						<ul id="page-navi">${requestScope.result.pageNavi}</ul>
 						<!----------------------------------->
 					</div>
 				</div>
 			</div>
 		</div>
-
-
-
-		<!-- 자바 스크립트    -->
-		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
-
 	</div>
-
-	</div>
-
-
+	<!-- 자바 스크립트    -->
+	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 </body>
 </html>
 

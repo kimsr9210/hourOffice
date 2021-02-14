@@ -1,3 +1,7 @@
+<%@page import="kr.or.houroffice.member.model.vo.Attendance"%>
+<%@page import="java.util.ArrayList"%>
+<!-- 날짜 format 을 위한 import -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,6 +20,9 @@
 <!-- CSS -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/header&sideNavi.css" />
+	
+<!--  -->
+<script src="/resources/js/memberMain/memberMain_work.js"></script>	
 <style>
 .approval {
 	background-color: #1D9F8E;
@@ -158,64 +165,89 @@ to {
 }
 </style>
 <script>
-	$(document).ready(function(){
-		makeWeekSelectOptions();
-	})
+	$(function(){
+		$(document).ready(function(){
+			makeWeekSelectOptions();
+		})
+		
+		$('#sh_week').on('change',function(){
+			var startDate = this.value.split('|')[0];
+			var endDate = this.value.split('|')[1];
+			
+			var object = {"startDate":startDate,"endDate":endDate};
+			
+
+			$.ajax({
+				url : "/workSearch.ho",
+				type : "get",
+				data : object,
+				success : function(data){
+					console.log("전송 성공");
+				},
+				error : function(e){
+					console.log("전송 실패");
+				}
+			});
+		})
 	
-	function makeWeekSelectOptions() {
-		  var year = $("#sh_year").val();
-		  var month = $("#sh_month").val();
+		function makeWeekSelectOptions() {
+			var year = $("#sh_year").val();
+			var month = $("#sh_month").val();
+			
+			var today = new Date();
+			
+			var sdate = new Date(year, month-1, 01);
+			var lastDay = (new Date(sdate.getFullYear(), sdate.getMonth()+1, 0)).getDate();
+			var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
+			
+			var week = sdate.getDay();
+			sdate.setDate(sdate.getDate() - week);
+			var edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
+			
+			var obj = document.getElementById("sh_week");
+			obj.options.length = 0;
+			var seled = "";
+  			while(endDate.getTime() >= edate.getTime()) {
+				var sYear = sdate.getFullYear();
+				var sMonth = (sdate.getMonth()+1);
+				var sDay = sdate.getDate();
+				
+				sMonth = (sMonth < 10) ? "0"+sMonth : sMonth;
+				sDay = (sDay < 10) ? "0"+sDay : sDay;
+				
+				var stxt = sYear + "-" + sMonth + "-" + sDay;
+				
+				edate.setDate(sdate.getDate() + 6);
+				
+				var eYear = edate.getFullYear();
+				var eMonth = (edate.getMonth()+1);
+				var eDay = edate.getDate();
+				
+				eMonth = (eMonth < 10) ? "0"+eMonth : eMonth;
+				eDay = (eDay < 10) ? "0"+eDay : eDay;
+				
+				var etxt = eYear + "-" + eMonth + "-" + eDay;
+				
+				if(today.getTime() >= sdate.getTime() && today.getTime() <= edate.getTime()) {
+				  seled = stxt+"|"+etxt;
+				}
+				
+				obj.options[obj.options.length] = new Option(stxt+"~"+etxt, stxt+"|"+etxt);
+				
+				sdate = new Date(edate.getFullYear(), edate.getMonth(), edate.getDate()+1);
+				edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
+  			}
 
-		  var today = new Date();
-
-		  var sdate = new Date(year, month-1, 01);
-		  var lastDay = (new Date(sdate.getFullYear(), sdate.getMonth()+1, 0)).getDate();
-		  var endDate = new Date(sdate.getFullYear(), sdate.getMonth(), lastDay);
-
-		  var week = sdate.getDay();
-		  sdate.setDate(sdate.getDate() - week);
-		  var edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
-
-		  var obj = document.getElementById("sh_week");
-		  obj.options.length = 0;
-		  var seled = "";
-		  while(endDate.getTime() >= edate.getTime()) {
-
-		    var sYear = sdate.getFullYear();
-		    var sMonth = (sdate.getMonth()+1);
-		    var sDay = sdate.getDate();
-
-		    sMonth = (sMonth < 10) ? "0"+sMonth : sMonth;
-		    sDay = (sDay < 10) ? "0"+sDay : sDay;
-
-		    var stxt = sYear + "-" + sMonth + "-" + sDay;
-
-		    edate.setDate(sdate.getDate() + 6);
-
-		    var eYear = edate.getFullYear();
-		    var eMonth = (edate.getMonth()+1);
-		    var eDay = edate.getDate();
-
-		    eMonth = (eMonth < 10) ? "0"+eMonth : eMonth;
-		    eDay = (eDay < 10) ? "0"+eDay : eDay;
-
-		    var etxt = eYear + "-" + eMonth + "-" + eDay;
-
-		    if(today.getTime() >= sdate.getTime() && today.getTime() <= edate.getTime()) {
-		      seled = stxt+"|"+etxt;
-		    }
-
-		    obj.options[obj.options.length] = new Option(stxt+"~"+etxt, stxt+"|"+etxt);
-
-		    sdate = new Date(edate.getFullYear(), edate.getMonth(), edate.getDate() + 1);
-		    edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
-		  }
-
-		  if(seled) obj.value = seled;
+  			if(seled) obj.value = seled;
 		}
+	})
 </script>
 </head>
 <body>
+
+	<% 	
+		ArrayList<Attendance> list = (ArrayList<Attendance>) request.getAttribute("list");
+	%>
 
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
@@ -330,14 +362,15 @@ to {
 										<th>출근시간</th>
 										<th>퇴근시간</th>
 									</tr>
-
+									<%for(Attendance ad : list) {%>
 									<tr>
-										<td>01월</td>
-										<td>홍길동</td>
-										<td>개발1팀</td>
-										<td>09:00</td>
-										<td>18:00</td>
+										<td><%=ad.getYmd() %></td>
+										<td><%=ad.getMemName() %></td>
+										<td><%=ad.getDeptName() %></td>
+										<td><%=ad.getStartDate() %></td>
+										<td><%=ad.getEndDate() %></td>
 									</tr>
+									<%} %>
 								</table>
 								<!-- <div id="accordion">
 									<h3>1주차</h3>
