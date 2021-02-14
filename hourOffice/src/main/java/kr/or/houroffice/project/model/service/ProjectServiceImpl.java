@@ -16,6 +16,8 @@ import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
+import kr.or.houroffice.project.model.vo.ProjectRequest;
+import kr.or.houroffice.project.model.vo.ProjectWork;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService{
@@ -175,6 +177,7 @@ public class ProjectServiceImpl implements ProjectService{
 	public ArrayList<ProjectComment> selectOneBoardComment(int boardNo){
 		return pDAO.selectOneBoardComment(sqlSession,boardNo);
 	}
+	
 	public int insertProjectBoardFile(ProjectFileData pfd) {
 		int result = pDAO.insertProjectBoardFile(pfd, sqlSession);
 		return result;
@@ -188,6 +191,96 @@ public class ProjectServiceImpl implements ProjectService{
 	public ArrayList<ProjectCode> selectProjectCodeList(int proNo) {
 		ArrayList<ProjectCode> codeList = pDAO.selectProjectCodeList(proNo, sqlSession);
 		return codeList;
+	}
+
+	public int updateProjectCode(ProjectCode pc) {
+		int result = pDAO.updateProjectCode(pc, sqlSession);
+		return result;
+	}
+
+	public int deleteProjectCode(int codeNo) {
+		int result = pDAO.deleteProjectCode(codeNo, sqlSession);
+		return result;
+	}
+
+	public ArrayList<ProjectComment> selectCodeCommentList(int proNo) {
+		ArrayList<ProjectComment> codeCommentList = pDAO.selectCodeCommentList(proNo, sqlSession);
+		return codeCommentList;
+	}
+
+	public int insertProjectWork(ProjectWork pw) {
+		int result = pDAO.insertProjectWork(pw, sqlSession);
+		return result;
+	}
+
+	public ArrayList<ProjectWork> selectProjectWorkList(int proNo) {
+		ArrayList<ProjectWork> workList = pDAO.selectProjectWorkList(proNo, sqlSession);
+		return workList;
+	}
+
+	public ArrayList<ProjectComment> selectWorkCommentList(int proNo) {
+		ArrayList<ProjectComment> workCommentList = pDAO.selectWorkCommentList(proNo, sqlSession);
+		return workCommentList;
+	}
+
+	public int updateProjectWork(ProjectWork pw) {
+		int result = pDAO.updateProjectWork(pw, sqlSession);
+		return result;
+	}
+
+	public int deleteProjectWork(int workNo) {
+		int result = pDAO.deleteProjectWork(workNo, sqlSession);
+		return result;
+	}
+
+	public int updateProjectWorkCheck(ProjectWork pw) {
+		int result = pDAO.updateProjectWorkCheck(pw, sqlSession);
+		return result;
+	}
+
+	public ArrayList<ProjectFileData> selectProjectFileList(int proNo) {
+		ArrayList<ProjectFileData> fileList = pDAO.selectProjectFileList(proNo, sqlSession);
+		return fileList;
+	}
+
+	public ProjectFileData selectOneProjectFile(int fileNo) {
+		ProjectFileData pfd = pDAO.selectOneProjectFile(fileNo, sqlSession);
+		return pfd;
+	}
+
+	public int deleteProjectFile(int fileNo) {
+		int result = pDAO.deleteProjectFile(fileNo, sqlSession);
+		return result;
+	}
+
+	public int updateProjectMemberCount(Project p) {
+		int result = pDAO.updateProjectMemberCount(p, sqlSession);
+		return result;
+	}
+
+	public int insertProjectRequest(ProjectRequest pr) {
+		int result = pDAO.insertProjectRequest(pr, sqlSession);
+		return result;
+	}
+
+	public ArrayList<ProjectRequest> selectProjectRequestList(int proNo) {
+		ArrayList<ProjectRequest> requestList = pDAO.selectProjectRequestList(proNo, sqlSession);
+		return requestList;
+	}
+
+	public int deleteProjectRequest(ProjectRequest pr) {
+		int result = pDAO.deleteProjectRequest(pr, sqlSession);
+		return result;
+	}
+
+	public ArrayList<Project> selectProjectRequestMember(int memNo) {
+		ArrayList<Project> requestList = pDAO.selectProjectRequestMember(memNo, sqlSession);
+		return requestList;
+	}
+
+	public int insertProjectMember(ProjectMember pm) {
+		int result = pDAO.insertProjectMember(pm, sqlSession);
+		return result;
 	}
 
 	

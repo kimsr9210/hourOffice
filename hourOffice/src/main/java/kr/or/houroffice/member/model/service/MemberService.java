@@ -58,4 +58,27 @@ public class MemberService {
 		return mDAO.updateAttendanceMember(sqlSession, atten);
 	}
 
+	//코드 게시물 작성자 리스트
+	public ArrayList<Member> selectProjectCodeMemberList(int proNo) {
+		ArrayList<Member> codeMemberList = mDAO.selectProjectCodeMemberList(proNo, sqlSession);
+		return codeMemberList;
+	}
+
+	//할일 게시물 작성자 리스트
+	public ArrayList<Member> selectProjectWorkMemberList(int proNo) {
+		ArrayList<Member> workMemberList = mDAO.selectProjectWorkMemberList(proNo, sqlSession);
+		return workMemberList;
+	}
+
+	//파일 게시물 작성자 리스트
+	public ArrayList<Member> selectProjectFileMemberList(int proNo) {
+		ArrayList<Member> fileMemberList = mDAO.selectProjectFileMemberList(proNo, sqlSession);
+		return fileMemberList;
+	}
+
+	public ArrayList<Member> selectAllMemberList() {
+		ArrayList<Member> allMemberList = mDAO.selectAllMemberList(sqlSession);
+		return allMemberList;
+	}
+
 }

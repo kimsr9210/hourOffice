@@ -14,6 +14,8 @@ import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
+import kr.or.houroffice.project.model.vo.ProjectRequest;
+import kr.or.houroffice.project.model.vo.ProjectWork;
 
 @Repository("projectDAO")
 public class ProjectDAO {
@@ -173,6 +175,96 @@ public class ProjectDAO {
 	public ArrayList<ProjectCode> selectProjectCodeList(int proNo, SqlSessionTemplate sqlSession) {
 		List codeList = sqlSession.selectList("project.selectProjectCodeList", proNo);
 		return (ArrayList<ProjectCode>)codeList;
+	}
+
+	public int updateProjectCode(ProjectCode pc, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectCode", pc);
+		return result;
+	}
+
+	public int deleteProjectCode(int codeNo, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.deleteProjectCode", codeNo);
+		return result;
+	}
+
+	public ArrayList<ProjectComment> selectCodeCommentList(int proNo, SqlSessionTemplate sqlSession) {
+		List codeCommentList = (List)sqlSession.selectList("project.selectCodeCommentList", proNo);
+		return (ArrayList<ProjectComment>)codeCommentList;
+	}
+
+	public int insertProjectWork(ProjectWork pw, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectWork", pw);
+		return result;
+	}
+
+	public ArrayList<ProjectWork> selectProjectWorkList(int proNo, SqlSessionTemplate sqlSession) {
+		List workList = (List)sqlSession.selectList("project.selectProjectWorkList", proNo);
+		return (ArrayList<ProjectWork>)workList;
+	}
+
+	public ArrayList<ProjectComment> selectWorkCommentList(int proNo, SqlSessionTemplate sqlSession) {
+		List workCommentList = (List)sqlSession.selectList("project.selectWorkCommentList", proNo);
+		return (ArrayList<ProjectComment>)workCommentList;
+	}
+
+	public int updateProjectWork(ProjectWork pw, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.updateProjectWork", pw);
+		return result;
+	}
+
+	public int deleteProjectWork(int workNo, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.deleteProjectWork", workNo);
+		return result;
+	}
+
+	public int updateProjectWorkCheck(ProjectWork pw, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectWorkCheck", pw);
+		return result;
+	}
+
+	public ArrayList<ProjectFileData> selectProjectFileList(int proNo, SqlSessionTemplate sqlSession) {
+		List fileList = (List)sqlSession.selectList("project.selectProjectFileList", proNo);
+		return (ArrayList<ProjectFileData>)fileList;
+	}
+
+	public ProjectFileData selectOneProjectFile(int fileNo, SqlSessionTemplate sqlSession) {
+		ProjectFileData pfd = sqlSession.selectOne("project.selectOneProjectFile", fileNo);
+		return pfd;
+	}
+
+	public int deleteProjectFile(int fileNo, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.deleteProjectFile", fileNo);
+		return result;
+	}
+
+	public int updateProjectMemberCount(Project p, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.update("project.updateProjectMemberCount", p);
+		return result;
+	}
+
+	public int insertProjectRequest(ProjectRequest pr, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectRequest", pr);
+		return result;
+	}
+
+	public ArrayList<ProjectRequest> selectProjectRequestList(int proNo, SqlSessionTemplate sqlSession) {
+		List requestList = (List)sqlSession.selectList("project.selectProjectRequestList", proNo);
+		return (ArrayList<ProjectRequest>)requestList;
+	}
+
+	public int deleteProjectRequest(ProjectRequest pr, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.deleteProjectRequest", pr);
+		return result;
+	}
+
+	public ArrayList<Project> selectProjectRequestMember(int memNo, SqlSessionTemplate sqlSession) {
+		List requestList = (List)sqlSession.selectList("project.selectProjectRequestMember", memNo);
+		return (ArrayList<Project>)requestList;
+	}
+
+	public int insertProjectMember(ProjectMember pm, SqlSessionTemplate sqlSession) {
+		int result = sqlSession.insert("project.insertProjectMember", pm);
+		return result;
 	}
 
 	

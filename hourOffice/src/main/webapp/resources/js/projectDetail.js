@@ -59,20 +59,7 @@ $(function() {
 		$('#wrap').css('pointer-events', 'all');
 	});
 
-	/* 멤버 +추가 누를 시 */
-	$('.memberAddBox').click(function() {
-		if ($('.memberAddBox').text() == '초대완료') {
-			$('.memberAddBox').html('+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추가');
-			$('.memberAddBox').css('background-color', 'white');
-			$('.memberAddBox').css('border-color', '#808080');
-			$('.memberAddBox').css('color', '#808080');
-		} else {
-			$('.memberAddBox').css('background-color', '#1D9F8E');
-			$('.memberAddBox').css('color', 'white');
-			$('.memberAddBox').css('border-color', '#1D9F8E');
-			$('.memberAddBox').text('초대완료');
-		}
-	});
+	
 
 	/* 멤버 전체보기 누를 경우 */
 	$('#memberAllList, #memberAllListNavi').click(function() {
@@ -196,7 +183,8 @@ $(function() {
 	            		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
 	            	}
 	            });
-				$(this).parent().parent().parent().remove();
+				//$(this).parent().parent().parent().remove();
+				location.reload();
 			}
 		}else{
 			var result = window.confirm("해당 댓글 수정을 취소하시겠습니까?");
@@ -264,6 +252,7 @@ $(function() {
         $textBox.removeAttr('disabled');
         $textBox.removeAttr('readonly');
         $textBox.css('border','1px solid black');
+        $textBox.focus();
         $modify.css('display','block');
         $('.boardModifyBox').css('display','none');
 	});
@@ -294,23 +283,61 @@ $(function() {
 		var boardNo = $(this).next().val();
 		var boardType = $(this).next().next().val();
 		if(result){
-			$.ajax({
-            	url : "/deleteProjectBoard.ho",
-            	data : {"boardNo" : boardNo, "boardType" : boardType},
-            	type : "post",
-            	success : function(result){
-            		if(result=="true"){
-            			alert("해당 게시물이 삭제되었습니다");
-            		}else{
-            			alert("게시물 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
-            		}
-            	},
-            	error : function(){
-            		console.log("게시물 삭제 ajax 통신 실패");
-            	}
-            });
-			
-			location.reload();
+			if(boardType=='post'){
+				$.ajax({
+	            	url : "/deleteProjectBoard.ho",
+	            	data : {"boardNo" : boardNo},
+	            	type : "post",
+	            	success : function(result){
+	            		if(result=="true"){
+	            			alert("해당 게시물이 삭제되었습니다");
+	            		}else{
+	            			alert("게시물 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+	            		}
+	            	},
+	            	error : function(){
+	            		console.log("게시물 삭제 ajax 통신 실패");
+	            	}
+	            });
+				
+				location.reload();
+			}else if(boardType=='code'){
+				$.ajax({
+	            	url : "/deleteProjectCode.ho",
+	            	data : {"boardNo" : boardNo},
+	            	type : "post",
+	            	success : function(result){
+	            		if(result=="true"){
+	            			alert("해당 게시물이 삭제되었습니다");
+	            		}else{
+	            			alert("게시물 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+	            		}
+	            	},
+	            	error : function(){
+	            		console.log("게시물 삭제 ajax 통신 실패");
+	            	}
+	            });
+				
+				location.reload();
+			}else if(boardType=='work'){
+				$.ajax({
+	            	url : "/deleteProjectWork.ho",
+	            	data : {"boardNo" : boardNo},
+	            	type : "post",
+	            	success : function(result){
+	            		if(result=="true"){
+	            			alert("해당 게시물이 삭제되었습니다");
+	            		}else{
+	            			alert("게시물 삭제에 실패하였습니다 \n지속적인 오류시 관리자에게 문의하세요");
+	            		}
+	            	},
+	            	error : function(){
+	            		console.log("게시물 삭제 ajax 통신 실패");
+	            	}
+	            });
+				
+				location.reload();
+			}
 		}
 	});
 	

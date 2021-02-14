@@ -49,8 +49,17 @@
 	background-color: #272822;
 	color: white;
 	border: 2px solid red;
+    overflow: scroll;
 }
 
+#dateInput{
+	width: 100px;
+	height: 100%;
+	padding: 6px;
+	border: 0;
+	float: left;
+	color: #808080;
+}
 </style>
 
 	<%
@@ -77,8 +86,6 @@
 
 			<div id="contents">
 				<div id="contentsDetail" class="clearfix">
-
-
 
 					<div id="projectBox">
 						<div id="projectLeft">
@@ -177,13 +184,13 @@
 												
 												
 										</div>
-											<img id="img1" class="imgUp"/>
+											<img id="img2" class="imgUp"/>
 											<div class="boardWriteBot">
 												<div class="fileUploadBox">
 													<input type="file" class="fileUpload" id="fileUpload2" name="file"/>
 													<input type="file" class="imgUpload" id="imgUpload2" name="imgFile"/>
-													<label for="fileUpload1" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload1" class="fileUploadImg"><i class="far fa-image"></i></label>
+													<label for="fileUpload2" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+													<label for="imgUpload2" class="fileUploadImg"><i class="far fa-image"></i></label>
 												</div>
 												<div class="fileNameBox">
 													<input text="text" class="fileName" readonly="readonly"/>
@@ -222,33 +229,23 @@
 									</form>
 
 									<!--할일 일 때-->
-									<form action="ccc" method="post">
+									<form action="/insertProjectWork.ho" method="post">
 										<input type="hidden" value="work" name="type" />
 										<div id="workBox" class="boardAllStyle">
-											<input type="text" class="boardWriteText" name=""
+											<input type="text" class="boardWriteText" name="Title"
 												placeholder="할일 제목을 입력해 주세요." />
-
+											<div class="workList">
+											<div id="dateInput">날짜 입력 : </div><input type="date" class="workDate" name="workDay" />
+											</div>
 											<!-- 얘가 여러개 -->
 											<div class="workList">
-												<i class="fas fa-minus-circle workDelete"></i> <input
-													class="workTitle" type="text" placeholder="할일 입력"
-													name="workTitle" /> <input type="date" class="workDate" />
-												<i class="fas fa-user-plus workMember"></i> <input
-													type="hidden" />
-											</div>
-
-											<div class="workList">
-												<i class="fas fa-minus-circle workDelete"></i> <input
-													class="workTitle" type="text" placeholder="할일 입력"
-													name="workTitle" /> <input type="date" class="workDate" />
-												<i class="fas fa-user-plus workMember"></i> <input
-													type="hidden" />
+												<span class="workDelete"><i class="fas fa-minus-circle"></i></span>
+												 <input class="workTitle" type="text" placeholder="할일 입력" name="workCon" />
 											</div>
 
 											<div id="workAdd">
-												<i class="fas fa-plus-circle workAddBtn"></i> <input
-													class="workTitle" type="text" placeholder="할일 추가"
-													readonly="readonly" />
+												<span class="workAddBtn"><i class="fas fa-plus-circle"></i></span>
+												<input class="workTitle" type="text" placeholder="할일 추가" readonly="readonly" />
 											</div>
 											<div class="boardWriteBot">
 												<div class="boardUpload">
@@ -256,13 +253,13 @@
 												</div>
 											</div>
 										</div>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
 									</form>
 
 									<div id="workHidden" class="workList">
-										<i class="fas fa-minus-circle workDelete"></i> <input
-											class="workTitle" type="text" placeholder="할일 입력"
-											name="workTitle" /> <input type="date" class="workDate" /> <i
-											class="fas fa-user-plus workMember"></i> <input type="hidden" />
+										<span class="workDelete"><i class="fas fa-minus-circle"></i></span>
+											<input class="workTitle" type="text" placeholder="할일 입력" name="workCon" />
 									</div>
 								</div>
 
@@ -699,18 +696,6 @@
     					location.reload();
     				}
     			}
-    		});
-    		
-    		function adjustHeight() {
-    			var textEle = $('#codeText');
-    			textEle[0].style.height = 'auto';
-    			var textEleHeight = textEle.prop('scrollHeight');
-    			textEle.css('height', textEleHeight);
-    		}
-    		;
-    		var textEle = $('#codeText');
-    		textEle.on('keyup', function() {
-    			adjustHeight();
     		});
 		});
 	</script>
