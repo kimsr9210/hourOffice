@@ -49,13 +49,21 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
 			classpath:applicationContext.xml
 			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-		
-	<servlet-mapping>
-		<servlet-name>appServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FileDownLoadServlet</display-name>
+    <servlet-name>FileDownLoadServlet</servlet-name>
+    <servlet-class>kr.or.houroffice.project.controller.FileDownLoadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileDownLoadServlet</servlet-name>
+    <url-pattern>/fileDownLoad.ho</url-pattern>
+  </servlet-mapping>
 </web-app>

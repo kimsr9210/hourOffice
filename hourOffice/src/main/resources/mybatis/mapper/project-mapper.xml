@@ -125,6 +125,7 @@
 		FROM PROJECT
 		WHERE DEL_YN='N' AND PRO_NO IN
         (SELECT PRO_NO FROM PRO_MEMBER WHERE MEM_NO=#{MEM_NO} AND DEL_YN='N')
+		ORDER by PRO_NO DESC
 	</select>
 	
 	<!-- 프로젝트 즐겨찾기 등록 -->
@@ -265,4 +266,205 @@
 		INSERT INTO PRO_FILE VALUES(PRO_FILE_SEQ.NEXTVAL, #{proNo}, #{memNo}, #{originalFileName}, #{changedFileName}, #{filePath}, #{fileSize}, #{uploadTime}, 'N')
 	</insert>
 	
+	<!-- 프로젝트 게시물에 사진 올릴 시 -->
+	<insert id="insertProjectCode" parameterType="ProjectCode">
+		INSERT INTO PRO_CODE VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, SYSTIMESTAMP, #{codeText}, #{boardText}, 'N', #{imgName})
+	</insert>
+	
+	<!-- 프로젝트 코드 목록 가져오기 -->
+	<select id="selectProjectCodeList" resultType="ProjectCode">
+		SELECT 
+		    CODE_NO as codeNo,
+		    PRO_NO as proNo,
+		    MEM_NO as memNo,
+		    CODE_DATE as codeDate,
+		    CODE_TEXT as codeText,
+		    BOARD_TEXT as boardText,
+		    DEL_YN as delYN,
+		    IMG_NAME as imgName
+		FROM PRO_CODE
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo}
+		ORDER by CODE_NO DESC
+	</select>
+	
+	<!-- 프로젝트 코드 내용 수정 -->
+	<update id="updateProjectCode" parameterType="ProjectCode">
+		UPDATE PRO_CODE SET 
+			BOARD_TEXT=#{boardText}
+		WHERE CODE_NO=#{codeNo}
+	</update>
+	
+	<!-- 프로젝트 코드 삭제 -->
+	<update id="deleteProjectCode">
+		UPDATE PRO_CODE SET 
+			DEL_YN='Y'
+		WHERE CODE_NO=#{codeNo}
+	</update>
+	
+	<!-- 프로젝트 번호에 따라 코드 댓글 출력 -->
+	<select id="selectCodeCommentList" resultType="ProjectComment">
+		SELECT 
+		    COMMENT_NO as commentNo,
+		    BOARD_NO as boardNo,
+		    MEM_NO as memNo,
+		    COMMENT_CON as commentCon,
+		    COMMENT_DATE as commentDate,
+		    DEL_YN as delYN
+		FROM PRO_COMMENT
+		WHERE DEL_YN='N' AND BOARD_NO IN 
+		(SELECT CODE_NO FROM PRO_CODE WHERE DEL_YN='N' AND PRO_NO=#{proNo})
+	</select>
+	
+	<!-- 할일 작성 -->
+	<insert id="insertProjectWork" parameterType="ProjectWork">
+		INSERT INTO PRO_WORK VALUES(PRO_BOARD_SEQ.NEXTVAL, #{proNo}, #{memNo}, #{title}, #{workCon}, #{workDay}, SYSDATE, 0, 'N')
+	</insert>
+	
+	<!-- 프로젝트 번호에 따른 할일 리스트 -->
+	<select id="selectProjectWorkList" resultType="ProjectWork">
+		SELECT 
+		    WORK_NO as workNo,
+		    PRO_NO as proNo,
+		    MEM_NO as memNo,
+		    TITLE as title,
+		    WORK_CON as workCon,
+		    WORK_DAY as workDay,
+		    WORK_DATE as workDate,
+		    WORK_COMP as workComp,
+		    DEL_YN as delYN
+		FROM PRO_WORK
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo}
+		ORDER by WORK_NO DESC
+	</select>
+	
+	<!-- 프로젝트 번호에 따라 일정 댓글 출력 -->
+	<select id="selectWorkCommentList" resultType="ProjectComment">
+		SELECT 
+		    COMMENT_NO as commentNo,
+		    BOARD_NO as boardNo,
+		    MEM_NO as memNo,
+		    COMMENT_CON as commentCon,
+		    COMMENT_DATE as commentDate,
+		    DEL_YN as delYN
+		FROM PRO_COMMENT
+		WHERE DEL_YN='N' AND BOARD_NO IN 
+		(SELECT WORK_NO FROM PRO_WORK WHERE DEL_YN='N' AND PRO_NO=#{proNo})
+	</select>
+	
+	<!-- 프로젝트 할일 제목 수정 -->
+	<update id="updateProjectWork" parameterType="ProjectWork">
+		UPDATE PRO_WORK SET 
+			TITLE=#{title}
+		WHERE WORK_NO=#{workNo}
+	</update>
+	
+	<!-- 프로젝트 할일 삭제 -->
+	<update id="deleteProjectWork" parameterType="ProjectWork">
+		UPDATE PRO_WORK SET 
+			DEL_YN='Y'
+		WHERE WORK_NO=#{workNo}
+	</update>
+	
+	<!-- 할일 선택 시 -->
+	<update id="updateProjectWorkCheck" parameterType="ProjectWork">
+		UPDATE PRO_WORK SET 
+			WORK_CON=#{workCon},
+			WORK_COMP=#{workComp}
+		WHERE WORK_NO=#{workNo}
+	</update>
+	
+	
+	<!-- 프로젝트 번호에 따른 파일 목록 가져오기 -->
+	<select id="selectProjectFileList" resultType="ProjectFileData">
+		SELECT 
+		    FILE_NO as fileNo,
+		    PRO_NO as proNo,
+		    MEM_NO as memNo,
+		    ORIGINALFILENAME as originalFileName,
+		    CHANGEDFILENAME as changedFileName,
+		    FILEPATH as filePath,
+		    FILESIZE as fileSize,
+		    UPLOADTIME as uploadTime
+		FROM PRO_FILE
+		WHERE DEL_YN='N' AND PRO_NO=#{proNo}
+        ORDER BY FILE_NO DESC
+	</select>
+	
+	
+	<!-- 프로젝트 파일 하나 선택 -->
+	<select id="selectOneProjectFile" resultType="ProjectFileData">
+		SELECT 
+		    FILE_NO as fileNo,
+		    PRO_NO as proNo,
+		    MEM_NO as memNo,
+		    ORIGINALFILENAME as originalFileName,
+		    CHANGEDFILENAME as changedFileName,
+		    FILEPATH as filePath,
+		    FILESIZE as fileSize,
+		    UPLOADTIME as uploadTime
+		FROM PRO_FILE
+		WHERE DEL_YN='N' AND FILE_NO=#{fileNo}
+	</select>
+	
+	<!-- 파일 삭제 -->
+	<update id="deleteProjectFile">
+		UPDATE PRO_FILE SET 
+			DEL_YN='Y'
+		WHERE FILE_NO=#{fileNo}
+	</update>
+	
+	
+	<!-- 프로젝트 멤버 수 업데이트 -->
+	<update id="updateProjectMemberCount" parameterType="Project">
+		UPDATE PROJECT SET 
+			MEM_COUNT=#{memCount}
+		WHERE PRO_NO=#{proNo}
+	</update>
+	
+	
+	<!-- 프로젝트 요청하기 -->
+	<insert id="insertProjectRequest" parameterType="ProjectRequest">
+		INSERT INTO REQUEST VALUES(#{requestMem}, #{responseMem}, #{proNo}, SYSTIMESTAMP, 'N')
+	</insert>
+	
+	<!-- 프로젝트 요청하기 멤버 리스트 가져오기 -->
+	<select id="selectProjectRequestList" resultType="ProjectRequest">
+		SELECT 
+		    REQUEST_MEM as requestMem,
+		    RESPONSE_MEM as responseMem,
+		    PRO_NO as proNo,
+		    REQUEST_DATE as requestDate,
+		    READ_YN
+		FROM REQUEST
+		WHERE PRO_NO=#{proNo}
+	</select>
+	
+	<!-- 프로젝트 요청 삭제 -->
+	<delete id="deleteProjectRequest" parameterType="ProjectRequest">
+		DELETE FROM REQUEST WHERE PRO_NO=#{proNo} AND RESPONSE_MEM=#{responseMem}
+	</delete>
+	
+	<!-- 프로젝트 요청하기 리스트 가져오기 -->
+	<select id="selectProjectRequestMember" resultType="Project">
+		SELECT
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			PRO_SUBJECT as proSubject,
+			PRO_EXP as proExp,
+			PRO_DATE as proDate,
+			PUBLIC_YN as publicYN,
+			COMP_YN as compYN,
+			COMP_DATE as compDate,
+			MEM_COUNT as memCount
+		FROM PROJECT
+		WHERE PRO_NO IN (
+            SELECT PRO_NO
+            FROM REQUEST 
+            WHERE RESPONSE_MEM=#{memNo})
+	</select>
+	
+	<!-- 프로젝트 참가하는 멤버 추가하기 -->
+	<insert id="insertProjectMember" parameterType="ProjectMember">
+		INSERT INTO PRO_MEMBER VALUES(#{proNo}, #{memNo}, 'N', 'N')
+	</insert>
 </mapper>

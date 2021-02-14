@@ -1,6 +1,6 @@
 $(function() {
 	/* textarea 키를 누를 때 마다 자동 높이 조절*/
-	function adjustHeight() {
+	function adjustHeight1() {
 		var textEle = $('#postTextarea');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -9,12 +9,12 @@ $(function() {
 	;
 	var textEle = $('#postTextarea');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight1();
 	});
 	/* TextArea 자동 높이 조절 CDN */
 	autosize($('textarea'));
 
-	function adjustHeight() {
+	function adjustHeight2() {
 		var textEle = $('#codeTextarea');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -23,11 +23,11 @@ $(function() {
 	;
 	var textEle = $('#codeTextarea');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight2();
 	});
 	
 	
-	function adjustHeight() {
+	function adjustHeight3() {
 		var textEle = $('#codeText');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -36,7 +36,7 @@ $(function() {
 	;
 	var textEle = $('#codeText');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight3();
 	});
 	
 	/* 프로젝트 옵션 선택 시 박스 나타내기 */

@@ -47,6 +47,27 @@ public class MemberDAO {
 		return result;
 	}
 
+	public ArrayList<Member> selectProjectCodeMemberList(int proNo, SqlSessionTemplate sqlSession) {
+		List codeMemberList = (List)sqlSession.selectList("member.selectProjectCodeMemberList", proNo);
+		return (ArrayList<Member>)codeMemberList;
+	}
+
+	public ArrayList<Member> selectProjectWorkMemberList(int proNo, SqlSessionTemplate sqlSession) {
+		List workMemberList = (List)sqlSession.selectList("member.selectProjectWorkMemberList", proNo);
+		return (ArrayList<Member>)workMemberList;
+	}
+
+	public ArrayList<Member> selectProjectFileMemberList(int proNo, SqlSessionTemplate sqlSession) {
+		List fileMemberList = (List)sqlSession.selectList("member.selectProjectFileMemberList", proNo);
+		return (ArrayList<Member>)fileMemberList;
+	}
+
+
+	public ArrayList<Member> selectAllMemberList(SqlSessionTemplate sqlSession) {
+		List allMemberList = (List)sqlSession.selectList("member.selectAllMemberList");
+		return (ArrayList<Member>)allMemberList;
+	}
+
 
 
 }

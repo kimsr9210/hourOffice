@@ -97,7 +97,7 @@
 /* 프로젝트 버튼누르면 나오는 박스(새 프로젝트 만들기) */
 #newProjectBox {
 	width: 500px;
-	height: 570px;
+	height: 500px;
 	background-color: #F2F2F2;
 	box-shadow: 3px 3px 5px #cccccc;
 	position: absolute;
