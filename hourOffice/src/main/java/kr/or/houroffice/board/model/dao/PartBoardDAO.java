@@ -61,6 +61,17 @@ public class PartBoardDAO {
 	public int insertPostComnt(SqlSessionTemplate sqlSession, PartComments comnt) {
 		return sqlSession.insert("board.addComnt",comnt);
 	}
+	// 댓글 수정
+	public int updateComnt(SqlSessionTemplate sqlSession, int comntNo, String comnt) {
+		PartComments pc = new PartComments();
+		pc.setPartComntNo(comntNo);
+		pc.setPartComnt(comnt);
+		return sqlSession.update("board.updateComnt",pc);
+	}
+	// 댓글 삭제
+	public int deleteComnt(SqlSessionTemplate sqlSession, int comntNo) {
+		return sqlSession.delete("board.deleteComnt",comntNo);
+	}
 	
 	
 	// 페이징 처리 네비
@@ -256,6 +267,8 @@ public class PartBoardDAO {
 		}
 		return 0;
 	}
+	
+	
 	
 	
 }

@@ -3,6 +3,8 @@ package kr.or.houroffice.board.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.oreilly.servlet.MultipartRequest;
@@ -201,8 +204,34 @@ public class PartBoardController {
 		model.addAttribute("msg","잘못된 접근입니다.");
 		return "part_board/allPartBoardPage";
 	}
+	// 댓글 수정 (ajax)
+	@RequestMapping(value="/modifyPostComntPartBoard.ho",produces = "application/text; charset=utf8")
+	public @ResponseBody String updateComnt(@RequestParam("comntNo") int comntNo, @RequestParam("writerNo") int writerNo, @RequestParam("comnt") String comnt, 
+						HttpServletResponse response, @SessionAttribute("member") Member m) throws UnsupportedEncodingException, IOException{ 
+		comnt = URLDecoder.decode(comnt, "UTF-8"); // 한글 디코딩
+		if(writerNo==m.getMemNo()){
+			int result = bService.updateComnt(comntNo,comnt);
+			if(result>0){
+				return "true";
+			}
+			return "댓글 수정에 실패했습니다. \n지속적인 실패시 관리자에 문의하세요.";
+		}
+		return "본인이 아닙니다만";
+	}
 	
-	
+	// 댓글 삭제 (ajax)
+	@RequestMapping(value="/deletePostComntPartBoard.ho",produces = "application/text; charset=utf8")
+	public @ResponseBody String deleteComment(@RequestParam("comntNo") int comntNo, @RequestParam("writerNo") int writerNo, HttpServletResponse response,
+							@SessionAttribute("member") Member m) throws IOException{
+		if(writerNo==m.getMemNo()){
+			int result = bService.deleteComnt(comntNo);
+			if(result>0){
+				return "true";
+			}
+			return "댓글 삭제에 실패했습니다. \n지속적인 실패시 관리자에 문의하세요.";
+		}
+		return "본인이 아닙니다만";
+	}
 	
 	// 부서별 게시판 - 새글쓰기 page
 	@RequestMapping(value="/writePostPartBoard.ho")

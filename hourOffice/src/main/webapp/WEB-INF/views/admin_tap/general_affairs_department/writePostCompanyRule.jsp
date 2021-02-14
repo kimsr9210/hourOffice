@@ -64,7 +64,7 @@
 						
 						<div id="txt-content">
                             <form id="frm" action="/savePostCompanyRule.ho" method="post">
-                            <div><span>제목</span> <input type="text" name="title"/></div>
+                            <div><span>제목</span> <input type="text" name="title" maxlength="35"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="content" id="txtArea" required></textarea>

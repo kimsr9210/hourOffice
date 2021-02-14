@@ -65,7 +65,7 @@
 						
 						<div id="txt-content">
                             <form id="frm" action="/admin_tap_updatePostCompanyRule.ho" method="post">
-                            <div><span>제목</span> <input type="text" name="title" value="${bp.title }"/></div>
+                            <div><span>제목</span> <input type="text" name="title" value="${bp.title }" maxlength="35"/></div>
                             
                             <!-- 표시할 textarea 영역 -->
                             <textarea name="content" id="txtArea" required>${bp.content }</textarea>

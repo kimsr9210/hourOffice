@@ -31,6 +31,7 @@
 			width:100%; height: 100%;
 			border-radius:100%;
 		}
+		
 
 	</Style>
 </head>
@@ -97,7 +98,7 @@
                                 <form id="addComnt-frm" action="/writeComntPartBoard.ho" method="post">
                                     <tr>
                                         <td><div><img src="/resources/images/profile/<%=member.getMemProfile()%>"></div></td>
-                                        <td colspan="2"><input type="text" name="partComnt" size="200"/><input type="text" name="partNo" value="${pb.partNo }" style="display:none;"/></td>
+                                        <td colspan="2"><textarea name="partComnt" maxlength="230" required></textarea><input type="text" name="partNo" value="${pb.partNo }" style="display:none;"/></td>
                                         <td><button type="button" id="addComnt-Btn">댓글쓰기</button></td>
                                     </tr>
                                 </form>
@@ -113,14 +114,21 @@
                                     <td><div><img src="/resources/images/profile/<%=comn.getMemProfile()%>"></div></td>
                                     <td><%=comn.getPartComntWriter() %> <%=comn.getMemPosition() %><br><%=format.format(comn.getPartComntDate()) %></td>
                                     <td><%=comn.getPartComnt() %></td>
-                                    <td>
-                                    	<div class="comnBtn-div<%=comn.getPartComntNo()%>"><button><i class="fas fa-feather i-icon"></i></button> <button class="comnt-del-btn"><i class="far fa-trash-alt i-icon" style="cursor:default;"></i></button></div>
+                                    <td id="comnt<%=comn.getMemNo()%>" class="comnt-btn">
+                                    	<div class="comnBtn-div<%=comn.getPartComntNo()%>"><button type="button" class="comnt-modify-btn"><i class="fas fa-feather i-icon"></i></button> <button type="button" class="comnt-del-btn"><i class="far fa-trash-alt i-icon"></i></button></div>
                         <% if(comn.getMemNo()!=member.getMemNo()){ %>
                         <script> // 댓글쓴이와 내 사번이 다르면 버튼 안보여주기
                         	$('.comnBtn-div<%=comn.getPartComntNo()%>').css('visibility','hidden');
                         </script>
                         <% } %>
                                     </td>
+                                </tr>
+                                <tr class="modify-tr">
+                                	<td></td>
+                                	<td colspan="2"><textarea name="modifyComnt" maxlength="230" required><%=comn.getPartComnt() %></textarea><input type="text" name="partNo" value="${pb.partNo }" style="display:none;"/></td>
+                                	<td id="comntMo<%=comn.getMemNo()%>">
+                                		<div class="comnBtn-div<%=comn.getPartComntNo()%>"><button type="button" class="comnt-correction-btn" style="background-color:#1D9F8E"><i class="fas fa-check i-icon"></i></button> <button type="button" class="cancel-btn delBtn" style="border:0;"><i class="fas fa-times"></i></button></div>
+                                	</td>
                                 </tr>
                        	<% } %>
                        	<% } %>
@@ -131,6 +139,20 @@
 						
 	<script>
         $(function(){
+        	
+        	// 수정 취소 버튼
+        	$('.cancel-btn').hover(function(){
+        		$(this).css('background-color','#E23C3C');
+        	},function(){
+        		$(this).css('background-color','#FF6363');
+        	});
+        	// 수정 전송 버튼
+        	$('.comnt-correction-btn').css('width','28px').css('padding','0').css('margin-left','5px').hover(function(){
+        		$(this).css('background-color','#12776A');
+        	},function(){
+        		$(this).css('background-color','#1D9F8E');
+        	});
+        	
             // 첨부파일
             $('#filePlace').hover(function(){
             	$('#fileName-sapn').css('color','blue').css('text-decoration','underline');
@@ -222,8 +244,62 @@
             	
             });
             
+            
+            var comntData;
+            // 댓글 수정
+            $('.comnt-modify-btn').click(function(){
+            	comntData = $(this).parent().parent().prev().text();
+            	$(this).parent().parent().parent().next().css('display','table-row');
+            });
+            // 댓글 수정 취소
+            $('.cancel-btn').click(function(){
+            	$(this).parent().parent().parent().find('textarea').val(comntData);
+            	$(this).parent().parent().parent().css('display','none');
+            });
+            // 댓글 수정
+            $('.comnt-correction-btn').click(function(){
+            	var comntNo = $(this).parent().attr('class').split('comnBtn-div')[1]; // 댓글번호
+            	var memNo = $(this).parent().parent().attr('id').split('comntMo')[1]; // 작성자사번
+            	var comnt = $(this).parent().parent().parent().find('textarea').val(); // 댓글 내용
+            	var $tr = $(this).parent().parent().parent();
+            	$.ajax({
+            		url:'/modifyPostComntPartBoard.ho',
+            		type:'post',
+            		data:{'comntNo':comntNo,'writerNo':memNo,'comnt':comnt},
+            		success:function(result){
+            			if(result=='true'){
+            				$tr.css('display','none');
+            				$tr.prev().children(':nth-child(3)').html(comnt);
+            			}else{
+            				alert(result);
+            			}
+            		},
+            		error:function(result){
+            			alert(result);
+            			alert('댓글 수정에 실패했습니다. \n지속적인 오류시 관리자에 문의하세요.');
+            		}
+            	});
+            });
+            // 댓글 삭제
             $('.comnt-del-btn').click(function(){
             	var comntNo = $(this).parent().attr('class').split('comnBtn-div')[1]; // 댓글번호
+            	var memNo = $(this).parent().parent().attr('id').split('comnt')[1]; // 작성자사번
+            	
+            	$.ajax({
+            		url:'/deletePostComntPartBoard.ho',
+            		type:'post',
+            		data:{"comntNo":comntNo,"writerNo":memNo},
+            		success:function(result){
+            			if(result=='true'){
+            				history.go(0);
+            			}else{
+            				alert(result);
+            			}
+            		},
+            		error:function(){
+            			alert('댓글 삭제에 실패했습니다. \n지속적인 오류시 관리자에 문의하세요.');
+            		}
+            	});
             });
             
         })

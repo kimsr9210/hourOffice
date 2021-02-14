@@ -53,7 +53,7 @@
 						
 						<div id="txt-content">
                             <form id="frm" action="/updatePostPartBoard.ho" method="post" enctype="multipart/form-data">
-                            <div><span>제목</span> <input type="text"  name="partTitle" value="${pb.partTitle }"/></div>
+                            <div><span>제목</span> <input type="text"  name="partTitle" value="${pb.partTitle }" maxlength="35"/></div>
                             <div><button type="button" id="attached-btn">첨부파일</button> <div id="attachedFile"><span id="file-icon"><i class="far fa-file-alt i-icon"></i></span><span>${pb.origName }</span></div><input type="file" name="attachedFile" style="display:none"/></div>
                             
                             <!-- 표시할 textarea 영역 -->

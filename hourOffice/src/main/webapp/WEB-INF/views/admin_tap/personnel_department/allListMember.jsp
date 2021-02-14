@@ -20,12 +20,9 @@
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/adminTapCommon.css" />
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/css/admin_tap/allListMember.css" />
-	
-	<style>
-		
-		
-	</style>
-	
+	<!-- 페이지 네비 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/css/board/pageNavi.css" />
+
 </head>
 
 <script>
@@ -230,7 +227,7 @@ $(function(){
                                 </tr>
                                 <% } %>
                             </table>
-                            <div id="pageNavi">${pageNavi }</div>
+                            <ul id="page-navi">${pageNavi }</ul>
                             
                         </div>
 						

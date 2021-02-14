@@ -67,23 +67,23 @@ public class AdminMemberDAO {
 		// 이제 pageNavi의 모양을 구성해야 함
 				
 		StringBuilder sb = new StringBuilder();
-						
+		
 		// 만약 첫번째 pageNavi가 아니라면 '<' 모양을 추가해라 (첫번째 pageNavi이면 추가하지 말아라)
 		if(startNavi != 1) { //href='/myReviewNote.rw?libraryOwner="+memberId+"&currentPage="+(startNavi-1)+"'
-			sb.append("<a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+(startNavi-1)+"'><</a>");
+			sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+(startNavi-1)+"'>◀</a></li>");
 		}
 						
 		for(int i=startNavi; i<=endNavi; i++) {
 			if(i==currentPage) {
-				sb.append("<a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+i+"'><B>"+i+"</B></a>");
+				sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+i+"'><B>"+i+"</B></a></li>");
 			}else {
-				sb.append("<a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+i+"'>"+i+"</a>");
+				sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+i+"'>"+i+"</a></li>");
 			}
 		}
 				
 		//만약 마지막 pageNavi가 아니라면 '>' 모양을 추가해라 (마지막 pageNavi이면 추가하지 말아라)
 		if(endNavi != pageTotalCount) {
-			sb.append("<a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+(startNavi+1)+"'>></a>");
+			sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_allListMember.ho?currentPage="+(startNavi+1)+"'>▶</a></li>");
 		}
 						
 		return sb+"";
@@ -146,23 +146,23 @@ public class AdminMemberDAO {
 	// 이제 pageNavi의 모양을 구성해야 함
 				
 		StringBuilder sb = new StringBuilder();
-					
+		
 			// 만약 첫번째 pageNavi가 아니라면 '<' 모양을 추가해라 (첫번째 pageNavi이면 추가하지 말아라)
 		if(startNavi != 1) { //href='/myReviewNote.rw?libraryOwner="+memberId+"&currentPage="+(startNavi-1)+"'
-			sb.append("<a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+(startNavi-1)+"'><</a>");
+			sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+(startNavi-1)+"'>◀</a></li>");
 		}
 						
 		for(int i=startNavi; i<=endNavi; i++) {
 			if(i==currentPage) {
-				sb.append("<a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+i+"'><B>"+i+"</B></a>");
+				sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+i+"'><B>"+i+"</B></a></li>");
 			}else {
-				sb.append("<a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+i+"'>"+i+"</a>");
+				sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+i+"'>"+i+"</a></li>");
 			}
 		}
 				
 		//만약 마지막 pageNavi가 아니라면 '>' 모양을 추가해라 (마지막 pageNavi이면 추가하지 말아라)
 		if(endNavi != pageTotalCount) {
-			sb.append("<a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+(startNavi+1)+"'>></a>");
+			sb.append("<li class='page-list'><a class='page-link' href='/admin_tap_search_allListMember.ho?currentPage="+(startNavi+1)+"'>▶</a></li>");
 		}
 						
 		return sb+"";

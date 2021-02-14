@@ -119,6 +119,14 @@
   		#{partComnt})
   </insert>
   
+  <update id="updateComnt" parameterType="PartComments">
+  	UPDATE PART_COMMENTS SET PART_COMNT=#{partComnt} WHERE PART_COMNT_NO=#{partComntNo}
+  </update>
+  
+  <delete id="deleteComnt" parameterType="int">
+  	DELETE FROM PART_COMMENTS WHERE PART_COMNT_NO=#{comntNo}
+  </delete>
+  
   <!-- BY 다빈  부서별 게시판 - 게시판 insert - 게시판번호 채번 -->
   <select id="selectNumber" parameterType="hashmap" resultType="int">
   	SELECT ${boardType}SEQ.NEXTVAL FROM DUAL

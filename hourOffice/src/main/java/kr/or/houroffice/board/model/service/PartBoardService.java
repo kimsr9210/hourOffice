@@ -112,5 +112,12 @@ public class PartBoardService implements BoardService{
 	public int selectPrevPost(HashMap<String, Object> map) {
 		return bDAO.selectPrevPost(sqlSession,map);
 	}
+	// 댓글 삭제
+	public int deleteComnt(int comntNo) {
+		return bDAO.deleteComnt(sqlSession,comntNo);
+	}
+	public int updateComnt(int comntNo, String comnt) {
+		return bDAO.updateComnt(sqlSession,comntNo,comnt);
+	}
 
 }
