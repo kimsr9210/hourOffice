@@ -1429,9 +1429,7 @@
     		            type : "post",
     		            success : function(result){
     		            	if(result=="true"){
-			            		alert("프로젝트 초대 취소");
 			            	}else{
-			            		alert("프로젝트 초대취소를 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
 			            	}
     		            },
     		            error : function(){
@@ -1449,9 +1447,7 @@
     		            type : "post",
     		            success : function(result){
     		            	if(result=="true"){
-			            		alert("프로젝트 초대완료");
 			            	}else{
-			            		alert("프로젝트 초대를 실패하였습니다\n지속적인 오류시 관리자에게 문의하세요");
 			            	}
     		            },
     		            error : function(){

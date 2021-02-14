@@ -337,6 +337,7 @@ $(function() {
 				
 				location.reload();
 			}
+		}
 	});
 	
 	

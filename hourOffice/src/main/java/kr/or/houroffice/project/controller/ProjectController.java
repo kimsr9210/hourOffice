@@ -37,6 +37,7 @@ import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.project.model.service.ProjectServiceImpl;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectCode;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
@@ -172,6 +173,7 @@ public class ProjectController {
 		mav.addObject("allMemberList", allMemberList);
 		mav.addObject("favoriteList", favoriteList);
 		mav.addObject("requestList", requestList);
+		mav.addObject("codeList", codeList);
 		mav.addObject("boardType", boardType);
 		mav.setViewName("project/projectDetail");
 		return mav;
