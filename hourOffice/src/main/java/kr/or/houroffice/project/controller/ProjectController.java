@@ -1,7 +1,10 @@
 package kr.or.houroffice.project.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,10 +13,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
+import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -30,11 +37,14 @@ import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.project.model.service.ProjectServiceImpl;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
+import kr.or.houroffice.project.model.vo.ProjectCode;
 import kr.or.houroffice.project.model.vo.ProjectComment;
 import kr.or.houroffice.project.model.vo.ProjectFavorite;
 import kr.or.houroffice.project.model.vo.ProjectFileData;
 import kr.or.houroffice.project.model.vo.ProjectMember;
 import kr.or.houroffice.project.model.vo.ProjectPlan;
+import kr.or.houroffice.project.model.vo.ProjectRequest;
+import kr.or.houroffice.project.model.vo.ProjectWork;
 
 @Controller
 public class ProjectController {
@@ -61,6 +71,12 @@ public class ProjectController {
 		//공개 프로젝트 정보 출력
 		ArrayList<Project> publicAllList = pService.selectPublicProject();
 		
+		//요청받은 프로젝트 목록
+		ArrayList<Project> requestList = pService.selectProjectRequestMember(member.getMemNo());
+		
+		//모든 인원
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+		
 		//공개프로젝트 - 참가 프로젝트
 		ArrayList<Project> publicList = new ArrayList<Project>();
 		for(int i = 0; i<publicAllList.size();i++){
@@ -80,6 +96,8 @@ public class ProjectController {
 		mav.addObject("myList", myProjectList);
 		mav.addObject("publicList", publicAllList);
 		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("requestList", requestList);
+		mav.addObject("allMemberList", allMemberList);
 		mav.setViewName("project/projectAllList");
 		return mav;
 	}
@@ -94,10 +112,13 @@ public class ProjectController {
 		ArrayList<ProjectBoard> boardList = pService.selectProjectBoardList(proNo);
 		
 		//프로젝트 게시물의 댓글 가져오기
-		ArrayList<ProjectComment> commentList = pService.selectBoardCommentList(proNo);
+		ArrayList<ProjectComment> postCommentList = pService.selectBoardCommentList(proNo);
 		
 		//프로젝트 게시물 작성자 정보 가져오기
 		ArrayList<Member> boardMemberList = mService.selectProjectBoardMemberList(proNo);
+		
+		//프로젝트 코드 작성자 정보 가져오기
+		ArrayList<Member> codeMemberList = mService.selectProjectCodeMemberList(proNo);
 		
 		//프로젝트  멤버 리스트 가져오기
 		ArrayList<Member> projectMemberList = mService.selectProjectMemberList(proNo);
@@ -108,14 +129,51 @@ public class ProjectController {
 		//즐겨찾기 목록 가져오기
 		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
 		
+		//프로젝트 코드 게시물  리스트 가져오기
+		ArrayList<ProjectCode> codeList = pService.selectProjectCodeList(proNo);
+		
+		//프로젝트 코드 게시물 댓글 가져오기
+		ArrayList<ProjectComment> codeCommentList = pService.selectCodeCommentList(proNo);
+		
+		//프로젝트 일정 게시물 가져오기
+		ArrayList<ProjectWork> projectWorkList = pService.selectProjectWorkList(proNo);
+		
+		//프로젝트 일정 댓글 가져오기
+		ArrayList<ProjectComment> workCommentList = pService.selectWorkCommentList(proNo);
+		
+		//프로젝트 일정 작성자 정보 가져오기
+		ArrayList<Member> workMemberList = mService.selectProjectWorkMemberList(proNo);
+		
+		//프로젝트 파일 목록 가져오기
+		ArrayList<ProjectFileData> fileList = pService.selectProjectFileList(proNo);
+		
+		//프로젝트 작성자 정보 가져오기
+		ArrayList<Member> fileMemberList = mService.selectProjectFileMemberList(proNo);
+		
+		//멤버 전체 목록 가져오기
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+		
+		//요청 멤버 번호 리스트 가져오기
+		ArrayList<ProjectRequest> requestList = pService.selectProjectRequestList(proNo);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
 		mav.addObject("boardList", boardList);
+		mav.addObject("fileList", fileList);
 		mav.addObject("boardMemberList", boardMemberList);
+		mav.addObject("codeMemberList", codeMemberList);
 		mav.addObject("projectMemberList", projectMemberList);
 		mav.addObject("projectMgrList", projectMgrList);
-		mav.addObject("commentList", commentList);
+		mav.addObject("postCommentList", postCommentList);
+		mav.addObject("codeCommentList", codeCommentList);
+		mav.addObject("projectWorkList", projectWorkList);
+		mav.addObject("workCommentList", workCommentList);
+		mav.addObject("workMemberList", workMemberList);
+		mav.addObject("fileMemberList", fileMemberList);
+		mav.addObject("allMemberList", allMemberList);
 		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("requestList", requestList);
+		mav.addObject("codeList", codeList);
 		mav.addObject("boardType", boardType);
 		mav.setViewName("project/projectDetail");
 		return mav;
@@ -340,7 +398,7 @@ public class ProjectController {
 	
 	//게시물 댓글 작성
 	@RequestMapping(value="/insertBoardComment.ho")
-	public ModelAndView insertBoardComment(ProjectComment pc, @RequestParam int proNo){
+	public ModelAndView insertBoardComment(ProjectComment pc, @RequestParam int proNo, @RequestParam String boardType){
 		
 		int result = pService.insertBoardComment(pc);
 		ModelAndView mav = new ModelAndView();
@@ -350,7 +408,7 @@ public class ProjectController {
 			System.out.println("댓글 작성 실패");
 		}
 		mav.addObject("proNo", proNo);
-		mav.addObject("boardType", "post");
+		mav.addObject("boardType", boardType);
 		mav.setViewName("project/commentResult");
 		
 		return mav;
@@ -358,7 +416,7 @@ public class ProjectController {
 	
 	//게시물 댓글 수정
 	@RequestMapping(value="/updateProjectComment.ho")
-	public ModelAndView updateProjectComment(ProjectComment pc, @RequestParam int proNo){
+	public ModelAndView updateProjectComment(ProjectComment pc, @RequestParam int proNo, @RequestParam String boardType){
 		
 		int result = pService.updateProjectComment(pc);
 		ModelAndView mav = new ModelAndView();
@@ -368,6 +426,7 @@ public class ProjectController {
 			System.out.println("댓글 수정 실패");
 		}
 		mav.addObject("proNo", proNo);
+		mav.addObject("boardType", boardType);
 		mav.setViewName("project/commentResult");
 		
 		return mav;
@@ -462,10 +521,18 @@ public class ProjectController {
 	//프로젝트 나가기
 	@RequestMapping(value="/updateProjectMemberExit.ho")
 	public void updateProjectMemberExit(ProjectMember pm, HttpServletResponse response)  throws IOException{
-		System.out.println(pm.getMemNo());
-		System.out.println(pm.getProNo());
+		
+		//프로젝트 참가 수 감소
+		Project pro = pService.selectOneProject(pm.getProNo());
+		pro.setMemCount((pro.getMemCount()-1));
+		
+		
 		int result = pService.updateProjectMemberExit(pm);
+		Project p = pService.selectOneProject(pm.getProNo());
 		if(result>0){
+			int memCount = p.getMemCount();
+			p.setMemCount(memCount);
+			pService.updateProjectMemberCount(p);
 			response.getWriter().print(true);
 		}else{
 			response.getWriter().print(false);
@@ -553,27 +620,29 @@ public class ProjectController {
 		
 		
 		String[] pTag = codeText.split("\n");
-		
-		
-		
-		for(int i=0; i<pTag.length; i++){
-			
-			pTag[i] = pTag[i].replace(" public ", "<span class=\"codeYellow\"> public </span>");
-			pTag[i] = pTag[i].replace(" void ", "<span class=\"codeYellow\"> void </span>");
+
+		for (int i = 0; i < pTag.length; i++) {
+
+			pTag[i] = pTag[i].replace("class", "<span class=\"codeYellow\">class</span>");
+			pTag[i] = pTag[i].replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+			pTag[i] = pTag[i].replace("package ", "<span class=\"codeYellow\">package </span>");
+			pTag[i] = pTag[i].replace("public ", "<span class=\"codeYellow\">public </span>");
+			pTag[i] = pTag[i].replace("void ", "<span class=\"codeYellow\">void </span>");
 			pTag[i] = pTag[i].replace("this", "<span class=\"codeYellow\">this</span>");
 			pTag[i] = pTag[i].replace("super", "<span class=\"codeYellow\">super</span>");
-			pTag[i] = pTag[i].replace("implements", "<span class=\"codeYellow\">implements</span>");
+			pTag[i] = pTag[i].replace("implements ", "<span class=\"codeYellow\">implements </span>");
 			pTag[i] = pTag[i].replace("while", "<span class=\"codeYellow\">while</span>");
-			pTag[i] = pTag[i].replace("private", "<span class=\"codeYellow\">private</span>");
+			pTag[i] = pTag[i].replace("private ", "<span class=\"codeYellow\">private </span>");
 			pTag[i] = pTag[i].replace("switch", "<span class=\"codeYellow\">switch</span>");
 			pTag[i] = pTag[i].replace("case ", "<span class=\"codeYellow\">case</span>");
 			pTag[i] = pTag[i].replace("new ", "<span class=\"codeYellow\">new</span>");
 			pTag[i] = pTag[i].replace("break", "<span class=\"codeYellow\">break</span>");
 			pTag[i] = pTag[i].replace("default", "<span class=\"codeYellow\">default</span>");
-			pTag[i] = pTag[i].replace("for", "<span class=\"codeYellow\">for</span>");
-			pTag[i] = pTag[i].replace("return", "<span class=\"codeYellow\">return</span>");
-			pTag[i] = pTag[i].replace("import", "<span class=\"codeYellow\">import</span>");
-			pTag[i] = pTag[i].replace("else", "<span class=\"codeYellow\">else</span>");
+			pTag[i] = pTag[i].replace(" for", "<span class=\"codeYellow\"> for</span>");
+			pTag[i] = pTag[i].replace(" return", "<span class=\"codeYellow\"> return</span>");
+			pTag[i] = pTag[i].replace("import ", "<span class=\"codeYellow\">import </span>");
+			pTag[i] = pTag[i].replace(" else", "<span class=\"codeYellow\"> else</span>");
 			pTag[i] = pTag[i].replace("if", "<span class=\"codeYellow\">if</span>");
 			pTag[i] = pTag[i].replace("class", "<span class=\"codeYellow\">class</span>");
 
@@ -588,20 +657,332 @@ public class ProjectController {
 			
 			Pattern pattern = Pattern.compile("[.][a-zA-Z0-9]+[(]");
 			Matcher matcher = pattern.matcher(pTag[i]);
-			while(matcher.find()){
-				String method = matcher.group().substring(1, matcher.group().length()-1);
-				pTag[i] = pTag[i].replace(method, "<span class=\"codeBlue\">"+ method +"</span>");
+			while (matcher.find()) {
+				String method = matcher.group().substring(0, matcher.group().length() - 1);
+				pTag[i] = pTag[i].replace(method, "<span class=\"codeBlue\">"+method+"</span>");
 			}
+
+			pTag[i] = "<pre class=\"codeLineNumber"+(i+1)+"\"><div class=\"codeLine\">"+(i+1)+"</div>" + pTag[i] + "</pre>";
 			
-			
-			if(i==0){
-				codeText=pTag[i];
-			}else{
-				codeText+=pTag[i];
+
+			if (i == 0) {
+				codeText = pTag[i];
+			} else {
+				codeText += pTag[i];
 			}
 		}
 		//System.out.println(codeText);
 		
 		
+	}
+	
+	// 코드 게시물 수정
+	@RequestMapping(value="/updateProjectCode.ho")
+	public ModelAndView updateProjectCode(ProjectCode pc){
+			
+		int result = pService.updateProjectCode(pc);
+		ModelAndView mav = new ModelAndView();
+		
+		if(result>0){
+			mav.addObject("msg", "게시물 수정 완료");
+		}else{
+			mav.addObject("msg", "게시물 수정 실패");
+		}
+		mav.addObject("proNo", pc.getProNo());
+		mav.addObject("boardType", "code");
+		mav.setViewName("project/projectDetailResult");
+		return mav;
+	}
+	
+	// 코드 게시물 삭제
+	@RequestMapping(value = "/deleteProjectCode.ho")
+	public void deleteProjectCode(@RequestParam int boardNo, HttpServletResponse response) throws IOException {
+		
+		int result = pService.deleteProjectCode(boardNo);
+		if (result > 0) {
+			response.getWriter().print(true);
+		} else {
+			response.getWriter().print(false);
+		}
+	}
+	
+	// 게시물 댓글 작성
+	@RequestMapping(value = "/insertProjectWork.ho")
+	public ModelAndView insertProjectWork(ProjectWork pw, HttpSession session) {
+		
+		int result = pService.insertProjectWork(pw);
+		ModelAndView mav = new ModelAndView();
+		if (result > 0) {
+			mav.addObject("msg", "게시물 작성 성공");
+		} else {
+			mav.addObject("msg", "게시물 작성 실패");
+		}
+		mav.addObject("proNo", pw.getProNo());
+		mav.addObject("boardType", "work");
+		mav.setViewName("project/projectDetailResult");
+
+		return mav;
+		
+	}
+	
+	// 일정 게시물 수정
+	@RequestMapping(value = "/updateProjectWork.ho")
+	public ModelAndView updateProjectWork(ProjectWork pw) {
+
+		int result = pService.updateProjectWork(pw);
+		ModelAndView mav = new ModelAndView();
+
+		if (result > 0) {
+			mav.addObject("msg", "게시물 수정 완료");
+		} else {
+			mav.addObject("msg", "게시물 수정 실패");
+		}
+		mav.addObject("proNo", pw.getProNo());
+		mav.addObject("boardType", "work");
+		mav.setViewName("project/projectDetailResult");
+		return mav;
+	}
+	
+	// 할일 게시물 삭제
+	@RequestMapping(value = "/deleteProjectWork.ho")
+	public void deleteProjectWork(@RequestParam int boardNo, HttpServletResponse response) throws IOException {
+
+		int result = pService.deleteProjectWork(boardNo);
+		if (result > 0) {
+			response.getWriter().print(true);
+		} else {
+			response.getWriter().print(false);
+		}
+	}
+	
+	
+	// 할일 체크
+	@RequestMapping(value = "/updateProjectWorkCheck.ho")
+	public void updateProjectWorkCheck(@RequestParam int workNo,
+										@RequestParam String text,
+										@RequestParam String workCon,
+										@RequestParam int max,
+										@RequestParam int workComp,
+										HttpSession session,
+										HttpServletResponse response) throws IOException {
+		Member m = (Member)session.getAttribute("member");
+		
+		String commentCon = "'"+text+"' 항목 완료!";
+		ProjectComment pc = new ProjectComment();
+		pc.setBoardNo(workNo);
+		pc.setMemNo(m.getMemNo());
+		pc.setCommentCon(commentCon);
+		pService.insertBoardComment(pc);
+		
+		workCon = workCon.replace(text, text+"Checked");
+		workComp = workComp + 1;
+		
+		ProjectWork pw = new ProjectWork();
+		pw.setWorkNo(workNo);
+		pw.setWorkCon(workCon);
+		pw.setWorkComp(workComp);
+		int result = pService.updateProjectWorkCheck(pw);
+		if (result > 0) {
+			response.getWriter().print(true);
+		} else {
+			response.getWriter().print(false);
+		}
+	}
+	
+	// 할일 체크 해제
+	@RequestMapping(value = "/updateProjectWorkUnCheck.ho")
+	public void updateProjectWorkUnCheck(@RequestParam int workNo,
+										@RequestParam String text,
+										@RequestParam String workCon,
+										@RequestParam int max,
+										@RequestParam int workComp,
+										HttpSession session,
+										HttpServletResponse response) throws IOException {
+		Member m = (Member)session.getAttribute("member");
+		
+		String commentCon = "'"+text+"' 항목 완료 취소.";
+		ProjectComment pc = new ProjectComment();
+		pc.setBoardNo(workNo);
+		pc.setMemNo(m.getMemNo());
+		pc.setCommentCon(commentCon);
+		pService.insertBoardComment(pc);
+		
+		
+		workCon = workCon.replace(text+"Checked", text);
+		workComp = workComp - 1;
+		
+		ProjectWork pw = new ProjectWork();
+		pw.setWorkNo(workNo);
+		pw.setWorkCon(workCon);
+		pw.setWorkComp(workComp);
+		
+		
+		
+		
+		
+		int result = pService.updateProjectWorkCheck(pw);
+		if (result > 0) {
+			response.getWriter().print(true);
+		} else {
+			response.getWriter().print(false);
+		}
+	}
+	
+	//프로젝트 파일 다운로드
+	@RequestMapping(value = "/projectFileDownload.ho")
+	public void projectFileDownload(@RequestParam int fileNo,
+										HttpServletResponse response,
+										HttpServletRequest request) throws IOException {
+		ProjectFileData pfd = pService.selectOneProjectFile(fileNo);
+		if (pfd != null) {
+			
+			File file = new File(pfd.getFilePath());
+			
+			// 웹 브라우저를 통해 문자열(String)이 아닌 데이터가 전송되려면 Binary 타입으로 처리해야 함
+			response.setContentType("application/octet-stream");
+			
+			// 파일의 사이즈를 전달해주어야 함
+			response.setContentLength((int)pfd.getFileSize());
+			
+			// 사용자에게 전달할 파일의 이름을 인코딩 해주어야함
+			// 이때,. 파일은 해당 컴퓨터의 OS 포맷에 맞게 인코딩해주어야함
+			// windows는 기본적으로 ISO-8859-1
+			String fileName = new String(pfd.getOriginalFileName().getBytes(),"ISO-8859-1");
+			
+			// 파일 이름을 http header를 통해서 전달
+			response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+			
+			
+			
+			// 위 코드까지는 파일이름 + 파일을 전송할 수 있는 웹 환경을 셋팅 했다고 보면 됨
+			// 아래 코드부터는 실제 파일이 가지고 있는 데이터들을 보내는 작업
+			
+			// 해당되는 파일의 데이터를 가져올 수 있는 통로(InputStream 생성)
+			FileInputStream fileIn = new FileInputStream(file);
+			
+			// 클라이언트에게 데이터를 전달할 통로 생성 (outputStream 생성)
+			ServletOutputStream out = response.getOutputStream();
+			
+			// 4KByte 씩 처리
+			byte [] outputByte = new byte[4096];
+			
+			// InputStream으로 데이터를 읽어다가 output 스트림으로 전송하기
+			while(fileIn.read(outputByte,0,4096) != -1) {
+				out.write(outputByte,0,4096);
+			}
+			fileIn.close();
+			out.close();
+		} else {
+			
+		}
+	}
+	
+	
+	// 파일 삭제
+	@RequestMapping(value = "/deleteProjectFile.ho")
+	public void deleteProjectFile(@RequestParam int fileNo,
+										HttpServletResponse response) throws IOException {
+		
+		int result = pService.deleteProjectFile(fileNo);
+		if (result > 0) {
+			response.getWriter().print(true);
+		} else {
+			response.getWriter().print(false);
+		}
+	}
+	
+	
+	//프로젝트 초대 요청
+	@RequestMapping(value="/insertProjectRequest.ho")
+	public void insertProjectRequest(@RequestParam int memNo,
+									@RequestParam int proNo,
+									HttpSession session,
+									HttpServletResponse response)  throws IOException{
+		Member m = (Member)session.getAttribute("member");
+		ProjectRequest pr = new ProjectRequest();
+		pr.setProNo(proNo);
+		pr.setRequestMem(m.getMemNo());
+		pr.setResponseMem(memNo);
+		int result = pService.insertProjectRequest(pr);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+	//프로젝트 초대 요청 취소
+	@RequestMapping(value="/deleteProjectRequest.ho")
+	public void deleteProjectRequest(@RequestParam int memNo,
+									@RequestParam int proNo,
+									HttpSession session,
+									HttpServletResponse response)  throws IOException{
+		Member m = (Member)session.getAttribute("member");
+		ProjectRequest pr = new ProjectRequest();
+		pr.setProNo(proNo);
+		pr.setResponseMem(memNo);
+		int result = pService.deleteProjectRequest(pr);
+		if(result>0){
+			response.getWriter().print(true);
+		}else{
+			response.getWriter().print(false);
+		}
+	}
+
+	// 프로젝트 참가하기
+	@RequestMapping(value = "/projectJoin.ho")
+	public ModelAndView projectJoin(@RequestParam int proNo,
+									HttpSession session) {
+		//프로젝트 참가수 인원 늘리기
+		Project p = pService.selectOneProject(proNo);
+		int memCount = p.getMemCount() + 1;
+		p.setMemCount(memCount);
+		pService.updateProjectMemberCount(p);
+		
+		Member m = (Member)session.getAttribute("member");
+		//Request delete
+		ProjectRequest pr = new ProjectRequest();
+		pr.setProNo(proNo);
+		pr.setResponseMem(m.getMemNo());
+		int result = pService.deleteProjectRequest(pr);
+		
+		//프로젝트 멤버 추가
+		ProjectMember pm = new ProjectMember();
+		pm.setMemNo(m.getMemNo());
+		pm.setProNo(proNo);
+		int projectResult = pService.insertProjectMember(pm);
+		
+		ModelAndView mav = new ModelAndView();
+		if (result > 0 && projectResult > 0) {
+			mav.addObject("msg", "프로젝트 참가 완료");
+		} else {
+			mav.addObject("msg", "프로젝트 참가 실패");
+		}
+		mav.addObject("location", "/projectAllList.ho");
+		mav.setViewName("result");
+
+		return mav;
+	}
+	
+	// 프로젝트 참가하기
+	@RequestMapping(value = "/projectRefusal.ho")
+	public ModelAndView projectRefusal(@RequestParam int proNo,
+										HttpSession session) {
+
+		Member m = (Member)session.getAttribute("member");
+		//Request delete
+		ProjectRequest pr = new ProjectRequest();
+		pr.setProNo(proNo);
+		pr.setResponseMem(m.getMemNo());
+		int result = pService.deleteProjectRequest(pr);
+		
+		ModelAndView mav = new ModelAndView();
+		if (result > 0) {
+			mav.addObject("msg", "해당 프로젝트의 참가를 거절하였습니다.");
+		} else {
+			mav.addObject("msg", "프롸젝트 거절 실패");
+		}
+		mav.addObject("location", "/projectAllList.ho");
+		mav.setViewName("result");
+		return mav;
 	}
 }

@@ -66,10 +66,7 @@
                                     </tr>
                                     <tr>
                                         <td>기안부서</td>
-                                        <td><c:choose>
-                                        	<c:when test="${docu.deptCode != null }">${docu.deptName }</c:when>
-                                        	<c:otherwise>부서없음</c:otherwise>
-                                        </c:choose></td>
+                                        <td>${docu.deptName }</td>
                                     </tr>
                                     <tr>
                                         <td>기안일</td>
@@ -131,7 +128,7 @@
                                 </table>
                             </fieldset>
                             <c:choose>
-                            	<c:when test="${docu.aprType=='R'.charAt(0) or docu.aprType=='C'.charAt(0) }"><!-- 결재가 완료됐으면 무조건-->
+                            	<c:when test="${docu.aprType!='W'.charAt(0) }"><!-- 결재가 완료됐으면 -->
                             		<fieldset id="apr-com-wrap">
 		                                <div>관련의견</div>
 		                                <div class="apr-comment"><c:forEach var="line" items="${aprLine }"><div><span>${line.memName } ${line.memPosition }</span><span>${line.aprComment }</span></div></c:forEach></div>

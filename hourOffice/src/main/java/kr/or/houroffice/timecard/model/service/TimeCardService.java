@@ -9,5 +9,9 @@ import kr.or.houroffice.timecard.model.vo.Holiday;
 public interface TimeCardService  {
 	
 	public ArrayList<Holiday> selectHoliday();
+	
+	
+	
+	
 
 }

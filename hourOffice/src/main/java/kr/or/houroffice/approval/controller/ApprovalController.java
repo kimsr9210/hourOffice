@@ -24,8 +24,6 @@ import kr.or.houroffice.approval.model.vo.AprLineMember;
 import kr.or.houroffice.approval.model.vo.AprListPage;
 import kr.or.houroffice.approval.model.vo.CCCForm;
 import kr.or.houroffice.common.PageList;
-import kr.or.houroffice.member.model.service.AdminMemberService;
-import kr.or.houroffice.member.model.vo.Department;
 import kr.or.houroffice.member.model.vo.Member;
 
 @Controller
@@ -35,9 +33,9 @@ public class ApprovalController {
 	@Qualifier(value="ApprovalService")
 	private ApprovalServiceImpl aprService;
 	
-	@Autowired
-	@Qualifier(value="adminMemberService")
-	private AdminMemberService amService;
+	//오늘 날짜 구하기
+	String today = LocalDate.now().toString();
+	
 	
 	//결재 리스트 출력
 	@RequestMapping(value="/approvalList.ho")
@@ -88,10 +86,11 @@ public class ApprovalController {
 		return mav;
 	}
 	
+	
 	//결재 폼 로드
 	@RequestMapping(value="/approvalForm.ho")
 	public ModelAndView approvalForm(@SessionAttribute("member") Member m, @RequestParam("docuType") String docuType, ModelAndView mav){
-		mav.addObject("today",LocalDate.now().toString()); //오늘 날짜 구하기
+		mav.addObject("today",today);
 		ArrayList<AprLineMember> list = null;
 		
 		switch(docuType.charAt(0)){
@@ -109,9 +108,6 @@ public class ApprovalController {
 			break;
 		}
 		mav.addObject("aprLineList",list);
-		ArrayList<Department> deptList = amService.selectDeptAll(); //부서 정보
-		mav.addObject("deptList", deptList);
-		
 		return mav;
 	}
 	
@@ -164,6 +160,7 @@ public class ApprovalController {
 	public String approvalInsertAprLazy(@SessionAttribute("member") Member m, AprFormLazy afl, Model model){
 		//lockYN urgencyYN aprLine, aprRef
 		//title, ovtType, startHour, startMinute, endHour, endMinute, totalHour, reasons
+		
 		afl.setMemNo(m.getMemNo());
 		afl.setMemName(m.getMemName());
 		afl.setDeptCode(m.getDeptCode());
@@ -273,11 +270,11 @@ public class ApprovalController {
 	}
 	
 	@RequestMapping(value="/aprProcess.ho") //결재 대기
-	public ModelAndView approvalProcess(@RequestParam("docuNo") int docuNo, @RequestParam("docuType") String docuType, ModelAndView mav){
+	public ModelAndView approvalProHol(@RequestParam("docuNo") int docuNo, @RequestParam("docuType") String docuType, ModelAndView mav){
 		switch(docuType.charAt(0)){
 		case 'H' : //연차신청
 			AprFormHol afh = aprService.selectOneAprHol(docuNo);
-			mav.addObject("docu", afh); 
+			mav.addObject("docu", afh);
 			mav.setViewName("approval/aprViewHol");
 			break;
 		case 'O' : //연장근무
@@ -319,7 +316,7 @@ public class ApprovalController {
 			@RequestParam("docuType") String docuType, Model model){
 		al.setMemNo(m.getMemNo());
 		
-		if(cardType!=0){ //결재시 카드 선택 처리
+		if(cardType!=0){
 			CCCForm cf = new CCCForm();
 			cf.setDocuNo(al.getDocuNo());
 			cf.setCardType(cardType);
@@ -333,7 +330,7 @@ public class ApprovalController {
 			model.addAttribute("msg", "전자결재 처리 실패");
 		}
 		
-		model.addAttribute("location", "/approvalList.ho?listType=W");
+		model.addAttribute("location", "/approvalList.ho");
 		
 		return "approval/aprResult";
 	}
@@ -345,7 +342,7 @@ public class ApprovalController {
 		switch(docuType.charAt(0)){
 		case 'H' : //연차신청
 			AprFormHol afh = aprService.selectOneAprHol(docuNo);
-			mav.addObject("docu", afh); 
+			mav.addObject("docu", afh);
 			mav.setViewName("approval/aprViewHol");
 			break;
 		case 'O' : //연장근무
