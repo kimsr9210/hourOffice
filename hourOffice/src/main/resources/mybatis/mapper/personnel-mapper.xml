@@ -5,26 +5,26 @@
 
 	<sql id="sql_selectAddbook">
 		SELECT M.* FROM (
-			SELECT
-				RNUM,
-				M.MEM_NO AS memNo,
-				M.MEM_POSITION AS memPosition,
-				M.MEM_NAME AS memName,
-				M.MEM_BIRTH AS memBirth,
-				M.MEM_ADDRESS AS memAddress,
-				M.MEM_PHONE AS MEMPHONE,
-				M.MEM_TELL AS MEMTELL,
-				M.MEM_EMAIL
-				AS MEMEMAIL,
-				M.MEM_PROFILE AS memProfile,
-				( SELECT DEPT_NAME FROM DEPARTMENT
-					WHERE DEPT_CODE = M.DEPT_CODE
-				) AS deptName,
-				M.MEM_DEL_YN
-			FROM (SELECT ROW_NUMBER()OVER(ORDER BY
-				MEM_JOIN_DATE DESC) AS RNUM,
-				MEMBER.* FROM MEMBER
-			) M
+		SELECT
+		RNUM,
+		M.MEM_NO AS memNo,
+		M.MEM_POSITION AS memPosition,
+		M.MEM_NAME AS memName,
+		M.MEM_BIRTH AS memBirth,
+		M.MEM_ADDRESS AS memAddress,
+		M.MEM_PHONE AS MEMPHONE,
+		M.MEM_TELL AS MEMTELL,
+		M.MEM_EMAIL
+		AS MEMEMAIL,
+		M.MEM_PROFILE AS memProfile,
+		( SELECT DEPT_NAME FROM DEPARTMENT
+		WHERE DEPT_CODE = M.DEPT_CODE
+		) AS deptName,
+		M.MEM_DEL_YN
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY
+		MEM_JOIN_DATE DESC) AS RNUM,
+		MEMBER.* FROM MEMBER
+		) M
 		) M
 	</sql>
 
@@ -40,7 +40,8 @@
 		EMAIL,
 		ENROLLDATE,
 		END_YN AS endYn
-		FROM CONTACT
+		FROM
+		CONTACT
 	</sql>
 
 	<select id="addbookCount" parameterType="hashmap" resultType="int">
@@ -125,6 +126,7 @@
 		<!-- INSERT INTO CONTACT VALUES(2101001,CONTACT_SEQ.NEXTVAL,'삼성','개발1팀',0212341234,'01011112222','K@NAVER.COM','회사',DEFAULT,'N'); -->
 	</select>
 
+
 	<!-- 개인주소록 수정 (update) -->
 	<update id="updateMyaddbook" parameterType="hashmap">
 		UPDATE CONTACT
@@ -135,8 +137,7 @@
 		,officenumber = #{tell}
 		,ph = #{ph}
 		,email = #{email}
-		WHERE cnt_no=
-		#{cntNo}
+		WHERE cnt_no=#{cntNo}
 	</update>
 
 	<!-- UPDATE 태그는 자동으로 int로 리턴합니다. resultType을 명시할필요는 없어요 -->
@@ -207,6 +208,25 @@
 		mem_dept.mem_no =
 		#{memNo}
 	</select>
+	
+	<select id="checkPwd" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE MEM_NO = #{memNo} AND MEM_PWD = #{memPwd}
+	</select> 
 
+	<!-- 마이페이지 수정 -->
+	<update id="mypageChange" parameterType="hashmap">
+		UPDATE MEMBER SET 
+			MEM_EMAIL = #{email},
+			MEM_PHONE = #{ph},
+			MEM_ADDRESS = #{address}
+		WHERE MEM_NO = #{memNo}
+	</update>
+	
+	<!-- 마이페이지 비밀번호 수정 -->
+	<update id="inforPwChange" parameterType="hashmap">
+		UPDATE MEMBER SET 
+			MEM_PWD =#{updateMemPwd}
+		WHERE MEM_NO = #{memNo}	
+	</update>
 
 </mapper>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -105,23 +106,44 @@ public class PersonnelController {
 	//내 개인정보 수정(update)
 	@RequestMapping(value ="/mypageChange.ho")
 	public ResponseEntity<String> mypageChange(HttpServletRequest request, @RequestParam String  ph, @RequestParam String email, @RequestParam String address
-			,@RequestParam String addrInput){
+			,@RequestParam String addrInput, HttpSession session){
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("ph", ph);
 		map.put("email", email);
+		
+		//1. 우선 우편번호를 잘라두었으니까 여기서는 다시 합쳐야 할듯 합니다.
+		address = addrInput +address;
+	
 		map.put("addrInput", addrInput);
 		map.put("address", address);
 		
-		System.out.println("mypageChange.ho :::::::::::: 실행 ");
-		System.out.println(map.get("ph"));
-		System.out.println(map.get("email"));
-		System.out.println(map.get("addrInput"));
-		System.out.println(map.get("address"));
+		//2. memNo를 세션에서 추출하여 같이 map으로 보내주어야 합니다.
+		Member m = (Member)session.getAttribute("member");
 		
+		int memNo = m.getMemNo();
+		map.put("memNo", memNo);
+			
+		System.out.println("mypageChange.ho :::::::::::: 실행 ");
+		System.out.println(map);
+		
+		pService.mypageChange(map);
 		return ResponseEntity.ok("success");
 	}
-
+	
+	//마이페이지 비밀번호 변경
+	@RequestMapping(value="/passwordChange.ho" , method = RequestMethod.POST, produces = "application/json; charset=utf8")
+	public ResponseEntity<String> inforPwChange(@SessionAttribute("member") Member m, HttpSession session, HttpServletRequest request) throws Exception{
+		System.out.println(request.getParameter("memPwd"));
+		int result = pService.inforPwChange(request,m.getMemNo());
+		// 성공
+		if(result > 0){
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	//내인사정보
 	@RequestMapping(value = "/information.ho")
 	public ModelAndView information(@SessionAttribute("member") Member m, HttpSession session) {
@@ -131,5 +153,6 @@ public class PersonnelController {
 		mav.setViewName("personnel/information"); // ViewResolver에 의해서 경로가 최종 완성됨
 		return mav;
 	}
+	
 
 }

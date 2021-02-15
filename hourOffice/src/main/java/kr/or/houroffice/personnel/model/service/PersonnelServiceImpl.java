@@ -1,6 +1,7 @@
 package kr.or.houroffice.personnel.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import kr.or.houroffice.common.PageList;
+import kr.or.houroffice.common.Sha256Util;
 import kr.or.houroffice.member.model.vo.Member;
 import kr.or.houroffice.personnel.model.dao.PersonnelDAO;
 import kr.or.houroffice.personnel.model.vo.Contact;
@@ -22,6 +24,9 @@ public class PersonnelServiceImpl implements PersonnelService {
 	@Autowired
 	@Qualifier(value = "PersonnelDAO")
 	private PersonnelDAO pDAO;
+	
+	@Autowired
+	Sha256Util sha256Util;
 
 	@Autowired // 의존성주입
 	@Qualifier(value = "sqlSessionTemplate") // 세션
@@ -134,6 +139,24 @@ public class PersonnelServiceImpl implements PersonnelService {
 	public ArrayList<MemDept> information(int memNo) {
 		ArrayList<MemDept> list = pDAO.information(sqlSession, memNo);
 		return list;
+	}
+
+	public void mypageChange(Map<String, Object> map) {
+		pDAO.mypageChange(sqlSession,map);
+	}
+
+	public int inforPwChange(HttpServletRequest request, int memNo) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memNo", memNo);
+		map.put("memPwd", sha256Util.encryData(request.getParameter("memPwd")));
+		map.put("updateMemPwd", sha256Util.encryData(request.getParameter("updateMemPwd")));
+		
+		int result = pDAO.checkPwd(sqlSession,map);
+		if(result > 0){
+			pDAO.inforPwChange(sqlSession,map);
+		}
+		return result;
 	}
 
 }

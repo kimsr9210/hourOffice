@@ -101,7 +101,7 @@ select{height: 25px;}
                         <option value="dept">부서</option>
                         <option value="position">직책</option>
                     </select>
-                    <input type="text" id="search" name="searchText" />
+                    <input type="text" id="search" name="searchText"  value="<%=request.getParameter("search")%>"/>
                     <input type="submit" class="sbbtn" name="searchBtn" value="검색" style="border-radius: 5px;"/>
                 </form>
             </td>

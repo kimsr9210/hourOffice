@@ -206,6 +206,21 @@ public class PersonnelDAO {
 		return (ArrayList<MemDept>)list; 
 	}
 
+	public int mypageChange(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		int result = sqlSession.update("personnel.mypageChange",map);
+		return result;
+	}
+	
+	public int checkPwd(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		int result = sqlSession.selectOne("personnel.checkPwd",map);
+		return result;
+	}
+
+	public int inforPwChange(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		int result = sqlSession.update("personnel.inforPwChange",map);
+		return result;
+	}
+
 
 
 }

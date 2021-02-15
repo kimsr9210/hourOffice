@@ -97,6 +97,10 @@ width: 200px;}
 	width: 100px;
 	height: 25px;
 }
+
+.tr_passChg{
+	display:none;
+}
 </style>
 
 <script>
@@ -120,6 +124,7 @@ width: 200px;}
 				type : "get",
 				success : function(data){
 					console.log("서버 호출 완료");
+					alert("회원 정보  변경이 완료 되었습니다.");
 				},
 				error : function(e){
 					console.log("서버 호출 처리 불가");
@@ -129,6 +134,55 @@ width: 200px;}
 		});
 	});
 		 
+</script>
+
+<script>
+	$(function(){
+		$('#passbtn').click(function(){
+			$("#updateMemPwd").val("");
+			$("#updateMemPwd2").val("");
+			$(".tr_passChg").toggle("display","");
+		});
+		
+		$("#passChgSubmit").click(function(){
+			
+			if($("#updateMemPwd").val() == ""){
+				alert('변경되는 비밀번호를 입력해주세요.');
+				$("#updateMemPwd").focus();
+				return;
+			}
+			
+			if($("#updateMemPwd2").val() == ""){
+				alert('변경되는 비밀번호 확인을 입력해주세요.');
+				$("#updateMemPwd2").focus();
+				return;
+			}
+			
+			if($("#updateMemPwd").val() != $("#updateMemPwd2").val()){
+				alert('변경될 비밀번호가 서로 일치하지않습니다. \n 다시 입력하세요.');
+				$("#updateMemPwd2").focus();
+				return;
+			}
+			
+			var value = "memPwd="+$("#memPwd").val()+"&updateMemPwd="+$("#updateMemPwd").val();
+			
+			$.ajax({
+				url : "/passwordChange.ho?"+value,
+				type : "POST",
+				success : function(){
+					console.log("서버 호출 완료");
+					alert("비밀번호  변경이 완료 되었습니다.");
+					$("#updateMemPwd").val("");
+					$("#updateMemPwd2").val("");
+					$(".tr_passChg").css("display","none");
+				},
+				error : function(e){
+					console.log("비밀번호 변경 불가");
+					alert("비밀번호  변경이 불가합니다. 다시 확인해주세요.");
+				}
+			});	
+		});
+	});
 </script>
 
 
@@ -265,9 +319,28 @@ width: 200px;}
 							<tr>
 								<td></td>
 								<th>비밀번호</th>
-								<form action="/passwordChange.ho" method="get">
-								<td><input type="password" value="<%=md.getMemPwd().substring(0, 20)%>" /></td>
-								<td><input type="submit" id="passbtn" value="비밀번호 변경" style="float: left;" /></td></form>
+								<td>
+									<input type="password" id="memPwd" value="<%=md.getMemPwd()%>" />
+								</td>
+								<td><input type="button" id="passbtn" value="비밀번호 변경" style="float: left;" /></td>
+								<td></td>
+							</tr>
+							<tr class="tr_passChg">
+								<td></td>
+								<th>비밀번호 변경</th>
+								<td>
+									<input type="password" id="updateMemPwd" value="" />
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="tr_passChg">
+								<td></td>
+								<th>비밀번호 변경 확인</th>
+								<td>
+									<input type="password" id="updateMemPwd2" value="" />
+								</td>
+								<td><input type="button" id="passChgSubmit" value="변경" style="float: left;" /></td>
 								<td></td>
 							</tr>
 							
