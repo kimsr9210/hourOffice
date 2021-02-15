@@ -103,12 +103,12 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						프로젝트 전체목록
+						프로젝트 진행목록
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						<div>참여 프로젝트</div>
+						<div>진행중인 프로젝트</div>
 						<div id="newProjectBtn">+ 새 프로젝트</div>
 
 						<div class="projectList">
@@ -179,99 +179,10 @@
 								<%} %>
 							<%} %>
 						<%}else{ %>
-							<div class="noneProject">참여하고 있는 프로젝트가 없습니다</div>
+							<div class="noneProject">진행중인 프로젝트가 없습니다</div>
 						<%} %>
 						</div>
 
-
-						<br>
-						<div class="projectClass">공개 프로젝트</div>
-						<div class="projectList">
-						<%if(!publicList.isEmpty()){ %>
-							<%for(Project p : publicList) {%>
-							<%
-								boolean like = false;
-								for(Project project : favoriteList){
-									if(project.getProNo()==p.getProNo()){
-										like = true;
-									}
-								}
-								
-							%>
-								<form action="/projectDetail.ho" method="post">
-								<div class="projectBox">
-									<a>
-										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
-									</a>
-									<div class="projectLike">
-									<%if(!like){ %>
-										<i class="far fa-star"></i>
-									<%}else{ %>
-										<i class="fas fa-star likeBtn"></i>
-									<%} %>
-										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
-										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
-										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
-    									<input type="hidden" name="boardType" value="post"/>
-									</div>
-								</div>
-								</form>
-							<%} %>
-						<%}else{ %>
-							<div class="noneProject">공개 프로젝트가 없습니다</div>
-						<%} %>
-
-						</div>
-
-						<br>
-						<div class="projectClass">완료 프로젝트</div>
-						<div class="projectList">
-						
-						
-						<%if(!myList.isEmpty()){ %>
-						
-							<%int count=0; %>
-							<%for(Project p : myList) {%>
-							<%
-								boolean like = false;
-								for(Project project : favoriteList){
-									if(project.getProNo()==p.getProNo()){
-										like = true;
-									}
-								}
-								
-							%>
-								<%if(p.getCompYN()=='Y'){ %>
-								<%count++; %>
-								<div class="projectBox">
-								<form action="/projectDetail.ho" method="post">
-									<a href="#">
-										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
-									</a>
-									<div class="projectLike">
-										<%if(!like){ %>
-										<i class="far fa-star"></i>
-										<%}else{ %>
-											<i class="fas fa-star likeBtn"></i>
-										<%} %>
-										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
-										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
-										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
-    									<input type="hidden" name="boardType" value="post"/>
-									</div>
-								</form>
-								</div>
-								<%} %>
-							<%} %>
-							<%if(count==0){ %>
-								<div class="noneProject">완료된 프로젝트가 없습니다</div>
-							<%} %>
-						<%} %>
-							
-							
-						</div>
 						<!----------------------------------->
 					</div>
 				</div>
@@ -317,15 +228,14 @@
 	<!-- 자바 스크립트    -->
 	<script>
 		$(function(){
-			
 			$('#categoryProject').next().css('display', 'block');
 			$('#categoryProject').next().css('height', '125px');
 			$('#categoryProject').children().last().children().attr('class',
 					'fas fa-chevron-left');
 
-			$('#categoryProject').next().children().eq(1).children().css('font-weight',
+			$('#categoryProject').next().children().eq(2).children().css('font-weight',
 					'800');
-			$('#categoryProject').next().children().eq(1).children().css('color',
+			$('#categoryProject').next().children().eq(2).children().css('color',
 					'#ffcc29');
 
 			//프로젝트 참가하기 버튼 누를 시

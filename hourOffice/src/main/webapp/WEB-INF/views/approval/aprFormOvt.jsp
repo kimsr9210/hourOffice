@@ -162,6 +162,11 @@
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script>
 		$(function() {
+			$('#categoryElecAppr').next().css('display', 'block');
+			$('#categoryElecAppr').next().css('height', '150px');
+			$('#categoryElecAppr').children().last().children().attr('class',
+					'fas fa-chevron-left');
+			
 			//결재선 선택 처리 //aprLine / apr-line-wrap 이름 유의
 			$('input[name=aprLine]').click(function() {
 					var $this = $(this);

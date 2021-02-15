@@ -3,16 +3,6 @@
  */
 $(function() {
 
-	$('#categoryProject').next().css('display', 'block');
-	$('#categoryProject').next().css('height', '125px');
-	$('#categoryProject').children().last().children().attr('class',
-			'fas fa-chevron-left');
-
-	$('#categoryProject').next().children().eq(1).children().css('font-weight',
-			'800');
-	$('#categoryProject').next().children().eq(1).children().css('color',
-			'#ffcc29');
-
 	/* 페이지 새로고침 */
 	$('#logoImg').click(function() {
 		location.reload();

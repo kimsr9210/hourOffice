@@ -103,132 +103,15 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						프로젝트 전체목록
+						프로젝트 완료목록
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						<div>참여 프로젝트</div>
+						<div>완료 프로젝트</div>
 						<div id="newProjectBtn">+ 새 프로젝트</div>
 
 						<div class="projectList">
-						<%if(!requestList.isEmpty()){ %>
-							<%for(Project pr : requestList){ %>
-							
-							<%
-								String name="";
-								String position="";
-								for(Member member : allMemberList){
-									if(member.getMemNo()==pr.getMemNo()){
-										name = member.getMemName();
-										position = member.getMemPosition();
-									}
-								}
-							%>
-								<div class="requestBox">
-									<a>
-										<div class="requestSubject">제목 : <%=pr.getProSubject() %></div>
-										<div class="requestMember">요청자 : <%=name %>(<%=position %>)</div>
-										<div class="requestBtnBox">
-											<div class="joinBtn">참가하기</div>
-											<form action="/projectJoin.ho" method="post">
-												<input type="hidden" name="proNo" value="<%=pr.getProNo() %>"/>
-											</form>
-											<div class="refusalBtn">거절하기</div>
-											<form action="/projectRefusal.ho" method="post">
-												<input type="hidden" name="proNo" value="<%=pr.getProNo() %>"/>
-											</form>
-										</div>
-									</a>
-								</div>
-							<%} %>
-						<%} %>
-							<!-- 얘가 여러개 생겨남 -->
-						<%if(!myList.isEmpty()){ %>
-							<%for(Project p : myList) {%>
-							
-							<%
-								boolean like = false;
-								for(Project project : favoriteList){
-									if(project.getProNo()==p.getProNo()){
-										like = true;
-									}
-								}
-								
-							%>
-								<%if(p.getCompYN()=='N'){ %>
-								<form action="/projectDetail.ho" method="post">
-								<div class="projectBox">
-									<a>
-										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
-									</a>
-									<div class="projectLike">
-									<%if(!like){ %>
-										<i class="far fa-star"></i>
-									<%}else{ %>
-										<i class="fas fa-star likeBtn"></i>
-									<%} %>
-										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
-										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
-										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
-    									<input type="hidden" name="boardType" value="post"/>
-									</div>
-								</div>
-								</form>
-								<%} %>
-							<%} %>
-						<%}else{ %>
-							<div class="noneProject">참여하고 있는 프로젝트가 없습니다</div>
-						<%} %>
-						</div>
-
-
-						<br>
-						<div class="projectClass">공개 프로젝트</div>
-						<div class="projectList">
-						<%if(!publicList.isEmpty()){ %>
-							<%for(Project p : publicList) {%>
-							<%
-								boolean like = false;
-								for(Project project : favoriteList){
-									if(project.getProNo()==p.getProNo()){
-										like = true;
-									}
-								}
-								
-							%>
-								<form action="/projectDetail.ho" method="post">
-								<div class="projectBox">
-									<a>
-										<div class="projectSubject"><input class="projectDetailBtn" type="submit" value="<%=p.getProSubject() %>"/></div>
-										<div class="projectMember"><%=p.getMemCount() %>명 참가중</div>
-									</a>
-									<div class="projectLike">
-									<%if(!like){ %>
-										<i class="far fa-star"></i>
-									<%}else{ %>
-										<i class="fas fa-star likeBtn"></i>
-									<%} %>
-										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
-										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
-										<input type="hidden" name="proSubject" value="<%=p.getProSubject()%>"/>
-    									<input type="hidden" name="boardType" value="post"/>
-									</div>
-								</div>
-								</form>
-							<%} %>
-						<%}else{ %>
-							<div class="noneProject">공개 프로젝트가 없습니다</div>
-						<%} %>
-
-						</div>
-
-						<br>
-						<div class="projectClass">완료 프로젝트</div>
-						<div class="projectList">
-						
-						
 						<%if(!myList.isEmpty()){ %>
 						
 							<%int count=0; %>
@@ -317,15 +200,14 @@
 	<!-- 자바 스크립트    -->
 	<script>
 		$(function(){
-			
 			$('#categoryProject').next().css('display', 'block');
 			$('#categoryProject').next().css('height', '125px');
 			$('#categoryProject').children().last().children().attr('class',
 					'fas fa-chevron-left');
 
-			$('#categoryProject').next().children().eq(1).children().css('font-weight',
+			$('#categoryProject').next().children().eq(3).children().css('font-weight',
 					'800');
-			$('#categoryProject').next().children().eq(1).children().css('color',
+			$('#categoryProject').next().children().eq(3).children().css('color',
 					'#ffcc29');
 
 			//프로젝트 참가하기 버튼 누를 시

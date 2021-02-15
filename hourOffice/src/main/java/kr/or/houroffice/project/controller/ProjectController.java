@@ -102,6 +102,126 @@ public class ProjectController {
 		return mav;
 	}
 	
+	//프로젝트 진행중 리스트
+	@RequestMapping(value="/projectProgressList.ho")
+	public ModelAndView projectProgressList(@SessionAttribute("member") Member member){
+		//내가 참가한 프로젝트 가져오기
+		ArrayList<Project> myProjectList = pService.selectMyProjectList(member.getMemNo());
+		
+		//공개 프로젝트 정보 출력
+		ArrayList<Project> publicAllList = pService.selectPublicProject();
+		
+		//요청받은 프로젝트 목록
+		ArrayList<Project> requestList = pService.selectProjectRequestMember(member.getMemNo());
+		
+		//모든 인원
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+		
+		//공개프로젝트 - 참가 프로젝트
+		ArrayList<Project> publicList = new ArrayList<Project>();
+		for(int i = 0; i<publicAllList.size();i++){
+			Project p = publicAllList.get(i);
+			for(Project mp : myProjectList){
+				if(mp.getProNo()==p.getProNo()){
+					publicAllList.remove(i);
+				}
+			}
+		}
+		
+		//즐겨찾는 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
+		
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("myList", myProjectList);
+		mav.addObject("publicList", publicAllList);
+		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("requestList", requestList);
+		mav.addObject("allMemberList", allMemberList);
+		mav.setViewName("project/projectProgressList");
+		return mav;
+	}
+	
+	//프로젝트 완료 리스트
+	@RequestMapping(value="/projectComplateList.ho")
+	public ModelAndView projectComplateList(@SessionAttribute("member") Member member){
+		//내가 참가한 프로젝트 가져오기
+		ArrayList<Project> myProjectList = pService.selectMyProjectList(member.getMemNo());
+		
+		//공개 프로젝트 정보 출력
+		ArrayList<Project> publicAllList = pService.selectPublicProject();
+		
+		//요청받은 프로젝트 목록
+		ArrayList<Project> requestList = pService.selectProjectRequestMember(member.getMemNo());
+		
+		//모든 인원
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+		
+		//공개프로젝트 - 참가 프로젝트
+		ArrayList<Project> publicList = new ArrayList<Project>();
+		for(int i = 0; i<publicAllList.size();i++){
+			Project p = publicAllList.get(i);
+			for(Project mp : myProjectList){
+				if(mp.getProNo()==p.getProNo()){
+					publicAllList.remove(i);
+				}
+			}
+		}
+		
+		//즐겨찾는 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
+		
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("myList", myProjectList);
+		mav.addObject("publicList", publicAllList);
+		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("requestList", requestList);
+		mav.addObject("allMemberList", allMemberList);
+		mav.setViewName("project/projectComplateList");
+		return mav;
+	}
+	
+	//프로젝트 완료 리스트
+	@RequestMapping(value="/projectLikeList.ho")
+	public ModelAndView projectLikeList(@SessionAttribute("member") Member member){
+		//내가 참가한 프로젝트 가져오기
+		ArrayList<Project> myProjectList = pService.selectMyProjectList(member.getMemNo());
+		
+		//공개 프로젝트 정보 출력
+		ArrayList<Project> publicAllList = pService.selectPublicProject();
+		
+		//요청받은 프로젝트 목록
+		ArrayList<Project> requestList = pService.selectProjectRequestMember(member.getMemNo());
+		
+		//모든 인원
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+		
+		//공개프로젝트 - 참가 프로젝트
+		ArrayList<Project> publicList = new ArrayList<Project>();
+		for(int i = 0; i<publicAllList.size();i++){
+			Project p = publicAllList.get(i);
+			for(Project mp : myProjectList){
+				if(mp.getProNo()==p.getProNo()){
+					publicAllList.remove(i);
+				}
+			}
+		}
+		
+		//즐겨찾는 목록 가져오기
+		ArrayList<Project> favoriteList = pService.selectProjectFavoriteList(member.getMemNo());
+		
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("myList", myProjectList);
+		mav.addObject("publicList", publicAllList);
+		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("requestList", requestList);
+		mav.addObject("allMemberList", allMemberList);
+		mav.setViewName("project/projectLikeList");
+		return mav;
+	}
+	
 	//프로젝트 상세 페이지
 	@RequestMapping(value="/projectDetail.ho")
 	public ModelAndView projectDetail(@RequestParam int proNo, @SessionAttribute("member") Member member, @RequestParam String boardType){
@@ -185,7 +305,11 @@ public class ProjectController {
 		
 		//프로젝트 정보 가져오기
 		Project p = pService.selectOneProject(proNo);
-		
+		//멤버 전체 목록 가져오기
+		ArrayList<Member> allMemberList = mService.selectAllMemberList();
+				
+		//요청 멤버 번호 리스트 가져오기
+		ArrayList<ProjectRequest> requestList = pService.selectProjectRequestList(proNo);
 
 		//프로젝트 게시물 가져오기
 		ArrayList<ProjectBoard> boardList = pService.selectProjectBoardList(proNo);
@@ -213,6 +337,8 @@ public class ProjectController {
 		mav.addObject("projectMgrList", projectMgrList);
 		mav.addObject("commentList", commentList);
 		mav.addObject("favoriteList", favoriteList);
+		mav.addObject("allMemberList", allMemberList);
+		mav.addObject("requestList", requestList);
 		mav.setViewName("project/projectBoardWrite");
 		return mav;
 	}

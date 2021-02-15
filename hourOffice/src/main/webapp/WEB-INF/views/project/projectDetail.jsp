@@ -318,6 +318,41 @@
     	margin-top: 20px;
     	border-radius: 3px;
     }
+    
+    .memberImg {
+		width: 7%;
+		height: 100%;
+		float: left;
+		color: #999999;
+		font-size: 2rem;
+		padding: 10px 2px 2px 20px;
+	}
+	
+	.nc-img{
+        display: block;
+        width: 35px;
+        height: 35px;
+        border-radius: 50px;
+        background-color: none;
+ 	}
+ 	
+ 	.memberAllListImg {
+	width: 10%;
+	height: 100%;
+	float: left;
+	color: #999999;
+	font-size: 2rem;
+	padding: 10px 2px 2px 15px;
+	}
+	
+	.inviteMemberImg {
+		width: 10%;
+		height: 100%;
+		float: left;
+		color: #999999;
+		font-size: 2rem;
+		padding: 10px 2px 2px 15px;
+	}
 </style>
     		
 
@@ -465,7 +500,8 @@
                             <%if(!boardList.isEmpty()) {%>
                             <%for(ProjectBoard pb : boardList){ %>
                             <%
-                            	String name = ""; 
+                            	String name = "";
+                            	String profile = null;
 	                            Date date = new Date(pb.getBoardDate().getTime());
 	                        	String time = sdf.format(date);
                             %>
@@ -473,10 +509,25 @@
                             	<%if(member.getMemNo()==pb.getMemNo()){ %>
                             	<%name = member.getMemName(); %>
                             	<%} %>
+                            	<%
+                            	if(member.getMemProfile()!=null){
+                            		profile = member.getMemProfile();
+                            	}
+                            	%>
+                            	
+                            	
                             <%} %>
                             <div class="boardBox">
                                 <div class="boardInfo">
-                                    <div class="memberImg"><i class="fas fa-user-circle"></i></div>
+                                    <div class="memberImg">
+                                    
+                                    <%if(profile==null){ %>
+                                    <i class="fas fa-user-circle"></i>
+                                    <%}else{ %>
+                                    <img class="nc-img" src="/resources/images/profile/<%=profile%>">
+                                    <%} %>
+                                    
+                                    </div>
                                     <div class="memberInfo">
                                     
                                         <div class="memberName"><%=name %></div>
@@ -525,18 +576,24 @@
                                 <%for(ProjectComment pc : postCommentList){ %>
                                 <%if(pc.getBoardNo()==pb.getBoardNo()){ %>
                                 <%
+                                	String commentProfile = null;
 	                                Date commentDate = new Date(pc.getCommentDate().getTime());
 	                            	String commentTime = sdf.format(commentDate);
                                 	String memName = "";
-                                	for(Member member : boardMemberList){
+                                	for(Member member : allMemberList){
                                 		if(pc.getMemNo()==member.getMemNo()){
                                 			memName = member.getMemName();
+                                			commentProfile = member.getMemProfile();
                                 		}
                                 	}
                                 %>
                                 <div class="commentList">
                                     <div class="commentUserImg">
-                                        <i class="fas fa-user-circle"></i>
+                                        <%if(commentProfile==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=commentProfile%>"/>
+                                    	<%} %>
                                     </div>
                                     <div class="commentInfo">
                                         <div class="commentName">
@@ -562,7 +619,11 @@
                                 
                                 <div class="commentWrite">
                                     <div class="commentUser">
-                                        <i class="fas fa-user-circle"></i>
+                                        <%if(m.getMemProfile()==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=m.getMemProfile()%>">
+                                    	<%} %>
                                     </div>
                                     <div class="commentText">
                                         <form action="/insertBoardComment.ho" method="post">
@@ -590,6 +651,7 @@
                             <%if(!codeList.isEmpty()){ %>
                             <%for(ProjectCode pCode : codeList){ %>
                             <%
+                            String profile = null;
                             String name = ""; 
                             Date date = new Date(pCode.getCodeDate().getTime());
                         	String time = sdf.format(date);
@@ -597,11 +659,22 @@
                             <%for(Member member : codeMemberList){ %>
                             	<%if(member.getMemNo()==pCode.getMemNo()){ %>
                             	<%name = member.getMemName(); %>
+                            	<%if(member.getMemProfile()!=null){
+                            		profile = member.getMemProfile();
+                            	}
+                            	%>
+                            	
                             	<%} %>
                             <%} %>
                             <div class="boardBox">
                                 <div class="boardInfo">
-                                    <div class="memberImg"><i class="fas fa-user-circle"></i></div>
+                                    <div class="memberImg">
+                                    <%if(profile==null){ %>
+                                    <i class="fas fa-user-circle"></i>
+                                    <%}else{ %>
+                                    <img class="nc-img" src="/resources/images/profile/<%=profile%>">
+                                    <%} %>
+                                    </div>
                                     <div class="memberInfo">
                                     
                                         <div class="memberName"><%=name %></div>
@@ -654,18 +727,24 @@
                                 <%for(ProjectComment pc : codeCommentList){ %>
                                 <%if(pc.getBoardNo()==pCode.getCodeNo()){ %>
                                 <%
+                                	String commentProfile = null;
 	                                Date commentDate = new Date(pc.getCommentDate().getTime());
 	                            	String commentTime = sdf.format(commentDate);
                                 	String memName = "";
-                                	for(Member member : boardMemberList){
+                                	for(Member member : allMemberList){
                                 		if(pc.getMemNo()==member.getMemNo()){
                                 			memName = member.getMemName();
+                                			commentProfile = member.getMemProfile();
                                 		}
                                 	}
                                 %>
                                 <div class="commentList">
                                     <div class="commentUserImg">
-                                        <i class="fas fa-user-circle"></i>
+                                         <%if(commentProfile==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=commentProfile%>"/>
+                                    	<%} %>
                                     </div>
                                     <div class="commentInfo">
                                         <div class="commentName">
@@ -691,7 +770,11 @@
                                 
                                 <div class="commentWrite">
                                     <div class="commentUser">
-                                        <i class="fas fa-user-circle"></i>
+                                        <%if(m.getMemProfile()==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=m.getMemProfile()%>">
+                                    	<%} %>
                                     </div>
                                     <div class="commentText">
                                         <form action="/insertBoardComment.ho" method="post">
@@ -718,6 +801,7 @@
                             <%if(!projectWorkList.isEmpty()) {%>
                             <%for(ProjectWork pw : projectWorkList){ %>
                             <%
+                            	String profile = null;
                             	String[] workList = pw.getWorkCon().split(",");
                             	int max = workList.length;
                             	int min = pw.getWorkComp();
@@ -730,10 +814,21 @@
                             	<%if(member.getMemNo()==pw.getMemNo()){ %>
                             	<%name = member.getMemName(); %>
                             	<%} %>
+                            	<%
+                            		if(member.getMemProfile()!=null){
+                            			profile = member.getMemProfile();
+                            		}
+                            	%>
                             <%} %>
                             <div class="boardBox">
                                 <div class="boardInfo">
-                                    <div class="memberImg"><i class="fas fa-user-circle"></i></div>
+                                    <div class="memberImg">
+                                    <%if(profile==null){ %>
+                                    <i class="fas fa-user-circle"></i>
+                                    <%}else{ %>
+                                    <img class="nc-img" src="/resources/images/profile/<%=profile%>">
+                                    <%} %>
+                                    </div>
                                     <div class="memberInfo">
                                     
                                         <div class="memberName"><%=name %></div>
@@ -811,18 +906,24 @@
                                 <%for(ProjectComment pc : workCommentList){ %>
                                 <%if(pc.getBoardNo()==pw.getWorkNo()){ %>
                                 <%
+                                	String commentProfile = null;
 	                                Date commentDate = new Date(pc.getCommentDate().getTime());
 	                            	String commentTime = sdf.format(commentDate);
                                 	String memName = "";
-                                	for(Member member : workMemberList){
+                                	for(Member member : allMemberList){
                                 		if(pc.getMemNo()==member.getMemNo()){
                                 			memName = member.getMemName();
+                                			commentProfile = member.getMemProfile();
                                 		}
                                 	}
                                 %>
                                 <div class="commentList">
                                     <div class="commentUserImg">
-                                        <i class="fas fa-user-circle"></i>
+                                         <%if(commentProfile==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=commentProfile%>"/>
+                                    	<%} %>
                                     </div>
                                     <div class="commentInfo">
                                         <div class="commentName">
@@ -848,7 +949,11 @@
                                 
                                 <div class="commentWrite">
                                     <div class="commentUser">
-                                        <i class="fas fa-user-circle"></i>
+                                        <%if(m.getMemProfile()==null){ %>
+                                    	<i class="fas fa-user-circle"></i>
+                                    	<%}else{ %>
+                                    	<img class="nc-img" src="/resources/images/profile/<%=m.getMemProfile()%>">
+                                    	<%} %>
                                     </div>
                                     <div class="commentText">
                                         <form action="/insertBoardComment.ho" method="post">
@@ -948,7 +1053,13 @@
                                     <!-- 멤버 목록 여러개 -->
                                     <%for(Member member : projectMemberList) {%>
                                     <div class="memberList">
-                                        <div><i class="fas fa-user-circle"></i></div>
+                                        <div>
+                                        <%if(member.getMemProfile()!=null){ %>
+                                        <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                                        <%}else{ %>
+                                        <i class="fas fa-user-circle"></i>
+                                        <%} %>
+                                        </div>
                                         <div class="memberListName"><%=member.getMemName() %></div>
                                     </div>
                                     <%} %>
@@ -1025,7 +1136,13 @@
 					if(except==false){
 			%>            
             <div class="inviteMemberList">
-                <div class="inviteMemberImg"><i class="fas fa-user-circle"></i></div>
+                <div class="inviteMemberImg">
+                <%if(member.getMemProfile()!=null){ %>
+                <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                <%}else{ %>
+                <i class="fas fa-user-circle"></i>
+                <%} %>
+                </div>
                 <div class="inviteMemberInfo">
                     <div class="inviteMemberName"><%=member.getMemName() %></div>
                     <div class="inviteMemberPosition"><%=member.getMemPosition() %></div>
@@ -1071,7 +1188,13 @@
             	}
             %>
             <div class="memberAllListLabel">
-                <div class="memberAllListImg displayNone"><i class="fas fa-user-circle"></i></div>
+                <div class="memberAllListImg displayNone">
+                <%if(member.getMemProfile()!=null){ %>
+                <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                <%}else{ %>
+                <i class="fas fa-user-circle"></i>
+                <%} %>
+                </div>
                 <div class="memberAllListInfo displayNone">
                     <div class="memberAllListName"><%=member.getMemName() %></div>
                     <div class="memberAllListPosition"><%=member.getMemPosition() %></div>
