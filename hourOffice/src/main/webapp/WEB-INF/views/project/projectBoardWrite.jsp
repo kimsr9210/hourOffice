@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectRequest"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectComment"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectMember"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectBoard"%>
@@ -32,12 +33,11 @@
 	src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
 <style>
-	#codeTextBox{
-		width:100%;
-		height:auto;
-	}
-	
-	
+#codeTextBox {
+	width: 100%;
+	height: auto;
+}
+
 .codeWriteText {
 	width: 90%;
 	margin: 30px;
@@ -46,30 +46,93 @@
 	resize: none;
 	border: 0;
 	outline: none;
-	background-color: #272822;
+	background-color: black;
 	color: white;
 	border: 2px solid red;
+	overflow: scroll;
 }
 
+#dateInput {
+	width: 100px;
+	height: 100%;
+	padding: 6px;
+	border: 0;
+	float: left;
+	color: #808080; . codeYellow { font-weight : bolder;
+	color: yellow;
+	}
+}
+
+.codeGreen {
+	font-weight: bolder;
+	color: green;
+}
+
+.codeRed {
+	font-weight: bolder;
+	color: red;
+}
+
+.codeBlue {
+	font-weight: bolder;
+	color: blue;
+}
+
+.memberImg {
+	width: 7%;
+	height: 100%;
+	float: left;
+	color: #999999;
+	font-size: 2rem;
+	padding: 10px 2px 2px 20px;
+}
+
+.nc-img{
+	display: block;
+	width: 35px;
+	height: 35px;
+	border-radius: 50px;
+	background-color: none;
+}
+
+.memberAllListImg {
+	width: 10%;
+	height: 100%;
+	float: left;
+	color: #999999;
+	font-size: 2rem;
+	padding: 10px 2px 2px 15px;
+}
+
+.inviteMemberImg {
+	width: 10%;
+	height: 100%;
+	float: left;
+	color: #999999;
+	font-size: 2rem;
+	padding: 10px 2px 2px 15px;
+}
 </style>
 
 	<%
-	Project p = (Project)request.getAttribute("project");
-	ArrayList<Member> projectMemberList = (ArrayList<Member>)request.getAttribute("projectMemberList");
-	ArrayList<ProjectBoard> boardList = (ArrayList<ProjectBoard>)request.getAttribute("boardList");
-	ArrayList<Member> boardMemberList = (ArrayList<Member>)request.getAttribute("boardMemberList");
-	ArrayList<ProjectMember> projectMgrList = (ArrayList<ProjectMember>)request.getAttribute("projectMgrList");
-	ArrayList<ProjectComment> commentList = (ArrayList<ProjectComment>)request.getAttribute("commentList");
-	ArrayList<Project> favoriteList = (ArrayList<Project>)request.getAttribute("favoriteList");
-	Member m = (Member)session.getAttribute("member");
-	
-	boolean like = false;
-	for(Project project : favoriteList){
-		if(project.getProNo()==p.getProNo()){
-			like = true;
+		Project p = (Project) request.getAttribute("project");
+		ArrayList<Member> projectMemberList = (ArrayList<Member>) request.getAttribute("projectMemberList");
+		ArrayList<ProjectBoard> boardList = (ArrayList<ProjectBoard>) request.getAttribute("boardList");
+		ArrayList<Member> boardMemberList = (ArrayList<Member>) request.getAttribute("boardMemberList");
+		ArrayList<ProjectMember> projectMgrList = (ArrayList<ProjectMember>) request.getAttribute("projectMgrList");
+		ArrayList<ProjectComment> commentList = (ArrayList<ProjectComment>) request.getAttribute("commentList");
+		ArrayList<Project> favoriteList = (ArrayList<Project>) request.getAttribute("favoriteList");
+		Member m = (Member) session.getAttribute("member");
+		ArrayList<Member> allMemberList = (ArrayList<Member>) request.getAttribute("allMemberList");
+		ArrayList<ProjectRequest> requestList = (ArrayList<ProjectRequest>) request.getAttribute("requestList");
+
+		boolean like = false;
+		for (Project project : favoriteList) {
+			if (project.getProNo() == p.getProNo()) {
+				like = true;
+			}
 		}
-	}
-%>
+	%>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp"%>
 		<div id="contentsBox">
@@ -77,8 +140,6 @@
 
 			<div id="contents">
 				<div id="contentsDetail" class="clearfix">
-
-
 
 					<div id="projectBox">
 						<div id="projectLeft">
@@ -163,27 +224,27 @@
 									</form>
 
 									<!-- 코드 일때 -->
-									<form action="/insertProjectCode.ho" method="post" enctype="multipart/form-data">
+									<form action="/insertProjectCode.ho" method="post">
 										<input type="hidden" value="<%=p.getProNo() %>" name="proNo" />
 										<input type="hidden" value="${sessionScope.member.memNo }" name="memNo" />
 										<div id="codeBox" class="boardAllStyle">
 										<div id="codeTextBox">
-											<textarea id="codeText" class="codeWriteText" name="codeText"
+											<textarea id="codeText"class="codeWriteText" name="codeText"
 												placeholder="코드을 입력해 주세요"></textarea>
-											<textarea id="codeTextarea" class="boardWriteText" name="boardText"
+											<textarea id="codeTextarea"class="boardWriteText" name="boardText"
 												placeholder="내용을 입력해 주세요"></textarea>
-
+	
 												
 												
 												
 										</div>
-											<img id="img1" class="imgUp"/>
+											<img id="img2" class="imgUp"/>
 											<div class="boardWriteBot">
 												<div class="fileUploadBox">
 													<input type="file" class="fileUpload" id="fileUpload2" name="file"/>
 													<input type="file" class="imgUpload" id="imgUpload2" name="imgFile"/>
-													<label for="fileUpload1" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
-													<label for="imgUpload1" class="fileUploadImg"><i class="far fa-image"></i></label>
+													<label for="fileUpload2" class="fileUploadImg"><i class="fas fa-paperclip"></i></label>
+													<label for="imgUpload2" class="fileUploadImg"><i class="far fa-image"></i></label>
 												</div>
 												<div class="fileNameBox">
 													<input text="text" class="fileName" readonly="readonly"/>
@@ -222,33 +283,23 @@
 									</form>
 
 									<!--할일 일 때-->
-									<form action="ccc" method="post">
+									<form action="/insertProjectWork.ho" method="post">
 										<input type="hidden" value="work" name="type" />
 										<div id="workBox" class="boardAllStyle">
-											<input type="text" class="boardWriteText" name=""
+											<input type="text" class="boardWriteText" name="Title"
 												placeholder="할일 제목을 입력해 주세요." />
-
+											<div class="workList">
+											<div id="dateInput">날짜 입력 : </div><input type="date" class="workDate" name="workDay" />
+											</div>
 											<!-- 얘가 여러개 -->
 											<div class="workList">
-												<i class="fas fa-minus-circle workDelete"></i> <input
-													class="workTitle" type="text" placeholder="할일 입력"
-													name="workTitle" /> <input type="date" class="workDate" />
-												<i class="fas fa-user-plus workMember"></i> <input
-													type="hidden" />
-											</div>
-
-											<div class="workList">
-												<i class="fas fa-minus-circle workDelete"></i> <input
-													class="workTitle" type="text" placeholder="할일 입력"
-													name="workTitle" /> <input type="date" class="workDate" />
-												<i class="fas fa-user-plus workMember"></i> <input
-													type="hidden" />
+												<span class="workDelete"><i class="fas fa-minus-circle"></i></span>
+												 <input class="workTitle" type="text" placeholder="할일 입력" name="workCon" />
 											</div>
 
 											<div id="workAdd">
-												<i class="fas fa-plus-circle workAddBtn"></i> <input
-													class="workTitle" type="text" placeholder="할일 추가"
-													readonly="readonly" />
+												<span class="workAddBtn"><i class="fas fa-plus-circle"></i></span>
+												<input class="workTitle" type="text" placeholder="할일 추가" readonly="readonly" />
 											</div>
 											<div class="boardWriteBot">
 												<div class="boardUpload">
@@ -256,13 +307,13 @@
 												</div>
 											</div>
 										</div>
+										<input type="hidden" name="memNo" value="<%=m.getMemNo()%>"/>
+										<input type="hidden" name="proNo" value="<%=p.getProNo()%>"/>
 									</form>
 
 									<div id="workHidden" class="workList">
-										<i class="fas fa-minus-circle workDelete"></i> <input
-											class="workTitle" type="text" placeholder="할일 입력"
-											name="workTitle" /> <input type="date" class="workDate" /> <i
-											class="fas fa-user-plus workMember"></i> <input type="hidden" />
+										<span class="workDelete"><i class="fas fa-minus-circle"></i></span>
+											<input class="workTitle" type="text" placeholder="할일 입력" name="workCon" />
 									</div>
 								</div>
 
@@ -283,7 +334,13 @@
                                     <!-- 멤버 목록 여러개 -->
                                     <%for(Member member : projectMemberList) {%>
                                     <div class="memberList">
-                                        <div><i class="fas fa-user-circle"></i></div>
+                                        <div>
+                                       <%if(member.getMemProfile()!=null){ %>
+                                        <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                                        <%}else{ %>
+                                        <i class="fas fa-user-circle"></i>
+                                        <%} %>
+                                        </div>
                                         <div class="memberListName"><%=member.getMemName() %></div>
                                     </div>
                                     <%} %>
@@ -328,6 +385,7 @@
         </form>
     </div>
     
+    
     <!-- 프로젝트 멤버 추가 하기 -->
     <div id="inviteBox">
         <div id="inviteHeader">
@@ -342,17 +400,42 @@
         <div id="inviteContents">
             
             <!--얘가 여러개 생겨남-->
+			<%
+				for(Member member : allMemberList){
+					boolean except = false;
+					boolean invite = false;
+					for(Member proMember : projectMemberList){
+						if(proMember.getMemNo()==member.getMemNo()){
+							except = true;
+						}
+					}
+					for(ProjectRequest pr : requestList){
+						if(pr.getResponseMem()==member.getMemNo()){
+							invite = true;
+						}
+					}
+					if(except==false){
+			%>            
             <div class="inviteMemberList">
-                <div class="inviteMemberImg"><i class="fas fa-user-circle"></i></div>
+                <div class="inviteMemberImg">
+                <%if(member.getMemProfile()!=null){ %>
+                <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                <%}else{ %>
+                <i class="fas fa-user-circle"></i>
+                <%} %>
+                </div>
                 <div class="inviteMemberInfo">
-                    <div class="inviteMemberName">이름</div>
-                    <div class="inviteMemberPosition">직급</div>
+                    <div class="inviteMemberName"><%=member.getMemName() %></div>
+                    <div class="inviteMemberPosition"><%=member.getMemPosition() %></div>
                 </div>
                 <div class="memberAdd">
-                    <div class="memberAddBox">+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추가</div>
+                    <div class="memberAddBox"><%if(invite==false){ %>추가<%}else{ %>초대완료<%} %></div>
+                    <input type="hidden" value="<%=member.getMemNo() %>"/>
+                    <input type="hidden" value="<%=p.getProNo() %>"/>
                 </div>
             </div>
-            
+            <%} %>
+            <%} %>
         </div>
     </div>
     
@@ -386,7 +469,13 @@
             	}
             %>
             <div class="memberAllListLabel">
-                <div class="memberAllListImg displayNone"><i class="fas fa-user-circle"></i></div>
+                <div class="memberAllListImg displayNone">
+                <%if(member.getMemProfile()!=null){ %>
+                <img class="nc-img" src="/resources/images/profile/<%=member.getMemProfile()%>">
+                <%}else{ %>
+                <i class="fas fa-user-circle"></i>
+                <%} %>
+                </div>
                 <div class="memberAllListInfo displayNone">
                     <div class="memberAllListName"><%=member.getMemName() %></div>
                     <div class="memberAllListPosition"><%=member.getMemPosition() %></div>
@@ -406,6 +495,7 @@
                             <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
                             <input type="hidden" name="" value="<%=member.getMemName() %>"/>
                         <%} %>
+                        <%if(sessionMgrYN=='Y') {%>
                         <%if(mgrYN=='N'){ %>
                             <div class="memberAdminList adminSet">관리자 지정</div>
                             <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
@@ -414,6 +504,7 @@
                             <div class="memberAdminList adminCancel">관리자 지정 해제</div>
                             <input type="hidden" name="memNo" value="<%=member.getMemNo()%>"/>
                             <input type="hidden" name="" value="<%=member.getMemName() %>"/>
+                        <%} %>
                         <%} %>
                         </div>
                         <!--  -->
@@ -426,34 +517,6 @@
         </div>
     </div>
         
-    <div id="boardCommentSet">
-        <div id="boardCommentHeader">
-            <i id="boardCommentExit" class="fas fa-times"></i>
-            <div id="boardCommentName">글/댓글 작성 권한 설정</div>
-        </div>
-        <div id="boardCommentContents">
-            <hr>
-            <p class="boardCommentBold">글</p>
-            <p class="boardCommentRegular"><input type="radio" name="board" value="all"/> 전체 작성 가능</p>
-            <p class="boardCommentRegular"><input type="radio" name="board" value="admin"/> 프로젝트 관리자만 작성 가능</p>
-            <hr>
-            <p class="boardCommentBold">댓글</p>
-            <p class="boardCommentRegular"><input type="radio" name="comment" value="all"/> 전체 작성 가능</p>
-            <p class="boardCommentRegular"><input type="radio" name="comment" value="admin"/> 프로젝트 관리자만 작성 가능</p>
-        </div>
-    </div>
-    
-    <div id="fileSet">
-        <div id="fileHeader">
-            <i id="fileExit" class="fas fa-times"></i>
-            <div id="fileName">파일 다운로드 권한 설정</div>
-        </div>
-        <div id="fileContents">
-            <hr>
-            <p class="fileRegular"><input type="radio" name="file" value="all"/> 전체 다운로드 가능</p>
-            <p class="fileRegular"><input type="radio" name="file" value="admin"/> 관리자 + 글 작성 본인만 다운로드 가능</p>
-        </div>
-    </div>
 
 	<!-- 자바 스크립트    -->
 	<script>
@@ -700,17 +763,48 @@
     				}
     			}
     		});
-    		
-    		function adjustHeight() {
-    			var textEle = $('#codeText');
-    			textEle[0].style.height = 'auto';
-    			var textEleHeight = textEle.prop('scrollHeight');
-    			textEle.css('height', textEleHeight);
-    		}
-    		;
-    		var textEle = $('#codeText');
-    		textEle.on('keyup', function() {
-    			adjustHeight();
+			
+    		/* 멤버 추가 누를 시 */
+    		$('.memberAddBox').click(function() {
+    			var memNo = $(this).next().val();
+    			var proNo = $(this).next().next().val();
+    			if ($(this).text() == '초대완료') {
+    				$.ajax({
+    		            url : "/deleteProjectRequest.ho",
+    		            data : {"memNo" : memNo, "proNo" : proNo},
+    		            type : "post",
+    		            success : function(result){
+    		            	if(result=="true"){
+			            	}else{
+			            	}
+    		            },
+    		            error : function(){
+    		            	console.log("프로젝트 초대하기 ajax 통신 실패");
+    		            }
+    		        });
+    				$(this).html('추가');
+    				$(this).css('background-color', 'white');
+    				$(this).css('border-color', '#808080');
+    				$(this).css('color', '#808080');
+    			} else {
+    				$.ajax({
+    		            url : "/insertProjectRequest.ho",
+    		            data : {"memNo" : memNo, "proNo" : proNo},
+    		            type : "post",
+    		            success : function(result){
+    		            	if(result=="true"){
+			            	}else{
+			            	}
+    		            },
+    		            error : function(){
+    		            	console.log("프로젝트 초대하기 ajax 통신 실패");
+    		            }
+    		        });
+    				$(this).css('background-color', '#1D9F8E');
+    				$(this).css('color', 'white');
+    				$(this).css('border-color', '#1D9F8E');
+    				$(this).text('초대완료');
+    			}
     		});
 		});
 	</script>

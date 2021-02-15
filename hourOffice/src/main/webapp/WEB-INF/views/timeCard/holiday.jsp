@@ -115,7 +115,7 @@ body {
 
 
 						<div style="float: right;">
-							<a id="aform" href="">연차작성</a>
+							<a id="aform" href="/approvalForm.ho?docuType=H">연차작성</a>
 						</div>
 						<div id="loading">loading...</div>
 						<div id="calendar" style="margin-top: 50px;"></div>

@@ -2,108 +2,75 @@ package kr.or.houroffice.mail.model.vo;
 
 import java.sql.Timestamp;
 
-import oracle.sql.CLOB;
-
 public class Mail {
 	private int mailNo; //메일번호
-	private String sender; //보낸사람
-	private String receiver; //받는사람
+	private int memNo; //보낸사람
 	private String title; //제목
-	private Timestamp receiveDate; //수신일
-	private CLOB content; //내용
-	private char readYN; //읽음여부
-	private char keepYN; //보관여부
-	private char delYN; //삭제여부
-	
+	private String content; //내용
+	private Timestamp sendDate; //수신일
+	private char fileYN; //첨부파일 여부
+	private char delYN; //삭제 여부
 	public Mail() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Mail(int mailNo, String sender, String receiver, String title, Timestamp receiveDate, CLOB content,
-			char readYN, char keepYN, char delYN) {
+	public Mail(int mailNo, int memNo, String title, String content, Timestamp sendDate, char fileYN, char delYN) {
 		super();
 		this.mailNo = mailNo;
-		this.sender = sender;
-		this.receiver = receiver;
+		this.memNo = memNo;
 		this.title = title;
-		this.receiveDate = receiveDate;
 		this.content = content;
-		this.readYN = readYN;
-		this.keepYN = keepYN;
+		this.sendDate = sendDate;
+		this.fileYN = fileYN;
 		this.delYN = delYN;
 	}
 
 	public int getMailNo() {
 		return mailNo;
 	}
-
-	public void setMailNo(int mailNo) {
-		this.mailNo = mailNo;
+	public int getMemNo() {
+		return memNo;
 	}
-
-	public String getSender() {
-		return sender;
-	}
-
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
-
-	public String getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
-
 	public String getTitle() {
 		return title;
 	}
-
+	public String getContent() {
+		return content;
+	}
+	public Timestamp getSendDate() {
+		return sendDate;
+	}
+	public void setMailNo(int mailNo) {
+		this.mailNo = mailNo;
+	}
+	public void setMemNo(int memNo) {
+		this.memNo = memNo;
+	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public Timestamp getReceiveDate() {
-		return receiveDate;
-	}
-
-	public void setReceiveDate(Timestamp receiveDate) {
-		this.receiveDate = receiveDate;
-	}
-
-	public CLOB getContent() {
-		return content;
-	}
-
-	public void setContent(CLOB content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
-
-	public char getReadYN() {
-		return readYN;
+	public void setSendDate(Timestamp sendDate) {
+		this.sendDate = sendDate;
 	}
 
-	public void setReadYN(char readYN) {
-		this.readYN = readYN;
-	}
-
-	public char getKeepYN() {
-		return keepYN;
-	}
-
-	public void setKeepYN(char keepYN) {
-		this.keepYN = keepYN;
+	public char getFileYN() {
+		return fileYN;
 	}
 
 	public char getDelYN() {
 		return delYN;
 	}
 
+	public void setFileYN(char fileYN) {
+		this.fileYN = fileYN;
+	}
+
 	public void setDelYN(char delYN) {
 		this.delYN = delYN;
 	}
-	
+
 }

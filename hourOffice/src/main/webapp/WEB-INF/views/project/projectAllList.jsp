@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.project.model.vo.ProjectRequest"%>
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="kr.or.houroffice.project.model.vo.Project"%>
 <%@page import="java.util.ArrayList"%>
@@ -23,10 +24,73 @@
 	href="/resources/css/project/projectAllList.css" />
 </head>
 <body>
+<style>
+	.requestBox{
+		width: 180px;
+		height: 150px;
+		background-color: #214252;
+		margin: 5px;
+		border-radius: 10px;
+		float: left;
+		color:white;
+	}
+	
+	/* 프로젝트 별 상세 내용 */
+.requestSubject {
+	padding: 10px;
+	color: white;
+	text-decoration: none;
+}
+
+.requestMember {
+	color: white;
+	padding: 0px 10px 10px 10px;
+	width: 80%;
+	float: left;
+}
+.requestBtnBox{
+	color: white;
+	padding: 40px 10px 10px 10px;
+	width: 100%;
+	float: left;
+}
+
+
+.joinBtn{
+	width: 48%;
+	text-align: center;
+	cursor: pointer;
+	padding: 10px;
+	float: left;
+	border-radius: 5px;
+	background-color: #1D9F8E; 
+	font-weight: bolder;
+}
+
+.refusalBtn{
+	width: 48%;
+	padding: 10px;
+	text-align: center;
+	cursor: pointer;
+	float: right;
+	border-radius: 5px;
+	background-color: #FF6363; 
+	font-weight: bolder;
+}
+.joinBtn:hover{
+	background-color: #198C7D; 
+}
+
+.refusalBtn:hover{
+	background-color: #F25E5E; 
+}
+</style>
 <%
 	ArrayList<Project> myList = (ArrayList<Project>)request.getAttribute("myList");
 	ArrayList<Project> publicList = (ArrayList<Project>)request.getAttribute("publicList");
 	ArrayList<Project> favoriteList = (ArrayList<Project>)request.getAttribute("favoriteList");
+	ArrayList<Project> requestList = (ArrayList<Project>)request.getAttribute("requestList");
+	ArrayList<Member> allMemberList = (ArrayList<Member>)request.getAttribute("allMemberList");
 	Member m = (Member)session.getAttribute("member");
 %>
 
@@ -39,7 +103,7 @@
 				<div id="contentsDetail" class="clearfix">
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						프로젝트 전체 목록
+						프로젝트 전체목록
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -48,7 +112,37 @@
 						<div id="newProjectBtn">+ 새 프로젝트</div>
 
 						<div class="projectList">
-
+						<%if(!requestList.isEmpty()){ %>
+							<%for(Project pr : requestList){ %>
+							
+							<%
+								String name="";
+								String position="";
+								for(Member member : allMemberList){
+									if(member.getMemNo()==pr.getMemNo()){
+										name = member.getMemName();
+										position = member.getMemPosition();
+									}
+								}
+							%>
+								<div class="requestBox">
+									<a>
+										<div class="requestSubject">제목 : <%=pr.getProSubject() %></div>
+										<div class="requestMember">요청자 : <%=name %>(<%=position %>)</div>
+										<div class="requestBtnBox">
+											<div class="joinBtn">참가하기</div>
+											<form action="/projectJoin.ho" method="post">
+												<input type="hidden" name="proNo" value="<%=pr.getProNo() %>"/>
+											</form>
+											<div class="refusalBtn">거절하기</div>
+											<form action="/projectRefusal.ho" method="post">
+												<input type="hidden" name="proNo" value="<%=pr.getProNo() %>"/>
+											</form>
+										</div>
+									</a>
+								</div>
+							<%} %>
+						<%} %>
 							<!-- 얘가 여러개 생겨남 -->
 						<%if(!myList.isEmpty()){ %>
 							<%for(Project p : myList) {%>
@@ -213,10 +307,6 @@
 			</div>
 			<input type="hidden" name="publicYN" id="public_check_hidden" value="off"/>
 			<br>
-			<br>
-			<div class="projectBtnSize" id="projectInviteMember">
-				<i class="fas fa-user-plus"></i> 초대하기
-			</div>
 			<input type="hidden" name="memNo" value=""/>
 			<div class="projectBtnSize">
 				<button type="submit" id="newProjectSubmitBtn">프로젝트 생성</button>
@@ -224,39 +314,40 @@
 		</form>
 	</div>
 
-	<!-- 멤버 추가 박스 Ajax로 하기 -->
-	<div id="inviteBox">
-		<div id="inviteHeader">
-			<i id="inviteExit" class="fas fa-arrow-left"></i>
-			<div id="inviteName">초대하기</div>
-		</div>
-		<div id="inviteSearchBox">
-			<form id="memberSearchForm" action="#" method="get">
-				<input id="memberSearch" type="text" name="memberNo"
-					placeholder=" 프로젝트를 함께할 친구를 찾아보세요!" /><i id="memberSearchImg"
-					class="fas fa-search"></i>
-			</form>
-		</div>
-		<div id="inviteContents">
-
-			<!--얘가 여러개 생겨남-->
-			<div class="inviteMemberList">
-				<div class="memberImg">
-					<i class="fas fa-user-circle"></i>
-				</div>
-				<div class="memberInfo">
-					<div class="memberName">이름</div>
-					<div class="memberPosition">직급</div>
-				</div>
-				<div class="memberAdd">
-					<div class="memberAddBox">+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추가</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
 	<!-- 자바 스크립트    -->
 	<script>
+		$(function(){
+			
+			$('#categoryProject').next().css('display', 'block');
+			$('#categoryProject').next().css('height', '125px');
+			$('#categoryProject').children().last().children().attr('class',
+					'fas fa-chevron-left');
+
+			$('#categoryProject').next().children().eq(1).children().css('font-weight',
+					'800');
+			$('#categoryProject').next().children().eq(1).children().css('color',
+					'#ffcc29');
+
+			//프로젝트 참가하기 버튼 누를 시
+			$('.joinBtn').click(function(){
+				var joinForm = $(this).next();
+				var result = window.confirm("해당 프로젝트에 참가하시겠습니까?");
+				if(result){
+					joinForm.submit();
+				}
+			});
+			
+			//프로젝트 거절하기 버튼 누를 시
+			$('.refusalBtn').click(function(){
+				var refusalForm = $(this).next();
+				var result = window.confirm("해당 프로젝트의 참가를 거절하시겠습니까?");
+				if(result){
+					refusalForm.submit();
+				}
+			});
+			
+			
+		});
 	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script type="text/javascript" src="/resources/js/projectAllList.js"></script>

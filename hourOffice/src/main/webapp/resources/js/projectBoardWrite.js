@@ -1,6 +1,6 @@
 $(function() {
 	/* textarea 키를 누를 때 마다 자동 높이 조절*/
-	function adjustHeight() {
+	function adjustHeight1() {
 		var textEle = $('#postTextarea');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -9,12 +9,12 @@ $(function() {
 	;
 	var textEle = $('#postTextarea');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight1();
 	});
 	/* TextArea 자동 높이 조절 CDN */
 	autosize($('textarea'));
 
-	function adjustHeight() {
+	function adjustHeight2() {
 		var textEle = $('#codeTextarea');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -23,11 +23,11 @@ $(function() {
 	;
 	var textEle = $('#codeTextarea');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight2();
 	});
 	
 	
-	function adjustHeight() {
+	function adjustHeight3() {
 		var textEle = $('#codeText');
 		textEle[0].style.height = 'auto';
 		var textEleHeight = textEle.prop('scrollHeight');
@@ -36,7 +36,7 @@ $(function() {
 	;
 	var textEle = $('#codeText');
 	textEle.on('keyup', function() {
-		adjustHeight();
+		adjustHeight3();
 	});
 	
 	/* 프로젝트 옵션 선택 시 박스 나타내기 */
@@ -87,20 +87,7 @@ $(function() {
 		$('#wrap').css('pointer-events', 'all');
 	});
 
-	/* 멤버 +추가 누를 시 */
-	$('.memberAddBox').click(function() {
-		if ($('.memberAddBox').text() == '초대완료') {
-			$('.memberAddBox').html('+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추가');
-			$('.memberAddBox').css('background-color', 'white');
-			$('.memberAddBox').css('border-color', '#808080');
-			$('.memberAddBox').css('color', '#808080');
-		} else {
-			$('.memberAddBox').css('background-color', '#1D9F8E');
-			$('.memberAddBox').css('color', 'white');
-			$('.memberAddBox').css('border-color', '#1D9F8E');
-			$('.memberAddBox').text('초대완료');
-		}
-	});
+	
 
 	/* 멤버 전체보기 누를 경우 */
 	$('#memberAllList').click(function() {
@@ -204,7 +191,7 @@ $(function() {
 	
 	//이전화면 누르기
 	$('#backward').click(function(){
-		location.replace('/projectAllList.ho');
+		location.replace('/projectDatail.ho');
 	});
 	
 	//게시물 즐겨찾기 추가버튼

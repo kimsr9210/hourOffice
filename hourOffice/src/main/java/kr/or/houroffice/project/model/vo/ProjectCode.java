@@ -15,6 +15,12 @@ public class ProjectCode {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public String toString() {
+		return "ProjectCode [codeNo=" + codeNo + ", proNo=" + proNo + ", memNo=" + memNo + ", codeDate=" + codeDate
+				+ ", codeText=" + codeText + ", boardText=" + boardText + ", delYN=" + delYN + ", imgName=" + imgName
+				+ "]";
+	}
 	public ProjectCode(int codeNo, int proNo, int memNo, Timestamp codeDate, String codeText, String boardText,
 			char delYN, String imgName) {
 		super();
@@ -74,12 +80,6 @@ public class ProjectCode {
 	}
 	public void setImgName(String imgName) {
 		this.imgName = imgName;
-	}
-	@Override
-	public String toString() {
-		return "ProjectCode [codeNo=" + codeNo + ", proNo=" + proNo + ", memNo=" + memNo + ", codeDate=" + codeDate
-				+ ", codeText=" + codeText + ", boardText=" + boardText + ", delYN=" + delYN + ", imgName=" + imgName
-				+ "]";
 	}
 	
 	

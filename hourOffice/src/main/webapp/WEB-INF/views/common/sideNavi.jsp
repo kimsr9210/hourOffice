@@ -31,11 +31,11 @@
 
 		<ui class="categoryBox">
 		<li class="categoryName">메일함</li>
-		<li class="categoryList"><a href="#">받은 메일함</a></li>
-		<li class="categoryList"><a href="#">보낸 메일함</a></li>
-		<li class="categoryList"><a href="#">보관 메일함</a></li>
-		<li class="categoryList"><a href="#">참조 메일함</a></li>
-		<li class="categoryList"><a href="#">삭제 메일함</a></li>
+		<li class="categoryList"><a href="/mailList.ho?listType=R">받은 메일함</a></li>
+		<li class="categoryList"><a href="/mailList.ho?listType=S">보낸 메일함</a></li>
+		<li class="categoryList"><a href="/mailList.ho?listType=K">보관 메일함</a></li>
+		<li class="categoryList"><a href="/mailList.ho?listType=F">참조 메일함</a></li>
+		<li class="categoryList"><a href="/mailList.ho?listType=D">삭제 메일함</a></li>
 		</ui>
 
 		<div id="categoryMypage" class="sideNaviClick">
@@ -120,10 +120,10 @@
 
 		<ui class="categoryBox">
 		<li class="categoryName">프로젝트 목록</li>
-		<li class="categoryList"><a href="#">프로젝트 전체목록</a></li>
-		<li class="categoryList"><a href="#">프로젝트 진행목록</a></li>
-		<li class="categoryList"><a href="#">프로젝트 완료목록</a></li>
-		<li class="categoryList"><a href="#">프로젝트 즐겨찾기</a></li>
+		<li class="categoryList"><a href="/projectAllList.ho">프로젝트 전체목록</a></li>
+		<li class="categoryList"><a href="/projectProgressList.ho">프로젝트 진행목록</a></li>
+		<li class="categoryList"><a href="/projectComplateList.ho">프로젝트 완료목록</a></li>
+		<li class="categoryList"><a href="/projectLikeList.ho">프로젝트 즐겨찾기</a></li>
 		</ui>
 
 		<div class="sideNaviClick">

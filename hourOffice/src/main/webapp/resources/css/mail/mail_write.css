@@ -1,0 +1,188 @@
+@charset "UTF-8";
+
+/* -------------- 공용 레이아웃 (수정X)-------------- */
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+}
+html{overflow-y: hidden;}
+a{ text-decoration: none;}
+a:visited{text-decoration: none; color: black;}
+a:active{ text-decoration: none;}
+#wrap {
+    position: absolute;
+    top: 0;
+    bottom:0;
+    left: 0;
+    right: 0;
+    min-width: 1200px;
+    overflow-y: hidden;
+}
+
+#header {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    background-color: #1D9F8E;
+}
+
+#contentsBox {
+    width: 100%;
+    height: calc(100% - 40px);
+    background-color: #F2F2F2;
+    overflow: hidden;
+}
+
+#sideNavi {
+    width: 200px;
+    height: 100%;
+    float: left;
+    overflow-y: auto;
+    background-color: #1D9F8E;
+}
+
+#contents {
+    width: calc(100% - 200px);
+    height: 100%;
+    float: left;
+    overflow-y: auto;
+}
+
+#contentsDetail {
+    min-width: 900px;
+    width: 90%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 700px;
+    background-color: white;
+    border-radius: 5px;
+    margin: 30px auto;
+    border: 0;
+    box-shadow: 0 0 6px #B3B3B3;
+}
+
+#TitleName {
+    width: calc(100% - 80px);
+    height: 50px;
+    font-size: 1.5rem;
+    margin: 40px 40px 10px;
+    float: left;
+}
+
+#TitleContents {
+    width: calc(100% - 80px);
+    height: calc(100% - 130px);
+    margin: 15px 40px 15px;
+    float: left;
+}
+
+/* clearfix */
+.clearfix {*zoom:1;}
+.clearfix:before, .clearfix:after {display:block; content: ''; line-height: 0;}
+.clearfix:after {clear: both;}
+
+/* -------------- 공용 레이아웃 (수정X)-------------- */
+
+input[type=submit] {
+    border: none;
+    background-color: #12776A;
+    color: white;
+    width: 120px;
+    height:  30px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    left: calc(100% - 120px);
+    bottom: 10px;
+}
+
+#mail-info-wrap {
+    border: 1px solid darkgray;
+    border-bottom: 1px solid white;
+    background-color: #eaeaea;
+    width: 100%;
+    height: 210px;
+   	overflow:hidden;
+    margin: 0 auto;
+    line-height: 40px;
+    padding: 10px 0;
+}
+
+#mail-content {
+    width: 99.7%;
+    height: 400px;
+}
+
+#mail-info-wrap input[type=text]{
+    padding: 5px;
+    width: 75%;
+}
+
+#mail-info-wrap input[type=file]{
+    width: 70%;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+#text-wrap {
+    width: 100%;
+    height: auto;
+    border: none;
+}
+
+.mail-info {
+    float: left;
+    width: 100%;
+    height: 50px;
+    overflow-x:hidden;
+}
+
+.mail-info>div:first-child {
+    float: left;
+    width: 150px;
+    padding-left: 20px;
+    height: 50px;
+    line-height: 50px;
+}
+.mail-info:nth-child(2n){
+    line-height: 50px;
+}
+
+.fa-plus-circle {
+    font-size: 1.2rem;
+    color: #1D9F8E;
+    cursor: pointer;
+}
+
+.mem-list {
+    float: left;
+    min-width: 600px;
+    max-width:900px;
+    height: 48px;
+    overflow-y: hidden;
+    white-space:nowrap;
+}
+.mem-list::-webkit-scrollbar { width: 5px; height: 7px;} /* 스크롤 바 */
+.mem-list::-webkit-scrollbar-track { background-color:none; } /* 스크롤 바 밑의 배경 */
+.mem-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; } /* 실질적 스크롤 바 */
+.mem-list::-webkit-scrollbar-thumb:hover { background: #404040; } /* 실질적 스크롤 바 위에 마우스를 올려다 둘 때 */
+.mem-list::-webkit-scrollbar-thumb:active { background: #808080; } /* 실질적 스크롤 바를 클릭할 때 */
+.mem-list::-webkit-scrollbar-button { display: none; } /* 스크롤 바 상 하단 버튼 */
+
+.rec-name, .ref-name {
+    border: 1px solid darkgray;
+    background-color: white;
+    border-radius: 15px;
+    padding: 5px;
+    margin-right: 5px;
+}
+.fa-times-circle {
+    font-size: 1rem;
+    color:darkgray;
+    cursor: pointer;
+}

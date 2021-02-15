@@ -16,5 +16,25 @@
         INNER JOIN MEMBER M
         ON L.MEM_NO = M.MEM_NO
 	</select>
+	
+	<!-- 근태 조회 -->
+	<select id="selectWork" resultType="Attendance" parameterType="hashmap">
+    	 SELECT
+            ATTENDANCE_BOOK.MEM_NO AS memNo,
+            TO_CHAR(ATTENDANCE_BOOK.YMD,'yyyyMMdd') AS YMD,
+            ATTENDANCE_BOOK.START_DATE AS startDate,
+            ATTENDANCE_BOOK.END_DATE AS endDate,
+            ATTENDANCE_BOOK.TODAY_WORK AS todayWork,
+            MEM_DEPT.MEM_NAME AS memName,
+            MEM_DEPT.DEPT_NAME AS deptName
+        FROM 
+            ATTENDANCE_BOOK 
+        LEFT OUTER JOIN MEM_DEPT ON ATTENDANCE_BOOK.MEM_NO = MEM_DEPT.MEM_NO
+        <where> 
+        	ATTENDANCE_BOOK.MEM_NO = #{memNo}
+        	AND TO_CHAR(ATTENDANCE_BOOK.YMD,'yyyyMMdd') >= replace(#{startDate}, '-', '')
+            AND TO_CHAR(ATTENDANCE_BOOK.YMD,'yyyyMMdd') <![CDATA[<=]]> replace(#{endDate}, '-', '')
+        </where>
+	</select>
 
 </mapper>

@@ -86,7 +86,20 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function(){
+			$('#categoryElecAppr').next().css('display', 'block');
+			$('#categoryElecAppr').next().css('height', '150px');
+			$('#categoryElecAppr').children().last().children().attr('class',
+					'fas fa-chevron-left');
 
+			$('#categoryElecAppr').next().children().eq(1).children().css('font-weight',
+					'800');
+			$('#categoryElecAppr').next().children().eq(1).children().css('color',
+					'#ffcc29');
+
+		});
+	</script>
 	<!-- 자바 스크립트    -->
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 </body>
