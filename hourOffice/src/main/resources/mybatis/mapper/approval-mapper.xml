@@ -94,7 +94,11 @@
   			FINAL_DATE as finalDate
   			FROM (SELECT ROW_NUMBER() OVER(ORDER BY DOCU_DATE DESC) 
 			AS ROW_NUM, APR.*, M.MEM_NAME FROM APPROVAL APR JOIN MEMBER M ON APR.MEM_NO = M.MEM_NO
-            WHERE APR.DEPT_CODE = #{deptCode}
+            WHERE 
+            <choose>
+            <when test="deptCode != null">APR.DEPT_CODE = #{deptCode}</when>
+            <otherwise>APR.DEPT_CODE IS NULL</otherwise>
+            </choose>
 			<if test="aprStatus != null">AND APR_TYPE = #{aprStatus}</if>
 			<choose>
 			<when test="searchType == 'title'">AND APR.TITLE LIKE '%'||#{keyword}||'%'</when>
@@ -108,7 +112,12 @@
   		SELECT COUNT(*) FROM APPROVAL APR JOIN MEMBER M ON APR.MEM_NO = M.MEM_NO WHERE 
   		<choose>
   			<when test="memNo != 0">APR.MEM_NO = #{memNo}</when>
-  			<otherwise>APR.DEPT_CODE = #{deptCode}</otherwise>
+  			<otherwise>
+  			<choose>
+            <when test="deptCode != null">APR.DEPT_CODE = #{deptCode}</when>
+            <otherwise>APR.DEPT_CODE IS NULL</otherwise>
+            </choose>
+  			</otherwise>
   		</choose>
   		<if test="aprStatus != null">AND APR.APR_TYPE = #{aprStatus}</if>
   		<choose>
@@ -152,7 +161,12 @@
 			MEM_NAME as memName,
 			DEPT_CODE as deptCode,
 			DEPT_NAME as deptName
-  		FROM MEM_DEPT WHERE DEPT_CODE = #{deptCode} AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		FROM MEM_DEPT WHERE
+  		<choose> 
+  		<when test="deptCode != null">DEPT_CODE = #{deptCode}</when>
+  		<otherwise>DEPT_CODE IS NULL</otherwise>
+  		</choose> 
+  		AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
   		ORDER BY DEPT_CODE
   	</select>
   	
@@ -163,7 +177,12 @@
 			MEM_NAME as memName,
 			DEPT_CODE as deptCode,
 			DEPT_NAME as deptName
-  		FROM MEM_DEPT WHERE DEPT_CODE IN ('D2',#{deptCode}) AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
+  		FROM MEM_DEPT WHERE
+  		<choose> 
+  		<when test="deptCode != null">DEPT_CODE IN ('D2',#{deptCode})</when>
+  		<otherwise>(DEPT_CODE = 'D2' OR DEPT_CODE IS NULL)</otherwise> 
+  		</choose> 
+  		AND MEM_NO != #{memNo} AND MEM_DEL_YN = 'N' AND MEM_RESIGN_YN = 'N'
   		ORDER BY DEPT_CODE
   	</select>
   	
