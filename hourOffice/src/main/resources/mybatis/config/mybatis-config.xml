@@ -18,6 +18,8 @@
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectCode" alias="ProjectCode"/>
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectWork" alias="ProjectWork"/>
 		<typeAlias type="kr.or.houroffice.project.model.vo.ProjectRequest" alias="ProjectRequest"/>
+		<typeAlias type="kr.or.houroffice.project.model.vo.MonthlyProject" alias="MonthlyProject"/><!-- 프로젝트월별 통계 -->
+		
 		<typeAlias type="kr.or.houroffice.timecard.model.vo.Holiday" alias="Holiday"/> <!-- 연차내역(켈린더) --> 
 		<typeAlias type="kr.or.houroffice.personnel.model.vo.MemDept" alias="MemDept"/> <!-- 인사정보 --> 
 		<typeAlias type="kr.or.houroffice.personnel.model.vo.Contact" alias="Contact"/> <!-- 개인주소록 -->
@@ -50,6 +52,9 @@
 		<typeAlias type="kr.or.houroffice.mail.model.vo.MailListPage" alias="MailListPage"/>
 		<typeAlias type="kr.or.houroffice.mail.model.vo.MailList" alias="MailList"/>
 		<typeAlias type="kr.or.houroffice.mail.model.vo.SendingMail" alias="SendingMail"/>
+		
+		<typeAlias type="kr.or.houroffice.main.model.vo.AllNotice" alias="AllNotice"/>
+		<typeAlias type="kr.or.houroffice.main.model.vo.CompanyRule" alias="CompanyRule"/>
 	</typeAliases>
 </configuration>
 

@@ -48,12 +48,18 @@
     .nc-state{
         color: #F7F4BC;
     }
+    .nc-state:visited{
+    	color: #F7F4BC; 
+    }
     .nc-state:hover{
         color: white;
     }
     .nc-cont{
         color: lightgray;
         float: right;
+    }
+    .nc-cont:visited{
+    	color: lightgray; 
     }
     .nc-cont:hover{
         color: #68B5F3;
