@@ -66,7 +66,10 @@
                                     </tr>
                                     <tr>
                                         <td>기안부서</td>
-                                        <td>${docu.deptName }</td>
+                                        <td><c:choose>
+                                        	<c:when test="${docu.deptCode != null }">${docu.deptName }</c:when>
+                                        	<c:otherwise>부서없음</c:otherwise>
+                                        </c:choose></td>
                                     </tr>
                                     <tr>
                                         <td>기안일</td>
