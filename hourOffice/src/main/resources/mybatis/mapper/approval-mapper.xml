@@ -189,9 +189,9 @@
 
   	<!-- BY 진원 - 자신이 결재해야할 문서개수 조회 -->
   	<select id="selectMyAprLineCount" resultType="int">
-  		SELECT COUNT(DOCU_NO)
-  		FROM APPROVAL_LINE
-  		WHERE MEM_NO=#{memNo} AND APR_TYPE = 'W'
+  		SELECT COUNT(AL.DOCU_NO)
+  		FROM APPROVAL_LINE AL JOIN APPROVAL APR ON AL.DOCU_NO = APR.DOCU_NO
+		WHERE AL.MEM_NO = #{memNo} AND AL.APR_TYPE = 'W' AND APR.DEL_YN ='N'
   	</select>
   	
   	

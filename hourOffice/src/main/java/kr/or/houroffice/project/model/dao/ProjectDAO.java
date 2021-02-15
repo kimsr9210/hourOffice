@@ -6,6 +6,7 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import kr.or.houroffice.project.model.vo.MonthlyProject;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectCode;
@@ -267,7 +268,17 @@ public class ProjectDAO {
 		return result;
 	}
 
+	//BY 진원 - 특정 개월 이내 월별 프로젝트 실행 개수 통계
+	public ArrayList<MonthlyProject> selectMonthlyProject(SqlSessionTemplate sqlSession, int monthly) {
+		List monthlyList = sqlSession.selectList("project.selectMonthlyProject",monthly);
+		return (ArrayList<MonthlyProject>)monthlyList;
+	}
 	
+	//BY 진원 -일정 목록 가져오기
+	public ArrayList<ProjectPlan> selectPlanList(SqlSessionTemplate sqlSession, int proNo) {
+		List list = sqlSession.selectList("project.selectPlanList",proNo);
+		return (ArrayList<ProjectPlan>) list;
+	}
 
 	
 

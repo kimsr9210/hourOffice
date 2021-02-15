@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import kr.or.houroffice.member.model.dao.MemberDAO;
 import kr.or.houroffice.member.model.vo.Attendance;
 import kr.or.houroffice.member.model.vo.Member;
-import kr.or.houroffice.project.model.vo.ProjectMember;
 
 @Service("memberService")
 public class MemberService {
