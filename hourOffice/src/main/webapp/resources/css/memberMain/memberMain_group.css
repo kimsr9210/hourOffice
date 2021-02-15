@@ -5,29 +5,30 @@
         background-color: white;
         padding: 15px 5px;
         overflow-y: scroll;
+        box-shadow: 0px 1px 1px 1px lightgray;
     }
     
-/* SCROLL */
-.group::-webkit-scrollbar { /* 스크롤바의 전체 width */
-	width: 20px;
-}
-
-.group::-webkit-scrollbar-track { /* 스크롤바의 전체 배경색 */
-	background-color: white;
-}
-
-.group::-webkit-scrollbar-thumb { /* 스크롤바 */
-    background-color: #595959;
-    border-radius: 20px;
-    background-clip: padding-box;
-    border: 5px solid transparent;
-}
-.group::-webkit-scrollbar-thumb:hover{
-	background-color: #1D9F8E;
-}
-.group::-webkit-scrollbar-button { /* 위 아래 버튼 (버튼 없애기를 함) */
-	display: none;
-}
+	/* SCROLL */
+	.group::-webkit-scrollbar { /* 스크롤바의 전체 width */
+		width: 20px;
+	}
+	
+	.group::-webkit-scrollbar-track { /* 스크롤바의 전체 배경색 */
+		background-color: white;
+	}
+	
+	.group::-webkit-scrollbar-thumb { /* 스크롤바 */
+	    background-color: #595959;
+	    border-radius: 20px;
+	    background-clip: padding-box;
+	    border: 5px solid transparent;
+	}
+	.group::-webkit-scrollbar-thumb:hover{
+		background-color: #1D9F8E;
+	}
+	.group::-webkit-scrollbar-button { /* 위 아래 버튼 (버튼 없애기를 함) */
+		display: none;
+	}
 
     
     .tree{
@@ -62,11 +63,14 @@
       color:#595959;
         font-weight: bold;
         font-size: 13px;
-        cursor: pointer;
+        /* cursor: pointer; */
         display: block;
         margin-bottom: 1px;
     }
-    .tree span:hover{
+    /* .tree span:hover{
+        color: #42B9CB;
+    } */
+    .tree label:hover{
         color: #42B9CB;
     }
     .tree span:before{ /*사람 실루엣*/

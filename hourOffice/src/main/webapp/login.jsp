@@ -29,7 +29,8 @@
 	</c:when>
 	<c:otherwise>
 		<script>
-			location.replace('/main.ho');
+			var todayMon = new Date().getMonth()+1;
+			location.replace('/main.ho?todayMon='+todayMon);
 		</script>
 	</c:otherwise>
 </c:choose>

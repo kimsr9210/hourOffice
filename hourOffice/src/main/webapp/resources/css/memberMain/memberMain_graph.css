@@ -5,6 +5,7 @@
         background-color: white;
         display: flex;
         align-items: center;
+        box-shadow: 0px 1px 1px 1px lightgray;
     }
     /*통계*/
     .pro-graph-count{

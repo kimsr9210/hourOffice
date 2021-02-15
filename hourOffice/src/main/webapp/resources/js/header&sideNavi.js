@@ -37,12 +37,15 @@ $(function() {
 		$('#searchBox').css('margin-top', '0');
 		$('#searchBox').css('transition', '0.3s');
 		$('#searchBox').css('cursor', 'text');
+		$('#searchBox').attr('placeholder','통합 검색...'); /*진원 추가*/
+		$('#searchBox').focus(); /*진원 추가*/
 	});
 	$('#searchBox').focusout(function() {
 		$('#searchBox').css('height', '0.01px');
 		$('#searchBox').css('margin-top', '29px');
 		$('#searchBox').css('transition', '0.3s');
 		$('#searchBox').css('cursor', 'point');
+		$('#searchBox').attr('placeholder',''); /*진원 추가*/
 	});
 
 	/* 카테고리 나타내기 */

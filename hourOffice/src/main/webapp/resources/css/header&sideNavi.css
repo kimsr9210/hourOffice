@@ -248,6 +248,8 @@ a:active {
 	height: 0.01px;
 	margin-top: 29px;
 	outline: none;
+	font-size: 14px; /*진원 추가*/
+	padding-left: 3px; /*진원 추가*/
 }
 
 #searchBtn {
@@ -347,7 +349,7 @@ a:active {
 
 /* 말풍선 */
 #searchTooltip {
-	background-color: black;;
+	background-color: black;
 	position: absolute;
 	top: 40px;
 	margin-left: -30px;
@@ -362,7 +364,7 @@ a:active {
 }
 
 #exitTooltip {
-	background-color: black;;
+	background-color: black;
 	position: absolute;
 	top: 40px;
 	margin-left: -30px;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import kr.or.houroffice.project.model.dao.ProjectDAO;
+import kr.or.houroffice.project.model.vo.MonthlyProject;
 import kr.or.houroffice.project.model.vo.Project;
 import kr.or.houroffice.project.model.vo.ProjectBoard;
 import kr.or.houroffice.project.model.vo.ProjectCode;
@@ -283,7 +284,16 @@ public class ProjectServiceImpl implements ProjectService{
 		return result;
 	}
 
-	
+	//BY 진원 - 특정 개월 이내 월별 프로젝트 실행 개수 통계
+	public ArrayList<MonthlyProject> selectMonthlyProject(int monthly){
+		return pDAO.selectMonthlyProject(sqlSession, monthly);
+	}
+
+	//BY 진원 -일정 목록 가져오기
+	public ArrayList<ProjectPlan> selectPlanList(int proNo) {
+		return pDAO.selectPlanList(sqlSession, proNo);
+		
+	}
 	
 
 	

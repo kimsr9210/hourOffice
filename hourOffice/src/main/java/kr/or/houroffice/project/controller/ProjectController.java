@@ -1,10 +1,8 @@
 package kr.or.houroffice.project.controller;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +15,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
-import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -276,6 +271,9 @@ public class ProjectController {
 		//요청 멤버 번호 리스트 가져오기
 		ArrayList<ProjectRequest> requestList = pService.selectProjectRequestList(proNo);
 		
+		//BY 진원 -일정 목록 가져오기
+		ArrayList<ProjectPlan> planList = pService.selectPlanList(proNo);
+
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
 		mav.addObject("boardList", boardList);
@@ -296,6 +294,8 @@ public class ProjectController {
 		mav.addObject("codeList", codeList);
 		mav.addObject("boardType", boardType);
 		mav.setViewName("project/projectDetail");
+		mav.addObject("planList", planList);
+		
 		return mav;
 	}
 	
