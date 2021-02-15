@@ -175,9 +175,9 @@
             	var mailNo = $('#mail-info-title').attr('mailno');
             	var listType = $('#mail_fdel_btn').attr('type');
             	  $.ajax({
-            		 url : "/restoreMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": [listType], "mailNoList" : [mailNo]},
+            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'T'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
@@ -197,9 +197,9 @@
             	var mailNo = $('#mail-info-title').attr('mailno');
             	var listType = $('#mail_fdel_btn').attr('type');
             	  $.ajax({
-            		 url : "/deletePermMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": [listType], "mailNoList" : [mailNo]},
+            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'P'},
             		 type : "post",
             		 success : function(result){
             			 if(result){

@@ -53,45 +53,36 @@ public class ApprovalDAO {
 	}
 
 	public int selectMyAprLineCount(SqlSessionTemplate sqlSession, int memNo) {
-		int count = sqlSession.selectOne("approval.selectMyAprLineCount",memNo);
-		return count;
+		return sqlSession.selectOne("approval.selectMyAprLineCount",memNo);
   }
 	public int insertApproval(SqlSessionTemplate sqlSession, AprForm af) {//결재문서 입력
 		int result = sqlSession.insert("approval.insertApproval",af);
-		if(result>0){
-			return af.getDocuNo();
-		}
+		if(result>0) return af.getDocuNo(); //결재문서 입력후 문서번호 반환
 		return result;
 	}
 
 	public int insertApprovalLine(SqlSessionTemplate sqlSession, ApprovalLine al) {
-		int result = sqlSession.insert("approval.insertApprovalLine",al);
-		return result;
+		return sqlSession.insert("approval.insertApprovalLine",al);
 	}
 
 	public int insertApprovalRef(SqlSessionTemplate sqlSession, ApprovalRef ar) {
-		int result =  sqlSession.insert("approval.insertApprovalRef", ar);
-		return result;
+		return  sqlSession.insert("approval.insertApprovalRef", ar);
 	}
 
 	public int insertHolidayForm(SqlSessionTemplate sqlSession, AprFormHol afh) {
-		int result = sqlSession.insert("approval.insertHolidayForm",afh);
-		return result;
+		return sqlSession.insert("approval.insertHolidayForm",afh);
 	}
 
 	public int insertLazinessForm(SqlSessionTemplate sqlSession, AprFormLazy afl) {
-		int result = sqlSession.insert("approval.insertLazinessForm",afl);
-		return result;
+		return sqlSession.insert("approval.insertLazinessForm",afl);
 	}
 
 	public int insertOvertimeForm(SqlSessionTemplate sqlSession, AprFormOvt afo) {
-		int result = sqlSession.insert("approval.insertOvertimeForm",afo);
-		return result;
+		return sqlSession.insert("approval.insertOvertimeForm",afo);
 	}
 
 	public int insertCCCForm(SqlSessionTemplate sqlSession, AprFormCCC afc) {
-		int result = sqlSession.insert("approval.insertCCCForm",afc);
-		return result;
+		return sqlSession.insert("approval.insertCCCForm",afc);
 	}
 
 	public String getPageNavi(SqlSessionTemplate sqlSession, AprListPage alp, char listType) {
@@ -183,14 +174,12 @@ public class ApprovalDAO {
 			result4 = sqlSession.update("approval.updateHolidayCount",afh); //연차 갯수 변경
 		}
 		
-		if(result1+result2+result3+result4>3){//모든 결과가 1이상이 나와야만 문제가 없음.
-			return 1;
-		}return 0;
+		if(result1+result2+result3+result4>3) return 1;//모든 결과가 1이상이 나와야만 문제가 없음.
+		return 0;
 	}
 
 	public int deleteApproval(SqlSessionTemplate sqlSession, Approval apr) {
-		int result = sqlSession.update("approval.deleteApproval",apr);
-		return result;
+		return sqlSession.update("approval.deleteApproval",apr);
 	}
 
 	public ArrayList<ApprovalRef> selectOneAprRef(SqlSessionTemplate sqlSession, int docuNo) {
@@ -199,38 +188,31 @@ public class ApprovalDAO {
 	}
 
 	public int updateAprForm(SqlSessionTemplate sqlSession, AprFormHol afh) {
-		int result = sqlSession.update("approval.updateAprFormHol",afh);
-		return result;
+		return sqlSession.update("approval.updateAprFormHol",afh);
 	}
 
 	public int updateAprForm(SqlSessionTemplate sqlSession, AprFormCCC afc) {
-		int result = sqlSession.update("approval.updateAprFormCCC",afc);
-		return result;
+		return sqlSession.update("approval.updateAprFormCCC",afc);
 	}
 
 	public int updateAprForm(SqlSessionTemplate sqlSession, AprFormLazy afl) {
-		int result = sqlSession.update("approval.updateAprFormLazy",afl);
-		return result;
+		return sqlSession.update("approval.updateAprFormLazy",afl);
 	}
 
 	public int updateAprForm(SqlSessionTemplate sqlSession, AprFormOvt afo) {
-		int result = sqlSession.update("approval.updateAprFormOvt",afo);
-		return result;
+		return sqlSession.update("approval.updateAprFormOvt",afo);
 	}
 
 	public int deleteApprovalLine(SqlSessionTemplate sqlSession, int docuNo) {
-		int result = sqlSession.delete("approval.deleteAprLine", docuNo);
-		return result;
+		return sqlSession.delete("approval.deleteAprLine", docuNo);
 	}
 
 	public int deleteApprovalRef(SqlSessionTemplate sqlSession, int docuNo) {
-		int result = sqlSession.delete("approval.deleteAprRef", docuNo);
-		return result;
+		return sqlSession.delete("approval.deleteAprRef", docuNo);
 	}
 
 	public int updateCardType(SqlSessionTemplate sqlSession, CCCForm cf) {
-		int result = sqlSession.update("approval.updateCardType",cf);
-		return result;
+		return sqlSession.update("approval.updateCardType",cf);
 	}
 
 }
