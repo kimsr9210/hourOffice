@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mail">
+  <select id="selectMemberAll" parameterType="String" resultType="Member">
+  	SELECT 
+ 		MEM_NO as memNo,
+		MEM_PWD as memPwd,
+		MEM_POSITION as memPosition,
+		DEPT_CODE as deptCode,
+		MEM_NAME as memName,
+		MEM_BIRTH as memBirth,
+		MEM_GENDER as memGender,
+		MEM_ADDRESS as memAddress,
+		MEM_PHONE as memPhone,
+		MEM_TELL as memTell,
+		MEM_EMAIL as memEmail,
+		MEM_PROFILE as memProfile,
+		MEM_HOLIDAY_COUNT as memHolidayCount,
+		MEM_JOIN_DATE as memJoinDate,
+		MEM_RESIGN_YN as memResignYN,
+		MEM_RESIGN_DATE as memResigndate,
+		MEM_DEL_YN as memDelYN,
+		MEM_DEL_DATE as memDelDate,
+		MEM_RIGHT_CODE as memRightCode 
+  	FROM MEMBER LEFT JOIN DEPARTMENT USING(DEPT_CODE)
+	WHERE 
+	<if test="value != null">DEPT_CODE = #{value} AND </if> 
+	MEM_RESIGN_YN = 'N' AND MEM_DEL_YN = 'N' ORDER BY MEM_NO
+  </select>
+  
+  <insert id="insertMail" parameterType="SendingMail">
+  	<selectKey keyProperty="mailNo" resultType="Integer" order="BEFORE"> select mail_seq.nextval from dual </selectKey>
+  	INSERT INTO MAIL VALUES(#{mailNo}, #{sender}, #{title}, #{content}, SYSTIMESTAMP, 
+  	<choose>
+  	 <when test="fileYN =='Y'">'Y'</when><otherwise>'N'</otherwise>
+  	 </choose>, 'N')
+  </insert>
+  
+  <update id="insertMailReceive" parameterType="SendingMail">
+  	<foreach collection="receiver" item="memNo" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+  	INTO MAIL_RECEIVE(MAIL_NO, MEM_NO, REC_DATE, READ_YN, KEEP_YN, DEL_YN) VALUES (#{mailNo}, #{memNo}, SYSTIMESTAMP, 'N','N','N') 
+  	</foreach>
+  </update>
+  
+  <update id="insertMailRef" parameterType="SendingMail">
+  	<foreach collection="memRef" item="memNo" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+  	INTO MAIL_REF(MAIL_NO, MEM_NO, REC_DATE, READ_YN, KEEP_YN, DEL_YN) VALUES (#{mailNo}, #{memNo}, SYSTIMESTAMP, 'N','N','N') 
+  	</foreach>
+  </update>
+  
+  <insert id="insertMailFile" parameterType="MailFile">
+  	<if test="originalFilename != null">
+  	INSERT INTO MAIL_FILE VALUES
+  	(MAIL_FILE_SEQ.NEXTVAL, #{mailNo}, #{originalFilename}, #{changedFilename}, #{filePath}, #{fileSize}, #{uploadDate})
+  	</if>
+  </insert>
+  
+  <select id="selectMailList" parameterType="MailListPage" resultType="MailGetter">
+  	SELECT
+  	MAIL_NO AS mailNo,
+  	SENDER AS sendMemNo,
+  	TITLE AS title,
+  	SEND_DATE AS sendDate,
+  	FILE_YN AS fileYN,
+  	RECEIVER AS recMemNo,
+  	REC_DATE AS recDate,
+  	READ_YN AS readYN,
+  	KEEP_YN AS keepYN,
+  	<if test="listType=='K' or listType=='D'">LISTTYPE AS listType,</if>
+  	MEM_NAME AS sendMemName,
+  	MEM_POSITION AS sendMemPosition 
+  	FROM (SELECT ROW_NUMBER() OVER(ORDER BY ML.MAIL_NO DESC) AS ROW_NUM, ML.MAIL_NO, ML.MEM_NO SENDER, ML.TITLE, ML.SEND_DATE, ML.FILE_YN, 
+  	<if test="listType=='K' or listType=='D'">MR.LISTTYPE,</if>
+	MR.MEM_NO RECEIVER, MR.REC_DATE, MR.READ_YN, MR.KEEP_YN, MR.DEL_YN, M.MEM_NAME, M.MEM_POSITION 
+	FROM MAIL ML JOIN 
+	<choose>
+		<when test="listType =='R'">MAIL_RECEIVE </when>
+		<when test="listType =='F'">MAIL_REF </when>
+		<when test="listType =='K' or listType=='D'">KEEP_MAIL_VIEW</when>
+	</choose>
+	MR ON ML.MAIL_NO = MR.MAIL_NO JOIN MEMBER M ON ML.MEM_NO = M.MEM_NO
+	WHERE MR.MEM_NO = #{memNo}
+	<if test="listType=='K'">AND MR.KEEP_YN = 'Y'</if> 
+	<choose>
+	<when test="searchType == 'title'">AND ML.TITLE LIKE '%'||#{keyword}||'%'</when>
+	<when test="searchType == 'sender'">AND M.MEM_NAME LIKE '%'||#{keyword}||'%'</when>
+	</choose>
+	AND <choose>
+  		<when test="listType=='D'">MR.DEL_YN = 'Y'</when>
+  		<otherwise>MR.DEL_YN = 'N'</otherwise>
+  	</choose>)
+	WHERE ROW_NUM BETWEEN #{startPage} AND #{endPage}
+  </select>
+  
+  <select id="selectSendMailList" parameterType="MailListPage" resultType="MailGetter">
+  	SELECT
+  	MAIL_NO AS mailNo,
+  	SENDER AS sendMemNo,
+  	TITLE AS title,
+  	SEND_DATE AS sendDate,
+  	FILE_YN AS fileYN,
+  	RECEIVER AS recMemNo,
+  	REC_DATE AS recDate,
+  	READ_YN AS readYN,
+  	KEEP_YN AS keepYN,
+  	MEM_NAME AS recMemName,
+  	MEM_POSITION AS recMemPosition 
+  	FROM (SELECT ROW_NUMBER() OVER(ORDER BY ML.MAIL_NO DESC) AS ROW_NUM, ML.MAIL_NO, ML.MEM_NO SENDER, ML.TITLE, ML.SEND_DATE, ML.FILE_YN, 
+	MR.MEM_NO RECEIVER, MR.REC_DATE, MR.READ_YN, MR.KEEP_YN, MR.DEL_YN, M.MEM_NAME, M.MEM_POSITION 
+	FROM MAIL ML JOIN  MAIL_RECEIVE MR ON ML.MAIL_NO = MR.MAIL_NO JOIN MEMBER M ON MR.MEM_NO = M.MEM_NO
+	WHERE ML.MEM_NO = #{memNo}
+	<choose>
+	<when test="searchType == 'title'">AND ML.TITLE LIKE '%'||#{keyword}||'%'</when>
+	<when test="searchType == 'receiver'">AND M.MEM_NAME LIKE '%'||#{keyword}||'%'</when>
+	</choose>
+	AND ML.DEL_YN = 'N')
+	WHERE ROW_NUM BETWEEN #{startPage} AND #{endPage}
+  </select>
+  
+  <select id="postTotalCount" parameterType="MailListPage" resultType="Integer">
+  	SELECT COUNT(*) FROM MAIL ML JOIN 
+	<choose>
+		<when test="listType =='R'">MAIL_RECEIVE </when>
+		<when test="listType =='F'">MAIL_REF </when>
+		<when test="listType =='K' or listType=='D'">KEEP_MAIL_VIEW</when>
+	</choose>
+ 	MR ON ML.MAIL_NO=MR.MAIL_NO WHERE MR.MEM_NO = #{memNo} 
+ 	<if test="listType=='K'">AND MR.KEEP_YN = 'Y'</if> 
+  	<choose>
+	<when test="searchType == 'title'">AND ML.TITLE LIKE '%'||#{keyword}||'%'</when>
+	<when test="searchType == 'sender'">AND M.MEM_NAME LIKE '%'||#{keyword}||'%'</when>
+	</choose>
+  	AND 
+  	<choose>
+  		<when test="listType=='D'">MR.DEL_YN = 'Y'</when>
+  		<otherwise>MR.DEL_YN = 'N'</otherwise>
+  	</choose>
+  </select>
+  
+  <select id="nonReadCount" parameterType="MailListPage" resultType="Integer">
+  	SELECT COUNT(*) FROM MAIL ML JOIN 
+  	<choose>
+		<when test="listType =='R'">MAIL_RECEIVE </when>
+		<when test="listType =='F'">MAIL_REF </when>
+		<when test="listType =='K' or listType=='D'">KEEP_MAIL_VIEW</when>
+	</choose>
+	MR ON ML.MAIL_NO=MR.MAIL_NO 
+	WHERE MR.MEM_NO = #{memNo} <if test="listType=='K'">AND MR.KEEP_YN = 'Y'</if> AND READ_YN ='N' AND 
+	<choose>
+  		<when test="listType=='D'">MR.DEL_YN = 'Y'</when>
+  		<otherwise>MR.DEL_YN = 'N'</otherwise>
+  	</choose>
+  </select>
+  
+  <select id="sendPostTotalCount" parameterType="MailListPage" resultType="Integer">
+  	SELECT  COUNT(*) 
+	FROM MAIL ML JOIN MAIL_RECEIVE MR ON ML.MAIL_NO = MR.MAIL_NO JOIN MEMBER M ON MR.MEM_NO = M.MEM_NO
+	WHERE ML.MEM_NO = #{memNo} 	
+	<choose>
+	<when test="searchType == 'title'">AND ML.TITLE LIKE '%'||#{keyword}||'%'</when>
+	<when test="searchType == 'receiver'">AND M.MEM_NAME LIKE '%'||#{keyword}||'%'</when>
+	</choose> 
+	AND ML.DEL_YN = 'N'
+  </select>
+  
+  <update id="updateReadYN" parameterType="MailReceive">
+  	UPDATE
+  	<choose>
+  		<when test="listType=='R'">MAIL_RECEIVE</when>
+  		<when test="listType=='F'">MAIL_REF</when>
+  	</choose>
+  	SET READ_YN = #{readYN} WHERE MAIL_NO = #{mailNo} AND MEM_NO = #{memNo}
+  </update>
+  
+  <update id="updateKeepYN" parameterType="MailReceive">
+  	UPDATE
+  	<choose>
+  		<when test="listType=='R'">MAIL_RECEIVE</when>
+  		<when test="listType=='F'">MAIL_REF</when>
+  	</choose>
+  	SET KEEP_YN = #{keepYN} WHERE MAIL_NO = #{mailNo} AND MEM_NO = #{memNo}
+  </update>
+  
+  <select id="selectOneMail" parameterType="MailReceive" resultType="MailGetter">
+  	SELECT 
+  	ML.MAIL_NO AS mailNo,
+  	ML.MEM_NO AS sendMemNo,
+  	M2.MEM_NAME AS sendMemName, 
+  	M2.MEM_POSITION AS sendMemPosition,
+  	ML.TITLE AS title,
+  	ML.CONTENT AS content,
+  	ML.SEND_DATE AS sendDate,
+  	ML.FILE_YN AS fileYN,
+  	MR.MEM_NO AS recMemNo,
+  	MR.REC_DATE AS recDate,
+  	MR.READ_YN AS readYN,
+  	MR.KEEP_YN AS keepYN,
+  	M.MEM_NAME AS recMemName,
+  	M.MEM_POSITION AS recMemPosition,
+  	MF.ATTACH_NO AS attachNo, 
+  	MF.ORIGINAL_FILENAME AS fileName 
+	FROM MAIL ML JOIN 
+	<choose>
+  		<when test="listType=='R' or listType=='S'">MAIL_RECEIVE</when>
+  		<when test="listType=='F'">MAIL_REF</when>
+  	</choose>
+	MR ON ML.MAIL_NO = MR.MAIL_NO JOIN MEMBER M ON MR.MEM_NO = M.MEM_NO
+	JOIN MEMBER M2 ON ML.MEM_NO = M2.MEM_NO
+	LEFT JOIN MAIL_FILE MF ON ML.MAIL_NO = MF.MAIL_NO
+	WHERE MR.MEM_NO = #{memNo} AND ML.MAIL_NO = #{mailNo} AND MR.DEL_YN = 'N'
+  </select>
+  
+  <update id="deleteMail" parameterType="MailInfo">
+  	UPDATE 
+  	<choose>
+  		<when test="listType=='R'">MAIL_RECEIVE</when>
+  		<when test="listType=='F'">MAIL_REF</when>
+  		<when test="listType=='S'">MAIL</when>
+  	</choose>
+  	SET DEL_YN = 'Y' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="mailNoList" item="mailNo" open="(" close=")" separator="," >#{mailNo}</foreach>
+  </update>
+  
+  <select id="selectTransferMail" resultType="MailGetter">
+  	SELECT
+  	ML.MAIL_NO AS mailNo,
+  	ML.MEM_NO AS sendMemNo,
+  	ML.TITLE AS title,
+  	ML.CONTENT AS content,
+  	ML.SEND_DATE AS sendDate,
+  	ML.FILE_YN AS fileYN,
+  	MF.ATTACH_NO AS attachNo, 
+  	MF.ORIGINAL_FILENAME AS fileName 
+ 	FROM MAIL ML LEFT JOIN MAIL_FILE MF 
+ 	ON ML.MAIL_NO = MF.MAIL_NO WHERE ML.MAIL_NO = #{mailNo}
+  </select>
+  
+  <select id="selectOneFile" resultType="MailFile">
+	SELECT 
+	ATTACH_NO AS attachNo,
+	MAIL_NO AS mailNo,
+	ORIGINAL_FILENAME AS originalFilename,
+	CHANGED_FILENAME AS changedFilename,
+	FILE_PATH AS filePath,
+	FILE_SIZE AS fileSize,
+	UPLOAD_DATE AS uploadDate
+	FROM MAIL_FILE WHERE ATTACH_NO = #{attachNo}
+  </select>
+  
+  <insert id="insertResendMail" parameterType="MailInfo">
+  	<selectKey keyProperty="rtMailNo" resultType="Integer" order="BEFORE"> select mail_seq.nextval from dual </selectKey>
+  	INSERT INTO MAIL (SELECT #{rtMailNo}, MEM_NO, TITLE, CONTENT, SEND_DATE, FILE_YN, DEL_YN FROM MAIL 
+  	WHERE MAIL_NO = #{sdMailNo} AND MEM_NO =#{memNo})
+  </insert>
+  
+  <insert id="insertResendMailRec" parameterType="MailInfo">
+  	INSERT INTO MAIL_RECEIVE (SELECT REC_NO, #{rtMailNo}, MEM_NO, SYSTIMESTAMP, 'N','N','N' FROM MAIL_RECEIVE 
+  	WHERE MAIL_NO = #{sdMailNo})
+  </insert>
+  
+  <insert id="insertResendMailRef" parameterType="MailInfo">
+  	INSERT INTO MAIL_REF (SELECT MAIL_REF_NO, #{rtMailNo}, MEM_NO, SYSTIMESTAMP, 'N','N','N' FROM MAIL_REF 
+  	WHERE MAIL_NO = #{sdMailNo})
+  </insert>
+  
+  <insert id="insertResendMailFile" parameterType="MailInfo">
+  	INSERT INTO MAIL_FILE (SELECT MAIL_FILE_SEQ.NEXTVAL, #{rtMailNo}, 
+  	ORIGINAL_FILENAME, CHANGED_FILENAME, FILE_PATH, FILE_SIZE, UPLOAD_DATE FROM MAIL_FILE WHERE MAIL_NO = #{sdMailNo})
+  </insert>
+  
+  <update id="deleteRecMailList" parameterType="MailList">
+  	UPDATE MAIL_RECEIVE SET DEL_YN = 'Y' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="recMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+  
+  <update id="deleteRefMailList" parameterType="MailList">
+  	UPDATE MAIL_REF SET DEL_YN = 'Y' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="refMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+  
+   <update id="restoreRecMailList" parameterType="MailList">
+  	UPDATE MAIL_RECEIVE SET DEL_YN = 'N' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="recMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+  
+  <update id="restoreRefMailList" parameterType="MailList">
+  	UPDATE MAIL_REF SET DEL_YN = 'N' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="refMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+  
+  <delete id="deletePermRecMailList" parameterType="MailList">
+  	DELETE FROM MAIL_RECEIVE WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="recMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </delete>
+  
+  <delete id="deletePermRefMailList" parameterType="MailList">
+  	DELETE FROM MAIL_REF WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="refMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </delete>
+  
+  <update id="updateReadRecMailList" parameterType="MailList">
+  	UPDATE MAIL_RECEIVE SET READ_YN = 'Y' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="recMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+  
+  <update id="updateReadRefMailList" parameterType="MailList">
+  	UPDATE MAIL_REF SET READ_YN = 'Y' WHERE MEM_NO = #{memNo} AND MAIL_NO IN
+  	<foreach collection="refMailNoList" open="(" close=")" separator="," item="mailNo">
+  	#{mailNo}
+  	</foreach>
+  </update>
+</mapper>
