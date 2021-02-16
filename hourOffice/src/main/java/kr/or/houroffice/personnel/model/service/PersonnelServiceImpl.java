@@ -159,4 +159,10 @@ public class PersonnelServiceImpl implements PersonnelService {
 		return result;
 	}
 
+	public int photoUpdate(int memNo) {
+		int result = pDAO.photoUpdate(sqlSession,memNo);
+		return result;
+		
+	}
+
 }

@@ -148,6 +148,12 @@
 		END_YN = 'Y'
 		where cnt_no=#{cntNo}
 	</update>
+	
+	<!-- 마이페이지 사진수정 -->
+	<update id="photoUpdate" parameterType="String">
+		UPDATE MEMBER SET mem_profile =#{memProfile}
+		WHERE mem_no = #{memNo}
+	</update>
 
 	<!-- 내 개인정보 (마이페이지) -->
 	<select id="mypage" resultType="MemDept">

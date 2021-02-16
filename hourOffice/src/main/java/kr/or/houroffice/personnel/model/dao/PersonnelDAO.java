@@ -221,6 +221,12 @@ public class PersonnelDAO {
 		return result;
 	}
 
+	public int photoUpdate(SqlSessionTemplate sqlSession, int memNo) {
+		int result = sqlSession.update("personnel.photoUpdate",memNo);
+		return result;
+		
+	}
+
 
 
 }

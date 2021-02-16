@@ -1,8 +1,13 @@
 package kr.or.houroffice.member.model.vo;
 
 import java.sql.Timestamp;
+import java.util.Map;
 
 public class Attendance {
+	private Map<String,Object> map;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
 	private int memNo;
 	private String ymd;	// 근무일
 	private Timestamp startDate;

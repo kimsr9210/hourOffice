@@ -70,7 +70,8 @@ th {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						내인사정보
+						<span>인사관리</span>
+                        <span>> 내인사정보</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
