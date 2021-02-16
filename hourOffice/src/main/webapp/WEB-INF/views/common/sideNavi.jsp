@@ -126,7 +126,7 @@
 		<li class="categoryList"><a href="/projectLikeList.ho">프로젝트 즐겨찾기</a></li>
 		</ui>
 
-		<div class="sideNaviClick">
+		<div id="categoryResource" class="sideNaviClick">
 			<div class="sideNaviIcon">
 				&nbsp;&nbsp;<i class="fas fa-save"></i>
 			</div>
@@ -135,7 +135,6 @@
 				<i class="fas fa-chevron-right"></i>
 			</div>
 		</div>
-		<ui class="categoryBox"> </ui>
 
 		<div id="categoryAdmin" class="sideNaviClick">
 			<div class="sideNaviIcon">
@@ -162,9 +161,15 @@
 
 </body>
 <script>
+$(function(){
 	$('.fa-home').parents('.sideNaviClick').click(function(){
-		
 		location.replace('/main.ho');
 	});
+	
+	$('#categoryResource').click(function(){
+		location.replace('/resourceCenter.ho?resourceType=all');
+	});
+})
+	
 </script>
 </html>

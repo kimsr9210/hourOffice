@@ -170,12 +170,12 @@
 		</dependency>
 		<!-- file outputstream -->
 		<dependency>
-	    <groupId>javax.servlet</groupId>
-	    <artifactId>javax.servlet-api</artifactId>
-	    <version>3.1.0</version>
-	    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
-		</dependencies>
+	</dependencies>
     <build>
         <plugins>
             <plugin>

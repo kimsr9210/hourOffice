@@ -1,10 +1,8 @@
 package kr.or.houroffice.project.controller;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +15,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
-import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -702,7 +697,6 @@ public class ProjectController {
 	//일정 게시물 올리기
 	@RequestMapping(value="/insertProjectPlan.ho")
 	public ModelAndView insertProjectPlan(ProjectPlan pp){
-		System.out.println(pp);
 		int result = pService.insertProjectPlan(pp);
 		ModelAndView mav = new ModelAndView();
 		
@@ -721,7 +715,6 @@ public class ProjectController {
 	
 	@RequestMapping(value="/updateProjectComplate.ho")
 	public void updateProjectComplate(Project p, HttpServletResponse response)  throws IOException{
-		System.out.println(p);
 		
 		if(p.getCompYN()=='Y'){
 			p.setCompYN('N');

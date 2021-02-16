@@ -50,6 +50,10 @@
 		<typeAlias type="kr.or.houroffice.mail.model.vo.MailListPage" alias="MailListPage"/>
 		<typeAlias type="kr.or.houroffice.mail.model.vo.MailList" alias="MailList"/>
 		<typeAlias type="kr.or.houroffice.mail.model.vo.SendingMail" alias="SendingMail"/>
+		
+		
+		<typeAlias type="kr.or.houroffice.resource.model.vo.ResourceData" alias="ResourceData"/>
+		<typeAlias type="kr.or.houroffice.resource.model.vo.ResourcePage" alias="ResourcePage"/>
 	</typeAliases>
 </configuration>
 
