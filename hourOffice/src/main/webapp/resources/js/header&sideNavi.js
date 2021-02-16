@@ -22,7 +22,8 @@ $(function() {
 	$('#categoryProject').next().css('height','125px');
 	$('#categoryProject').children().last().children().attr('class','fas fa-chevron-left');
 	
-	$('#categoryProject').next().children().eq(2).children().css('font-weight','800');  $('#categoryProject').next().children().eq(2).children().css('color','#ffcc29');
+	$('#categoryProject').next().children().eq(2).children().css('font-weight','800');
+	$('#categoryProject').next().children().eq(2).children().css('color','#ffcc29');
 	
 	
 	//관리 페이지 일 때

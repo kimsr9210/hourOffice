@@ -164,6 +164,10 @@
 	<!-- 자바 스크립트    -->
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script>
+	$('#categoryElecAppr').next().css('display', 'block');
+	$('#categoryElecAppr').next().css('height', '150px');
+	$('#categoryElecAppr').children().last().children().attr('class',
+			'fas fa-chevron-left');
 		function listPage(){
 			history.back(-1);
 		}

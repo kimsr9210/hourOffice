@@ -87,6 +87,9 @@
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script>
         $(function(){
+        	$('#categoryMail').next().css('display','block');
+        	$('#categoryMail').next().css('height','150px');
+        	$('#categoryMail').children().last().children().attr('class','fas fa-chevron-left');
         	// 보관 상태 변경 처리
             $('.fa-star').click(function(){
             	var $this = $(this);

@@ -522,6 +522,11 @@
 	<script>
 		$(function(){
 
+			$('#categoryProject').next().css('display', 'block');
+			$('#categoryProject').next().css('height', '125px');
+			$('#categoryProject').children().last().children().attr('class',
+					'fas fa-chevron-left');
+			
 			//프로젝트 나가기
 			$('#projectExit, .outProject').click(function(){
 				var proNo = '<%=p.getProNo()%>';

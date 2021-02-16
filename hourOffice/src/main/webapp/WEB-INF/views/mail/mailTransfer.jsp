@@ -72,6 +72,10 @@
         });
        
         $(function() {
+        	
+        	$('#categoryMail').next().css('display','block');
+        	$('#categoryMail').next().css('height','150px');
+        	$('#categoryMail').children().last().children().attr('class','fas fa-chevron-left');
             //주소록 창
             var addrView;
             $(document).on('click', '.addr_list', function(){

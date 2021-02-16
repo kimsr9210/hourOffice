@@ -65,10 +65,15 @@
                             </form>
                         </div>
 						
-						
 	<!-- smartEditor2 api 페이지 로딩시 초기화 -->
 	<script>
 		$(function(){
+			$('#categoryBoard').next().css('display','block');
+			$('#categoryBoard').next().css('height','150px');
+			$('#categoryBoard').children().last().children().attr('class','fas fa-chevron-left');
+			
+			$('#categoryBoard').next().children().eq(5).children().css('font-weight','800');
+			$('#categoryBoard').next().children().eq(5).children().css('color','#ffcc29');
 		    //전역변수
 		    var obj = [];              
 		    //스마트에디터 프레임생성
