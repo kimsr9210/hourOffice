@@ -63,5 +63,9 @@ public class MemberController {
 		AjaxTemplate.resultTF(result, response);
 	}
 	
+	@RequestMapping(value="/proG.ho")// 퇴근 기록
+	public String proGPage() { 
+		return "projectCal";
+	}
 
 }

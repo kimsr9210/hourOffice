@@ -271,6 +271,9 @@ public class ProjectController {
 		//요청 멤버 번호 리스트 가져오기
 		ArrayList<ProjectRequest> requestList = pService.selectProjectRequestList(proNo);
 		
+		//BY 진원 -일정 목록 가져오기
+		ArrayList<ProjectPlan> planList = pService.selectPlanList(proNo);
+
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("project", p);
 		mav.addObject("boardList", boardList);
@@ -291,6 +294,8 @@ public class ProjectController {
 		mav.addObject("codeList", codeList);
 		mav.addObject("boardType", boardType);
 		mav.setViewName("project/projectDetail");
+		mav.addObject("planList", planList);
+		
 		return mav;
 	}
 	

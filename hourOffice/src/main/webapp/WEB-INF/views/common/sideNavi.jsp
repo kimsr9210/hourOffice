@@ -163,7 +163,8 @@
 <script>
 $(function(){
 	$('.fa-home').parents('.sideNaviClick').click(function(){
-		location.replace('/main.ho');
+		var todayMon = new Date().getMonth()+1;
+		location.replace('/main.ho?todayMon='+todayMon);
 	});
 	
 	$('#categoryResource').click(function(){

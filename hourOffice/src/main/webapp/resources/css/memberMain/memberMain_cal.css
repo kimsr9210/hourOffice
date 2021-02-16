@@ -4,6 +4,7 @@
     height: 290px;
     background-color: white;
     padding-top: 5px;
+    box-shadow: 0px 1px 1px 1px lightgray;
 }
 .calendar {
   width: 230px;
