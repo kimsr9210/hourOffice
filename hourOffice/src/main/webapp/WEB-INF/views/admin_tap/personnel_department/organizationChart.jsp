@@ -1,3 +1,4 @@
+<%@page import="kr.or.houroffice.member.model.vo.Department"%>
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>H:our Office</title>
 	<!-- 폰트어썸 -->
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     
@@ -123,7 +124,7 @@
                     <p><input type="text" name="deptName"/></p><br>
                     <p><input type="text" name="deptCode"/></p>
                 </div>
-                <button id="modal_close_btn">생성</button>
+                <button type="button" id="modal_close_btn">생성</button>
             </form>
         </div>
    
@@ -243,6 +244,21 @@
                 $('#modal').show();
                 
             });
+            // 부서 추가
+            $('#modal_close_btn').click(function(){
+            	var $deptCode = $('#modal-right').find('input[name=deptCode]').val();
+            	var count = 0;
+            <% ArrayList<Department> deptListAll = (ArrayList<Department>)request.getAttribute("deptListAll"); %>
+            <% for(Department deptAll : deptListAll){ %>
+            	if($deptCode+" "=='<%=deptAll.getDeptCode()%>'){
+            		alert('해당 코드는 사용하실 수 없습니다.(중복)');
+            		count++;
+            	}
+            <% } %>
+            	if(count==0){
+            		$('#modal form').submit();
+            	}
+            });
             
             // 부서 삭제
             $('.delBtn').click(function(){
@@ -320,6 +336,10 @@
                 $('#modal').hide();
                 $('#modal input').val('');
             });
+        
+        
+        
+        
         })
         
             

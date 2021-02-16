@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>H:our Office</title>
 	<!-- 폰트어썸 -->
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     
@@ -172,7 +172,7 @@
                 	
                     $.ajax({
                     	url:'/deltetPostPartBoard.ho',
-                    	data:{memNo,postNo},
+                    	data:{'memNo':memNo,'postNo':postNo},
                     	type:'post',
                     	success:function(result){
                     		if(result){
@@ -196,51 +196,6 @@
             });
             // 일단 댓글 네비 ...
             $('#pageNavi').children().click(function(){
-            	
-            	var comnNo = [];
-            	var memNo = [];
-            	var writer = [];
-            	var writeDate = [];
-            	var comnCon = [];
-            	var memPosition = [];
-            	var memProfile = [];
-            	<% for(PartComments comn1 : comntList){ %>
-            		comnNo.push('<%=comn1.getPartComntNo()%>');
-            		memNo.push('<%=comn1.getMemNo()%>');
-            		writer.push('<%=comn1.getPartComntWriter()%>');
-            		writeDate.push('<%=format.format(comn1.getPartComntDate()) %>');
-            		comnCon.push('<%=comn1.getPartComnt()%>');
-            		memPosition.push('<%=comn1.getMemPosition()%>');
-            		memProfile.push('<%=comn1.getMemProfile()%>');
-            	<% } %>
-            	var pageNum = $(this).text();
-            	
-            	// (pageNum*5)-1 - end
-            	// pageNum*5-5 - start
-            	var j=2;
-            	for(var i=pageNum*5-5; i<=pageNum*5-1; i++){
-            		
-            		
-            		var str = '<tr></tr>';
-            		var str1 = '<td><div><img src="/resources/images/profile/'+memProfile[i]+'"></div></td>';
-            		var str2 = '<td>'+writer[i]+' '+memPosition[i]+'<br>'+writeDate[i]+'</td>';
-            		var str3 = '<td>'+comnCon[i]+'</td>';
-            		var str4 = '<td><div class="comnBtn-div'+comnNo[i]+'"><button><i class="fas fa-feather i-icon"></i></button> <button class="comnt-del-btn"><i class="far fa-trash-alt i-icon"></i></button></div></td>';
-            		
-            		
-            		
-            		//alert(comnNo[i]+"/"+memNo[i]+"/"+writer[i]+"/"+writeDate[i]+"/"+comnCon[i]+"/"+memPosition[i]+"/"+memProfile[i]);
-            		if(comnCon[i]!=null){ // 댓글이 있으면 실행
-            			$('#comment-div tr:nth-child('+j+') td:nth-child(1)').html('<div><img src="/resources/images/profile/'+memProfile[i]+'"></div>');
-            			$('#comment-div tr:nth-child('+j+') td:nth-child(2)').html(writer[i]+' '+memPosition[i]+'<br>'+writeDate[i]);
-            			$('#comment-div tr:nth-child('+j+') td:nth-child(3)').html(comnCon[i]+' ');
-            			if(memNo[i]!='<%=member.getMemNo()%>'){ // 댓글쓴이 사번과 내 사번이 일치하지 않으면 버튼 가림
-            				$('.comnBtn-div'+comnNo[i]).css('visibility','hidden');
-            			}
-            		}
-            		
-            		j++; 
-            	}
             	
             });
             
@@ -268,6 +223,7 @@
             		data:{'comntNo':comntNo,'writerNo':memNo,'comnt':comnt},
             		success:function(result){
             			if(result=='true'){
+            				alert('댓글이 수정되었습니다.');
             				$tr.css('display','none');
             				$tr.prev().children(':nth-child(3)').html(comnt);
             			}else{
@@ -301,7 +257,10 @@
             		}
             	});
             });
-            
+            <% if(request.getParameter("pageCheck")!=null){ %>
+            	$('html, body').scrollTop( $(document).height() );
+		    <% } %>
+		    
         })
     </script>
 						

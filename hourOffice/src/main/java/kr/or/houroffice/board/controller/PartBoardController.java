@@ -2,13 +2,17 @@ package kr.or.houroffice.board.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -249,30 +255,51 @@ public class PartBoardController {
 	}
 	// 부서별 게시판 - 게시글 등록 insert
 	@RequestMapping(value="/savePostPartBoard.ho")
-	public String addPost(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException{
-		
+	public String addPost(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException, Exception{
 		if(m!=null){
-			// 파일이 업로드 되는 경로
-			String uploadPath = "/resources/file/part_board/";
-	
-			// 최대 파일 사이즈를 정하기 위한 값
-			int uploadFileSizeLimit = 10*1024*1024; // 최대 10MB 까지 업로드 가능
-	
-			// 파일 이름 인코딩 값
-			String encType = "UTF-8"; 
 			
-			// 정보를 가지고 있는 객체
-			// @Autowired	ServletContext context;
+			MultipartHttpServletRequest multi = (MultipartHttpServletRequest) request;
 			
-			// context.getRealPath(); -> WebContent까지의 절대 경로 (실제경로)
-			String realUploadPath = context.getRealPath(uploadPath);
+			MultipartFile file = multi.getFile("attachedFile");
 			
-			// MultipartRequest 객체 생성 (생성하면서 마지막 5번째 정책 설정 객체 만들기)
-			MultipartRequest multi = new MultipartRequest(request, // 1. request
-																realUploadPath, // 2. 실제 업로드 되는 경로 
-																uploadFileSizeLimit, // 3. 최대 파일 사이즈 크기
-																encType, // 4. 인코딩 타입
-																new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
+			 String path="";
+	         UUID randomeUUID = UUID.randomUUID();
+	         String organizedfilePath="";        
+	         if(file!=null){
+	        
+	          System.out.println("파라미터명" + file.getName());
+	          System.out.println("파일크기" + file.getSize());
+	          System.out.println("파일 존재" + file.isEmpty());
+	          System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
+	        
+	          // 파일이 업로드 되는 경로
+	          path = "/resources/file/part_board/";
+	          InputStream inputStream = null;
+	          OutputStream outputStream = null;
+	          
+	              if (file.getSize() > 0) {
+	                  inputStream = file.getInputStream();
+	                  File realUploadDir = new File(path);
+	                  
+	                  if (!realUploadDir.exists()) {
+	                      realUploadDir.mkdirs();//폴더생성.
+	                  }
+	                  
+	                  
+	                  organizedfilePath = path + randomeUUID + "_" + file.getOriginalFilename();
+	                  System.out.println(organizedfilePath);//파일이 저장된경로 + 파일 명
+	                  
+	                  outputStream = new FileOutputStream(organizedfilePath);
+	 
+	                  int readByte = 0;
+	                  byte[] buffer = new byte[8192];
+	 
+	                  while ((readByte = inputStream.read(buffer, 0, 8120)) != -1) {
+	                      outputStream.write(buffer, 0, readByte); //파일 생성 ! 
+	                  }
+	              }
+	              
+	         }
 			
 			// 위의 코드까지 하면 파일 업로드는 완료
 			
@@ -291,20 +318,20 @@ public class PartBoardController {
 			// 게시글 고유번호
 			if(partNo>0){
 				
-				if(multi.getFilesystemName("attachedFile")!=null){
+				if(file.getSize() > 0){
 				
 					// 서버에 실제로 업로드 된 파일이름 가져오기
-					String originalFileName = multi.getFilesystemName("attachedFile");
+					String originalFileName = file.getOriginalFilename();
 					
 					long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
 					
 					// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
-					File file = new File(realUploadPath+"\\"+originalFileName);
+					File file1 = new File(organizedfilePath);
 					// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
-					file.renameTo(new File(realUploadPath+"\\"+m.getDeptCode()+partNo+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
+					file1.renameTo(new File(path+"\\"+m.getDeptCode()+partNo+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
 					String changedFileName = m.getDeptCode()+partNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
 					// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
-					File reNameFile = new File(realUploadPath+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
+					File reNameFile = new File(path+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
 					String filePath = reNameFile.getPath(); // 경로
 					// 해당 업로드된 file의 사이즈
 					long fileSize = reNameFile.length();
@@ -348,32 +375,54 @@ public class PartBoardController {
 	}
 	// 부서별 게시판 update 
 	@RequestMapping(value="/updatePostPartBoard.ho")
-	public String updatePostPartBoad(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException{
+	public String updatePostPartBoad(Model model, HttpServletRequest request, @SessionAttribute("member") Member m) throws IOException, Exception{
 		
 		if(m!=null){
 			
-			// 파일이 업로드 되는 경로
-			String uploadPath = "/resources/file/part_board/";
-
-			// 최대 파일 사이즈를 정하기 위한 값
-			int uploadFileSizeLimit = 10*1024*1024; // 최대 10MB 까지 업로드 가능
-
-			// 파일 이름 인코딩 값
-			String encType = "UTF-8"; 
+			MultipartHttpServletRequest multi = (MultipartHttpServletRequest) request;
 			
-			// 정보를 가지고 있는 객체
-			// @Autowired	ServletContext context;
-		
-			// context.getRealPath(); -> WebContent까지의 절대 경로 (실제경로)
-			String realUploadPath = context.getRealPath(uploadPath);
+			MultipartFile file = multi.getFile("attachedFile");
 			
-			// MultipartRequest 객체 생성 (생성하면서 마지막 5번째 정책 설정 객체 만들기)
-			MultipartRequest multi = new MultipartRequest(request, // 1. request
-															realUploadPath, // 2. 실제 업로드 되는 경로 
-															uploadFileSizeLimit, // 3. 최대 파일 사이즈 크기
-															encType, // 4. 인코딩 타입
-															new DefaultFileRenamePolicy()); // 5. 중복 이름 정책
-		
+			 String path="";
+	         UUID randomeUUID = UUID.randomUUID();
+	         String organizedfilePath="";        
+	         if(file!=null){
+	        
+	          //System.out.println("파라미터명" + file.getName());
+	          //System.out.println("파일크기" + file.getSize());
+	          //System.out.println("파일 존재" + file.isEmpty());
+	          //System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
+	        
+	          // 파일이 업로드 되는 경로
+	          path = "/resources/file/part_board/";
+	          InputStream inputStream = null;
+	          OutputStream outputStream = null;
+	          
+	              if (file.getSize() > 0) {
+	                  inputStream = file.getInputStream();
+	                  File realUploadDir = new File(path);
+	                  
+	                  if (!realUploadDir.exists()) {
+	                      realUploadDir.mkdirs();//폴더생성.
+	                  }
+	                  
+	                  
+	                  organizedfilePath = path + randomeUUID + "_" + file.getOriginalFilename();
+	                  System.out.println(organizedfilePath);//파일이 저장된경로 + 파일 명
+	                  
+	                  outputStream = new FileOutputStream(organizedfilePath);
+	 
+	                  int readByte = 0;
+	                  byte[] buffer = new byte[8192];
+	 
+	                  while ((readByte = inputStream.read(buffer, 0, 8120)) != -1) {
+	                      outputStream.write(buffer, 0, readByte); //파일 생성 ! 
+	                  }
+	              }
+	              
+	         }
+			
+			// 위의 코드까지 하면 파일 업로드는 완료
 			
 			String fileNo = multi.getParameter("fileNo");
 			
@@ -396,23 +445,23 @@ public class PartBoardController {
 				
 				if(result>0){
 					
-					if(multi.getFilesystemName("attachedFile")!=null){
+					if(multi.getFile("attachedFile")!=null){
 						// 2. 파일이 있는 경우
 						// 2-1) 원래 파일이 있는 경우 - update
 						// 2-2) 원래 파일이 없는 경우 - insert
 						
 						// 서버에 실제로 업로드 된 파일이름 가져오기
-						String originalFileName = multi.getFilesystemName("attachedFile");
+						String originalFileName = file.getOriginalFilename();
 						
 						long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
 						
 						// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
-						File file = new File(realUploadPath+"\\"+originalFileName);
+						File file1 = new File(organizedfilePath);
 						// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
-						file.renameTo(new File(realUploadPath+"\\"+m.getDeptCode()+pb.getPartNo()+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
+						file1.renameTo(new File(path+"\\"+m.getDeptCode()+pb.getPartNo()+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
 						String changedFileName = m.getDeptCode()+pb.getPartNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
 						// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
-						File reNameFile = new File(realUploadPath+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
+						File reNameFile = new File(path+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
 						String filePath = reNameFile.getPath(); // 경로
 						// 해당 업로드된 file의 사이즈
 						long fileSize = reNameFile.length();

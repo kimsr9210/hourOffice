@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -269,6 +270,11 @@ public class AdminMemberDAO {
 	//BY 진원   조직도 - 부서목록
 	public ArrayList<Department> selectAllDepartment(SqlSessionTemplate sqlSession) {
 		List<Department> list = sqlSession.selectList("member.selectAllDepartment");
+		return (ArrayList<Department>) list;
+	}
+	//BY 다빈 조직도 - 부서목록 (삭제한것까지 모두)
+	public ArrayList<Department> selectAllDeptCode(SqlSessionTemplate sqlSession) {
+		List<Department> list = sqlSession.selectList("member.selectAllDeptCode");
 		return (ArrayList<Department>) list;
 	}
 

@@ -163,20 +163,20 @@ public class PartBoardDAO {
 		StringBuilder sb = new StringBuilder();
 		
 		if(startNavi != 1) { //href='/myReviewNote.rw?libraryOwner="+memberId+"&currentPage="+(startNavi-1)+"'
-			sb.append("<li class='page-list'><a href='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi-1)+"' class='page-link'>◀</a></li>");
+			sb.append("<li class='page-list'><a href='page-link' href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi-1)+"&pageCheck=U' class='page-link'>◀</a></li>");
 		}
 						
 		for(int i=startNavi; i<=endNavi; i++) {
 			if(i==page.getCurrentPage()) {
-				sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"' class='page-link'><B>"+i+"</B></a></li>");
+				sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"&pageCheck=U' class='page-link'><B>"+i+"</B></a></li>");
 			}else {
-				sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"' class='page-link'>"+i+"</a></li>");
+				sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+i+"&pageCheck=U' class='page-link'>"+i+"</a></li>");
 			}
 		}
 				
 		//만약 마지막 pageNavi가 아니라면 '>' 모양을 추가해라 (마지막 pageNavi이면 추가하지 말아라)
 		if(endNavi != pageTotalCount) {
-			sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi+1)+"' class='page-link'>▶</a></li>");
+			sb.append("<li class='page-list'><a href='/postInPartBoard.ho?deptCode="+pageDeptCode+"&partNo="+partNo+"&currentPage="+(startNavi+1)+"&pageCheck=U' class='page-link'>▶</a></li>");
 		}
 		page.setUrl(sb+"");
 		return page;

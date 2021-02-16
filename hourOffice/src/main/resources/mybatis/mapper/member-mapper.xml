@@ -536,6 +536,14 @@
 		WHERE DEPT_DEL_YN='N'
 		ORDER BY DEPT_NAME
 	</select>
+	<!-- BY 다빈 - 부서 목록(삭제된것 포함) -->
+	<select id="selectAllDeptCode" resultType="Department">
+		SELECT
+			DEPT_CODE AS deptCode,
+			DEPT_NAME AS deptName,
+			DEPT_DEL_YN AS deptDelYN
+		FROM DEPARTMENT
+	</select>
 
 	<!-- BY 두진 - 전체 멤버 리스트 -->
 	<select id="selectAllMemberList" resultType="Member">
