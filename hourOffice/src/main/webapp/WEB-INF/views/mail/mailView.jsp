@@ -34,28 +34,42 @@
                       <div id="mail_btn_wrap">
                       	<c:choose>
                       		<c:when test="${listType=='S' }"> <!-- 페이지 내 구분을 위한 String listType -->
-                      		<span id="mail_del_btn" type="S" class="left-btn">삭제</span>
-                      		<span id="mail_send_btn" class="left-btn">전달</span>
-                      		<span id="mail_res_btn" class="left-btn">재발송</span>
+	                      		<span id="mail_del_btn" type="S" class="left-btn">삭제</span>
+	                      		<span id="mail_send_btn" class="left-btn">전달</span>
+	                      		<span id="mail_res_btn" class="left-btn">재발송</span>
+	                      		<span id="mail_list_btn" type="S" class="right-btn">목록</span>
                       		</c:when>
                       		<c:when test="${listType=='R' }"><span id="mail_del_btn" type="R" class="left-btn">삭제</span>
                                 <span id="mail_rep_btn" class="left-btn">답장</span>
                                 <span id="mail_send_btn" class="left-btn">전달</span>
+                                <span id="mail_list_btn" type="R" class="right-btn">목록</span>
                             </c:when>
                             <c:when test="${listType=='F'}"><span id="mail_del_btn" type="F" class="left-btn">삭제</span>
                                 <span id="mail_rep_btn" class="left-btn">답장</span>
                                 <span id="mail_send_btn" class="left-btn">전달</span>
+                                <span id="mail_list_btn" type="F" class="right-btn">목록</span>
+                             </c:when>
+                             <c:when test="${listType=='RK' }"><span id="mail_del_btn" type="R" class="left-btn">삭제</span>
+                                <span id="mail_rep_btn" class="left-btn">답장</span>
+                                <span id="mail_send_btn" class="left-btn">전달</span>
+                                <span id="mail_list_btn" type="R" class="right-btn">목록</span>
+                            </c:when>
+                             <c:when test="${listType=='FK'}"><span id="mail_del_btn" type="F" class="left-btn">삭제</span>
+                                <span id="mail_rep_btn" class="left-btn">답장</span>
+                                <span id="mail_send_btn" class="left-btn">전달</span>
+                                <span id="mail_list_btn" type="F" class="right-btn">목록</span>
                              </c:when>
                              <c:when test="${listType=='FD'}">
                              	<span id="mail_fdel_btn" type="F" class="left-btn">영구삭제</span>
                                 <span id="mail_res_btn" class="left-btn">복원</span>
+                                <span id="mail_list_btn" type="D" class="right-btn">목록</span>
                              </c:when>
                              <c:when test="${listType=='RD'}">
                              	<span id="mail_fdel_btn" type="R" class="left-btn">영구삭제</span>
                                 <span id="mail_res_btn" class="left-btn">복원</span>
+                                <span id="mail_list_btn" type="D" class="right-btn">목록</span>
                              </c:when>
                       	</c:choose>
-                                <span id="mail_list_btn" class="right-btn">목록</span>
                             </div>
                        <div id="mail-page-wrap">
                            <div id="mail-info-wrap">
@@ -175,9 +189,9 @@
             	var mailNo = $('#mail-info-title').attr('mailno');
             	var listType = $('#mail_fdel_btn').attr('type');
             	  $.ajax({
-            		 url : "/restoreMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": [listType], "mailNoList" : [mailNo]},
+            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'T'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
@@ -197,14 +211,14 @@
             	var mailNo = $('#mail-info-title').attr('mailno');
             	var listType = $('#mail_fdel_btn').attr('type');
             	  $.ajax({
-            		 url : "/deletePermMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": [listType], "mailNoList" : [mailNo]},
+            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'P'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
             			 	alert('처리 성공');
-            			 	location.reload();
+            			 	location.href="/mailList.ho?listType=D";
             			 }else{
             				 alert('처리 실패');
             			 }
@@ -216,7 +230,8 @@
             });
             //목록버튼
             $('#mail_list_btn').click(function(){
-            	history.back(-1);
+            	var type = $(this).attr('type');
+            	location.href="/mailList.ho?listType="+type;
             });
         });
     </script>

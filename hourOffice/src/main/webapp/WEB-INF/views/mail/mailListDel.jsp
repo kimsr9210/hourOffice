@@ -32,6 +32,7 @@
                            <select name="searchType" id="search-option">
                                <option value="title">제목</option>
                                <option value="sender">보낸사람</option>
+                               <option value="contents">내용</option>
                            </select>
                             <input type="text" name="keyword" id="mail-search"><button type="submit" id="mail-search-btn">
                                 <i class="fas fa-search"></i>
@@ -128,12 +129,11 @@
             		 inputArray.push($(this).val());
             		 listTypeArr.push($(this).next().val());
             	 }); 
-            	 console.log(inputArray);
-            	 
+            	 if(inputArray.length>0){
             	  $.ajax({
-            		 url : "/deletePermMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": listTypeArr, "mailNoList" : inputArray},
+            		 data : {"listType": listTypeArr, "mailNoList" : inputArray, "ptype" : 'P'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
@@ -147,6 +147,9 @@
             			 alert('처리 에러');
             		 }
             	 });
+            	 }else{
+            		 alert('대상을 1개 이상 선택해주세요');
+            	 }
             });
           //읽음 버튼
             $('#mail_read_btn').click(function(){
@@ -157,12 +160,11 @@
             		 inputArray.push($(this).val());
             		 listTypeArr.push($(this).next().val());
             	 }); 
-            	 console.log(inputArray);
-            	 
+            	 if(inputArray.length>0){
             	  $.ajax({
-            		 url : "/changeReadMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": listTypeArr, "mailNoList" : inputArray},
+            		 data : {"listType": listTypeArr, "mailNoList" : inputArray, "ptype" : 'R'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
@@ -179,6 +181,9 @@
             			 alert('처리 에러');
             		 }
             	 });
+            	 }else{
+            		 alert('대상을 1개 이상 선택해주세요');
+            	 }
             });
             //복원 버튼
             $('#mail_res_btn').click(function(){
@@ -188,12 +193,11 @@
             		 inputArray.push($(this).val());
             		 listTypeArr.push($(this).next().val());
             	 }); 
-            	 console.log(inputArray);
-            	 
+            	 if(inputArray.length>0){
             	  $.ajax({
-            		 url : "/restoreMailList.ho",
+            		 url : "/allChange.ho",
             		 traditional : true,
-            		 data : {"listType": listTypeArr, "mailNoList" : inputArray},
+            		 data : {"listType": listTypeArr, "mailNoList" : inputArray, "ptype" : 'T'},
             		 type : "post",
             		 success : function(result){
             			 if(result){
@@ -207,6 +211,9 @@
             			 alert('처리 에러');
             		 }
             	 });
+	            }else{
+	       		 alert('대상을 1개 이상 선택해주세요');
+	       	 	}
             });
         });
     </script>

@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="wrap">
-	<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
+<c:if test="${sessionScope.member ==null }"><script>alert("로그인이 필요합니다."); location.href="/login.ho";</script></c:if>
 	<c:choose>
 	<c:when test="${docu.lockYN eq 'Y'.charAt(0) }"><!-- 비공개일때, 작성자도 아니고, 결재선도 아니고, 참조도 아니면 비공개 알람.  -->
 		<c:choose>

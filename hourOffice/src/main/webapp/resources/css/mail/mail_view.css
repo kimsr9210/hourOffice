@@ -173,6 +173,7 @@ a:active{ text-decoration: none;}
 }
 #mail_btn_wrap .left-btn{
     float: left;
+    margin-right:5px;
 }
 #mail_btn_wrap .right-btn{
     float: right;

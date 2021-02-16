@@ -33,6 +33,7 @@
                            <select name="searchType" id="search-option">
                                <option value="title">제목</option>
                                <option value="receiver">받는 사람</option>
+                               <option value="contents">내용</option>
                            </select>
                             <input type="text" name="keyword" id="mail-search"><button type="submit" id="mail-search-btn">
                                 <i class="fas fa-search"></i>
@@ -91,7 +92,7 @@
             	 $('input[name=mail-one-select]:checked').each(function(){
             		 inputArray.push($(this).val());
             	 });
-            	 console.log(inputArray);
+            	 if(inputArray.length>0){ 
             	 $.ajax({
             		 url : "/deleteMail.ho",
             		 traditional : true,
@@ -109,6 +110,9 @@
             			 alert('처리 에러');
             		 }
             	 });
+            	 }else{
+            		 alert('대상을 1개 이상 선택해주세요');
+            	 }
             });
           	//전달 버튼
             $('#mail_send_btn').click(function(){
@@ -136,6 +140,7 @@
             		 success : function(result){
             			 if(result){
             			 	alert('재발송 성공');
+            			 	location.reload();
             			 }else{
             				 alert('재발송 실패');
             			 }
