@@ -29,6 +29,18 @@
         width: 100%;
         height: 100%;
     }
+    #ruleHead{
+    	height: 20%;
+    }
+    #ruleBody{
+    	height: 80%;
+    }
+    #role-data th:nth-child(1){
+    	width: 15%;
+    }
+    #role-data th:nth-child(2){
+    	width: 70%;
+    }
     #role-data td{
         border-top: 1px solid lightgray;
         text-align: center;
