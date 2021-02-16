@@ -135,25 +135,28 @@
             });
             //삭제 버튼
             $('#mail_del_btn').click(function(){
-            	var mailNo= $('#mail-info-title').attr('mailno');
-            	var listType = $('#mail_del_btn').attr('type');
-            	$.ajax({
-            		 url : "/deleteMail.ho",
-            		 traditional : true,
-            		 data : {"listType": listType, "mailNoList" : [mailNo]},
-            		 type : "post",
-            		 success : function(result){
-            			 if(result){
-            			 	alert('처리 성공');
-            			 	location.href="/mailList.ho?listType="+listType; //받은, 보낸, 참조
-            			 }else{
-            				 alert('처리 실패');
-            			 }
-            		 },
-            		 error : function(){
-            			 alert('처리 에러');
-            		 }
-            	 });
+            	var answer = window.confirm('정말로 삭제하시겠습니까?');
+                if(answer){
+	            	var mailNo= $('#mail-info-title').attr('mailno');
+	            	var listType = $('#mail_del_btn').attr('type');
+	            	$.ajax({
+	            		 url : "/deleteMail.ho",
+	            		 traditional : true,
+	            		 data : {"listType": listType, "mailNoList" : [mailNo]},
+	            		 type : "post",
+	            		 success : function(result){
+	            			 if(result){
+	            			 	alert('처리 성공');
+	            			 	location.href="/mailList.ho?listType="+listType; //받은, 보낸, 참조
+	            			 }else{
+	            				 alert('처리 실패');
+	            			 }
+	            		 },
+	            		 error : function(){
+	            			 alert('처리 에러');
+	            		 }
+	            	 });
+                }
             });
             //답장 버튼
             $('#mail_rep_btn').click(function(){
@@ -211,25 +214,28 @@
             });
           //영구 삭제 버튼
             $('#mail_fdel_btn').click(function(){
-            	var mailNo = $('#mail-info-title').attr('mailno');
-            	var listType = $('#mail_fdel_btn').attr('type');
-            	  $.ajax({
-            		 url : "/allChange.ho",
-            		 traditional : true,
-            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'P'},
-            		 type : "post",
-            		 success : function(result){
-            			 if(result){
-            			 	alert('처리 성공');
-            			 	location.href="/mailList.ho?listType=D";
-            			 }else{
-            				 alert('처리 실패');
-            			 }
-            		 },
-            		 error : function(){
-            			 alert('처리 에러');
-            		 }
-            	 });
+            	var answer = window.confirm('정말로 삭제하시겠습니까?');
+                if(answer){
+	            	var mailNo = $('#mail-info-title').attr('mailno');
+	            	var listType = $('#mail_fdel_btn').attr('type');
+	            	  $.ajax({
+	            		 url : "/allChange.ho",
+	            		 traditional : true,
+	            		 data : {"listType": [listType], "mailNoList" : [mailNo], "ptype" : 'P'},
+	            		 type : "post",
+	            		 success : function(result){
+	            			 if(result){
+	            			 	alert('처리 성공');
+	            			 	location.href="/mailList.ho?listType=D";
+	            			 }else{
+	            				 alert('처리 실패');
+	            			 }
+	            		 },
+	            		 error : function(){
+	            			 alert('처리 에러');
+	            		 }
+	            	 });
+                }
             });
             //목록버튼
             $('#mail_list_btn').click(function(){
