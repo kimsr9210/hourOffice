@@ -67,7 +67,7 @@
 	                                <td><c:choose><c:when test="${mail.readYN =='Y'.charAt(0) }"><i class="fas fa-envelope-open"></i></c:when><c:otherwise><i class="fas fa-envelope"></i></c:otherwise></c:choose></td>
 	                                <td><c:if test="${mail.fileYN =='Y'.charAt(0) }"><i class="fas fa-paperclip"></i></c:if></td>
 	                                <td><div class="mail-sender" memno="${mail.sendMemNo }">${mail.sendMemName } ${mail.sendMemPosition }</div></td>
-	                                <td><div class="mail-title"><a href="/mailView.ho?mailNo=${mail.mailNo }&other=${mail.recMemNo}&listType=${mail.listType }&readYN=${mail.readYN}"><c:choose><c:when test="${mail.listType=='R'.charAt(0) }">[받은메일함]</c:when><c:when test="${ mail.listType=='F'.charAt(0)}">[참조메일함]</c:when></c:choose>
+	                                <td><div class="mail-title"><a href="/mailView.ho?mailNo=${mail.mailNo }&other=${mail.recMemNo}&listType=${mail.listType }K&readYN=${mail.readYN}"><c:choose><c:when test="${mail.listType=='R'.charAt(0) }">[받은메일함]</c:when><c:when test="${ mail.listType=='F'.charAt(0)}">[참조메일함]</c:when></c:choose>
 	                                <c:choose><c:when test="${mail.title !=null }">${mail.title}</c:when><c:otherwise>(제목없음)</c:otherwise></c:choose></a></div></td>
 	                                <td><fmt:formatDate value="${mail.recDate }" pattern="yyyy-MM-dd (E) hh:mm"/></td>
 	                            </tr>

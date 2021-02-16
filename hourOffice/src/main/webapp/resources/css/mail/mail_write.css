@@ -122,7 +122,7 @@ input[type=submit] {
 }
 
 #mail-info-wrap input[type=file]{
-    width: 70%;
+    width: 40%;
 }
 
 form {

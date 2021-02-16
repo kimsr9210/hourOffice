@@ -140,6 +140,7 @@
             		 success : function(result){
             			 if(result){
             			 	alert('재발송 성공');
+            			 	location.reload();
             			 }else{
             				 alert('재발송 실패');
             			 }

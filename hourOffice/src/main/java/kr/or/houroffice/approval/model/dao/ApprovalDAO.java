@@ -167,7 +167,7 @@ public class ApprovalDAO {
 		
 		int result3 =1;
 		int result4 =1;
-		if(lineCount==0 && docuType=='H'){ //결재처리가 완료되었으면 & 연차 신청서인 경우에만
+		if(lineCount==0 && refusalCount==0 && docuType=='H'){ //결재처리가 완료되고, 반려없고, 연차 신청서인 경우에만
 			//문서번호를 조회해서 연차 정보를 가져다가 연차내역에 추가하고 멤버 연차 갯수에 변경
 			AprFormHol afh = selectOneAprHol(sqlSession, al.getDocuNo()); //문서정보 받아오기
 			result3 = sqlSession.insert("approval.insertHolidayList", afh);//연차 내역 추가
