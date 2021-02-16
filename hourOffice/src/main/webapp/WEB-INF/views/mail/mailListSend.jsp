@@ -99,23 +99,26 @@
             		 inputArray.push($(this).val());
             	 });
             	 if(inputArray.length>0){ 
-            	 $.ajax({
-            		 url : "/deleteMail.ho",
-            		 traditional : true,
-            		 data : {"listType": 'S', "mailNoList" : inputArray},
-            		 type : "post",
-            		 success : function(result){
-            			 if(result){
-            			 	alert('처리 성공');
-            			 	location.reload();
-            			 }else{
-            				 alert('처리 실패');
-            			 }
-            		 },
-            		 error : function(){
-            			 alert('처리 에러');
-            		 }
-            	 });
+            		 var answer = window.confirm('정말로 삭제하시겠습니까?');
+                     if(answer){
+		            	 $.ajax({
+		            		 url : "/deleteMail.ho",
+		            		 traditional : true,
+		            		 data : {"listType": 'S', "mailNoList" : inputArray},
+		            		 type : "post",
+		            		 success : function(result){
+		            			 if(result){
+		            			 	alert('처리 성공');
+		            			 	location.reload();
+		            			 }else{
+		            				 alert('처리 실패');
+		            			 }
+		            		 },
+		            		 error : function(){
+		            			 alert('처리 에러');
+		            		 }
+		            	 });
+                     }
             	 }else{
             		 alert('대상을 1개 이상 선택해주세요');
             	 }
