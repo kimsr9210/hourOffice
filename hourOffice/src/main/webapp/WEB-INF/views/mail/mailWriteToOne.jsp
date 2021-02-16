@@ -72,6 +72,9 @@
         });
        
         $(function() {
+        	$('#categoryMail').next().css('display','block');
+        	$('#categoryMail').next().css('height','150px');
+        	$('#categoryMail').children().last().children().attr('class','fas fa-chevron-left');
             //주소록 창
             $(document).on('click', '.addr_list', function(){
                 window.open('/address.ho', '_blank', 'width=801, height=652, top=150, left=350, resizable=no, location=no, titlebar=no');

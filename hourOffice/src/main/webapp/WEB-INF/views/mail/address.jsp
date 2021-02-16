@@ -44,6 +44,10 @@
     
     <script>
         $(function(){
+        	$('#categoryMail').next().css('display','block');
+        	$('#categoryMail').next().css('height','150px');
+        	$('#categoryMail').children().last().children().attr('class','fas fa-chevron-left');
+        	
             //부서 클릭시 리스트 출력
             $('#dept-list>span').click(function(){
             	var $this = $(this);

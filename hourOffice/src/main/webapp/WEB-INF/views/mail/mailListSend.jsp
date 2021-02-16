@@ -77,6 +77,12 @@
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 	<script>
         $(function(){
+        	$('#categoryMail').next().css('display','block');
+        	$('#categoryMail').next().css('height','150px');
+        	$('#categoryMail').children().last().children().attr('class','fas fa-chevron-left');
+        	
+        	$('#categoryMail').next().children().eq(2).children().css('font-weight','800');
+        	$('#categoryMail').next().children().eq(2).children().css('color','#ffcc29');
             //all 선택
             $('#mail-all-select').click(function(){
                 console.log($(this).prop('checked'));
