@@ -525,9 +525,7 @@ input[type="checkbox"]:checked + label:after {
 							
 							<div id="fileContentsBox">
 								<ul id="contentsName">
-									<li>
-									<input id="checkbox1" name="checkbox" type="checkbox">
-									<label for="checkbox1"></label>
+									<li>&nbsp;
 									</li>
 									<li><a href="#">파일명</a></li>
 									<li><a href="#">크기</a></li>
@@ -550,9 +548,7 @@ input[type="checkbox"]:checked + label:after {
         							}
         						%>
 								<ul class="fileList">
-									<li>
-									<input id="checkbox2" name="checkbox" type="checkbox">
-									<label for="checkbox2"></label>
+									<li>&nbsp;
 									</li>
 									<li>
 									<%if(rd.getOriginalFileName().contains(".png")==true || rd.getOriginalFileName().contains(".jpg")==true){ %>
@@ -582,11 +578,9 @@ input[type="checkbox"]:checked + label:after {
 									</li>
 								</ul>
 								<%} %>
-								<%if(fileList.size()>=10){ %>
 								<div id="pageNaviBox">
 								<%=pageNavi %>
 								</div>
-								<%} %>
 							</div>
 							
 								

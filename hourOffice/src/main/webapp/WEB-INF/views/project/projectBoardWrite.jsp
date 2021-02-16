@@ -224,7 +224,7 @@
 									</form>
 
 									<!-- 코드 일때 -->
-									<form action="/insertProjectCode.ho" method="post">
+									<form action="/insertProjectCode.ho" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<%=p.getProNo() %>" name="proNo" />
 										<input type="hidden" value="${sessionScope.member.memNo }" name="memNo" />
 										<div id="codeBox" class="boardAllStyle">

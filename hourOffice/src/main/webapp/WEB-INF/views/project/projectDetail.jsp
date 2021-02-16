@@ -1129,7 +1129,7 @@
 							        			<%} %>
 							        		<%}%>
 							                
-							            ]
+							            
 							            },
 							        	<%} %>
 							            
@@ -1586,7 +1586,7 @@
     		$('.codeLine').click(function(){
     			var $text = $(this).parent().text();
     			$text = $text+" → ";
-    			var comment = $(this).parent().parent().parent().parent().next().next().children().eq(1).children().children().eq(0);
+    			var comment =$(this).parents('.boardBox').children('.commentWrite').children('.commentText').children().children('.boardComment');
     			comment.val($text);
     			comment.focus();
     		});
@@ -1703,6 +1703,8 @@
     				$(this).text('초대완료');
     			}
     		});
+    		
+    		
     	});
     </script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
