@@ -10,7 +10,7 @@
 	<div id="header">
 		<div id="headerLogo">
 			<a href="/index.jsp"><img id="logoImg"
-				src="resources/images/logo_white.png" /></a>
+				src="resources/images/logo4.png" /></a>
 		</div>
 		<form action="/search" method="post">
 			<ui id="headerNavi">
