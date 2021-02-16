@@ -702,7 +702,6 @@ public class ProjectController {
 	//일정 게시물 올리기
 	@RequestMapping(value="/insertProjectPlan.ho")
 	public ModelAndView insertProjectPlan(ProjectPlan pp){
-		System.out.println(pp);
 		int result = pService.insertProjectPlan(pp);
 		ModelAndView mav = new ModelAndView();
 		
@@ -721,7 +720,6 @@ public class ProjectController {
 	
 	@RequestMapping(value="/updateProjectComplate.ho")
 	public void updateProjectComplate(Project p, HttpServletResponse response)  throws IOException{
-		System.out.println(p);
 		
 		if(p.getCompYN()=='Y'){
 			p.setCompYN('N');

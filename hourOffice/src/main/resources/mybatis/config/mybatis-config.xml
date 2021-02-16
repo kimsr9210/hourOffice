@@ -53,6 +53,10 @@
 		<typeAlias type="kr.or.houroffice.mail.model.vo.MailList" alias="MailList"/>
 		<typeAlias type="kr.or.houroffice.mail.model.vo.SendingMail" alias="SendingMail"/>
 		
+		
+		<typeAlias type="kr.or.houroffice.resource.model.vo.ResourceData" alias="ResourceData"/>
+		<typeAlias type="kr.or.houroffice.resource.model.vo.ResourcePage" alias="ResourcePage"/>
+    
 		<typeAlias type="kr.or.houroffice.main.model.vo.AllNotice" alias="AllNotice"/>
 		<typeAlias type="kr.or.houroffice.main.model.vo.CompanyRule" alias="CompanyRule"/>
 		<typeAlias type="kr.or.houroffice.main.model.vo.MainMailPage" alias="MainMailPage"/>
