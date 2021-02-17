@@ -106,11 +106,17 @@ $(function() {
 		$('#searchTooltip').css('visibility', 'visible');
 	}, function() {
 		$('#searchTooltip').css('visibility', 'hidden');
-	})
+	});
 
 	$('#userLogout').hover(function() {
 		$('#exitTooltip').css('visibility', 'visible');
 	}, function() {
 		$('#exitTooltip').css('visibility', 'hidden');
-	})
+	});
+	
+	$('#myInfoHead').hover(function() {
+		$('#myInfoTooltip').css('visibility', 'visible');
+	}, function() {
+		$('#myInfoTooltip').css('visibility', 'hidden');
+	});
 });

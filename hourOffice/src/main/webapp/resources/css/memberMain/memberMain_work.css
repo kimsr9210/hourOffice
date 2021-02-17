@@ -11,6 +11,8 @@
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 15px;
+        color: #707070;
+        font-family: 'GongGothicMedium';
     }
     #clock{
         color: #8B8EA1;
