@@ -49,6 +49,13 @@
 	height: 25px;
 }
 
+#passChgSubmit{	background-color: #1D9F8E;
+	color: white;
+	border: 0;
+	border-radius: 5px;
+	width: 100px;
+	height: 25px;}
+
 #checkbtn {
 	background-color: #1D9F8E;
 	color: white;
@@ -97,38 +104,105 @@ width: 200px;}
 	width: 100px;
 	height: 25px;
 }
+
+.tr_passChg{
+	display:none;
+}
 </style>
 
 <script>
 	$( function() {
 		$("#change").click(function(){
 			//$(".text_span").css("display","none");
-			//$(".text_input").removeAttr("style");
 			
-			var addPh = $("#addPh").val();
-			var addEmail = $("#addEmail").val();
-			var addAddress = $("#addAddress").val();
-			var addrInput = $("#addrInput").val();
-			
-			var param = "ph="+addPh+
-			"&email="+addEmail+
-			"&addrInput="+addrInput+
-			"&address="+addAddress;
-			
-			$.ajax({
-				url : "/mypageChange.ho?"+param,
-				type : "get",
-				success : function(data){
-					console.log("서버 호출 완료");
-				},
-				error : function(e){
-					console.log("서버 호출 처리 불가");
-				}
-			});
-			
+			var text = $(this).text();
+			if(text=='수정'){
+				$(this).text('완료');
+				
+				$(".text_input").removeAttr("style");	
+				$("#search").show();	
+			}else if(text=='완료'){
+				var addPh = $("#addPh").val();
+				var addEmail = $("#addEmail").val();
+				var addAddress = $("#addAddress").val();
+				var addrInput = $("#addrInput").val();
+				
+				var param = "ph="+addPh+
+				"&email="+addEmail+
+				"&addrInput="+addrInput+
+				"&address="+addAddress;
+				
+				$.ajax({
+					url : "/mypageChange.ho?"+param,
+					type : "get",
+					success : function(data){
+						console.log("서버 호출 완료");
+						location.reload();
+						alert("회원 정보  변경이 완료 되었습니다.");
+					},
+					error : function(e){
+						console.log("서버 호출 처리 불가");
+						alert("회원 정보  변경이 불가합니다. \n 관리자에게 문의바랍니다.");
+					}
+				});
+				
+			}
+		});
+		
+		$("#cxlbtn").click(function(){
+			location.reload();
 		});
 	});
-		 
+	
+</script>
+
+<script>
+	$(function(){
+		$('#passbtn').click(function(){
+			$("#updateMemPwd").val("");
+			$("#updateMemPwd2").val("");
+			$(".tr_passChg").toggle("display","");
+		});
+		
+		$("#passChgSubmit").click(function(){
+			
+			if($("#updateMemPwd").val() == ""){
+				alert('변경되는 비밀번호를 입력해주세요.');
+				$("#updateMemPwd").focus();
+				return;
+			}
+			
+			if($("#updateMemPwd2").val() == ""){
+				alert('변경되는 비밀번호 확인을 입력해주세요.');
+				$("#updateMemPwd2").focus();
+				return;
+			}
+			
+			if($("#updateMemPwd").val() != $("#updateMemPwd2").val()){
+				alert('변경될 비밀번호가 서로 일치하지않습니다. \n 다시 입력하세요.');
+				$("#updateMemPwd2").focus();
+				return;
+			}
+			
+			var value = "memPwd="+$("#memPwd").val()+"&updateMemPwd="+$("#updateMemPwd").val();
+			
+			$.ajax({
+				url : "/passwordChange.ho?"+value,
+				type : "POST",
+				success : function(){
+					console.log("서버 호출 완료");
+					alert("비밀번호  변경이 완료 되었습니다.");
+					$("#updateMemPwd").val("");
+					$("#updateMemPwd2").val("");
+					$(".tr_passChg").css("display","none");
+				},
+				error : function(e){
+					console.log("비밀번호 변경 불가");
+					alert("비밀번호  변경이 불가합니다. 다시 확인해주세요.");
+				}
+			});	
+		});
+	});
 </script>
 
 
@@ -150,7 +224,8 @@ width: 200px;}
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						내 개인정보
+						<span>인사관리</span>
+                        <span>> 내개인정보</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -166,8 +241,8 @@ width: 200px;}
 								<td width="30%"></td>
 								<td width="10%"></td>
 								<td width="20%">
-									<input type="button" id="change" value="수정" /> 
-									<input type="reset" id="cxlbtn" value="취소" />
+									<button type="button" id="change">수정</button>
+									<input type="button" id="cxlbtn" value="취소" />
 								</td>
 							</tr>
 							
@@ -182,10 +257,11 @@ width: 200px;}
 								<td rowspan="5">
 					
 									<div class="photo" style="margin: 30px"><img src="/resources/images/profile/<%=md.getMemProfile()%>" class="photo"></div> 
-									<form action="" method="post" enctype="multipart/form-data">
-										<input type="file" id="pic"/>
+									<!--  어려워서 못하겠음 .. 
+									<form action="photoUpdate.ho" method="post" enctype="multipart/form-data">
+										<input type="file" id="memProfile"/>
 										<input type="submit" value="등록" id="upload" />
-									</form>
+									</form>  -->
 								</td>
 								<th>사번</th>
 								<td><%=md.getMemNo() %></td>
@@ -219,7 +295,7 @@ width: 200px;}
 							<tr>
 
 								<th>내선번호</th>
-								<td><%=md.getMemTell() %></td>
+								<td><%=md.getMemTell() == null ? "(입력된 정보가 없습니다)" : md.getMemTell() %></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -230,7 +306,7 @@ width: 200px;}
 									<th>휴대전화번호</th>
 									<td>
 										<!-- <span class="text_span"><%=md.getMemPhone() %></span> -->
-										<input type="text" class="text_input" id="addPh" value="<%=md.getMemPhone() %>">
+										<input type="text" class="text_input" id="addPh" value="<%=md.getMemPhone() %>"style="border:none; text-align:center;">
 									</td>
 									
 									<td></td>
@@ -241,9 +317,11 @@ width: 200px;}
 									<td></td>
 									<th>이메일</th>
 									<td>
-										<!-- <span class="text_span"><%=md.getMemEmail() %></span>
+										<!--  
+										<span class="text_span"><%=md.getMemEmail() %></span>
 										<input type="text" class="text_input"  value="<%=md.getMemEmail() %>" style="display:none;">-->
-										<input type="text" class="text_input" id="addEmail" value="<%=md.getMemEmail() %>">
+						
+										<input type="text" class="text_input" id="addEmail" value="<%=md.getMemEmail() %>" style="border:none; text-align:center; ">
 									</td>
 									<td></td>
 									<td></td>
@@ -253,10 +331,10 @@ width: 200px;}
 									<td></td>
 									<th>주소</th>
 									<td>
-									<input type="text" name="memAddress1" id="addrInput" readonly  value="<%=md.getMemAddress().substring(0, 7) %>" ><br>
-                               		<input type="text" name="memAddress2" class="inputStyle" id="addAddress" value="<%=md.getMemAddress().substring(7) %>" >
+									<input type="text" name="memAddress1" class="text_input" id="addrInput" readonly  value="<%=md.getMemAddress().substring(0, 7) %>" style="border:none;  text-align:center;"><br>
+                               		<input type="text" name="memAddress2" class="text_input" id="addAddress" value="<%=md.getMemAddress().substring(7) %>" style="border:none; text-align:center;">
 									</td>
-									<td><button type="button" onclick="searchAddr()" id="search">검색</button></td>
+									<td><button type="button" onclick="searchAddr()" id="search" style="display:none;">검색</button></td>
 									<td></td>
 								</tr>
 							</form>
@@ -265,9 +343,28 @@ width: 200px;}
 							<tr>
 								<td></td>
 								<th>비밀번호</th>
-								<form action="/passwordChange.ho" method="get">
-								<td><input type="password" value="<%=md.getMemPwd().substring(0, 20)%>" /></td>
-								<td><input type="submit" id="passbtn" value="비밀번호 변경" style="float: left;" /></td></form>
+								<td>
+									<input type="password" id="memPwd" value="<%=md.getMemPwd()%>" style="border:none" />
+								</td>
+								<td><input type="button" id="passbtn" value="비밀번호 변경" style="float: left;" /></td>
+								<td></td>
+							</tr>
+							<tr class="tr_passChg">
+								<td></td>
+								<th>비밀번호 변경</th>
+								<td>
+									<input type="password" id="updateMemPwd" value="" />
+								</td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr class="tr_passChg">
+								<td></td>
+								<th>비밀번호 변경 확인</th>
+								<td>
+									<input type="password" id="updateMemPwd2" value="" />
+								</td>
+								<td><input type="button" id="passChgSubmit" value="변경" style="float: left;" /></td>
 								<td></td>
 							</tr>
 							

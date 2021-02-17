@@ -17,6 +17,17 @@
         ON L.MEM_NO = M.MEM_NO
 	</select>
 	
+	<select id="selectWorkTime" resultType="int" parameterType="hashmap">
+		SELECT NVL(SUM(TIMESTP),0) FROM (
+        SELECT TRUNC(EXTRACT(HOUR FROM T2) * 60 + EXTRACT(MINUTE FROM T2)) AS TIMESTP FROM (
+            SELECT  ATTENDANCE_BOOK.END_DATE - ATTENDANCE_BOOK.START_DATE AS T2 FROM ATTENDANCE_BOOK
+            WHERE
+	            ATTENDANCE_BOOK.MEM_NO = #{memNo}
+	        	AND TO_CHAR(ATTENDANCE_BOOK.YMD,'yyyyMMdd') >= replace(#{startDate}, '-', '')
+	            AND TO_CHAR(ATTENDANCE_BOOK.YMD,'yyyyMMdd') <![CDATA[<=]]> replace(#{endDate}, '-', '')
+        ))
+	</select>
+	
 	<!-- 근태 조회 -->
 	<select id="selectWork" resultType="Attendance" parameterType="hashmap">
     	 SELECT

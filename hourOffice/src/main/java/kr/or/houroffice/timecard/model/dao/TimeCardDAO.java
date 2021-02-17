@@ -19,6 +19,12 @@ public class TimeCardDAO {
 		List<Holiday> list = sqlSession.selectList("timeCard.selectHoliday");
 		return (ArrayList<Holiday>) list;
 	}
+	
+	//근태 조회 (리스트)
+		public int selectWorkTime(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+			int result = sqlSession.selectOne("timeCard.selectWorkTime",map);
+			return result;
+		}
 
 	//근태 조회 (리스트)
 	public ArrayList<Attendance> selectWork(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {

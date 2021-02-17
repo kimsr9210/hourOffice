@@ -70,7 +70,8 @@ th {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						내인사정보
+						<span>인사관리</span>
+                        <span>> 내인사정보</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -83,7 +84,7 @@ th {
             
             <div class="pic"><img src="/resources/images/profile/<%=m.getMemProfile()%>" class="pic"></div></th>
             <th>이름</th>
-            <td><%=m.getMemName() %></td>
+            <td width="25%"><%=m.getMemName() %></td>
             <th>사번</th>
             <td><%=m.getMemNo() %></td>
         </tr>
@@ -99,14 +100,14 @@ th {
             <th>연락처</th>
             <td><%=m.getMemPhone() %></td>
             <th>부서명</th>
-            <td><%=m.getDeptName() %></td>
+            <td><%= m.getDeptName() ==  null ? "" : m.getDeptName() %></td>
         </tr>
         <tr>
             
             <th>이메일</th>
-            <td><%=m.getMemEmail() %></td>
+            <td><%= m.getMemEmail() ==  null ? "" : m.getMemEmail() %></td>
             <th>내선번호</th>
-            <td><%=m.getMemTell() %></td>
+            <td><%= m.getMemTell() ==  null ? "" : m.getMemTell() %></td>
         </tr>
         <tr>
             
@@ -127,11 +128,11 @@ th {
         </tr>
         <%for(MemDept md : list){ %>
         <tr>
-            <td><%=md.getAcaSchoolName() %></td>
-            <td><%=md.getAcaEnrollDate() %></td>
-            <td><%=md.getAcaGradDate() %></td>
-            <td><%=md.getAcaMajorName() %></td>
-            <td><%=md.getAcaGrad() %></td>
+            <td><%= md.getAcaSchoolName() ==  null ? "" : md.getAcaSchoolName() %></td>
+            <td><%= md.getAcaEnrollDate() ==  null ? "" : md.getAcaEnrollDate().substring(0,10) %></td>
+            <td><%= md.getAcaGradDate() ==  null ? "" : md.getAcaGradDate().substring(0,10) %></td>
+            <td><%= md.getAcaMajorName() ==  null ? "" : md.getAcaMajorName() %></td>
+            <td><%= md.getAcaGrad() ==  null ? "" : md.getAcaGrad() %></td>
         </tr>
         <%} %>
     </table><br><br>

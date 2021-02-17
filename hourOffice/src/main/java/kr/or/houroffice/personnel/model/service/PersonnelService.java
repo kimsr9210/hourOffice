@@ -23,5 +23,9 @@ public interface PersonnelService {
 	public void deleteMyaddbook(String ck);
 	public MemDept mypage(int memNo);
 	public ArrayList<MemDept> information(int memNo);
+	public int photoUpdate(int memNo);
+	public int inforPwChange(HttpServletRequest request, int memNo) throws Exception;
+	public void mypageChange(Map<String, Object> map);
+	
 	
 }

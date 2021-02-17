@@ -50,11 +50,11 @@
 
 		<ui class="categoryBox">
 		<li class="categoryName">내 정보</li>
-		<li class="categoryList"><a href="#">내 개인정보</a></li>
-		<li class="categoryList"><a href="#">내 인사정보</a></li>
+		<li class="categoryList"><a href="/mypage.ho">내 개인정보</a></li>
+		<li class="categoryList"><a href="/information.ho">내 인사정보</a></li>
 		<li class="categoryName">주소록</li>
-		<li class="categoryList"><a href="#">사내 주소록</a></li>
-		<li class="categoryList"><a href="#">개인 주소록</a></li>
+		<li class="categoryList"><a href="/addbook.ho">사내 주소록</a></li>
+		<li class="categoryList"><a href="/myaddbook.ho">개인 주소록</a></li>
 		</ui>
 
 		<div id="categoryWork" class="sideNaviClick">
@@ -68,8 +68,8 @@
 		</div>
 		<ui class="categoryBox">
 		<li class="categoryName">근태관리</li>
-		<li class="categoryList"><a href="#">내 연차내역</a></li>
-		<li class="categoryList"><a href="#">내 근태현황</a></li>
+		<li class="categoryList"><a href="/holiday.ho">내 연차내역</a></li>
+		<li class="categoryList"><a href="/work.ho">내 근태현황</a></li>
 		</ui>
 
 		<div id="categoryElecAppr" class="sideNaviClick">
