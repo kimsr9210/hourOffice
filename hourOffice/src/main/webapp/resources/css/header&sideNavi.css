@@ -184,6 +184,7 @@ a:active {
 	width: 200px;
 	height: 100%;
 	float: left;
+	cursor: pointer;
 }
 
 #logoImg {
@@ -248,6 +249,8 @@ a:active {
 	height: 0.01px;
 	margin-top: 29px;
 	outline: none;
+	font-size: 14px; /*진원 추가*/
+	padding-left: 3px; /*진원 추가*/
 }
 
 #searchBtn {
@@ -347,7 +350,7 @@ a:active {
 
 /* 말풍선 */
 #searchTooltip {
-	background-color: black;;
+	background-color: black;
 	position: absolute;
 	top: 40px;
 	margin-left: -30px;
@@ -362,11 +365,26 @@ a:active {
 }
 
 #exitTooltip {
-	background-color: black;;
+	background-color: black;
 	position: absolute;
 	top: 40px;
 	margin-left: -30px;
 	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 5px;
+	font-size: 0.8rem;
+	color: white;
+	opacity: 0.6;
+	visibility: hidden;
+}
+
+#myInfoTooltip {
+	background-color: black;
+	position: absolute;
+	top: 40px;
+	margin-left: -30px;
+	width: 53px;
 	height: 30px;
 	line-height: 30px;
 	border-radius: 5px;

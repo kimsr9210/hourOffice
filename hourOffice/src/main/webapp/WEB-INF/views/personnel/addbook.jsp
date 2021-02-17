@@ -80,7 +80,8 @@ select{height: 25px;}
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						사내주소록
+						<span>인사정보</span>
+                        <span>> 사내주소록</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -101,6 +102,7 @@ select{height: 25px;}
                         <option value="dept">부서</option>
                         <option value="position">직책</option>
                     </select>
+                    <!--  value="<%=request.getParameter("search")%>" -->
                     <input type="text" id="search" name="searchText" />
                     <input type="submit" class="sbbtn" name="searchBtn" value="검색" style="border-radius: 5px;"/>
                 </form>
@@ -132,7 +134,8 @@ select{height: 25px;}
             <td>${result.memPosition}</td>
             <td>${result.memTell}</td>
             <td>${result.memPhone}</td>
-            <td>${result.memEmail}</td>
+            <td><a href="/transferMail.ho?mailNo=4">${result.memEmail}</a></td>
+
         </tr>
         </c:forEach>
 
@@ -150,14 +153,17 @@ select{height: 25px;}
 		</div>
 
 		<!-- 자바 스크립트    -->
+		<script>
+		$('#categoryMypage').next().css('display','block');
+		$('#categoryMypage').next().css('height','150px');
+		$('#categoryMypage').children().last().children().attr('class','fas fa-chevron-left');
+		
+		$('#categoryMypage').next().children().eq(4).children().css('font-weight','800');
+		$('#categoryMypage').next().children().eq(4).children().css('color','#ffcc29');
+		</script>
 		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 
 	</div>
-
-	</div>
-</body>
-</html>
-
 
 </body>
 </html>

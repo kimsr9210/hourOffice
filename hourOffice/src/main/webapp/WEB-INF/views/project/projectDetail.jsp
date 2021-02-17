@@ -1,4 +1,5 @@
 
+<%@page import="kr.or.houroffice.project.model.vo.ProjectPlan"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectRequest"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -7,7 +8,6 @@
 <%@page import="kr.or.houroffice.project.model.vo.ProjectCode"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectComment"%>
 <%@page import="org.springframework.web.bind.annotation.SessionAttribute"%>
-<%@page import="javax.websocket.Session"%>
 <%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectBoard"%>
 <%@page import="kr.or.houroffice.project.model.vo.ProjectMember"%>
@@ -34,12 +34,27 @@
 	href="/resources/css/header&sideNavi.css" />
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/project/projectDetail.css" />
-	
+
+<!--풀캘린더-->
+<link href='/resources/api/fullcalendar-5.5.1/lib/main.css' rel='stylesheet'>
 	
 <!-- TextArea 자동 높이 조절 CDN -->
 <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 <body>
 <style>
+@font-face {
+    font-family: 'GongGothicMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'GongGothicLight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @font-face {
     font-family: 'NanumSquareRound';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
@@ -312,11 +327,11 @@
     	width: 98%;
     	padding: 70px;
     	font-size: 1.5rem;
-    	font-weight: bolder;
     	text-align: center;
     	border: 1px solid #cccccc;
     	margin-top: 20px;
     	border-radius: 3px;
+    	font-family: GongGothicLight;
     }
     
     .memberImg {
@@ -353,6 +368,19 @@
 		font-size: 2rem;
 		padding: 10px 2px 2px 15px;
 	}
+	
+	/*-------------------- 풀캘린더 ------------------*/
+	#calendar {
+	    max-width: 785px;
+	    margin-top: 10px;
+	    margin-bottom: 50px;
+	}
+	.koHolidays{
+	    color: red;
+	    font-weight: 600;
+	}
+	.fc-day-sat { color:#0000FF; }     /* 토요일 */
+	.fc-day-sun { color:#FF0000; }    /* 일요일 */
 </style>
     		
 
@@ -391,6 +419,9 @@
 			like = true;
 		}
 	}
+	
+	SimpleDateFormat planForm = new SimpleDateFormat("yyyy-MM-dd");
+	ArrayList<ProjectPlan> planList = (ArrayList<ProjectPlan>)request.getAttribute("planList");
 %>
 
 
@@ -1035,9 +1066,106 @@
                             <!----------------------------- 일정 일때 ------------------------------------>
                             <!-- 여기다가 일정  -->
                             <%if(boardType.equals("plan")){ %>
-                            
+                            	<div id='calendar'></div>
                             
                             <%} %>
+                            <!-- 풀캘린더 -->
+                            <script src='/resources/api/fullcalendar-5.5.1/lib/main.js'></script>
+							<script>
+							
+							  document.addEventListener('DOMContentLoaded', function() {
+							    var calendarEl = document.getElementById('calendar');
+							      
+							      var today = new Date();
+							      var month = today.getMonth()+1;
+							      if(month<10){
+							          month = '0'+month;
+							      }
+							
+							    var calendar = new FullCalendar.Calendar(calendarEl, {
+							        
+							        initialDate: (today.getFullYear()+'-'+month+'-'+today.getDate()),
+							        editable: true,
+							        selectable: false,
+							        businessHours: true,
+							        dayMaxEvents: true,
+							        buttonText: {
+							            today : '오늘'
+							        },
+							        
+							        titleFormat : function(date) { // title 설정
+							            return date.date.year +"년 "+(date.date.month +1)+"월"; 
+							        },
+							        dayHeaderFormat : function(date) {
+							            var weekList = ['일','월','화','수','목','금','토'];
+							            var tDay = new Date().getDay()-1;
+							            
+							            return weekList[date.date.day - tDay];
+							        },
+							        
+							        dayPopoverFormat: { month: '2-digit', day: '2-digit' },
+							        
+							        fixedWeekCount : false,
+							        eventRender: function(info) {
+							            var tooltip = new Tooltip(info.el, {
+							              title: info.event.extendedProps.description,
+							              placement: 'top',
+							              trigger: 'hover',
+							              container: 'body'
+							            });
+							        },
+							        googleCalendarApiKey: 'AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE',
+							        eventSources: [
+							        	<%if(!(planList.isEmpty())){ %>
+							        	{events: [
+							        		<%for(int i=0; i<planList.size();i++){
+							        			ProjectPlan pp = planList.get(i); 
+							        			Date startPlan = new Date(pp.getStartDate().getTime());
+							        			String startTime = planForm.format(startPlan);
+							        			Date endPlan = new Date(pp.getEndDate().getTime());
+							        			String endTime = planForm.format(endPlan); %>
+							        			
+							        			<%if(i==planList.size()-1){ %>
+							        			{
+							        				title: '<%=pp.getSubject()%>',
+							        				description: '<%=pp.getMemo() %>',
+									                start: '<%=startPlan%>',
+									                end: '<%=endPlan%>'
+							        			}
+							        			<%}else {%>
+							        			{
+							        				title: '<%=pp.getSubject()%>',
+							        				description: '<%=pp.getMemo() %>',
+									                start: '<%=startPlan%>',
+									                end: '<%=endPlan%>'
+							        			},
+							        			<%} %>
+							        		<%}%>
+							                
+							            ]
+							            },
+							        	<%} %>
+							            
+							            { /*한국 공휴일*/
+							                googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", className : "koHolidays",
+							                display : 'background',
+							                color : '#CFFFFF',
+							                order : 'title'
+							            }
+							        ],
+							      
+							        eventClick: function(arg) {
+							            // opens events in a popup window
+							
+							            arg.jsEvent.preventDefault() // don't navigate in main tab
+							        }
+							        
+							    });
+							
+							    calendar.render();
+							  });
+							
+							</script>
                             <!------------------------------------------------------------------------->
 
                         </div>
@@ -1265,6 +1393,11 @@
     <!-- 자바 스크립트    -->
     <script>
     	$(function(){
+    		$('#categoryProject').next().css('display', 'block');
+			$('#categoryProject').next().css('height', '125px');
+			$('#categoryProject').children().last().children().attr('class',
+					'fas fa-chevron-left');
+    		
     		//프로젝트 나가기
     		$('#projectExit, .outProject').click(function(){
     			var proNo = '<%=p.getProNo()%>';
@@ -1466,7 +1599,7 @@
     		$('.codeLine').click(function(){
     			var $text = $(this).parent().text();
     			$text = $text+" → ";
-    			var comment = $(this).parent().parent().parent().parent().next().next().children().eq(1).children().children().eq(0);
+    			var comment =$(this).parents('.boardBox').children('.commentWrite').children('.commentText').children().children('.boardComment');
     			comment.val($text);
     			comment.focus();
     		});
@@ -1583,6 +1716,8 @@
     				$(this).text('초대완료');
     			}
     		});
+    		
+    		
     	});
     </script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>

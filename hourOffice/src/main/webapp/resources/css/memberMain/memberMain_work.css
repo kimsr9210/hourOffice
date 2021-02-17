@@ -4,12 +4,15 @@
         height: 320px;
         background-color: white;
         padding: 20px 15px 0px 15px;
+        box-shadow: 0px 1px 1px 1px lightgray;
     }
     .work-title{
         color: #3B3E43;
         font-size: 15px;
         font-weight: 700;
         margin-bottom: 15px;
+        color: #707070;
+        font-family: 'GongGothicMedium';
     }
     #clock{
         color: #8B8EA1;

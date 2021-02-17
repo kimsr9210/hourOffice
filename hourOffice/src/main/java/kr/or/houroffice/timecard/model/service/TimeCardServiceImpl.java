@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,12 +39,7 @@ public class TimeCardServiceImpl implements TimeCardService {
 	}
 
 	// 근태 조회 (리스트)
-	public ArrayList<Attendance> selectWork(HttpServletRequest request, int memNo) {
-
-		
-		
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
+	public Map<String,Object> selectWork(String startDate,String endDate, int memNo) {
 		
 		if(startDate == null || endDate == null){
 			String day = getDay();
@@ -56,8 +52,25 @@ public class TimeCardServiceImpl implements TimeCardService {
 		map.put("endDate", endDate);
 		map.put("memNo", memNo);
 
+		int workTime = tDAO.selectWorkTime(sqlSession, map);
+		int hour = Math.floorDiv(workTime,60);	// 근무 시간
+		int min = Math.floorMod(workTime,60);	// 근무 분
+		int overHour = 0;						// 52시간 초과 시간
+		int overMin = 0;						// 52시간 초과 분
+		if(workTime > 3120){
+			workTime = workTime-3120;
+			overHour = Math.floorDiv(workTime,60);
+			overMin = Math.floorMod(workTime,60);
+		}
+		
 		ArrayList<Attendance> list = tDAO.selectWork(sqlSession, map);
-		return list;
+		
+		Map<String,Object> resultMap = new HashMap<>(); 
+		resultMap.put("list", list);
+		resultMap.put("time", hour+"시간 "+min+"분");
+		resultMap.put("overTime", overHour+"시간 "+overMin+"분");
+		
+		return resultMap;
 	}
 	
 	private String getDay(){

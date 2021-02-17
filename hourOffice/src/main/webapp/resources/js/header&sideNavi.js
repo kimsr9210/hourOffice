@@ -22,12 +22,13 @@ $(function() {
 	$('#categoryProject').next().css('height','125px');
 	$('#categoryProject').children().last().children().attr('class','fas fa-chevron-left');
 	
-	$('#categoryProject').next().children().eq(2).children().css('font-weight','800');  $('#categoryProject').next().children().eq(2).children().css('color','#ffcc29');
+	$('#categoryProject').next().children().eq(2).children().css('font-weight','800');
+	$('#categoryProject').next().children().eq(2).children().css('color','#ffcc29');
 	
 	
 	//관리 페이지 일 때
 	$('#categoryAdmin').next().css('display','block');
-	$('#categoryAdmin').next().css('height','125px');
+	$('#categoryAdmin').next().css('height','200px');
 	$('#categoryAdmin').children().last().children().attr('class','fas fa-chevron-left');
 	 */
 
@@ -37,12 +38,15 @@ $(function() {
 		$('#searchBox').css('margin-top', '0');
 		$('#searchBox').css('transition', '0.3s');
 		$('#searchBox').css('cursor', 'text');
+		$('#searchBox').attr('placeholder','통합 검색...'); /*진원 추가*/
+		$('#searchBox').focus(); /*진원 추가*/
 	});
 	$('#searchBox').focusout(function() {
 		$('#searchBox').css('height', '0.01px');
 		$('#searchBox').css('margin-top', '29px');
 		$('#searchBox').css('transition', '0.3s');
 		$('#searchBox').css('cursor', 'point');
+		$('#searchBox').attr('placeholder',''); /*진원 추가*/
 	});
 
 	/* 카테고리 나타내기 */
@@ -102,11 +106,17 @@ $(function() {
 		$('#searchTooltip').css('visibility', 'visible');
 	}, function() {
 		$('#searchTooltip').css('visibility', 'hidden');
-	})
+	});
 
 	$('#userLogout').hover(function() {
 		$('#exitTooltip').css('visibility', 'visible');
 	}, function() {
 		$('#exitTooltip').css('visibility', 'hidden');
-	})
+	});
+	
+	$('#myInfoHead').hover(function() {
+		$('#myInfoTooltip').css('visibility', 'visible');
+	}, function() {
+		$('#myInfoTooltip').css('visibility', 'hidden');
+	});
 });

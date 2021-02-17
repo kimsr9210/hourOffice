@@ -241,6 +241,15 @@ $(function(){
 		</div>
 
 	<!-- 자바 스크립트    -->
+    <script>
+	//관리 페이지 일 때
+	$('#categoryAdmin').next().css('display','block');
+	$('#categoryAdmin').next().css('height','200px');
+	$('#categoryAdmin').children().last().children().attr('class','fas fa-chevron-left');
+	
+	$('#categoryAdmin').next().children().eq(1).children().css('font-weight','800');
+	$('#categoryAdmin').next().children().eq(1).children().css('color','#ffcc29');
+	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 
 	</div>

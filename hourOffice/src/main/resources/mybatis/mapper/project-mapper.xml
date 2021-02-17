@@ -467,4 +467,31 @@
 	<insert id="insertProjectMember" parameterType="ProjectMember">
 		INSERT INTO PRO_MEMBER VALUES(#{proNo}, #{memNo}, 'N', 'N')
 	</insert>
+	
+	<!-- BY 진원 - 특정 개월 이내 월별 프로젝트 실행 개수 통계 -->
+	<select id="selectMonthlyProject" resultType="MonthlyProject">
+		WITH CHART AS (SELECT TO_CHAR(PRO_DATE,'MM') AS MONTHLY FROM PROJECT
+                WHERE TO_CHAR(PRO_DATE,'YYYY-MM-DD')
+                BETWEEN TO_CHAR(TRUNC(ADD_MONTHS(SYSTIMESTAMP,-#{monthly}),'MM'),'YYYY-MM-DD')
+                AND TO_CHAR(LAST_DAY(SYSTIMESTAMP),'YYYY-MM-DD')
+                ORDER BY PRO_DATE DESC)
+		SELECT MONTHLY AS monthly, COUNT(MONTHLY) AS monthlyCount FROM CHART
+		GROUP BY MONTHLY
+	</select>
+	
+	<!-- BY BY 진원 -일정 목록 가져오기 -->
+	<select id="selectPlanList" resultType="ProjectPlan">
+		SELECT
+			PLAN_NO as planNo,
+			PRO_NO as proNo,
+			MEM_NO as memNo,
+			SUBJECT as subject,
+			MEMO as memo,
+			START_DATE as startDate,
+			END_DATE as endDate,
+			DEL_YN as delYN
+		FROM PRO_PLAN
+		WHERE PRO_NO=#{proNo} AND DEL_YN='N'
+	</select>
+	
 </mapper>

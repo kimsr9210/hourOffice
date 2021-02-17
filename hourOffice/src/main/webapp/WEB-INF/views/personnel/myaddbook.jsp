@@ -302,7 +302,8 @@ select {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						개인주소록
+						<span>인사정보</span>
+                        <span>> 개인 주소록</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -376,10 +377,14 @@ select {
 		</div>
 	</div>
 	<!-- 자바 스크립트    -->
+	<script>
+	$('#categoryMypage').next().css('display','block');
+	$('#categoryMypage').next().css('height','150px');
+	$('#categoryMypage').children().last().children().attr('class','fas fa-chevron-left');
+	
+	$('#categoryMypage').next().children().eq(5).children().css('font-weight','800');
+	$('#categoryMypage').next().children().eq(5).children().css('color','#ffcc29');
+	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
-</body>
-</html>
-
-
 </body>
 </html>

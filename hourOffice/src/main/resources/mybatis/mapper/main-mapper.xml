@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="main">
+
+	<resultMap id="noticeListResult" type="AllNotice">
+		<result property="notNo" column="NOT_NO" />
+		<result property="notTitle" column="NOT_TITLE" />
+		<result property="notDate" column="NOT_DATE" />
+		<result property="memNo" column="MEM_NO" />
+		<result property="notWriter" column="NOT_WRITER" />
+		<result property="notContent" column="NOT_CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+		<result property="notHits" column="NOT_HITS" />
+		<result property="notDelYN" column="NOT_DEL_YN" />
+		<result property="notDelDate" column="NOT_DEL_DATE" />
+	</resultMap>
+
+	<select id="selectAllNotice" resultMap="noticeListResult">
+		SELECT
+			NOT_NO as notNo,
+			NOT_TITLE as notTitle,
+			NOT_DATE as notDate,
+			MEM_NO as memNo,
+			NOT_WRITER as notWriter,
+			NOT_CONTENT as notContent,
+			NOT_HITS as notHits,
+			NOT_DEL_YN as notDelYN,
+			NOT_DEL_DATE as notDelDate
+		FROM ALL_NOTICE
+		WHERE NOT_DEL_YN='N'
+		ORDER BY NOT_DATE DESC
+	</select>
+		
+	<resultMap id="ruleListResult" type="CompanyRule">
+		<result property="ruleNo" column="RULE_NO" />
+		<result property="ruleTitle" column="RULE_TITLE" />
+		<result property="ruleContent" column="RULE_CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+		<result property="ruleDate" column="RULE_DATE" />
+		<result property="ruleDateFormat" column="RULE_DATE_FORMAT" />
+	</resultMap>
+
+	<select id="selectAllRule" parameterType="Page" resultMap="ruleListResult">
+		select
+			RULE_NO,
+			RULE_TITLE,
+			RULE_CONTENT,
+			RULE_DATE,
+			to_char(RULE_DATE,'yyyy-mm-dd') as RULE_DATE_FORMAT
+		from 
+	    (SELECT ROW_NUMBER() OVER(ORDER BY RULE_DATE DESC) AS ROW_NUM, CR.* from COMPANY_RULE CR)
+	    where ROW_NUM between #{startPage} and #{endPage}
+	</select>
+	
+	<select id="selectAllMail" parameterType="MainMailPage" resultType="MainMailGetter">
+	    SELECT
+	  	MAIL_NO AS mailNo,
+	  	SENDER AS sendMemNo,
+	  	TITLE AS title,
+	  	SEND_DATE AS sendDate,
+	    to_char(SEND_DATE,'mm/dd') AS sendDateFormat,
+	    RECEIVER AS recMemNo,
+	  	READ_YN AS readYN
+	    
+	  	FROM (SELECT ROW_NUMBER() OVER(ORDER BY ML.MAIL_NO DESC) AS ROW_NUM, ML.MAIL_NO, ML.MEM_NO SENDER, ML.TITLE, ML.SEND_DATE,
+	    MR.MEM_NO RECEIVER, MR.READ_YN, MR.DEL_YN FROM MAIL ML JOIN MAIL_RECEIVE MR ON ML.MAIL_NO = MR.MAIL_NO JOIN MEMBER M ON ML.MEM_NO = M.MEM_NO
+		WHERE MR.MEM_NO = #{memNo} AND MR.DEL_YN = 'N')
+	    
+		WHERE ROW_NUM BETWEEN #{startPage} AND #{endPage}
+	</select>
+</mapper>

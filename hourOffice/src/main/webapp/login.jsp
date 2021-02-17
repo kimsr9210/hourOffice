@@ -20,7 +20,7 @@
 <c:choose>
 	<c:when test="${empty sessionScope.member }">
 		<form id="form" action="/memberLogin.ho" method="post">
-	        <p>H:our Office</p>
+	        <p><img src="resources/images/logo4.png" width="300"/></p>
 	        <br><br>
 	        <input type="text" name="memNo" class="in-type" placeholder="계정"><br>
 	        <input type="password" name="memPwd" class="in-type" placeholder="비밀번호"><br>
@@ -29,7 +29,8 @@
 	</c:when>
 	<c:otherwise>
 		<script>
-			location.replace('/main.ho');
+			var todayMon = new Date().getMonth()+1;
+			location.replace('/main.ho?todayMon='+todayMon);
 		</script>
 	</c:otherwise>
 </c:choose>

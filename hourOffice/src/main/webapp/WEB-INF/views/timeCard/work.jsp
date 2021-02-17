@@ -168,11 +168,21 @@ to {
 	$(function(){
 		$(document).ready(function(){
 			makeWeekSelectOptions();
+			search($('#sh_week').val());
+		})
+		
+		$('#sh_month').on('change',function(){
+			makeWeekSelectOptions();
+			search($('#sh_week').val());
 		})
 		
 		$('#sh_week').on('change',function(){
-			var startDate = this.value.split('|')[0];
-			var endDate = this.value.split('|')[1];
+			search(this.value);
+		})
+		
+		function search(val){
+			var startDate = val.split('|')[0];
+			var endDate = val.split('|')[1];
 			
 			var object = {"startDate":startDate,"endDate":endDate};
 			
@@ -182,13 +192,29 @@ to {
 				type : "get",
 				data : object,
 				success : function(data){
-					console.log("전송 성공");
+					$(".workTime").text(data.time);
+					$(".workOverTime").text(data.overTime);
+					if(data.list.length < 1){
+						$(".workData").remove();
+						return;
+					}
+					var txt = "";
+					for(var i=0; i<data.list.length;i++){
+						txt += "<tr class='workData'>";
+						txt += "<td>"+data.list[i].ymd+"</td>";
+						txt += "<td>"+data.list[i].memName+"</td>";
+						txt += "<td>"+data.list[i].deptName+"</td>";
+						txt += "<td>"+data.list[i].startDate+"</td>";
+						txt += "<td>"+data.list[i].endDate+"</td>";
+						txt += "</tr>";
+					}
+					$("#workList").append(txt);
 				},
 				error : function(e){
 					console.log("전송 실패");
 				}
 			});
-		})
+		}
 	
 		function makeWeekSelectOptions() {
 			var year = $("#sh_year").val();
@@ -261,7 +287,8 @@ to {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						내근태현황
+						<span>근태관리</span>
+                        <span>> 내근태현황</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
@@ -281,14 +308,14 @@ to {
 							<tr>
 								<td height="30%">이번주 누적 근무시간</td>
 								<td>이번주 초과 근무시간</td>
-								<td>이번달 누적 근무시간</td>
-								<td>이번달 초과 근무시간</td>
+<!-- 								<td>이번달 누적 근무시간</td>
+								<td>이번달 초과 근무시간</td> -->
 							</tr>
 							<tr>
-								<td height="70%" style="font-size: 25px;">46시간 10분</td>
-								<td style="font-size: 25px; color: red;">1시간 10분</td>
-								<td style="font-size: 25px;">51시간 10분</td>
-								<td style="font-size: 25px; color: red;">5시간 10분</td>
+								<td class="workTime" height="70%" style="font-size: 25px;"></td>
+								<td class="workOverTime" style="font-size: 25px; color: red;"></td>
+								<!-- <td style="font-size: 25px;">51시간 10분</td>
+								<td style="font-size: 25px; color: red;">5시간 10분</td> -->
 							</tr>
 						</table>
 						<br> <br> <br>
@@ -352,7 +379,7 @@ to {
 								<select name="sh_week" id="sh_week">
 								</select><br><br>
 								
-								<table border="1px" width="100%"
+								<table id="workList" border="1px" width="100%"
 									style="text-align: center; margin: auto;">
 
 									<tr style="background-color: #1D9F8E; color: white">
@@ -362,7 +389,7 @@ to {
 										<th>출근시간</th>
 										<th>퇴근시간</th>
 									</tr>
-									<%for(Attendance ad : list) {%>
+									<%-- <%for(Attendance ad : list) {%>
 									<tr>
 										<td><%=ad.getYmd() %></td>
 										<td><%=ad.getMemName() %></td>
@@ -370,7 +397,7 @@ to {
 										<td><%=ad.getStartDate() %></td>
 										<td><%=ad.getEndDate() %></td>
 									</tr>
-									<%} %>
+									<%} %> --%>
 								</table>
 								<!-- <div id="accordion">
 									<h3>1주차</h3>
@@ -445,6 +472,14 @@ to {
 		</div>
 
 		<!-- 자바 스크립트    -->
+		<script>
+		$('#categoryWork').next().css('display','block');
+		$('#categoryWork').next().css('height','75px');
+		$('#categoryWork').children().last().children().attr('class','fas fa-chevron-left');
+		
+		$('#categoryWork').next().children().eq(2).children().css('font-weight','800');
+		$('#categoryWork').next().children().eq(2).children().css('color','#ffcc29');
+		</script>
 		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 
 	</div>

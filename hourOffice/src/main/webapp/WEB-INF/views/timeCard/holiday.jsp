@@ -30,7 +30,6 @@
 	background: #1D9F8E;
 	font-size: 1.2em;
 	padding: 0.3em 0.5em;
-	margin-right: 0.1em;
 	border-radius: 5px;
 	float: right;
 }
@@ -53,6 +52,7 @@ body {
 	max-width: 1100px;
 	margin: 0 auto;
 }
+
 </style>
 
 
@@ -107,16 +107,15 @@ body {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						연차내역
+						<span>근태관리</span>
+                        <span>> 내연차내역</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
 						<!--여기서 각자 id 만드시면 됩니다-->
 
 
-						<div style="float: right;">
-							<a id="aform" href="/approvalForm.ho?docuType=H">연차작성</a>
-						</div>
+						<a id="aform" href="/approvalForm.ho?docuType=H">연차작성</a>
 						<div id="loading">loading...</div>
 						<div id="calendar" style="margin-top: 50px;"></div>
 
@@ -128,7 +127,14 @@ body {
 				</div>
 			</div>
 		</div>
-
+		<script>
+		$('#categoryWork').next().css('display','block');
+		$('#categoryWork').next().css('height','75px');
+		$('#categoryWork').children().last().children().attr('class','fas fa-chevron-left');
+		
+		$('#categoryWork').next().children().eq(1).children().css('font-weight','800');
+		$('#categoryWork').next().children().eq(1).children().css('color','#ffcc29');
+		</script>
 		<!-- 자바 스크립트    -->
 		<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>
 

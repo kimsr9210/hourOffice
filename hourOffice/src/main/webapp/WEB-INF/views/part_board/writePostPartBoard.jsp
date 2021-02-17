@@ -65,6 +65,14 @@
 	
 	<script>
 		$(function(){
+      $('#categoryBoard').next().css('display','block');
+			$('#categoryBoard').next().css('height','150px');
+			$('#categoryBoard').children().last().children().attr('class','fas fa-chevron-left');
+			
+			$('#categoryBoard').next().children().eq(5).children().css('font-weight','800');
+			$('#categoryBoard').next().children().eq(5).children().css('color','#ffcc29');
+      
+      
 			var files; // 파일 변수
 			
 			$('#attachedFile').children(':first-child').css('visibility','hidden'); // 아이콘 셋팅
@@ -158,4 +166,3 @@
 	</div>
 </body>
 </html>
-

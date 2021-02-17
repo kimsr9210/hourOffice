@@ -53,11 +53,11 @@
 
 		<ui class="categoryBox">
 		<li class="categoryName">내 정보</li>
-		<li class="categoryList"><a href="#">내 개인정보</a></li>
-		<li class="categoryList"><a href="#">내 인사정보</a></li>
+		<li class="categoryList"><a href="/mypage.ho">내 개인정보</a></li>
+		<li class="categoryList"><a href="/information.ho">내 인사정보</a></li>
 		<li class="categoryName">주소록</li>
-		<li class="categoryList"><a href="#">사내 주소록</a></li>
-		<li class="categoryList"><a href="#">개인 주소록</a></li>
+		<li class="categoryList"><a href="/addbook.ho">사내 주소록</a></li>
+		<li class="categoryList"><a href="/myaddbook.ho">개인 주소록</a></li>
 		</ui>
 
 		<div id="categoryWork" class="sideNaviClick">
@@ -71,8 +71,8 @@
 		</div>
 		<ui class="categoryBox">
 		<li class="categoryName">근태관리</li>
-		<li class="categoryList"><a href="#">내 연차내역</a></li>
-		<li class="categoryList"><a href="#">내 근태현황</a></li>
+		<li class="categoryList"><a href="/holiday.ho">내 연차내역</a></li>
+		<li class="categoryList"><a href="/work.ho">내 근태현황</a></li>
 		</ui>
 
 		<div id="categoryElecAppr" class="sideNaviClick">
@@ -129,7 +129,7 @@
 		<li class="categoryList"><a href="/projectLikeList.ho">프로젝트 즐겨찾기</a></li>
 		</ui>
 
-		<div class="sideNaviClick">
+		<div id="categoryResource" class="sideNaviClick">
 			<div class="sideNaviIcon">
 				&nbsp;&nbsp;<i class="fas fa-save"></i>
 			</div>
@@ -142,6 +142,7 @@
 		
 		
 		<c:if test="${sessionScope.member.memRightCode=='A'.charAt(0) || sessionScope.member.memRightCode=='B'.charAt(0) || sessionScope.member.memRightCode=='C'.charAt(0) || sessionScope.member.memRightCode=='D'.charAt(0)}">
+
 		<div id="categoryAdmin" class="sideNaviClick">
 			<div class="sideNaviIcon">
 				&nbsp;&nbsp;<i class="fas fa-cog"></i>
@@ -172,9 +173,16 @@
 
 </body>
 <script>
+$(function(){
 	$('.fa-home').parents('.sideNaviClick').click(function(){
-		
-		location.replace('/main.ho');
+		var todayMon = new Date().getMonth()+1;
+		location.replace('/main.ho?todayMon='+todayMon);
 	});
+	
+	$('#categoryResource').click(function(){
+		location.replace('/resourceCenter.ho?resourceType=all');
+	});
+})
+	
 </script>
 </html>
