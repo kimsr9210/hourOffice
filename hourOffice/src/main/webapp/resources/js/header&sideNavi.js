@@ -28,7 +28,7 @@ $(function() {
 	
 	//관리 페이지 일 때
 	$('#categoryAdmin').next().css('display','block');
-	$('#categoryAdmin').next().css('height','125px');
+	$('#categoryAdmin').next().css('height','200px');
 	$('#categoryAdmin').children().last().children().attr('class','fas fa-chevron-left');
 	 */
 
