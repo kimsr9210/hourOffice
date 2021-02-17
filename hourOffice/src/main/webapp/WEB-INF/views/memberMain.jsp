@@ -111,7 +111,7 @@
 		                        </a>
 		                        
 		                        <div>
-		                            <span><fmt:formatDate value="${noticeList[0].notDate }" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+		                            <span><fmt:formatDate value="${noticeList[0].notDate }" pattern="yyyy년 M월 d일 HH:mm:ss"/></span>
 		                            <span>${noticeList[0].notHits }</span>
 		                        </div>
                     		</c:otherwise>
