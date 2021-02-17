@@ -92,9 +92,6 @@ public class AdminDAO {
 		//pageNavi 모양 구성
 		StringBuilder sb = new StringBuilder();
 		
-		
-		
-		
 			//만약 첫번째 pageNavi가 아니라면 '<' 모양을 추가해라
 			if(startNavi != 1) {
 				sb.append("<li class='page-list'><a class='page-link' href='/adminDeleteMemberPage.ho?currentPage="+(startNavi-1)+"'>◀</a></li>");
