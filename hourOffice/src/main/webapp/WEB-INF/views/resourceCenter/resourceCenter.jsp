@@ -86,6 +86,7 @@
 	#contentsName>li{
 		float: left;
 		text-align: center;
+		font-weight: bolder;
 	}
 	
 	#contentsName>li>a{
@@ -527,10 +528,10 @@ input[type="checkbox"]:checked + label:after {
 								<ul id="contentsName">
 									<li>&nbsp;
 									</li>
-									<li><a href="#">파일명</a></li>
-									<li><a href="#">크기</a></li>
-									<li><a href="#">등록자</a></li>
-									<li><a href="#">최근 업로드 순</a></li>
+									<li>파일명</li>
+									<li>크기</li>
+									<li>등록자</li>
+									<li>업로드 날짜</li>
 									<li>다운로드</li>
 									<li>파일삭제</li>
 								</ul>
@@ -557,8 +558,8 @@ input[type="checkbox"]:checked + label:after {
                             		<i class="far fa-file-pdf"></i>
                             		<%} else{%>
                             		<i class="far fa-file"></i>
-                            		<%} %><a href="#">
-									<%=rd.getOriginalFileName() %></a></li>
+                            		<%} %>
+									<%=rd.getOriginalFileName() %></li>
 									<li><%=rd.getFileSize() %> KB</li>
 									<li><%=name %></li>
 									<li><%=date %></li>
