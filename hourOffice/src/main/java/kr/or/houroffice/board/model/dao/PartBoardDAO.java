@@ -220,6 +220,7 @@ public class PartBoardDAO {
 	}
 	// 부서별 게시판 - 게시글 수정 - 파일 delete
 	public int deletePostFile(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		map.put("BoardType", "PART_");
 		map.put("type", "PART_");
 		return sqlSession.delete("board.deletePostFile",map);
 	}

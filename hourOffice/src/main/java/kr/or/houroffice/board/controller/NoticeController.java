@@ -221,8 +221,14 @@ public class NoticeController {
 		          //System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
 		        
 		          // 파일이 업로드 되는 경로
-		          path = "/resources/file/notice/";
-		          InputStream inputStream = null;
+		          path = context.getRealPath("/");
+			      path = path.replace("\\target\\m2e-wtp\\web-resources", "");
+			      String uploadPath = "src\\main\\webapp\\resources\\file\\notice\\";
+			      path = path + uploadPath;
+			         
+			      System.out.println(path);
+		          
+			      InputStream inputStream = null;
 		          OutputStream outputStream = null;
 		              if (file.getSize() > 0) {
 		                  inputStream = file.getInputStream();
@@ -261,16 +267,32 @@ public class NoticeController {
 				int postNo = bService.insertPost(bp);
 				if(postNo>0){
 					if(file.getSize() > 0){
+						
 						// 서버에 실제로 업로드 된 파일이름 가져오기
 						String originalFileName = file.getOriginalFilename();
 						
 						long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
 						
-						// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
-						File fileSave = new File(organizedfilePath);
-						// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
-						fileSave.renameTo(new File(path+"\\"+"N"+postNo+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
-						String changedFileName = "N"+postNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						// 파일 리네임
+						File fileSave = new File(organizedfilePath); // 파일 연결
+						File copyFile = new File(path+"\\"+"N"+postNo+"_"+currentTime+"_ho"); // 새로 만든 파일 연렬
+						String changedFileName = path+"\\"+"N"+postNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						
+						//아래 로직은 파일을 새로만들어서 데이터를 이동하는 작업
+						FileInputStream fis = new FileInputStream(fileSave); //읽을파일
+			            FileOutputStream fos = new FileOutputStream(copyFile); //복사할파일
+			            
+			            int fileByte = 0; 
+			            // fis.read()가 -1 이면 파일을 다 읽은것
+			            while((fileByte = fis.read()) != -1) {
+			                fos.write(fileByte);
+			            }
+			            //자원사용종료
+			            fis.close();
+			            fos.close();
+						
+			            fileSave.delete(); //기존 원본 파일 삭제
+						
 						// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
 						File reNameFile = new File(path+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
 						String filePath = reNameFile.getPath(); // 경로
@@ -349,7 +371,13 @@ public class NoticeController {
 		          System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
 		        
 		          // 파일이 업로드 되는 경로
-		          path = "/resources/file/notice/";
+		          path = context.getRealPath("/");
+			      path = path.replace("\\target\\m2e-wtp\\web-resources", "");
+			      String uploadPath = "src\\main\\webapp\\resources\\file\\notice\\";
+			      path = path + uploadPath;
+			         
+			      System.out.println(path);
+		          
 		          InputStream inputStream = null;
 		          OutputStream outputStream = null;
 		          
@@ -406,11 +434,26 @@ public class NoticeController {
 						
 						long currentTime = Calendar.getInstance().getTimeInMillis(); // 현재 시간값 가져오기
 						
-						// File 객체는 경로를 통해서 해당 파일을 연결하는 객체
-						File fileSave = new File(organizedfilePath);
-						// File 객체가 가지고 있는 renameTo 메소드를 통해서 파일의이름을 바꿀 수 잇음
-						fileSave.renameTo(new File(path+"\\"+"N"+bp.getPostNo()+"_"+currentTime+"_ho")); // 실제 경로에 있는 파일 이름을 바꿈
-						String changedFileName = "N"+bp.getPostNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						// 파일 리네임
+						File fileSave = new File(organizedfilePath); // 파일 연결
+						File copyFile = new File(path+"\\"+"N"+bp.getPostNo()+"_"+currentTime+"_ho"); // 새로 만든 파일 연렬
+						String changedFileName = path+"\\"+"N"+bp.getPostNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						
+						//아래 로직은 파일을 새로만들어서 데이터를 이동하는 작업
+						FileInputStream fis = new FileInputStream(fileSave); //읽을파일
+			            FileOutputStream fos = new FileOutputStream(copyFile); //복사할파일
+			            
+			            int fileByte = 0; 
+			            // fis.read()가 -1 이면 파일을 다 읽은것
+			            while((fileByte = fis.read()) != -1) {
+			                fos.write(fileByte);
+			            }
+			            //자원사용종료
+			            fis.close();
+			            fos.close();
+						
+			            fileSave.delete(); //기존 원본 파일 삭제
+						
 						// File 객체를 통해 파일이름이 변경되면 새롭게 연결하는 파일 객체가 필요함
 						File reNameFile = new File(path+"\\"+changedFileName); // 이름이 바뀌여 다시 연결해줌
 						String filePath = reNameFile.getPath(); // 경로

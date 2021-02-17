@@ -1,6 +1,7 @@
 package kr.or.houroffice.member.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -156,6 +157,8 @@ public class AdminMemberController {
 		} // 로그인을 하지 않았다면 ↓
 		return "redirect:/login.jsp"; 		
 	}
+	
+	
 	// 사원 등록 - insert
 	@RequestMapping(value="/memberSingUp.ho")
 	public String memberSingUp(Model model, HttpServletRequest request, @SessionAttribute("member") Member mem) throws IOException{
@@ -175,9 +178,16 @@ public class AdminMemberController {
 		          System.out.println("파일크기" + file.getSize());
 		          System.out.println("파일 존재" + file.isEmpty());
 		          System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
-		        
+		          
 		          // 파일이 업로드 되는 경로
-		          path = "/resources/images/profile/";
+		         
+		          path = context.getRealPath("/");
+		          path = path.replace("\\target\\m2e-wtp\\web-resources", "");
+		          String uploadPath = "src\\main\\webapp\\resources\\images\\profile\\";
+		          path = path + uploadPath;
+		         
+		          System.out.println(path);
+		          
 		          InputStream inputStream = null;
 		          OutputStream outputStream = null;
 		          
@@ -200,9 +210,9 @@ public class AdminMemberController {
 		 
 		                  while ((readByte = inputStream.read(buffer, 0, 8120)) != -1) {
 		                      outputStream.write(buffer, 0, readByte); //파일 생성 ! 
-		                      System.out.println("파일 생성");
 		                  }
 		              }
+		              
 		          
 		         }
 				
@@ -303,9 +313,30 @@ public class AdminMemberController {
 				int result = mService.insertMember(m,acaList,licList,carList,mil); // 사번 리턴
 				
 				if(result>0){
+					
+					
 					// 파일 리네임
 					File fileSave = new File(organizedfilePath); // 파일 연결
-					fileSave.renameTo(new File(path+"\\"+profileRename+"_"+result+"."+ext)); // 실제 경로에 있는 파일 이름을 바꿈
+					File copyFile = new File(path+profileRename+"_"+result+"."+ext);
+			
+					//System.out.println("변경전 파일 이름 : " + organizedfilePath);
+					//System.out.println("변경된 파일 이름 : " +path+profileRename+"_"+result+"."+ext );
+					
+					//아래 로직은 파일을 새로만들어서 데이터를 이동하는 작업
+					FileInputStream fis = new FileInputStream(fileSave); //읽을파일
+		            FileOutputStream fos = new FileOutputStream(copyFile); //복사할파일
+		            
+		            int fileByte = 0; 
+		            // fis.read()가 -1 이면 파일을 다 읽은것
+		            while((fileByte = fis.read()) != -1) {
+		                fos.write(fileByte);
+		            }
+		            //자원사용종료
+		            fis.close();
+		            fos.close();
+					
+		            fileSave.delete(); //기존 원본 파일 삭제
+					
 					model.addAttribute("msg", "사원 등록을 완료하였습니다.");
 				}else{
 					model.addAttribute("msg", "사원 등록을 실패하였습니다. \n지속적인 실패 시 관리자에 문의하세요.");
