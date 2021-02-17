@@ -62,6 +62,20 @@
 	.favor{
 		color: yellow;
 	}
+	
+	/* 폰트 */
+	@font-face {
+    font-family: 'GongGothicMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+	}
+	@font-face {
+	    font-family: 'GongGothicLight';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
 </style>
 <body>
 <c:if test="${empty sessionScope.member }">
@@ -699,6 +713,7 @@
 <script src="/resources/js/memberMain/memberMain_cal.js"></script>
 <script src="/resources/js/memberMain/memberMain_work.js"></script>
 <script src="/resources/js/memberMain/memberMain_publicPro.js"></script>
+<script src="/resources/js/memberMain/memberMain_mail.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 
