@@ -1,5 +1,8 @@
+<%@page import="kr.or.houroffice.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -136,7 +139,9 @@
 			</div>
 		</div>
 		<ui class="categoryBox"> </ui>
-
+		
+		
+		<c:if test="${sessionScope.member.memRightCode=='A'.charAt(0) || sessionScope.member.memRightCode=='B'.charAt(0) || sessionScope.member.memRightCode=='C'.charAt(0) || sessionScope.member.memRightCode=='D'.charAt(0)}">
 		<div id="categoryAdmin" class="sideNaviClick">
 			<div class="sideNaviIcon">
 				&nbsp;&nbsp;<i class="fas fa-cog"></i>
@@ -146,18 +151,23 @@
 				<i class="fas fa-chevron-right"></i>
 			</div>
 		</div>
-
 		<ui class="categoryBox">
+		<c:if test="${sessionScope.member.memRightCode=='A'.charAt(0) || sessionScope.member.memRightCode=='C'.charAt(0) }">
 		<li class="categoryName">인사 관리자</li>
 		<li class="categoryList"><a href="/admin_tap_allListMember.ho">통합사원 관리</a></li>
 		<li class="categoryList"><a href="/admin_tap_organizationChart.ho">조직도 관리</a></li>
+		</c:if>
+		<c:if test="${sessionScope.member.memRightCode=='A'.charAt(0) || sessionScope.member.memRightCode=='D'.charAt(0) }">
 		<li class="categoryName">총무 관리자</li>
 		<li class="categoryList"><a href="/admin_tap_allNoticePage.ho">공지사항 관리</a></li>
 		<li class="categoryList"><a href="/admin_tap_allCompanyRulePage.ho">사내규정 관리</a></li>
+		</c:if>
+		<c:if test="${sessionScope.member.memRightCode=='A'.charAt(0) || sessionScope.member.memRightCode=='B'.charAt(0) }">
 		<li class="categoryName">전산 관리자</li>
 		<li class="categoryList"><a href="/adminMainPage.ho">관리자 페이지</a></li>
+		</c:if>
 		</ui>
-
+		</c:if>
 	</div>
 
 </body>
