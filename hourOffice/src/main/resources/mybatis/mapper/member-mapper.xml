@@ -498,6 +498,7 @@
 			MEM_NO
 		FROM PRO_MEMBER
 		WHERE DEL_YN='N' AND PRO_NO=#{proNo})
+		ORDER BY ROWID DESC
 	</select>
 	
 	<!-- BY 진원 - 개인 근태기록 조회 -->

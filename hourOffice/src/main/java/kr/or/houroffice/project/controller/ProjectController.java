@@ -234,7 +234,7 @@ public class ProjectController {
 
 		// 프로젝트 멤버 리스트 가져오기
 		ArrayList<Member> projectMemberList = mService.selectProjectMemberList(proNo);
-
+		
 		// 프로젝트 관리자 목록 가져오기
 		ArrayList<ProjectMember> projectMgrList = pService.selectProjectMemberList(proNo);
 
@@ -406,7 +406,9 @@ public class ProjectController {
 
 		int proNo = Integer.parseInt(multi.getParameter("proNo"));
 		String boardText = multi.getParameter("boardText");
-
+		if(boardText.equals("")){
+			boardText=" ";
+		}
 		// 파일 이름 가져오기
 		request.setCharacterEncoding("UTF-8");
 
@@ -515,7 +517,10 @@ public class ProjectController {
 	// 게시물 댓글 작성
 	@RequestMapping(value = "/insertBoardComment.ho")
 	public ModelAndView insertBoardComment(ProjectComment pc, @RequestParam int proNo, @RequestParam String boardType) {
-
+		
+		if(pc.getCommentCon().equals("")){
+			pc.setCommentCon("&nbsp;");
+		}
 		int result = pService.insertBoardComment(pc);
 		ModelAndView mav = new ModelAndView();
 		if (result > 0) {
@@ -737,7 +742,12 @@ public class ProjectController {
 		int proNo = Integer.parseInt(multi.getParameter("proNo"));
 		String boardText = multi.getParameter("boardText");
 		String codeText = multi.getParameter("codeText");
-
+		if(boardText.equals("")){
+			boardText=" ";
+		}
+		if(codeText.equals("")){
+			codeText=" ";
+		}
 		// 파일 이름 가져오기
 		request.setCharacterEncoding("UTF-8");
 
@@ -798,6 +808,15 @@ public class ProjectController {
 		
 		String[] pTag = codeText.split("\n");
 		for (int i = 0; i < pTag.length; i++) {
+
+			Pattern pattern2 = Pattern.compile("[<][a-zA-Z]+");
+			Matcher matcher2 = pattern2.matcher(pTag[i]);
+			while (matcher2.find()) {
+				String method2 = matcher2.group().substring(0, 1);
+				pTag[i] = pTag[i].replace(method2, "< ");
+			}
+			
+			
 			
 			pTag[i] = pTag[i].replace("	", "&nbsp;&nbsp;&nbsp;&nbsp;");
 			
@@ -834,6 +853,13 @@ public class ProjectController {
 			while (matcher.find()) {
 				String method = matcher.group().substring(0, matcher.group().length() - 1);
 				pTag[i] = pTag[i].replace(method, "<span class=\"codeBlue\">" + method + "</span>");
+			}
+			
+			Pattern pattern3 = Pattern.compile("[/][/][a-zA-Z0-9]+");
+			Matcher matcher3 = pattern3.matcher(pTag[i]);
+			while (matcher3.find()) {
+				String method3 = matcher3.group().substring(0,  matcher3.group().length());
+				pTag[i] = pTag[i].replace(method3, "<span class=\"codeGray\">" + method3 + "</span>");
 			}
 
 			pTag[i] = "<pre class=\"codeLineNumber" + i + "\"><div class=\"codeLine\">"+(i+1)+"</div>" + pTag[i] + "</pre>";
@@ -894,10 +920,10 @@ public class ProjectController {
 		}
 	}
 
-	// 게시물 댓글 작성
+	// 할일 작성
 	@RequestMapping(value = "/insertProjectWork.ho")
 	public ModelAndView insertProjectWork(ProjectWork pw, HttpSession session) {
-
+		
 		int result = pService.insertProjectWork(pw);
 		ModelAndView mav = new ModelAndView();
 		if (result > 0) {
