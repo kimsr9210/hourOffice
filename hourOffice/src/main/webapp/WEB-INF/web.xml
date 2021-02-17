@@ -39,6 +39,7 @@
 	    <url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- multipart -->
+	<!-- 
 	<filter>
     <filter-name>multipartFilter</filter-name>
     <filter-class>org.springframework.web.multipart.support.MultipartFilter
@@ -52,7 +53,7 @@
 <filter-mapping>
     <filter-name>multipartFilter</filter-name>
     <url-pattern>*.ho</url-pattern>
-</filter-mapping>
+</filter-mapping> -->
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
