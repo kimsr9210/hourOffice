@@ -43,6 +43,19 @@
 <body>
 <style>
 @font-face {
+    font-family: 'GongGothicMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'GongGothicLight';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'NanumSquareRound';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
     font-weight: normal;
@@ -314,11 +327,11 @@
     	width: 98%;
     	padding: 70px;
     	font-size: 1.5rem;
-    	font-weight: bolder;
     	text-align: center;
     	border: 1px solid #cccccc;
     	margin-top: 20px;
     	border-radius: 3px;
+    	font-family: GongGothicLight;
     }
     
     .memberImg {
@@ -1129,7 +1142,7 @@
 							        			<%} %>
 							        		<%}%>
 							                
-							            
+							            ]
 							            },
 							        	<%} %>
 							            
