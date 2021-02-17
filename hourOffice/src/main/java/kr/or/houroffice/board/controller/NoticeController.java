@@ -276,7 +276,7 @@ public class NoticeController {
 						// 파일 리네임
 						File fileSave = new File(organizedfilePath); // 파일 연결
 						File copyFile = new File(path+"\\"+"N"+postNo+"_"+currentTime+"_ho"); // 새로 만든 파일 연렬
-						String changedFileName = path+"\\"+"N"+postNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						String changedFileName = "N"+postNo+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
 						
 						//아래 로직은 파일을 새로만들어서 데이터를 이동하는 작업
 						FileInputStream fis = new FileInputStream(fileSave); //읽을파일
@@ -365,10 +365,10 @@ public class NoticeController {
 		         System.out.println(file.getOriginalFilename());
 		         if(file!=null){
 		        
-		          System.out.println("파라미터명" + file.getName());
-		          System.out.println("파일크기" + file.getSize());
-		          System.out.println("파일 존재" + file.isEmpty());
-		          System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
+		          //System.out.println("파라미터명" + file.getName());
+		          //System.out.println("파일크기" + file.getSize());
+		          //System.out.println("파일 존재" + file.isEmpty());
+		          //System.out.println("오리지날 파일 이름" + file.getOriginalFilename());
 		        
 		          // 파일이 업로드 되는 경로
 		          path = context.getRealPath("/");
@@ -437,7 +437,7 @@ public class NoticeController {
 						// 파일 리네임
 						File fileSave = new File(organizedfilePath); // 파일 연결
 						File copyFile = new File(path+"\\"+"N"+bp.getPostNo()+"_"+currentTime+"_ho"); // 새로 만든 파일 연렬
-						String changedFileName = path+"\\"+"N"+bp.getPostNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
+						String changedFileName = "N"+bp.getPostNo()+"_"+currentTime+"_ho"; // DB에 저장할 파일 이름
 						
 						//아래 로직은 파일을 새로만들어서 데이터를 이동하는 작업
 						FileInputStream fis = new FileInputStream(fileSave); //읽을파일
