@@ -302,7 +302,8 @@ select {
 
 					<div id="TitleName">
 						<!--여기서 각자 id 만드시면 됩니다-->
-						개인주소록
+						<span>인사정보</span>
+                        <span>> 개인 주소록</span>
 						<!----------------------------------->
 					</div>
 					<div id="TitleContents">
