@@ -434,7 +434,7 @@
                                         			var ruleData;
                                         			
                                         			for(var i=0; i<data.length; i++){
-                                        				
+                                        				/* 추가 */
                                         				ruleData += "<tr>";
                                         				
                                         				ruleData += "<td>"+data[i].ruleNo+"</td>";
