@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public class PartBoard {
 	
+	private int boardNumber;
 	private int partNo;				// 게시물 고유번호
 	private String partTitle;		// 게시물 제목
 	private String deptCode;		// 부서 고유번호
@@ -31,12 +32,13 @@ public class PartBoard {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public PartBoard(int partNo, String partTitle, String deptCode, Timestamp partDate, int memNo, String partWriter,
-			String partContent, int partHits, char partDelYN, Timestamp partDelDate, String deptName,
+
+	public PartBoard(int boardNumber, int partNo, String partTitle, String deptCode, Timestamp partDate, int memNo,
+			String partWriter, String partContent, int partHits, char partDelYN, Timestamp partDelDate, String deptName,
 			String memPosition, String memProfile, int fileNo, String origName, String chgName, String filePath,
 			long fileSize, Timestamp uploadDate) {
 		super();
+		this.boardNumber = boardNumber;
 		this.partNo = partNo;
 		this.partTitle = partTitle;
 		this.deptCode = deptCode;
@@ -58,81 +60,114 @@ public class PartBoard {
 		this.uploadDate = uploadDate;
 	}
 
+	public int getBoardNumber() {
+		return boardNumber;
+	}
+
+	public void setBoardNumber(int boardNumber) {
+		this.boardNumber = boardNumber;
+	}
+
 	public int getPartNo() {
 		return partNo;
 	}
+
 	public void setPartNo(int partNo) {
 		this.partNo = partNo;
 	}
+
 	public String getPartTitle() {
 		return partTitle;
 	}
+
 	public void setPartTitle(String partTitle) {
 		this.partTitle = partTitle;
 	}
+
 	public String getDeptCode() {
 		return deptCode;
 	}
+
 	public void setDeptCode(String deptCode) {
 		this.deptCode = deptCode;
 	}
+
 	public Timestamp getPartDate() {
 		return partDate;
 	}
+
 	public void setPartDate(Timestamp partDate) {
 		this.partDate = partDate;
 	}
+
 	public int getMemNo() {
 		return memNo;
 	}
+
 	public void setMemNo(int memNo) {
 		this.memNo = memNo;
 	}
+
 	public String getPartWriter() {
 		return partWriter;
 	}
+
 	public void setPartWriter(String partWriter) {
 		this.partWriter = partWriter;
 	}
+
 	public String getPartContent() {
 		return partContent;
 	}
+
 	public void setPartContent(String partContent) {
 		this.partContent = partContent;
 	}
+
 	public int getPartHits() {
 		return partHits;
 	}
+
 	public void setPartHits(int partHits) {
 		this.partHits = partHits;
 	}
+
 	public char getPartDelYN() {
 		return partDelYN;
 	}
+
 	public void setPartDelYN(char partDelYN) {
 		this.partDelYN = partDelYN;
 	}
+
 	public Timestamp getPartDelDate() {
 		return partDelDate;
 	}
+
 	public void setPartDelDate(Timestamp partDelDate) {
 		this.partDelDate = partDelDate;
 	}
+
 	public String getDeptName() {
 		return deptName;
 	}
+
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
 	}
+
 	public String getMemPosition() {
 		return memPosition;
 	}
+
 	public void setMemPosition(String memPosition) {
 		this.memPosition = memPosition;
 	}
+
 	public String getMemProfile() {
 		return memProfile;
 	}
+
 	public void setMemProfile(String memProfile) {
 		this.memProfile = memProfile;
 	}
@@ -184,6 +219,8 @@ public class PartBoard {
 	public void setUploadDate(Timestamp uploadDate) {
 		this.uploadDate = uploadDate;
 	}
+	
+	
 	
 	
 }

@@ -63,7 +63,7 @@
                   	<% if(!list.isEmpty()){ %>
                   	<% for(PartBoard pb : list){ %>
                             <tr>
-                                <td><%=pb.getPartNo() %></td>
+                                <td><%=pb.getBoardNumber() %></td>
                                 <td><div><a href="/postInPartBoard.ho?deptCode=${list[0].deptCode }&partNo=<%=pb.getPartNo()%>"><%=pb.getPartTitle() %></a></div></td>
                                 <td><%=pb.getPartWriter() %></td>
                     <% if(format.format(pb.getPartDate()).equals(format.format(toDay))){ %>

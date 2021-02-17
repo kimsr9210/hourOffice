@@ -7,6 +7,7 @@
   <!-- BY 다빈  부서별 게시판 - 게시판 select -->
   <select id="allPartBoardList" parameterType="hashmap" resultType="PartBoard">
   	SELECT 
+        ROW_NUM AS boardNumber,
 		PART_NO AS partNo,
 		PART_TITLE AS partTitle,
 		DEPT_CODE AS deptCode,
@@ -19,21 +20,25 @@
 		PART_DEL_DATE AS partDelDate,
 		DEPT_NAME AS deptName
 	FROM (
-		SELECT 
-			ROW_NUMBER() OVER (ORDER BY A.PART_DATE DESC) AS NUM,
-			A.*,
-			D.DEPT_NAME
-		FROM PART_BOARD A LEFT JOIN DEPARTMENT D ON A.DEPT_CODE=D.DEPT_CODE 
-		WHERE A.PART_DEL_YN='N' AND A.DEPT_CODE=#{deptCode} 
-		<choose>
-			<when test="searchType != null">
-				<choose>
-					<when test="searchTypeOrg == 'both'">AND (PART_TITLE LIKE #{keyword} OR DBMS_LOB.INSTR(PART_CONTENT, #{keywordOrg} ) > 0)</when>
-					<when test="searchTypeOrg == 'content'">AND (DBMS_LOB.INSTR(${searchType}, #{keywordOrg} ) > 0)</when>
-					<otherwise>AND ${searchType} LIKE #{keyword}</otherwise>
-				</choose>
-			</when>
-		</choose>
+    	SELECT 
+    		ROW_NUMBER() OVER (ORDER BY ROW_NUM DESC) AS NUM,A.* 
+    	FROM (
+	    	SELECT 
+				ROW_NUMBER() OVER (ORDER BY PART_DATE) AS ROW_NUM,
+				P.*,
+				D.DEPT_NAME
+			FROM PART_BOARD P LEFT JOIN DEPARTMENT D ON P.DEPT_CODE=D.DEPT_CODE 
+			WHERE P.PART_DEL_YN='N' AND P.DEPT_CODE=#{deptCode} 
+			<choose>
+				<when test="searchType != null">
+					<choose>
+						<when test="searchTypeOrg == 'both'">AND (PART_TITLE LIKE #{keyword} OR DBMS_LOB.INSTR(PART_CONTENT, #{keywordOrg} ) > 0)</when>
+						<when test="searchTypeOrg == 'content'">AND (DBMS_LOB.INSTR(${searchType}, #{keywordOrg} ) > 0)</when>
+						<otherwise>AND ${searchType} LIKE #{keyword}</otherwise>
+					</choose>
+				</when>
+			</choose>
+		) A 
 	) WHERE NUM BETWEEN #{start} AND #{end}
   </select>
   <!-- BY 다빈  부서별 게시판 - 게시글 one select -->
