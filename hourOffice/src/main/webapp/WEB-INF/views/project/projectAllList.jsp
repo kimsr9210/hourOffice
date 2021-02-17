@@ -73,7 +73,7 @@
 
 .requestMember {
 	color: white;
-	padding: 0px 10px 10px 10px;
+	padding: 0px 0px 10px 10px;
 	width: 80%;
 	float: left;
 }

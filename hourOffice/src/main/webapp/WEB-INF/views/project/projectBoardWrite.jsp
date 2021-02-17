@@ -811,6 +811,11 @@
     				$(this).text('초대완료');
     			}
     		});
+    		
+    		//이전화면 누르기
+    		$('#backward').click(function(){
+    			history.back(-1);
+    		});
 		});
 	</script>
 	<script type="text/javascript" src="/resources/js/header&sideNavi.js"></script>

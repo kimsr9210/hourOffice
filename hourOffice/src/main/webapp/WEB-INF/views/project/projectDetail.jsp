@@ -105,6 +105,11 @@
 	font-weight: bolder;
 	color: #36bcfc;
 }
+
+.codeGray{
+	font-weight: normal;
+	color: #8C8C8C;
+}
 .codeLine{
 	width:30px;
 	float:left;
@@ -573,6 +578,7 @@
                                             <div class="boardModifyList boardModify">게시물 수정</div>
                                             <div class="boardModifyList boardDelete">게시물 삭제</div>
                                             <input type="hidden" name="boardNo" value="<%=pb.getBoardNo()%>"/>
+                                            <input type="hidden" name="boardType" value="post"/>
                                         </div>
                                     </div>
                                     <%} %>
