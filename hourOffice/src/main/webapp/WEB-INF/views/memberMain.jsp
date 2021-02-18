@@ -187,7 +187,7 @@
 								<div class="in-pro-top">
 									<a class="detailBtn">${myProject[0].proSubject }</a>
 									
-									<div class="inProLike">
+									<div class="projectLike">
 		                                <c:set var="like" value="false"></c:set>
 		                                <c:forEach items="${favorList }" var="fl">
 		                                	<c:if test="${fl.proNo eq myProject[0].proNo }">
@@ -249,6 +249,47 @@
 							</c:otherwise>
 						</c:choose>
 					</div>
+					<script>
+					//즐겨찾기
+				    $('.projectLike').click(function(){
+						console.log('클릭!');
+					    var proNo = $(this).children().eq(1).val();
+					    var memNo = $(this).children().eq(2).val();
+					    if($(this).children().eq(0).css('color')=='rgb(255, 255, 255)'){
+					        $.ajax({
+					        	url : "/insertProjectFavor.ho",
+					        	data : {"proNo" : proNo, "memNo" : memNo},
+					        	type : "get",
+					        	success : function(result){
+					        		if(result=="false"){
+					        			alert("프로젝트 즐겨찾기 실패");
+					        		}
+					        	},
+					        	error : function(){
+					        		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+					        	}
+					        });
+					        $(this).children().eq(0).attr('class','fas fa-star favor');
+					    }else{
+					    	$.ajax({
+					        	url : "/deleteProjectFavor.ho",
+					        	data : {"proNo" : proNo, "memNo" : memNo},
+					        	type : "get",
+					        	success : function(result){
+					        		if(result=="false"){
+					        			alert("프로젝트 즐겨찾기 실패");
+					        		}
+					        	},
+					        	error : function(){
+					        		console.log("프로젝트 즐겨찾기 ajax 통신 실패");
+					        	}
+					        });
+					        $(this).children().eq(0).attr('class','far fa-star');
+					    }
+				    	
+				        
+				    });
+					</script>
 				    
 				    <div id="myMail">
 				        <div class="myMail-title">메일함</div>
@@ -377,7 +418,7 @@
                 <div class="pro-graph">
                     <div id="columnchart_values"></div>
                     <div class="pro-graph-count" style="width:25%;">
-                        <span id="cTitle">이번달 프로젝트 수</span>
+                        <span id="cTitle">이번 달 프로젝트 수</span>
                         <span id="cValue">${monthlyList[0].monthlyCount}</span><!--4자리까지-->
                     </div>
                     
@@ -434,7 +475,7 @@
                                         			var ruleData;
                                         			
                                         			for(var i=0; i<data.length; i++){
-                                        				/* 추가 */
+                                        				
                                         				ruleData += "<tr>";
                                         				
                                         				ruleData += "<td>"+data[i].ruleNo+"</td>";
@@ -582,7 +623,7 @@
                         			${fn:substring(atten.todayWork,0,workHour) }
                         		</c:otherwise>
                         	</c:choose>
-                        </span> 시간
+                        </span> <a>시간</a>
                         <span id="work-minute">
                         	<c:choose>
                         		<c:when test="${empty atten.todayWork }">
@@ -593,7 +634,7 @@
                         			${fn:substring(atten.todayWork,(workHour+1),workMin) }
                         		</c:otherwise>
                         	</c:choose>
-                        </span> 분
+                        </span> <a>분</a>
                         <input type="hidden" id="workTime" name="todayWork">
                     </div>
                     
