@@ -146,6 +146,9 @@ $(function(){
 })	
 
 </script>
+<Style>
+	
+</Style>
 <body>
 	<div id="wrap">
 		<%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -202,12 +205,12 @@ $(function(){
                                     <td><a href="/admin_tap_memberInfo.ho?memNo=<%=member.getMemNo()%>"><%=member.getMemName() %></a></td>
                                     <td><%=member.getMemPosition() %></td>
                            		<% if(member.getDeptCode() != null){ %>
-                                    <td><%=member.getDeptCode() %></td>
+                                    <td><%=member.getDeptName() %></td>
                                 <% }else { %>
                                     <td>미정</td>
                                 <% } %>
                               	<% if(member.getMemEmail() != null){ %>
-                                    <td><%=member.getDeptName() %></td>
+                                    <td><%=member.getMemEmail() %></td>
                                 <% }else { %>
                                 	<td>미등록</td>
                                 <% } %>
