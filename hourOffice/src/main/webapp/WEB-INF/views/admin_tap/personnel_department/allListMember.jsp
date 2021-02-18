@@ -44,7 +44,7 @@ $(function(){
             }else{
                 checkMem.push($(this).val());
             }
-        }else{
+        }else{console.log(checkMem);
             if($(this).val()=='all'){
                 $('input[name=checkMem]').prop('checked',false);
                 checkMem = []; // 변수 비워주기
@@ -54,8 +54,10 @@ $(function(){
             			$(this).prop('checked',false);
             			checkMem.splice(checkMem.indexOf($(this).val()),1);
             		}
-            	});
+            	}); // all 체크 빼기
+            	console.log($(this).val());
                 checkMem.splice(checkMem.indexOf($(this).val()),1);
+                console.log(checkMem);
             }
         }
     });
